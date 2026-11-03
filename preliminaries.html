@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Preliminaries · APSC 270 – Signals and Communication Systems</title>
+<style>
+:root{--bg:#fff;--fg:#1b1f2a;--mut:#5b6475;--card:#f3f5fa;--acc:#0b3d91;--ln:#d5d9e3;--a:#2f6fe0;--b:#e0562f;--g:#2fa05a;--ok:#17803d;--bad:#b3261e;--hd:#0b3d91;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12151c;--fg:#e8eaf0;--mut:#9aa3b5;--card:#1b2030;--acc:#7fa8ff;--ln:#2e3547;--a:#6ea2ff;--b:#ff8f6b;--g:#5fd38d;--ok:#5fd38d;--bad:#ff8a80;--hd:#0a2a66}}
+:root[data-theme="dark"]{--bg:#12151c;--fg:#e8eaf0;--mut:#9aa3b5;--card:#1b2030;--acc:#7fa8ff;--ln:#2e3547;--a:#6ea2ff;--b:#ff8f6b;--g:#5fd38d;--ok:#5fd38d;--bad:#ff8a80;--hd:#0a2a66}
+html{scroll-padding-top:calc(60px + env(safe-area-inset-top,0px));scroll-behavior:smooth}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--hd);z-index:10}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;display:flex;justify-content:space-between;gap:12px;padding:12px 20px;background:var(--hd);color:#fff;font-weight:600}
+header span:last-child{opacity:.9;font-weight:500}
+.wrap{max-width:880px;margin:auto;padding:0 20px 40px}
+.over{margin:34px 0 4px;color:var(--acc);font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+h1,h2{font-family:Georgia,'Times New Roman',serif}h1{font-size:clamp(1.9rem,5vw,2.6rem);line-height:1.2;margin:.1em 0 .3em}
+h2{font-size:1.6rem;margin:2.2em 0 .1em;padding-top:.4em;border-top:1px solid var(--ln)}h2 small{color:var(--acc);margin-right:.4em}
+.sub{margin:0 0 1em;color:var(--mut);font-style:italic}h3{margin:1.4em 0 .3em}.lede{font-size:1.1rem;color:var(--mut)}
+.card{background:var(--card);border-radius:12px;padding:14px 18px;margin:16px 0}.card h4{margin:.2em 0 .4em}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:16px 0}.meta div{border:1px solid var(--ln);border-radius:10px;padding:8px 12px;font-size:.9rem}.meta b{display:block;color:var(--acc);font-size:.75rem;text-transform:uppercase;letter-spacing:.08em}
+.toc{columns:2;column-gap:28px;padding-left:0;list-style:none;margin:6px 0}.toc li{margin:3px 0;break-inside:avoid}.toc a{color:var(--fg);text-decoration:none}.toc a:hover{color:var(--acc)}.toc b{color:var(--acc);margin-right:6px}
+.eq{margin:12px 0;padding:10px 16px;background:var(--card);border-left:4px solid var(--acc);border-radius:6px;font:1.05rem Georgia,serif;overflow-x:auto}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 3px;font-size:.95em}.fr>*:first-child{border-bottom:1px solid currentColor;padding:0 3px}
+code{font-family:ui-monospace,Menlo,monospace;background:var(--card);padding:1px 5px;border-radius:4px;font-size:.92em}
+.wd{border:1px solid var(--ln);background:var(--bg)}.cap{color:var(--acc);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+canvas{width:100%;height:auto;border:1px solid var(--ln);border-radius:8px;background:var(--bg)}
+label{display:block;margin:8px 0 2px;font-size:.9rem}input[type=range]{width:100%}select{width:100%;padding:6px;border-radius:8px;border:1px solid var(--ln);background:var(--bg);color:var(--fg);font:inherit}
+.ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:0 18px}.note{font-size:.93rem;color:var(--mut);margin:8px 0 0}
+.btn,.chk{background:var(--acc);color:var(--bg);border:0;padding:7px 14px;border-radius:8px;cursor:pointer;font:inherit;font-size:.9rem}
+.ex{border:1px solid var(--ln);border-radius:12px;margin:18px 0;padding:14px 18px}.ex .tag{color:var(--acc);font-weight:700;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase}
+details summary{cursor:pointer;color:var(--acc);font-weight:600;margin-top:8px}.ok{color:var(--ok)}.bad{color:var(--bad)}
+.badge{display:inline-block;padding:2px 10px;border-radius:99px;font-size:.85rem;margin-right:6px;border:1px solid currentColor}
+.keys{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}.keys .card{margin:0}.keys small{color:var(--mut)}
+.q{margin:10px 0}.q p{margin:2px 0;font-weight:600}.q label{font-weight:400;margin:2px 0}
+footer{border-top:1px solid var(--ln);padding:20px;text-align:center;font-size:.85rem;color:var(--mut)}footer a{color:var(--acc)}
+@media(max-width:640px){.toc{columns:1}header{font-size:.85rem}}
+</style></head>
+<body>
+<header><span>APSC 270 – Signals and Communication Systems</span><span>Preliminaries</span></header>
+<div class="wrap">
+<p class="over">APSC 270 · Preliminaries</p>
+<h1>What you are expected to know</h1>
+<p class="lede">This page summarizes the preliminary material you should know from previous courses, and repeats some of the key topics from the review lectures on signals and systems (Lectures 2 and 3). Review it carefully: it is required for solving problems in APSC 270.</p>
+<div class="card"><h4>Learning objectives</h4><ul>
+<li>Recognize and sketch the common signals: sinusoids, Π, Λ, sinc, step, impulse and sign</li>
+<li>Apply shifting, time-scaling and time-reversal, alone and combined</li>
+<li>Compute the energy and power of a signal</li>
+<li>Classify a system as linear, time-invariant and causal, and compute the convolution y(t) = x(t) ⊛ h(t)</li>
+<li>Use trigonometric identities, Euler’s formula and small-angle approximations</li></ul></div>
+<div class="meta"><div><b>Instructor</b>Dr. Anas Chaaban, P.Eng.</div><div><b>Course</b>APSC 270 · UBC School of Engineering</div><div><b>Topics</b>Signals · operations · energy &amp; power · LTI systems · trigonometry</div></div>
+<div class="card"><h4>Contents</h4><ol class="toc" style="list-style:none">
+<li><b>1</b><a href="#s1">Common signals</a></li><li><b>2</b><a href="#s2">Some important signal operations</a></li><li><b>3</b><a href="#s3">Signal energy and power</a></li><li><b>4</b><a href="#s4">LTI systems and convolution</a></li><li><b>5</b><a href="#s5">Trigonometric identities and calculus</a></li><li><b>▸</b><a href="#quiz">Check yourself</a></li><li><b>▸</b><a href="#key">Key formulas</a></li></ol></div>
+
+<h2 id="s1"><small>1</small>Common signals</h2><p class="sub">The shapes that appear throughout signals, systems and communications</p>
+<p>You are expected to know these signals and to be able to plot them. Pick one below to see its definition and plot, and drag the probe to read its value at any time <i>t</i>.</p>
+<div class="eq"><i>Π</i>(<i>t</i>) = 1 for |<i>t</i>| &lt; ½, else 0 &nbsp;·&nbsp; <i>Λ</i>(<i>t</i>) = 1 − |<i>t</i>| for |<i>t</i>| ≤ 1, else 0 &nbsp;·&nbsp; sinc(<i>t</i>) = <span class="fr"><i>sin(π<i>t</i>)</i><i>π<i>t</i></i></span>, sinc(0) = 1<br>
+<i>u</i>(<i>t</i>) = 1 for <i>t</i> ≥ 0, else 0 &nbsp;·&nbsp; sign(<i>t</i>) = 1, 0, −1 for <i>t</i> &gt; 0, = 0, &lt; 0 &nbsp;·&nbsp; <i>δ</i>(<i>t</i>) = <span class="fr"><i>d</i><i>dt</i></span><i>u</i>(<i>t</i>), &nbsp;<i>u</i>(<i>t</i>) = ∫<sub>−∞</sub><sup><i>t</i></sup> <i>δ</i>(<i>τ</i>) d<i>τ</i></div>
+<div data-w="gal"></div>
+
+<h2 id="s2"><small>2</small>Some important signal operations</h2><p class="sub">Shifting, time-scaling and time-reversal</p>
+<ul><li><b>Shift:</b> <i>x</i>(<i>t</i> − <i>t</i><sub>0</sub>) is <i>x</i>(<i>t</i>) shifted to the right by <i>t</i><sub>0</sub> if <i>t</i><sub>0</sub> &gt; 0, and to the left if <i>t</i><sub>0</sub> &lt; 0.</li>
+<li><b>Scale:</b> <i>x</i>(<i>at</i>), <i>a</i> &gt; 0, is contracted along the time axis if <i>a</i> &gt; 1 and expanded if <i>a</i> &lt; 1.</li>
+<li><b>Reverse:</b> <i>x</i>(−<i>t</i>) is <i>x</i>(<i>t</i>) flipped about the vertical axis.</li></ul>
+<p>Operations can be combined with each other and with amplitude scaling, addition and multiplication. The playground below builds <i>y</i>(<i>t</i>) = <i>A</i> · <i>x</i>(±<i>a</i>(<i>t</i> − <i>t</i><sub>0</sub>)); try one operation at a time first.</p>
+<div data-w="ops"></div>
+<div class="ex"><span class="tag">Example 2.1 · Combining operations</span><p>Plot <i>x</i>(<i>t</i>) = 2<i>Π</i>((<i>t</i> − 1)/2). Use the button above to load it, then check against the solution.</p>
+<details><summary>Show solution</summary><p>Start from <i>Π</i>(<i>t</i>), a unit pulse centred at <i>t</i> = 0 with width 1. Shifting right by 1 moves the centre to <i>t</i> = 1; the factor ½ inside expands the width to 2; the factor 2 doubles the height. Check by evaluating: <i>Π</i>(<i>s</i>) = 0 for |<i>s</i>| &gt; ½, so <i>Π</i>((<i>t</i> − 1)/2) = 0 when (<i>t</i> − 1)/2 &lt; −½ or &gt; ½, i.e. <i>t</i> &lt; 0 or <i>t</i> &gt; 2, and it equals 1 for 0 ≤ <i>t</i> ≤ 2. Hence <i>x</i>(<i>t</i>) is a pulse of height 2 on [0, 2].</p></details></div>
+
+<h2 id="s3"><small>3</small>Signal energy and power</h2><p class="sub">Which signals have finite energy, and which have finite power?</p>
+<div class="eq"><i>E</i> = lim<sub><i>T</i>→∞</sub> ∫<sub>−<i>T</i>/2</sub><sup><i>T</i>/2</sup> |<i>x</i>(<i>t</i>)|² d<i>t</i> &nbsp;&nbsp; <i>P</i> = lim<sub><i>T</i>→∞</sub> <span class="fr"><i>1</i><i>T</i></span> ∫<sub>−<i>T</i>/2</sub><sup><i>T</i>/2</sup> |<i>x</i>(<i>t</i>)|² d<i>t</i> &nbsp;&nbsp; <i>P</i> = <span class="fr"><i>1</i><i>T</i><sub>0</sub></span> ∫<sub>−<i>T</i><sub>0</sub>/2</sub><sup><i>T</i><sub>0</sub>/2</sup> |<i>x</i>(<i>t</i>)|² d<i>t</i> (periodic)</div>
+<p>These expressions are unitless, which keeps them general. If the signal is a current in amperes through a load of 1 Ω, then <i>P</i> is in watts. Use the window slider to see the limit in action: for an energy signal <i>E</i><sub><i>T</i></sub> settles while <i>P</i><sub><i>T</i></sub> → 0; for a power signal <i>E</i><sub><i>T</i></sub> keeps growing while <i>P</i><sub><i>T</i></sub> settles.</p>
+<div data-w="ep"></div>
+
+<h2 id="s4"><small>4</small>LTI systems and convolution</h2><p class="sub">Linearity, time invariance, causality, and the impulse response</p>
+<p>Let the output for input <i>x</i><sub><i>i</i></sub>(<i>t</i>) be <i>y</i><sub><i>i</i></sub>(<i>t</i>).</p>
+<ul><li><b>Linearity:</b> input <i>a</i><sub>1</sub><i>x</i><sub>1</sub> + <i>a</i><sub>2</sub><i>x</i><sub>2</sub> gives <i>a</i><sub>1</sub><i>y</i><sub>1</sub> + <i>a</i><sub>2</sub><i>y</i><sub>2</sub>.</li><li><b>Time invariance:</b> <i>x</i>(<i>t</i> − <i>t</i><sub>0</sub>) gives <i>y</i>(<i>t</i> − <i>t</i><sub>0</sub>) for any <i>t</i><sub>0</sub>: a delayed input produces a delayed output.</li><li><b>Causality:</b> <i>y</i>(<i>t</i><sub>0</sub>) depends only on <i>x</i>(<i>t</i>) for <i>t</i> ≤ <i>t</i><sub>0</sub>.</li></ul>
+<p>Pick a system and test it: the top plot checks time invariance (do the two curves coincide?), the bottom plot checks superposition.</p>
+<div data-w="sys"></div>
+<p>A system that is both linear and time-invariant is an <b>LTI system</b>, characterized by its impulse response <i>h</i>(<i>t</i>) (its output for input <i>δ</i>(<i>t</i>)). Its output for any input is the convolution</p>
+<div class="eq"><i>y</i>(<i>t</i>) = <i>x</i>(<i>t</i>) ⊛ <i>h</i>(<i>t</i>) = ∫<sub>−∞</sub><sup>∞</sup> <i>x</i>(<i>τ</i>) <i>h</i>(<i>t</i> − <i>τ</i>) d<i>τ</i></div>
+<p>To evaluate it: <b>(1)</b> plot <i>x</i>(<i>τ</i>) and <i>h</i>(<i>τ</i>); <b>(2)</b> plot the time-reversed <i>h</i>(−<i>τ</i>); <b>(3)</b> shift it by <i>t</i> to get <i>h</i>(<i>t</i> − <i>τ</i>); <b>(4)</b> multiply by <i>x</i>(<i>τ</i>) and integrate over <i>τ</i>; <b>(5)</b> repeat for all <i>t</i>.</p>
+<div data-w="conv"></div>
+<div class="ex"><span class="tag">Example 4.1 · Step input, decaying-exponential system</span><p>Let <i>x</i>(<i>t</i>) = <i>u</i>(<i>t</i>) and <i>h</i>(<i>t</i>) = <i>e</i><sup>−<i>at</i></sup><i>u</i>(<i>t</i>), <i>a</i> ≥ 0. Find <i>y</i>(<i>t</i>) = <i>x</i>(<i>t</i>) ⊛ <i>h</i>(<i>t</i>).</p>
+<details><summary>Show solution</summary><p>The shape of <i>x</i>(<i>τ</i>) tells us which cases to consider. For <i>t</i> &lt; 0, <i>h</i>(<i>t</i> − <i>τ</i>) lies entirely where <i>x</i>(<i>τ</i>) = 0, so the product is zero and <i>y</i>(<i>t</i>) = 0. For <i>t</i> ≥ 0 the product is nonzero for 0 ≤ <i>τ</i> ≤ <i>t</i>:</p>
+<div class="eq"><i>y</i>(<i>t</i>) = ∫<sub>0</sub><sup><i>t</i></sup> e<sup>−<i>a</i>(<i>t</i>−<i>τ</i>)</sup> d<i>τ</i> = e<sup>−<i>at</i></sup> ∫<sub>0</sub><sup><i>t</i></sup> e<sup><i>aτ</i></sup> d<i>τ</i> = e<sup>−<i>at</i></sup> <span class="fr"><i>e<sup>at</sup> − 1</i><i>a</i></span> = <span class="fr"><i>1</i><i>a</i></span>(1 − e<sup>−<i>at</i></sup>)</div>
+<p>So <i>y</i>(<i>t</i>) = 0 for <i>t</i> &lt; 0 and (1/<i>a</i>)(1 − e<sup>−<i>at</i></sup>) for <i>t</i> ≥ 0. Compare with the bottom plot of the widget above.</p></details></div>
+
+<h2 id="s5"><small>5</small>Trigonometric identities and calculus</h2><p class="sub">Identities used throughout APSC 270</p>
+<div class="eq">2 cos<i>a</i> cos<i>b</i> = cos(<i>a</i>−<i>b</i>) + cos(<i>a</i>+<i>b</i>) &nbsp;·&nbsp; 2 sin<i>a</i> sin<i>b</i> = cos(<i>a</i>−<i>b</i>) − cos(<i>a</i>+<i>b</i>) &nbsp;·&nbsp; 2 sin<i>a</i> cos<i>b</i> = sin(<i>a</i>−<i>b</i>) + sin(<i>a</i>+<i>b</i>)<br>
+sin(<i>a</i>±<i>b</i>) = sin<i>a</i> cos<i>b</i> ± cos<i>a</i> sin<i>b</i> &nbsp;·&nbsp; cos(<i>a</i>±<i>b</i>) = cos<i>a</i> cos<i>b</i> ∓ sin<i>a</i> sin<i>b</i><br>
+cos²<i>a</i> = (1 + cos 2<i>a</i>)/2 &nbsp;·&nbsp; sin²<i>a</i> = (1 − cos 2<i>a</i>)/2 &nbsp;·&nbsp; cos<i>a</i> = sin(<i>a</i> + π/2) &nbsp;·&nbsp; sin<i>a</i> = cos(<i>a</i> − π/2)<br>
+e<sup><i>jθ</i></sup> = cos<i>θ</i> + <i>j</i> sin<i>θ</i> &nbsp;·&nbsp; cos<i>θ</i> = (e<sup><i>jθ</i></sup> + e<sup>−<i>jθ</i></sup>)/2 &nbsp;·&nbsp; sin<i>θ</i> = (e<sup><i>jθ</i></sup> − e<sup>−<i>jθ</i></sup>)/2<i>j</i></div>
+<p>Pick an identity and move <i>a</i> and <i>b</i>: the two sides trace the same curve, and the numbers agree to machine precision.</p>
+<div data-w="trig"></div>
+<p>For small angles, cos<i>θ</i> ≈ 1 and sin<i>θ</i> ≈ <i>θ</i> when |<i>θ</i>| ≪ 1. See how quickly the approximation degrades:</p>
+<div data-w="small"></div>
+<p>The course also involves many differentiation and integration problems (like Example 4.1). You are expected to handle derivatives and integrals with the standard methods from APSC 172 and APSC 173.</p>
+
+<h2 id="quiz"><small>▸</small>Check yourself</h2><p class="sub">Four quick questions</p><div id="quizbox" class="card"></div>
+
+<h2 id="key"><small>▸</small>Key formulas</h2>
+<div class="keys">
+<div class="card"><small>Combined operation</small><br><i>y</i>(<i>t</i>) = <i>A</i> <i>x</i>(<i>a</i>(<i>t</i> − <i>t</i><sub>0</sub>))<br><small>shift right by t₀, contract if a &gt; 1</small></div>
+<div class="card"><small>Energy</small><br><i>E</i> = ∫ |<i>x</i>(<i>t</i>)|² d<i>t</i><br><small>finite ⇒ energy signal</small></div>
+<div class="card"><small>Power (periodic)</small><br><i>P</i> = (1/<i>T</i><sub>0</sub>) ∫<sub>period</sub> |<i>x</i>|² d<i>t</i><br><small>A cos(2πf₀t): P = A²/2</small></div>
+<div class="card"><small>LTI output</small><br><i>y</i> = <i>x</i> ⊛ <i>h</i> = ∫ <i>x</i>(<i>τ</i>)<i>h</i>(<i>t</i>−<i>τ</i>)d<i>τ</i><br><small>x ⊛ δ = x</small></div>
+<div class="card"><small>Euler</small><br>e<sup><i>jθ</i></sup> = cos<i>θ</i> + <i>j</i> sin<i>θ</i><br><small>cos θ = (e^{jθ}+e^{−jθ})/2</small></div>
+<div class="card"><small>Small angle</small><br>sin<i>θ</i> ≈ <i>θ</i>, cos<i>θ</i> ≈ 1<br><small>|θ| ≪ 1</small></div></div>
+</div>
+<footer><b>Dr. Anas Chaaban, P.Eng.</b> · School of Engineering · University of British Columbia (UBC) · <a href="mailto:anas.chaaban@ubc.ca">anas.chaaban@ubc.ca</a><br>© Anas Chaaban. Not to be copied, used, revised, or distributed without explicit written permission from the copyright owner.</footer>
+<script>
+const col=k=>getComputedStyle(document.documentElement).getPropertyValue('--'+k).trim(),UPS=[];
+function plot(c,S,x0,x1,y0,y1,r){const x=c.getContext('2d'),w=c.width,oy=r?r[0]:0,hh=r?r[1]:c.height,X=t=>(t-x0)/(x1-x0)*w,Y=v=>oy+hh-(v-y0)/(y1-y0)*hh;
+ if(!r)x.clearRect(0,0,w,c.height);x.save();x.beginPath();x.rect(0,oy,w,hh);x.clip();x.font='12px system-ui';x.lineWidth=1;x.setLineDash([]);
+ for(let k=Math.ceil(x0);k<=x1;k++){x.strokeStyle=col('ln');x.beginPath();x.moveTo(X(k),oy);x.lineTo(X(k),oy+hh);x.stroke();if(k){x.fillStyle=col('mut');x.fillText(k,X(k)+3,Y(0)+13)}}
+ x.strokeStyle=col('mut');x.beginPath();x.moveTo(0,Y(0));x.lineTo(w,Y(0));x.stroke();
+ S.forEach(s=>{x.strokeStyle=x.fillStyle=col(s.c);x.lineWidth=s.lw||2;x.setLineDash(s.d||[]);
+  if(s.pts){s.pts.forEach(([t,v])=>{x.beginPath();x.moveTo(X(t),Y(0));x.lineTo(X(t),Y(v));x.stroke();x.beginPath();x.arc(X(t),Y(v),4,0,7);x.fill()})}
+  else{x.beginPath();let n=0,lx=0;for(let i=0;i<=w;i++){const t=x0+i/w*(x1-x0);if(s.to!==undefined&&t>s.to)break;const v=s.f(t);n++?x.lineTo(i,Y(v)):x.moveTo(i,Y(v));lx=i}
+   if(s.fill){x.lineTo(lx,Y(0));x.lineTo(0,Y(0));x.closePath();x.globalAlpha=.3;x.fill();x.globalAlpha=1}else x.stroke()}});x.restore();x.setLineDash([])}
+function W(id,o){const host=document.querySelector(`[data-w="${id}"]`),d=document.createElement('div'),inp={},bs={};d.className='card wd';
+ d.innerHTML=`<div class="cap">${o.cap}</div><h4>${o.title}</h4><canvas width="720" height="${o.h||260}"></canvas><div class="ctl"></div><p class="note"></p>`;
+ const ctl=d.querySelector('.ctl');
+ o.ctl.forEach(c=>{const l=document.createElement('label');
+  if(c.t=='b'){l.innerHTML='<br><button class="btn">'+c.l+'</button>';l.querySelector('button').onclick=()=>{for(const k in c.set)inp[k].value=c.set[k];up()}}
+  else if(c.t=='s'){l.innerHTML=c.l+'<select>'+c.o.map((x,i)=>`<option value="${i}">${x}</option>`).join('')+'</select>';inp[c.k]=l.querySelector('select');inp[c.k].value=c.v||0}
+  else{l.innerHTML=`${c.l}: <b></b><input type="range" min="${c.min}" max="${c.max}" step="${c.step}" value="${c.v}">`;inp[c.k]=l.querySelector('input');bs[c.k]=l.querySelector('b')}
+  ctl.appendChild(l)});
+ const up=()=>{const v={};for(const k in inp){v[k]=+inp[k].value;if(bs[k])bs[k].textContent=inp[k].value}d.querySelector('.note').innerHTML=o.draw(d.querySelector('canvas'),v)};
+ d.addEventListener('input',up);host.appendChild(d);up();UPS.push(up)}
+const sinc=t=>t==0?1:Math.sin(Math.PI*t)/(Math.PI*t),PI_=t=>Math.abs(t)<.5?1:0,LA=t=>Math.max(0,1-Math.abs(t)),U=t=>t>=0?1:0,TP=2*Math.PI;
+// ---- 1 gallery
+const SG=[
+{n:'Trigonometric functions',r:[-TP,TP],y:[-1.5,1.5],s:[{f:Math.sin,c:'a',n:'sin(t)'},{f:Math.cos,c:'b',n:'cos(t)'}],d:'sin(<i>t</i>) (blue) and cos(<i>t</i>) (red) are periodic with period 2π, and cos(<i>t</i>) = sin(<i>t</i> + π/2).'},
+{n:'Rectangular pulse Π(t)',r:[-3,3],y:[-.5,1.5],s:[{f:PI_,c:'a',n:'Π(t)'}],d:'A unit-height pulse of width 1 centred at <i>t</i> = 0.'},
+{n:'Triangular pulse Λ(t)',r:[-3,3],y:[-.5,1.5],s:[{f:LA,c:'a',n:'Λ(t)'}],d:'A triangle of height 1 and base width 2, centred at <i>t</i> = 0.'},
+{n:'Sinc function',r:[-3,3],y:[-.5,1.3],s:[{f:sinc,c:'a',n:'sinc(t)'}],d:'sinc(<i>t</i>) = sin(π<i>t</i>)/(π<i>t</i>) with sinc(0) = 1; it crosses zero at every nonzero integer.'},
+{n:'Unit step u(t)',r:[-3,3],y:[-.5,1.5],s:[{f:U,c:'a',n:'u(t)'}],d:'Zero for <i>t</i> &lt; 0 and one for <i>t</i> ≥ 0; the running integral of δ(<i>t</i>).'},
+{n:'Unit impulse δ(t)',r:[-3,3],y:[-.5,1.5],s:[],st:1,d:'Zero everywhere except <i>t</i> = 0, with unit area. It is drawn as an arrow of height 1, and δ(<i>t</i>) = d<i>u</i>/d<i>t</i>.'},
+{n:'Sign function',r:[-3,3],y:[-1.5,1.5],s:[{f:t=>Math.sign(t),c:'a',n:'sign(t)'}],d:'+1 for <i>t</i> &gt; 0, −1 for <i>t</i> &lt; 0, and 0 at <i>t</i> = 0.'}];
+W('gal',{cap:'Interactive 1.1',title:'Signal gallery',ctl:[{t:'s',k:'s',l:'Signal',o:SG.map(g=>g.n)},{k:'t',l:'Probe time t',min:-6,max:6,step:.1,v:.5}],
+ draw(c,v){const g=SG[v.s],t=Math.max(g.r[0],Math.min(g.r[1],v.t)),pts=g.st?[{pts:[[0,1]],c:'a'}]:g.s.map(s=>({pts:[[t,s.f(t)]],c:s.c,lw:1}));
+  plot(c,[...g.s.map(s=>({f:s.f,c:s.c})),...pts],g.r[0],g.r[1],g.y[0],g.y[1]);
+  return g.d+(g.st?'':'<br><b>Probe:</b> '+g.s.map(s=>`${s.n} at t = ${t.toFixed(1)} → ${s.f(t).toFixed(3)}`).join(' · '))}});
+// ---- 2 operations
+const BASE=[['Π(t)',PI_],['Λ(t)',LA],['sinc(t)',sinc],['u(t)',U]];
+W('ops',{cap:'Interactive 2.1',title:'Shift, scale, reverse: y(t) = A·x(±a(t − t₀))',ctl:[{t:'s',k:'s',l:'Signal x(t)',o:BASE.map(b=>b[0])},
+ {k:'A',l:'Amplitude A',min:-2,max:2,step:.5,v:1},{k:'t0',l:'Shift t₀ (right if &gt; 0)',min:-3,max:3,step:.25,v:0},{k:'a',l:'Scale a (&gt; 1 contracts)',min:.25,max:3,step:.25,v:1},{k:'r',l:'Time reversal (0 = off, 1 = on)',min:0,max:1,step:1,v:0},
+ {t:'b',l:'Load Example 2.1: 2Π((t−1)/2)',set:{s:0,A:2,t0:1,a:.5,r:0}}],
+ draw(c,v){const x=BASE[v.s][1],g=v.r?-1:1;plot(c,[{f:x,c:'b',d:[5,4]},{f:t=>v.A*x(g*v.a*(t-v.t0)),c:'a'}],-4,4,-2.5,2.5);
+  return `Blue: y(t) = ${v.A}·x(${v.r?'−':''}${v.a}(t − ${v.t0})); red dashed: x(t).`+(v.s==0&&!v.r?` For Π: centre at t = ${v.t0}, width ${(1/v.a).toFixed(2)}, height ${v.A}.`:'')}});
+// ---- 3 energy & power
+W('ep',{cap:'Interactive 3.1',title:'Energy and power over a window of length T',ctl:[{t:'s',k:'s',l:'Signal',o:['Rectangular pulse A·Π(t/p)','Sinusoid A·cos(2πpt)','Decaying exponential A·e^(−pt)·u(t)']},
+ {k:'A',l:'Amplitude A',min:.5,max:3,step:.5,v:1},{k:'p',l:'Parameter p (width, frequency or decay rate)',min:.5,max:4,step:.5,v:1},{k:'T',l:'Window length T',min:4,max:100,step:4,v:40}],
+ draw(c,v){const{A,p,T}=v,f=[t=>Math.abs(t)<p/2?A:0,t=>A*Math.cos(TP*p*t),t=>t>=0?A*Math.exp(-p*t):0][v.s];let E=0;const n=20000,dt=T/n;for(let i=0;i<n;i++){const t=-T/2+(i+.5)*dt;E+=f(t)**2*dt}
+  plot(c,[{f,c:'a'}],-5,5,-3.4,3.4);const th=[[A*A*p,0,'energy signal'],[Infinity,A*A/2,'power signal'],[A*A/(2*p),0,'energy signal']][v.s];
+  return `<b>E<sub>T</sub></b> = ${E.toFixed(3)} · <b>P<sub>T</sub> = E<sub>T</sub>/T</b> = ${(E/T).toFixed(4)}<br>As T → ∞: E = ${th[0]===Infinity?'∞':th[0].toFixed(3)}, P = ${th[1]===0?'0':th[1].toFixed(3)} ⇒ <b>${th[2]}</b>.`}});
+// ---- 4 systems
+const SY=[['y = 2x(t)',(x,t)=>2*x(t),[1,1,1],'Scaling by a constant.'],['y = x²(t)',(x,t)=>x(t)**2,[0,1,1],'Squaring breaks superposition: (x₁ + x₂)² ≠ x₁² + x₂².'],
+['y = x(t)cos(2πt)',(x,t)=>x(t)*Math.cos(TP*t),[1,0,1],'A modulator: the carrier depends explicitly on t, so a delayed input does not give a delayed output.'],
+['y = x(t − 1)',(x,t)=>x(t-1),[1,1,1],'A pure delay.'],['y = x(t + 1)',(x,t)=>x(t+1),[1,1,0],'It needs the input one second in the future.'],
+['y = dx/dt',(x,t)=>(x(t+1e-3)-x(t-1e-3))/2e-3,[1,1,1],'A differentiator.'],['y = x(−t)',(x,t)=>x(-t),[1,0,0],'Time reversal: it needs future values for t &lt; 0 and is not time-invariant.'],
+['y = x(t) + 1',(x,t)=>x(t)+1,[0,1,1],'An offset violates superposition (affine, not linear).']];
+W('sys',{cap:'Interactive 4.1',title:'Test a system: time invariance and linearity',h:370,ctl:[{t:'s',k:'s',l:'System',o:SY.map(s=>s[0])},{k:'d',l:'Input delay t₀',min:-2,max:2,step:.25,v:.5}],
+ draw(c,v){const[,S,P,why]=SY[v.s],x1=LA,x2=t=>LA(t-1),sh=t=>LA(t-v.d),a=t=>S(sh,t),b=t=>S(x1,t-v.d),l=t=>S(t2=>x1(t2)+x2(t2),t),r=t=>S(x1,t)+S(x2,t);
+  let m=1.2,e1=0,e2=0;for(let t=-4;t<=4;t+=.05){m=Math.max(m,Math.abs(a(t)),Math.abs(l(t)),Math.abs(r(t)));e1=Math.max(e1,Math.abs(a(t)-b(t)));e2=Math.max(e2,Math.abs(l(t)-r(t)))}
+  c.getContext('2d').clearRect(0,0,720,370);m*=1.15;
+  plot(c,[{f:a,c:'a'},{f:b,c:'b',d:[5,4]}],-4,4,-m,m,[0,180]);plot(c,[{f:l,c:'a'},{f:r,c:'b',d:[5,4]}],-4,4,-m,m,[190,180]);
+  const B=(n,ok)=>`<span class="badge ${ok?'ok':'bad'}">${ok?'✓':'✗'} ${n}</span>`;
+  return `Top: S[x(t−t₀)] (blue) vs y(t−t₀) (red dashed) with x = Λ(t): ${e1<1e-6?'<b class="ok">identical</b>':'<b class="bad">different</b>'}. Bottom: S[x₁+x₂] vs S[x₁]+S[x₂] with x₂ = Λ(t−1): ${e2<1e-6?'<b class="ok">identical</b>':'<b class="bad">different</b>'}.<br>${B('Linear',P[0])}${B('Time-invariant',P[1])}${B('Causal',P[2])} ${why}${v.d==0?' <i>Set a nonzero delay to test time invariance.</i>':(v.s==2&&Number.isInteger(v.d)?' <i>Note: a whole-number delay equals a whole number of carrier periods, which hides the effect; try t₀ = 0.5.</i>':'')}`}});
+// ---- convolution
+W('conv',{cap:'Interactive 4.2',title:'Convolution step by step: u(t) ⊛ e^(−at)u(t)',h:380,ctl:[{k:'a',l:'Decay rate a',min:.2,max:3,step:.1,v:1},{k:'t',l:'Time t',min:-1,max:5,step:.1,v:1.5}],
+ draw(c,v){const a=v.a,h=t=>t>=0?Math.exp(-a*t):0,hs=t=>h(v.t-t),yt=t=>t<0?0:(1-Math.exp(-a*t))/a,ym=1/a;c.getContext('2d').clearRect(0,0,720,380);
+  plot(c,[{f:t=>U(t)*hs(t),c:'g',fill:1,lw:1},{f:U,c:'a'},{f:hs,c:'b'}],-1,5,-.2,1.4,[0,185]);
+  plot(c,[{f:yt,c:'a',lw:1,d:[3,3]},{f:yt,c:'a',lw:3,to:v.t},{pts:[[v.t,yt(v.t)]],c:'b'}],-1,5,-.12*ym,1.15*ym,[195,185]);
+  return `Top: x(τ) = u(τ) (blue), h(t−τ) (red) and their product (green area). Bottom: y(t) is that area. At t = ${v.t.toFixed(1)}: y = <b>${yt(v.t).toFixed(3)}</b> = (1 − e<sup>−${a}·${v.t.toFixed(1)}</sup>)/${a} for t ≥ 0.`}});
+// ---- 5 trig
+const ID=[['2cos a cos b = cos(a−b)+cos(a+b)',(a,b)=>2*Math.cos(a)*Math.cos(b),(a,b)=>Math.cos(a-b)+Math.cos(a+b)],['2sin a sin b = cos(a−b)−cos(a+b)',(a,b)=>2*Math.sin(a)*Math.sin(b),(a,b)=>Math.cos(a-b)-Math.cos(a+b)],
+['2sin a cos b = sin(a−b)+sin(a+b)',(a,b)=>2*Math.sin(a)*Math.cos(b),(a,b)=>Math.sin(a-b)+Math.sin(a+b)],['sin(a+b) = sin a cos b + cos a sin b',(a,b)=>Math.sin(a+b),(a,b)=>Math.sin(a)*Math.cos(b)+Math.cos(a)*Math.sin(b)],
+['sin(a−b) = sin a cos b − cos a sin b',(a,b)=>Math.sin(a-b),(a,b)=>Math.sin(a)*Math.cos(b)-Math.cos(a)*Math.sin(b)],['cos(a+b) = cos a cos b − sin a sin b',(a,b)=>Math.cos(a+b),(a,b)=>Math.cos(a)*Math.cos(b)-Math.sin(a)*Math.sin(b)],
+['cos(a−b) = cos a cos b + sin a sin b',(a,b)=>Math.cos(a-b),(a,b)=>Math.cos(a)*Math.cos(b)+Math.sin(a)*Math.sin(b)],['cos²a = (1+cos 2a)/2',a=>Math.cos(a)**2,a=>(1+Math.cos(2*a))/2],['sin²a = (1−cos 2a)/2',a=>Math.sin(a)**2,a=>(1-Math.cos(2*a))/2],
+['cos a = sin(a+π/2)',a=>Math.cos(a),a=>Math.sin(a+Math.PI/2)],['sin a = cos(a−π/2)',a=>Math.sin(a),a=>Math.cos(a-Math.PI/2)]];
+W('trig',{cap:'Interactive 5.1',title:'Verify an identity numerically',ctl:[{t:'s',k:'s',l:'Identity',o:ID.map(i=>i[0])},{k:'a',l:'Angle a (degrees)',min:-180,max:180,step:5,v:40},{k:'b',l:'Angle b (degrees)',min:-180,max:180,step:5,v:25}],
+ draw(c,v){const[,L,R]=ID[v.s],rd=Math.PI/180,b=v.b*rd,a=v.a*rd;plot(c,[{f:t=>L(t*rd,b),c:'a',lw:3},{f:t=>R(t*rd,b),c:'b',d:[5,4]},{pts:[[v.a,L(a,b)]],c:'g'}],-180,180,-2.3,2.3);
+  return `Blue = left side, red dashed = right side, as functions of a (degrees) for the chosen b. At a = ${v.a}°, b = ${v.b}°: LHS = <b>${L(a,b).toFixed(6)}</b>, RHS = <b>${R(a,b).toFixed(6)}</b>, difference ${Math.abs(L(a,b)-R(a,b)).toExponential(1)}.`}});
+W('small',{cap:'Interactive 5.2',title:'Small-angle approximation',ctl:[{k:'th',l:'Angle θ (radians)',min:.05,max:2,step:.05,v:.3}],
+ draw(c,v){const t=v.th;plot(c,[{f:Math.sin,c:'a'},{f:x=>x,c:'b',d:[5,4]},{f:Math.cos,c:'g'},{f:()=>1,c:'mut',d:[2,4],lw:1},{pts:[[t,Math.sin(t)],[t,Math.cos(t)]],c:'a',lw:1}],-2.2,2.2,-1.6,1.6);
+  return `sin θ = <b>${Math.sin(t).toFixed(4)}</b> vs θ = ${t.toFixed(2)} (error ${(100*Math.abs(t-Math.sin(t))/Math.sin(t)).toFixed(1)}%); cos θ = <b>${Math.cos(t).toFixed(4)}</b> vs 1 (error ${(100*(1-Math.cos(t))/Math.cos(t)).toFixed(1)}%). Blue/green: sin, cos; red dashed: θ.`}});
+// ---- quiz
+const Q=[{q:'Π((t−1)/2) is a pulse…',o:['centred at t = 1, width 2','centred at t = −1, width 2','centred at t = 1, width ½','centred at t = 2, width 1'],a:0,e:'Shift right by 1, expand by 2.'},
+{q:'The power of A·cos(2πf₀t) is…',o:['A²','A²/2','A/2','∞'],a:1,e:'P = A²/2; it is a power signal with infinite energy.'},
+{q:'Which system is time-varying?',o:['y = 3x(t)','y = dx/dt','y = x(t)cos(2πf₀t)','y = x(t − 2)'],a:2,e:'The explicit carrier makes the response depend on absolute time.'},
+{q:'For t ≥ 0, u(t) ⊛ e^(−at)u(t) equals…',o:['e^(−at)','(1/a)(1 − e^(−at))','a·e^(−at)','t·e^(−at)'],a:1,e:'The integral of e^(−a(t−τ)) from 0 to t.'}];
+const qb=document.getElementById('quizbox');Q.forEach((q,j)=>{const d=document.createElement('div');d.className='q';
+ d.innerHTML=`<p>${j+1}. ${q.q}</p>`+q.o.map((o,k)=>`<label><input type="radio" name="q${j}" value="${k}"> ${o}</label>`).join('')+'<button class="chk">Check</button> <span></span>';
+ d.querySelector('button').onclick=()=>{const s=d.querySelector('input:checked'),f=d.querySelector('span');if(!s){f.textContent='Pick an answer.';return}const ok=+s.value===q.a;f.className=ok?'ok':'bad';f.textContent=ok?'✓ '+q.e:'✗ Not quite, try again.'};qb.appendChild(d)});
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>UPS.forEach(f=>f()));
+</script></body></html>
