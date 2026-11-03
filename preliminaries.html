@@ -35,7 +35,19 @@ details summary{cursor:pointer;color:var(--acc);font-weight:600;margin-top:8px}.
 .q{margin:10px 0}.q p{margin:2px 0;font-weight:600}.q label{font-weight:400;margin:2px 0}
 footer{border-top:1px solid var(--ln);padding:20px;text-align:center;font-size:.85rem;color:var(--mut)}footer a{color:var(--acc)}
 @media(max-width:640px){.toc{columns:1}header{font-size:.85rem}}
-</style></head>
+</style>
+<script>
+MathJax = {
+    tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+    },
+    svg: {
+        fontCache: 'global'
+    }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+</head>
 <body>
 <header><span>APSC 270 – Signals and Communication Systems</span><span>Preliminaries</span></header>
 <div class="wrap">
@@ -54,8 +66,44 @@ footer{border-top:1px solid var(--ln);padding:20px;text-align:center;font-size:.
 
 <h2 id="s1"><small>1</small>Common signals</h2><p class="sub">The shapes that appear throughout signals, systems and communications</p>
 <p>You are expected to know these signals and to be able to plot them. Pick one below to see its definition and plot, and drag the probe to read its value at any time <i>t</i>.</p>
-<div class="eq"><i>Π</i>(<i>t</i>) = 1 for |<i>t</i>| &lt; ½, else 0 &nbsp;·&nbsp; <i>Λ</i>(<i>t</i>) = 1 − |<i>t</i>| for |<i>t</i>| ≤ 1, else 0 &nbsp;·&nbsp; sinc(<i>t</i>) = <span class="fr"><i>sin(π<i>t</i>)</i><i>π<i>t</i></i></span>, sinc(0) = 1<br>
-<i>u</i>(<i>t</i>) = 1 for <i>t</i> ≥ 0, else 0 &nbsp;·&nbsp; sign(<i>t</i>) = 1, 0, −1 for <i>t</i> &gt; 0, = 0, &lt; 0 &nbsp;·&nbsp; <i>δ</i>(<i>t</i>) = <span class="fr"><i>d</i><i>dt</i></span><i>u</i>(<i>t</i>), &nbsp;<i>u</i>(<i>t</i>) = ∫<sub>−∞</sub><sup><i>t</i></sup> <i>δ</i>(<i>τ</i>) d<i>τ</i></div>
+<div class="eq">
+\[
+\begin{aligned}
+\Pi(t) &= 
+\begin{cases}
+1, & |t| < \frac{1}{2},\\
+0, & \text{otherwise}
+\end{cases}
+\\[6pt]
+\Lambda(t) &=
+\begin{cases}
+1-|t|, & |t|\leq 1,\\
+0, & \text{otherwise}
+\end{cases}
+\\[6pt]
+\operatorname{sinc}(t) &= \frac{\sin(\pi t)}{\pi t},
+\qquad \operatorname{sinc}(0)=1
+\\[10pt]
+u(t) &=
+\begin{cases}
+1, & t\geq 0,\\
+0, & \text{otherwise}
+\end{cases}
+\\[6pt]
+\operatorname{sign}(t) &=
+\begin{cases}
+1, & t>0,\\
+0, & t=0,\\
+-1, & t<0
+\end{cases}
+\\[6pt]
+\delta(t) &= \frac{d}{dt}u(t),
+\qquad
+u(t)=\int_{-\infty}^{t}\delta(\tau)\,d\tau
+\end{aligned}
+\]
+</div>
+
 <div data-w="gal"></div>
 
 <h2 id="s2"><small>2</small>Some important signal operations</h2><p class="sub">Shifting, time-scaling and time-reversal</p>
