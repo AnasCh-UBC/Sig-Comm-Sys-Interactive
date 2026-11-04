@@ -37,16 +37,23 @@ footer{border-top:1px solid var(--ln);padding:20px;text-align:center;font-size:.
 @media(max-width:640px){.toc{columns:1}header{font-size:.85rem}}
 </style>
 <script>
-MathJax = {
-    tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']]
-    },
-    svg: {
-        fontCache: 'global'
-    }
-};
-</script>
-<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        },
+        svg: {
+            fontCache: 'global'
+        },
+        startup: {
+            typeset: true
+        }
+    };
+    </script>
+    
+    <script defer
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
 </head>
 <body>
 <header><span>APSC 270 – Signals and Communication Systems</span><span>Preliminaries</span></header>
@@ -268,20 +275,105 @@ function plot(c,S,x0,x1,y0,y1,r){const x=c.getContext('2d'),w=c.width,oy=r?r[0]:
   if(s.pts){s.pts.forEach(([t,v])=>{x.beginPath();x.moveTo(X(t),Y(0));x.lineTo(X(t),Y(v));x.stroke();x.beginPath();x.arc(X(t),Y(v),4,0,7);x.fill()})}
   else{x.beginPath();let n=0,lx=0;for(let i=0;i<=w;i++){const t=x0+i/w*(x1-x0);if(s.to!==undefined&&t>s.to)break;const v=s.f(t);n++?x.lineTo(i,Y(v)):x.moveTo(i,Y(v));lx=i}
    if(s.fill){x.lineTo(lx,Y(0));x.lineTo(0,Y(0));x.closePath();x.globalAlpha=.3;x.fill();x.globalAlpha=1}else x.stroke()}});x.restore();x.setLineDash([])}
-function W(id,o){const host=document.querySelector(`[data-w="${id}"]`),d=document.createElement('div'),inp={},bs={};d.className='card wd';
- d.innerHTML=`<div class="cap">${o.cap}</div><h4>${o.title}</h4><canvas width="720" height="${o.h||260}"></canvas><div class="ctl"></div><p class="note"></p>`;
- const ctl=d.querySelector('.ctl');
- o.ctl.forEach(c=>{const l=document.createElement('label');
-  if(c.t=='b'){l.innerHTML='<br><button class="btn">'+c.l+'</button>';l.querySelector('button').onclick=()=>{for(const k in c.set)inp[k].value=c.set[k];up()}}
-  else if(c.t=='s'){l.innerHTML=c.l+'<select>'+c.o.map((x,i)=>`<option value="${i}">${x}</option>`).join('')+'</select>';inp[c.k]=l.querySelector('select');inp[c.k].value=c.v||0}
-  else{l.innerHTML=`${c.l}: <b></b><input type="range" min="${c.min}" max="${c.max}" step="${c.step}" value="${c.v}">`;inp[c.k]=l.querySelector('input');bs[c.k]=l.querySelector('b')}
-  ctl.appendChild(l)});
- const up=()=>{const v={};for(const k in inp){v[k]=+inp[k].value;if(bs[k])bs[k].textContent=inp[k].value}d.querySelector('.note').innerHTML=o.draw(d.querySelector('canvas'),v)};
- d.addEventListener('input',up);host.appendChild(d);up();UPS.push(up)
- if (window.MathJax?.typesetPromise) {
-    MathJax.typesetPromise();
+
+   function W(id,o) {
+    const host = document.querySelector(`[data-w="${id}"]`);
+
+    if (!host) {
+        console.error(`Widget host not found: ${id}`);
+        return;
+    }
+
+    const d = document.createElement('div');
+    const inp = {};
+    const bs = {};
+
+    d.className = 'card wd';
+
+    d.innerHTML = `
+        <div class="cap">${o.cap}</div>
+        <h4>${o.title}</h4>
+        <canvas width="720" height="${o.h || 260}"></canvas>
+        <div class="ctl"></div>
+        <p class="note"></p>
+    `;
+
+    const ctl = d.querySelector('.ctl');
+
+    o.ctl.forEach(c => {
+        const l = document.createElement('label');
+
+        if (c.t === 'b') {
+            l.innerHTML = `<br><button class="btn">${c.l}</button>`;
+
+            l.querySelector('button').onclick = () => {
+                for (const k in c.set) {
+                    inp[k].value = c.set[k];
+                }
+                up();
+            };
+        }
+        else if (c.t === 's') {
+            l.innerHTML = c.l + '<select>' +
+                c.o.map((x,i) =>
+                    `<option value="${i}">${x}</option>`
+                ).join('') + '</select>';
+
+            inp[c.k] = l.querySelector('select');
+            inp[c.k].value = c.v || 0;
+        }
+        else {
+            l.innerHTML = `
+                ${c.l}: <b></b>
+                <input type="range"
+                    min="${c.min}"
+                    max="${c.max}"
+                    step="${c.step}"
+                    value="${c.v}">
+            `;
+
+            inp[c.k] = l.querySelector('input');
+            bs[c.k] = l.querySelector('b');
+        }
+
+        ctl.appendChild(l);
+    });
+
+    const up = () => {
+        const v = {};
+
+        for (const k in inp) {
+            v[k] = +inp[k].value;
+
+            if (bs[k]) {
+                bs[k].textContent = inp[k].value;
+            }
+        }
+
+        try {
+            d.querySelector('.note').innerHTML =
+                o.draw(d.querySelector('canvas'), v);
+
+            // Render any LaTeX in dynamically generated content
+            if (window.MathJax?.typesetPromise) {
+                MathJax.typesetClear([d]);
+                MathJax.typesetPromise([d]).catch(console.error);
+            }
+        }
+        catch (err) {
+            console.error(`Widget error (${id}):`, err);
+            d.querySelector('.note').textContent =
+                'Error rendering this interactive widget. Check the browser console.';
+        }
+    };
+
+    d.addEventListener('input', up);
+
+    host.appendChild(d);
+    UPS.push(up);
+    up();
 }
-}
+
 const sinc=t=>t==0?1:Math.sin(Math.PI*t)/(Math.PI*t),PI_=t=>Math.abs(t)<.5?1:0,LA=t=>Math.max(0,1-Math.abs(t)),U=t=>t>=0?1:0,TP=2*Math.PI;
 // ---- 1 gallery
 const SG=[
