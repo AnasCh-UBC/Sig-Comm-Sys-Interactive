@@ -491,8 +491,9 @@ function plot(c,S,x0,x1,y0,y1,r,axisX='t',axisY='Amplitude'){
     x.textBaseline='top';
 
     // Time: far right, below horizontal axis
-    x.textAlign='right';
-    x.fillText(axisX,w-8,Y(0)+10);
+    x.textAlign = 'right';
+    x.textBaseline = 'bottom';
+    x.fillText(axisX,w-8,Y(0)-6);
 
     // Amplitude: left of vertical axis
     x.textAlign='right';
