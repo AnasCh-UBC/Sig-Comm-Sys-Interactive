@@ -397,9 +397,10 @@ footer{border-top:1px solid var(--ln);padding:20px;text-align:center;font-size:.
         <small>LTI output</small><br>
         \[
         y(t)=x(t)\circledast h(t)
-        =\int_{-\infty}^{\infty}x(\tau)h(t-\tau)\,d\tau
         \]
         <small>
+            \(x(t)\circledast h(t)=\int_{-\infty}^{\infty}x(\tau)h(t-\tau)\,d\tau\)
+
             \(x(t)\circledast\delta(t)=x(t)\)
         </small>
     </div>
@@ -410,7 +411,7 @@ footer{border-top:1px solid var(--ln);padding:20px;text-align:center;font-size:.
         e^{j\theta}=\cos\theta+j\sin\theta
         \]
         <small>
-            \(\cos\theta=\frac{e^{j\theta}+e^{-j\theta}}{2}\)
+            \(\cos\theta=\frac{e^{j\theta}+e^{-j\theta}}{2},\ \ \sin\theta=\frac{e^{j\theta}-e^{-j\theta}}{2j}\)
         </small>
     </div>
 
@@ -420,7 +421,7 @@ footer{border-top:1px solid var(--ln);padding:20px;text-align:center;font-size:.
         \sin\theta\approx\theta,\qquad
         \cos\theta\approx 1
         \]
-        <small>\(|\theta|\ll 1\)</small>
+        <small>for \(|\theta|\ll 1\)</small>
     </div>
 
 </div>
@@ -435,8 +436,8 @@ function plot(c,S,x0,x1,y0,y1,r,axisX='t',axisY='Amplitude'){const x=c.getContex
  x.beginPath();x.moveTo(X(0),oy);x.lineTo(X(0),oy+hh);x.stroke();
  x.fillStyle=col('mut');x.font='12px system-ui';x.textAlign='right';x.fillText(axisX,w-8,oy+hh-7);
  x.textAlign='left';
- x.fillText(axisY,Math.max(8,X(0)+8),oy+5);
-  S.forEach(s=>{x.strokeStyle=x.fillStyle=col(s.c);x.lineWidth=s.lw||2;x.setLineDash(s.d||[]);
+ x.fillText(axisY,Math.max(8,X(0)+8),oy+20);
+   S.forEach(s=>{x.strokeStyle=x.fillStyle=col(s.c);x.lineWidth=s.lw||2;x.setLineDash(s.d||[]);
   if(s.pts){s.pts.forEach(([t,v])=>{x.beginPath();x.moveTo(X(t),Y(0));x.lineTo(X(t),Y(v));x.stroke();x.beginPath();x.arc(X(t),Y(v),4,0,7);x.fill()})}
   else{x.beginPath();let n=0,lx=0;for(let i=0;i<=w;i++){const t=x0+i/w*(x1-x0);if(s.to!==undefined&&t>s.to)break;const v=s.f(t);n++?x.lineTo(i,Y(v)):x.moveTo(i,Y(v));lx=i}
    if(s.fill){x.lineTo(lx,Y(0));x.lineTo(0,Y(0));x.closePath();x.globalAlpha=.3;x.fill();x.globalAlpha=1}else x.stroke()}});x.restore();x.setLineDash([])}
@@ -713,18 +714,16 @@ W('unitcircle', {
         const co = Math.cos(th);
         const si = Math.sin(th);
 
-        // Clear canvas
         x.clearRect(0, 0, w, h);
 
-        // Equal scaling: same number of pixels per unit
-        const scale = Math.min(w, h) * 0.36;
+        // Equal scaling and larger circle
+        const scale = Math.min(w, h) * 0.43;
         const cx = w / 2;
         const cy = h / 2;
 
         const X = a => cx + a * scale;
         const Y = a => cy - a * scale;
 
-        // Drawing helpers
         function line(x1, y1, x2, y2, color, width = 2) {
             x.beginPath();
             x.moveTo(x1, y1);
@@ -748,18 +747,20 @@ W('unitcircle', {
         const projectionColor = '#17a2a4';
 
         // Coordinate axes
-        line(X(-1.25), Y(0), X(1.25), Y(0), axisColor, 2);
-        line(X(0), Y(-1.25), X(0), Y(1.25), axisColor, 2);
+        line(X(-1.12), Y(0), X(1.12), Y(0), axisColor, 2);
+        line(X(0), Y(-1.12), X(0), Y(1.12), axisColor, 2);
 
-        // Axis labels
+        // Axis labels, positioned outside the circle
         x.fillStyle = axisColor;
         x.font = '18px system-ui';
-        x.textAlign = 'center';
-        x.fillText('Real', X(1.32), Y(0) + 6);
+
+        x.textAlign = 'left';
+        x.fillText('Real', X(1.13) + 8, Y(0) + 6);
 
         x.save();
-        x.translate(X(0) - 12, Y(1.32));
+        x.translate(X(0) - 24, Y(1.13) - 8);
         x.rotate(-Math.PI / 2);
+        x.textAlign = 'center';
         x.fillText('Imaginary', 0, 0);
         x.restore();
 
@@ -770,26 +771,25 @@ W('unitcircle', {
         x.lineWidth = 2.5;
         x.stroke();
 
-        // Coordinates of e^(j theta)
+        // Point representing e^(j theta)
         const px = X(co);
         const py = Y(si);
 
-        // Projection lines
+        // Projections onto real and imaginary axes
         line(px, py, px, Y(0), projectionColor, 2);
         line(px, py, X(0), py, projectionColor, 2);
 
-        // Radius: center to point only
+        // Radius from origin to e^(j theta)
         line(X(0), Y(0), px, py, radiusColor, 2.5);
 
-        // Point on the unit circle
+        // Point on the circle
         point(px, py, radiusColor, 6);
 
         // Projection labels
         x.fillStyle = projectionColor;
         x.font = '17px system-ui';
         x.textAlign = 'center';
-
-        x.fillText('cos(θ)', px, Y(0) + 25);
+        x.fillText('cos(θ)', px, Y(0) + 27);
 
         x.textAlign = 'left';
         x.fillText('sin(θ)', X(0) + 12, py - 8);
@@ -798,39 +798,47 @@ W('unitcircle', {
         x.fillStyle = radiusColor;
         x.font = '17px system-ui';
         x.textAlign = co >= 0 ? 'left' : 'right';
-        x.fillText('e^(jθ)', px + (co >= 0 ? 10 : -10), py - 12);
+        x.fillText(
+            'e^(jθ)',
+            px + (co >= 0 ? 10 : -10),
+            py - 12
+        );
 
-        // Angle arc
+        // Counterclockwise angle arc from positive real axis
+        const arcRadius = scale * 0.24;
+
         x.beginPath();
-        x.arc(cx, cy, scale * 0.22, 0, -th, th < 0);
+        x.arc(cx, cy, arcRadius, 0, -th, true);
         x.strokeStyle = radiusColor;
         x.lineWidth = 2;
         x.stroke();
 
-        // Angle label
+        // Angle label positioned along the angle bisector
+        const mid = th / 2;
+        const labelR = scale * 0.36;
+
         x.fillStyle = radiusColor;
-        x.font = '16px system-ui';
-        x.textAlign = 'left';
-        x.fillText('θ', X(0.27), Y(0.12));
+        x.font = '17px system-ui';
+        x.textAlign = 'center';
+        x.fillText(
+            'θ',
+            cx + labelR * Math.cos(mid),
+            cy - labelR * Math.sin(mid)
+        );
 
         return `
-            <div style="text-align:center">
+            <div style="text-align:center; font-size:0.85em; line-height:1.1">
                 \\[
                 \\theta=${th.toFixed(2)}\\text{ rad}
                 \\]
-
                 \\[
                 \\cos\\theta=${co.toFixed(3)}
                 \\]
-
                 \\[
                 \\sin\\theta=${si.toFixed(3)}
                 \\]
-
                 \\[
-                e^{j\\theta}
-                =${co.toFixed(3)}
-                +j(${si.toFixed(3)})
+                e^{j\\theta}=${co.toFixed(3)}+j(${si.toFixed(3)})
                 \\]
             </div>
         `;
