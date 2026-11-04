@@ -125,62 +125,67 @@ footer{border-top:1px solid var(--ln);padding:20px;text-align:center;font-size:.
 }
 </style>
 
+
 <div class="eq-box">
     <div class="eq-grid">
 
         <div class="eq-column">
             \[
-            \Pi(t)=
+            \begin{aligned}
+            \Pi(t)
+            &=
             \begin{cases}
             1, & |t|<\frac{1}{2},\\
             0, & \text{otherwise}
             \end{cases}
-            \]
-
-            \[
-            \Lambda(t)=
+            \\[12pt]
+            \Lambda(t)
+            &=
             \begin{cases}
             1-|t|, & |t|\leq 1,\\
             0, & \text{otherwise}
             \end{cases}
-            \]
-
-            \[
-            \operatorname{sinc}(t)=
+            \\[12pt]
+            \operatorname{sinc}(t)
+            &=
             \begin{cases}
-            \frac{\sin(\pi t)}{\pi t}, & t\neq 0\\
+            \frac{\sin(\pi t)}{\pi t}, & t\neq 0,\\
             1, & t=0
             \end{cases}
+            \end{aligned}
             \]
         </div>
 
         <div class="eq-column">
             \[
-            u(t)=
+            \begin{aligned}
+            u(t)
+            &=
             \begin{cases}
             1, & t\geq 0,\\
             0, & \text{otherwise}
             \end{cases}
-            \]
-
-            \[
-            \operatorname{sign}(t)=
+            \\[12pt]
+            \operatorname{sign}(t)
+            &=
             \begin{cases}
             1, & t>0,\\
             0, & t=0,\\
             -1, & t<0
             \end{cases}
-            \]
-
-            \[
-            \delta(t)=\frac{d}{dt}u(t),
-            \qquad
-            u(t)=\int_{-\infty}^{t}\delta(\tau)\,d\tau
+            \\[12pt]
+            \delta(t)
+            &=\frac{d}{dt}u(t)
+            \\[6pt]
+            u(t)
+            &=\int_{-\infty}^{t}\delta(\tau)\,d\tau
+            \end{aligned}
             \]
         </div>
 
     </div>
 </div>
+
 
 <div data-w="gal"></div>
 
@@ -221,7 +226,7 @@ footer{border-top:1px solid var(--ln);padding:20px;text-align:center;font-size:.
     \\[10pt]
     P &= \frac{1}{T_0}
     \int_{-T_0/2}^{T_0/2}|x(t)|^2\,dt
-    \qquad \text{(periodic with period \(T_0\))}
+    \qquad \text{(when \(x(t)\) is periodic with period \(T_0\))}
     \end{aligned}
     \]
     </div>
@@ -409,8 +414,6 @@ W('unitcircle', {
 });
 </script>
 
-<p>Pick an identity and move <i>a</i> and <i>b</i>: the two sides trace the same curve, and the numbers agree to machine precision.</p>
-<div data-w="trig"></div>
 <p>For small angles, cos<i>θ</i> ≈ 1 and sin<i>θ</i> ≈ <i>θ</i> when |<i>θ</i>| ≪ 1. See how quickly the approximation degrades:</p>
 <div data-w="small"></div>
 <p>The course also involves many differentiation and integration problems (like Example 4.1). You are expected to handle derivatives and integrals with the standard methods from APSC 172 and APSC 173.</p>
@@ -546,7 +549,7 @@ const SG=[
 {n:'Unit step u(t)',r:[-3,3],y:[-.5,1.5],s:[{f:U,c:'a',n:'u(t)'}],d:'Zero for <i>t</i> &lt; 0 and one for <i>t</i> ≥ 0; the running integral of δ(<i>t</i>).'},
 {n:'Unit impulse δ(t)',r:[-3,3],y:[-.5,1.5],s:[],st:1,d:'Zero everywhere except <i>t</i> = 0, with unit area. It is drawn as an arrow of height 1, and δ(<i>t</i>) = d<i>u</i>/d<i>t</i>.'},
 {n:'Sign function',r:[-3,3],y:[-1.5,1.5],s:[{f:t=>Math.sign(t),c:'a',n:'sign(t)'}],d:'+1 for <i>t</i> &gt; 0, −1 for <i>t</i> &lt; 0, and 0 at <i>t</i> = 0.'}];
-W('gal',{cap:'Interactive 1.1',title:'Signal gallery',ctl:[{t:'s',k:'s',l:'Signal',o:SG.map(g=>g.n)},{k:'t',l:'Probe time t',min:-6,max:6,step:.1,v:.5}],
+W('gal',{cap:'Interactive 1.1',title:'Signal gallery: Check signal, probe time, and comments below figure.',ctl:[{t:'s',k:'s',l:'Signal',o:SG.map(g=>g.n)},{k:'t',l:'Probe time t',min:-6,max:6,step:.1,v:.5}],
  draw(c,v){const g=SG[v.s],t=Math.max(g.r[0],Math.min(g.r[1],v.t)),pts=g.st?[{pts:[[0,1]],c:'a'}]:g.s.map(s=>({pts:[[t,s.f(t)]],c:s.c,lw:1}));
   plot(c,[...g.s.map(s=>({f:s.f,c:s.c})),...pts],g.r[0],g.r[1],g.y[0],g.y[1]);
   return g.d+(g.st?'':'<br><b>Probe:</b> '+g.s.map(s=>`${s.n} at t = ${t.toFixed(1)} → ${s.f(t).toFixed(3)}`).join(' · '))}});
@@ -560,7 +563,7 @@ const BASE=[
 
 W('ops',{
     cap:'Interactive 2.1',
-    title:'Shift, scale, reverse: \\(y(t)=Ax(\\pm a(t-t_0))\\)',
+    title:'Shift, scale, reverse: \\(y(t)=Ax(\\pm a(t-t_0))\\). Check signal, parameters, and comments below figure.',
     ctl:[
         {t:'s',k:'s',l:'Signal x(t)',o:BASE.map(b=>b[0])},
         {k:'A',l:'Amplitude A',min:-2,max:2,step:.5,v:1},
@@ -652,7 +655,7 @@ const SY=[['y = 2x(t)',(x,t)=>2*x(t),[1,1,1],'Scaling by a constant.'],['y = x²
 ['y = x(t − 1)',(x,t)=>x(t-1),[1,1,1],'A pure delay.'],['y = x(t + 1)',(x,t)=>x(t+1),[1,1,0],'It needs the input one second in the future.'],
 ['y = dx/dt',(x,t)=>(x(t+1e-3)-x(t-1e-3))/2e-3,[1,1,1],'A differentiator.'],['y = x(−t)',(x,t)=>x(-t),[1,0,0],'Time reversal: it needs future values for t &lt; 0 and is not time-invariant.'],
 ['y = x(t) + 1',(x,t)=>x(t)+1,[0,1,1],'An offset violates superposition (affine, not linear).']];
-W('sys',{cap:'Interactive 4.1',title:'Test a system: time invariance and linearity',h:370,ctl:[{t:'s',k:'s',l:'System',o:SY.map(s=>s[0])},{k:'d',l:'Input delay t₀',min:-2,max:2,step:.25,v:.5}],
+W('sys',{cap:'Interactive 4.1',title:'Test a system: time invariance and linearity (triangle input signal)',h:370,ctl:[{t:'s',k:'s',l:'System',o:SY.map(s=>s[0])},{k:'d',l:'Input delay t₀',min:-2,max:2,step:.25,v:.5}],
  draw(c,v){const[,S,P,why]=SY[v.s],x1=LA,x2=t=>LA(t-1),sh=t=>LA(t-v.d),a=t=>S(sh,t),b=t=>S(x1,t-v.d),l=t=>S(t2=>x1(t2)+x2(t2),t),r=t=>S(x1,t)+S(x2,t);
   let m=1.2,e1=0,e2=0;for(let t=-4;t<=4;t+=.05){m=Math.max(m,Math.abs(a(t)),Math.abs(l(t)),Math.abs(r(t)));e1=Math.max(e1,Math.abs(a(t)-b(t)));e2=Math.max(e2,Math.abs(l(t)-r(t)))}
   c.getContext('2d').clearRect(0,0,720,370);m*=1.15;
@@ -660,7 +663,7 @@ W('sys',{cap:'Interactive 4.1',title:'Test a system: time invariance and lineari
   const B=(n,ok)=>`<span class="badge ${ok?'ok':'bad'}">${ok?'✓':'✗'} ${n}</span>`;
   return `Top: S[x(t−t₀)] (blue) vs y(t−t₀) (red dashed) with x = Λ(t): ${e1<1e-6?'<b class="ok">identical</b>':'<b class="bad">different</b>'}. Bottom: S[x₁+x₂] vs S[x₁]+S[x₂] with x₂ = Λ(t−1): ${e2<1e-6?'<b class="ok">identical</b>':'<b class="bad">different</b>'}.<br>${B('Linear',P[0])}${B('Time-invariant',P[1])}${B('Causal',P[2])} ${why}${v.d==0?' <i>Set a nonzero delay to test time invariance.</i>':(v.s==2&&Number.isInteger(v.d)?' <i>Note: a whole-number delay equals a whole number of carrier periods, which hides the effect; try t₀ = 0.5.</i>':'')}`}});
 // ---- convolution
-W('conv',{cap:'Interactive 4.2',title:'Convolution step by step: u(t) ⊛ e^(−at)u(t)',h:380,ctl:[{k:'a',l:'Decay rate a',min:.2,max:3,step:.1,v:1},{k:'t',l:'Time t',min:-1,max:5,step:.1,v:1.5}],
+W('conv',{cap:'Interactive 4.2',title:'Convolution step by step: u(t) ⊛ exp(−at)u(t)',h:380,ctl:[{k:'a',l:'Decay rate a',min:.2,max:3,step:.1,v:1},{k:'t',l:'Time t',min:-1,max:5,step:.1,v:1.5}],
  draw(c,v){const a=v.a,h=t=>t>=0?Math.exp(-a*t):0,hs=t=>h(v.t-t),yt=t=>t<0?0:(1-Math.exp(-a*t))/a,ym=1/a;c.getContext('2d').clearRect(0,0,720,380);
   plot(c,[{f:t=>U(t)*hs(t),c:'g',fill:1,lw:1},{f:U,c:'a'},{f:hs,c:'b'}],-1,5,-.2,1.4,[0,185]);
   plot(c,[{f:yt,c:'a',lw:1,d:[3,3]},{f:yt,c:'a',lw:3,to:v.t},{pts:[[v.t,yt(v.t)]],c:'b'}],-1,5,-.12*ym,1.15*ym,[195,185]);
