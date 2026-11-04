@@ -20,17 +20,17 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 <p class="lede">From everyday messages to the technologies that move information around the world. Explore what communication systems do, how they evolved, and what you will learn in this course.</p>
 <div class="meta"><div><b>Instructor</b>Dr. Anas Chaaban, P.Eng.<br>UBC School of Engineering</div><div><b>Course</b>APSC 270 · Signals and Communication Systems</div><div><b>Focus</b>Analog communication, signals, systems, and practical implementation</div></div>
 <div class="card"><h3>Contents</h3><ol class="toc">
-<li><b>1</b><a href="#instructor">About the instructor</a></li>
-<li><b>2</b><a href="#motivation">Why communication matters</a></li><li><b>3</b><a href="#history">A brief history</a></li><li><b>4</b><a href="#system">A communication system</a></li><li><b>5</b><a href="#classification">Classifying systems</a></li><li><b>6</b><a href="#analog">Analog communication</a></li><li><b>7</b><a href="#expectations">Course expectations</a></li><li><b>8</b><a href="#format">Course format and assessment</a></li><li><b>9</b><a href="#outline">Tentative course outline</a></li></ol></div>
+<li><b>1</b><a href="#motivation">Why communication matters</a></li>
+<li><b>2</b><a href="#history">A brief history</a></li>
+<li><b>3</b><a href="#system">A communication system</a></li>
+<li><b>4</b><a href="#classification">Classifying systems</a></li>
+<li><b>5</b><a href="#analog">Analog communication</a></li>
+<li><b>6</b><a href="#expectations">Course expectations</a></li>
+<li><b>7</b><a href="#format">Course format and assessment</a></li>
+<li><b>8</b><a href="#outline">Tentative course outline</a></li></ol></div>
 
-<h2 id="instructor"><small>1</small>About the instructor</h2><p class="sub">Background, experience, and research interests</p>
-<div class="card"><h3>Dr. Anas Chaaban, P.Eng.</h3><div class="grid">
-<div class="tile"><b class="tag">Education</b><ul><li>BSc, Lebanese University (2006)</li><li>MASc, University of Ulm (2009)</li><li>PhD, Ruhr University Bochum (2013)</li></ul></div>
-<div class="tile"><b class="tag">Academic experience</b><ul><li>Postdoctoral researcher, Ruhr University Bochum (2014)</li><li>KAUST (2015–2017)</li><li>Professor at UBC since 2018</li></ul></div></div>
-<h3>Professional and research experience</h3><ul><li><b>Industry:</b> Daimler AG, Hella, FortisBC, TELUS, Rogers, KFAerospace, and others.</li><li><b>Research:</b> Wireless communications and sensing (radio-frequency, optical, and acoustic); information theory, processing, storage, and transmission.</li><li><b>Courses taught:</b> APSC 173, APSC 177, APSC 270, ENGR 418/518, 463, 562, and ENGR 498-Q.</li></ul>
-<p><b>Office:</b> EME 3215 · Tuesdays 11 a.m.–4 p.m.; open door 10 a.m.–4 p.m. on most weekdays. Email to confirm availability: <a href="mailto:anas.chaaban@ubc.ca">anas.chaaban@ubc.ca</a>.</p></div>
 
-<h2 id="motivation"><small>2</small>Why communication matters</h2><p class="sub">Information moves between people, devices, and systems every day</p>
+<h2 id="motivation"><small>1</small>Why communication matters</h2><p class="sub">Information moves between people, devices, and systems every day through communication systems</p>
 <div class="grid">
     
     <div class="tile tile-dark"><b class="tag">Information</b><h3>What do we communicate?</h3><p>Information may be analog or digital, and can take many forms:</p>
@@ -51,53 +51,137 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
         
         </div></div>
         <style>
-        .tile.tile-dark{position:relative;overflow:hidden;background:radial-gradient(120% 140% at 0% 0%,#0b2a66 0%,#071433 45%,#040a18 100%);color:#cfe6ff;border:1px solid rgba(56,189,248,.3);border-radius:16px;padding:22px 22px 18px;box-shadow:0 12px 40px rgba(4,10,24,.45)}
-        .tile-dark::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;background-image:linear-gradient(rgba(29,109,255,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(29,109,255,.14) 1px,transparent 1px);background-size:24px 24px}
-        .tile-dark>*{position:relative}
-        .tile-dark .tag{display:inline-block;padding:3px 12px;border-radius:99px;background:rgba(56,189,248,.14);border:1px solid rgba(56,189,248,.45);color:#7dd3fc;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase}
-        .tile-dark h3{color:#fff;margin:.6em 0 .2em;font-size:1.35rem}
-        .tile-dark p{color:#9db8dc;margin:0 0 14px}
-        .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
-        .info-card{border:1px solid rgba(56,189,248,.25);border-radius:12px;background:rgba(6,18,48,.65);padding:8px 8px 12px;text-align:center;transition:border-color .2s,transform .2s}
-        .info-card:hover{border-color:#38bdf8;transform:translateY(-2px)}
-        .info-card svg{display:block;width:100%;height:auto}
-        .tile-dark .pill{display:inline-block;margin:10px 0 2px;padding:4px 12px;border-radius:99px;background:rgba(29,109,255,.22);border:1px solid rgba(56,189,248,.45);color:#cfe6ff;font-size:.85rem}
-        .info-card small{display:block;color:#7aa2d6;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase}
-        </style>
-        
-    <div class="tile"><b class="tag">Applications</b><h3>Where do we see it?</h3><p>Examples of communication systems:</p><span class="pill">Radio and TV</span><span class="pill">Telephone and cable</span><span class="pill">Cellular and satellite</span><span class="pill">Internet and IoT</span></div></div>
+            .tile.tile-dark {
+                position: relative;
+                overflow: hidden;
+                background: radial-gradient(120% 140% at 0% 0%, #0b2a66 0%, #071433 45%, #040a18 100%);
+                color: #cfe6ff;
+                border: 1px solid rgba(56,189,248,.3);
+                border-radius: 16px;
+                padding: 14px 18px 12px;
+                box-shadow: 0 12px 40px rgba(4,10,24,.45);
+            }
+            
+            .tile-dark::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                pointer-events: none;
+                opacity: .55;
+                background-image:
+                    linear-gradient(rgba(29,109,255,.14) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(29,109,255,.14) 1px, transparent 1px);
+                background-size: 24px 24px;
+            }
+            
+            .tile-dark > * {
+                position: relative;
+            }
+            
+            .tile-dark .tag {
+                display: inline-block;
+                padding: 2px 10px;
+                border-radius: 99px;
+                background: rgba(56,189,248,.14);
+                border: 1px solid rgba(56,189,248,.45);
+                color: #7dd3fc;
+                font-size: .68rem;
+                letter-spacing: .12em;
+                text-transform: uppercase;
+            }
+            
+            .tile-dark h3 {
+                color: #fff;
+                margin: .35em 0 .15em;
+                font-size: 1.2rem;
+            }
+            
+            .tile-dark p {
+                color: #9db8dc;
+                margin: 0 0 9px;
+                font-size: .9rem;
+            }
+            
+            .info-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+                gap: 9px;
+            }
+            
+            .info-card {
+                border: 1px solid rgba(56,189,248,.25);
+                border-radius: 10px;
+                background: rgba(6,18,48,.65);
+                padding: 6px 6px 7px;
+                text-align: center;
+                transition: border-color .2s, transform .2s;
+            }
+            
+            .info-card:hover {
+                border-color: #38bdf8;
+                transform: translateY(-2px);
+            }
+            
+            .info-card svg {
+                display: block;
+                width: 100%;
+                height: auto;
+                max-height: 75px;
+            }
+            
+            .tile-dark .pill {
+                display: inline-block;
+                margin: 5px 0 1px;
+                padding: 3px 9px;
+                border-radius: 99px;
+                background: rgba(29,109,255,.22);
+                border: 1px solid rgba(56,189,248,.45);
+                color: #cfe6ff;
+                font-size: .78rem;
+            }
+            
+            .info-card small {
+                display: block;
+                color: #7aa2d6;
+                font-size: .65rem;
+                letter-spacing: .08em;
+                text-transform: uppercase;
+            }
+            </style>
+
+    <div class="tile"><b class="tag">Communication Systems</b><h3>Where do we see it?</h3><p>Examples of communication systems:</p><span class="pill">Radio and TV</span><span class="pill">Telephone and cable</span><span class="pill">Cellular and satellite</span><span class="pill">Internet and IoT</span></div></div>
 <div class="card"><h3>The central idea</h3><p>Communication is the task of <b>delivering information</b> from a source (transmitter) to a destination (receiver) in a <b>recognizable form</b>.</p><b>Course focus:</b> The underlying techniques that make these systems work.</div>
 
-<h2 id="history"><small>3</small>A brief history</h2><p class="sub">Milestones that transformed communication from telegraphy to global networks</p>
+<h2 id="history"><small>2</small>A brief history</h2><p class="sub">Milestones that transformed communication from telegraphy to global networks</p>
 <div class="timeline"><div class="event"><b>1837–1858</b><p>Faraday's electromagnetic induction, Maxwell's electromagnetic theory, and Morse's telegraph.</p></div><div class="event"><b>1875–1895</b><p>Bell's telephone, Baudot's telegraph code, Marconi's wireless telegraphy, and the first transatlantic cable.</p></div><div class="event"><b>1915–1960</b><p>Transcontinental telephone, television, AM/FM, transistors, digital switching, integrated circuits, and lasers.</p></div><div class="event"><b>Modern era</b><p>Satellite communication, fiber optics, cable, LANs, cellular systems, and high-speed networks.</p></div></div>
 <div class="card"><h3>Communication today</h3><ul><li>Analog communication developed mainly in the early twentieth century and remains in use.</li><li>Digital communication has become increasingly prominent, while many digital techniques build on analog concepts.</li><li>Current research explores THz and mmWave communication and ultra-massive MIMO systems.</li></ul></div>
 <p class="lede">How does it work? What are the main principles and techniques?</p>
 
-<h2 id="system"><small>4</small>What is a communication system?</h2><p class="sub">Four essential elements work together to deliver information</p>
+<h2 id="system"><small>3</small>What is a communication system?</h2><p class="sub">Four essential elements work together to deliver information</p>
 <div class="flow"><div class="stage"><span class="symbol">✉</span><b>Source</b><small>Generates information: voice, images, text, data</small></div><div class="stage"><span class="symbol">↗</span><b>Transmitter</b><small>Creates a signal suitable for transmission</small></div><div class="stage"><span class="symbol">〰</span><b>Channel</b><small>Physical medium; adds noise, interference, and distortion</small></div><div class="stage"><span class="symbol">⌕</span><b>Receiver</b><small>Processes the received signal to recover information</small></div></div>
 <div class="eq">Information source → Transmitter → Channel → Receiver → Information sink</div>
 <ul><li><b>Source:</b> Generates information, such as analog voice/video or digital text/files.</li><li><b>Transmitter:</b> Converts the source information into an electrical, electromagnetic, or optical signal suitable for the channel.</li><li><b>Channel:</b> The physical medium—wire, optical fiber, or free space—through which the signal travels. It may distort the signal.</li><li><b>Receiver:</b> Extracts the transmitted information from the distorted received signal.</li></ul>
 <div class="card"><h3>Communication is a resource-allocation problem</h3><p>Transmitter design must use limited resources efficiently:</p><span class="pill">Transmission power</span><span class="pill">Bandwidth</span><span class="pill">Time</span><span class="pill">Space and antennas</span><span class="pill">Computation</span><span class="pill">Infrastructure</span><p>Communication schemes balance these resources, often through engineering trade-offs.</p></div>
 <p>Constructing the transmitted signal and processing the received signal rely on concepts from signals and systems—the foundation developed in this course.</p>
 
-<h2 id="classification"><small>5</small>Classifying communication systems</h2><p class="sub">Systems can be described along several independent dimensions</p>
+<h2 id="classification"><small>4</small>Classifying communication systems</h2><p class="sub">Systems can be described along several independent dimensions</p>
 <div class="grid"><div class="tile"><b class="tag">Analog vs. digital</b><p><b>Analog:</b> Continuous signals, often transmitted using analog modulation such as AM and FM.</p><p><b>Digital:</b> Discrete information (bits) transmitted using digital modulation.</p></div><div class="tile"><b class="tag">Wired vs. wireless</b><p><b>Wired:</b> Electrical cable or optical fiber.</p><p><b>Wireless:</b> Propagation through free space, air, water, and other media.</p></div><div class="tile"><b class="tag">Single vs. multi-user</b><p><b>Single-user:</b> Point-to-point communication.</p><p><b>Multi-user:</b> Broadcasting or multicasting.</p></div><div class="tile"><b class="tag">Direction</b><p>Uplink and downlink; communication may be full-duplex or half-duplex.</p></div></div><p>Other classifications include bandwidth, range, and transmit power.</p>
 
-<h2 id="analog"><small>6</small>Analog communication</h2><p class="sub">The main focus of this course—and a foundation for understanding digital systems</p>
+<h2 id="analog"><small>5</small>Analog communication</h2><p class="sub">The main focus of this course—and a foundation for understanding digital systems</p>
 <div class="card"><ul><li>Analog communication is used in radio and TV broadcasting.</li><li>Analog techniques are building blocks for modern digital communication systems.</li><li>Analog signals can travel through twisted-pair and coaxial cables, radio waves, and acoustic waves.</li></ul></div>
 <p>To understand communication techniques, we first develop the tools of <b>signals and systems</b>, then apply them to communication systems.</p><h3>Why is this useful?</h3><ul><li>Understanding RF integrated circuits.</li><li>Understanding digital communication systems and wireless networking.</li><li>Applications in biomedical engineering and the Internet of Things (IoT).</li><li>Preparation for careers in telecommunications, graduate studies, and internships.</li></ul>
 
-<h2 id="expectations"><small>7</small>Course expectations</h2><p class="sub">Mathematical analysis and hands-on implementation</p>
+<h2 id="expectations"><small>6</small>Course expectations</h2><p class="sub">Mathematical analysis and hands-on implementation</p>
 <div class="grid"><div class="tile"><b class="tag">Theory</b><h3>Mathematical tools</h3><p>The course involves a substantial amount of mathematics to model and analyze communication schemes.</p></div><div class="tile"><b class="tag">Practice</b><h3>Implementation</h3><p>You will implement communication schemes using GNU Radio and software-defined radios (SDRs).</p></div></div>
 
-<h2 id="format"><small>8</small>Course format and assessment</h2><p class="sub">Where learning happens and how your work is evaluated</p>
+<h2 id="format"><small>7</small>Course format and assessment</h2><p class="sub">Where learning happens and how your work is evaluated</p>
 <div class="meta"><div><b>Lectures</b>EME 0050</div><div><b>Laboratories</b>EDL 002</div><div><b>Teaching assistants</b>Ayush Madhan Sohini · Adam Aldwiry</div></div>
 <h3>Assessment breakdown</h3>
 <div class="barrow"><span>In-class activities</span><div class="bar"><i style="width:4%"></i></div><b>4%</b></div><div class="barrow"><span>Assignments</span><div class="bar"><i style="width:4%"></i></div><b>4%</b></div><div class="barrow"><span>Labs</span><div class="bar"><i style="width:21%"></i></div><b>21%</b></div><div class="barrow"><span>Quizzes</span><div class="bar"><i style="width:21%"></i></div><b>21%</b></div><div class="barrow"><span>Final exam</span><div class="bar"><i style="width:50%"></i></div><b>50%</b></div>
 <div class="card"><ul><li><b>In-class activities (4%):</b> Questions posted and answered during class.</li><li><b>Assignments (4%):</b> Approximately 5–6 assignments completed outside class.</li><li><b>Labs (21%):</b> Pre-lab, in-lab, and post-lab work.</li><li><b>Quizzes (21%):</b> January 29, February 26, and March 26, during class time.</li><li><b>Final exam (50%):</b> Date to be announced.</li></ul></div>
 <div class="callout"><b>Course logistics:</b> Consult the official syllabus for definitive policies, dates, assessment instructions, and updates.</div>
 
-<h2 id="outline"><small>9</small>Tentative course outline</h2><p class="sub">The topics build from signal foundations toward communication techniques</p>
+<h2 id="outline"><small>8</small>Tentative course outline</h2><p class="sub">The topics build from signal foundations toward communication techniques</p>
 <ol class="card"><li>Review of signals and properties</li><li>Fourier series and Fourier transform</li><li>Linear systems and convolution</li><li>Amplitude modulation</li><li>Angle modulation</li><li>Sampling and quantization</li><li>Introduction to digital communication</li></ol>
 <div class="callout"><h3>Attendance matters</h3><div style="font-size:2.5rem;font-weight:750;line-height:1.2;color:var(--red)">10.6%</div><p>On average, students who attended lectures scored 10.6% higher than students who did not attend.</p></div>
 <footer><b>Dr. Anas Chaaban, P.Eng.</b> · School of Engineering · University of British Columbia (UBC) · <a href="mailto:anas.chaaban@ubc.ca">anas.chaaban@ubc.ca</a><br>© Anas Chaaban. Not to be copied, used, revised, or distributed without explicit written permission from the copyright owner.</footer>
