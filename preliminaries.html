@@ -342,8 +342,8 @@ footer{border-top:1px solid var(--ln);padding:20px;text-align:center;font-size:.
     </div>
 </div>
 
-<p>For small angles, cos<i>θ</i> ≈ 1 and sin<i>θ</i> ≈ <i>θ</i> when |<i>θ</i>| ≪ 1. See how quickly the approximation degrades:</p>
-<div data-w="small"></div>
+<p>For small angles, cos<i>θ</i> ≈ 1 and sin<i>θ</i> ≈ <i>θ</i> when |<i>θ</i>| ≪ 1.</p>
+
 <div style="
     border: 1.5px solid #dc3545;
     border-left: 5px solid #dc3545;
@@ -364,12 +364,65 @@ footer{border-top:1px solid var(--ln);padding:20px;text-align:center;font-size:.
 
 <h2 id="key"><small>▸</small>Key formulas</h2>
 <div class="keys">
-<div class="card"><small>Combined operation</small><br><i>y</i>(<i>t</i>) = <i>A</i> <i>x</i>(<i>a</i>(<i>t</i> − <i>t</i><sub>0</sub>))<br><small>shift right by t₀, contract if a &gt; 1</small></div>
-<div class="card"><small>Energy</small><br><i>E</i> = ∫ |<i>x</i>(<i>t</i>)|² d<i>t</i><br><small>finite ⇒ energy signal</small></div>
-<div class="card"><small>Power (periodic)</small><br><i>P</i> = (1/<i>T</i><sub>0</sub>) ∫<sub>period</sub> |<i>x</i>|² d<i>t</i><br><small>A cos(2πf₀t): P = A²/2</small></div>
-<div class="card"><small>LTI output</small><br><i>y</i> = <i>x</i> ⊛ <i>h</i> = ∫ <i>x</i>(<i>τ</i>)<i>h</i>(<i>t</i>−<i>τ</i>)d<i>τ</i><br><small>x ⊛ δ = x</small></div>
-<div class="card"><small>Euler</small><br>e<sup><i>jθ</i></sup> = cos<i>θ</i> + <i>j</i> sin<i>θ</i><br><small>cos θ = (e^{jθ}+e^{−jθ})/2</small></div>
-<div class="card"><small>Small angle</small><br>sin<i>θ</i> ≈ <i>θ</i>, cos<i>θ</i> ≈ 1<br><small>|θ| ≪ 1</small></div></div>
+
+    <div class="card">
+        <small>Combined operation</small><br>
+        \[
+        y(t)=A\,x\bigl(a(t-t_0)\bigr)
+        \]
+        <small>
+            Shift right by \(t_0\), contract if \(a>1\)
+        </small>
+    </div>
+
+    <div class="card">
+        <small>Energy</small><br>
+        \[
+        E=\int_{-\infty}^{\infty}|x(t)|^2\,dt
+        \]
+        <small>Finite \(\Rightarrow\) energy signal</small>
+    </div>
+
+    <div class="card">
+        <small>Power (periodic)</small><br>
+        \[
+        P=\frac{1}{T_0}\int_{T_0}|x(t)|^2\,dt
+        \]
+        <small>
+            \(A\cos(2\pi f_0t):\quad P=\frac{A^2}{2}\)
+        </small>
+    </div>
+
+    <div class="card">
+        <small>LTI output</small><br>
+        \[
+        y(t)=x(t)\circledast h(t)
+        =\int_{-\infty}^{\infty}x(\tau)h(t-\tau)\,d\tau
+        \]
+        <small>
+            \(x(t)\circledast\delta(t)=x(t)\)
+        </small>
+    </div>
+
+    <div class="card">
+        <small>Euler</small><br>
+        \[
+        e^{j\theta}=\cos\theta+j\sin\theta
+        \]
+        <small>
+            \(\cos\theta=\frac{e^{j\theta}+e^{-j\theta}}{2}\)
+        </small>
+    </div>
+
+    <div class="card">
+        <small>Small angle</small><br>
+        \[
+        \sin\theta\approx\theta,\qquad
+        \cos\theta\approx 1
+        \]
+        <small>\(|\theta|\ll 1\)</small>
+    </div>
+
 </div>
 <footer><b>Dr. Anas Chaaban, P.Eng.</b> · School of Engineering · University of British Columbia (UBC) · <a href="mailto:anas.chaaban@ubc.ca">anas.chaaban@ubc.ca</a><br>© Anas Chaaban. Not to be copied, used, revised, or distributed without explicit written permission from the copyright owner.</footer>
 <script>
@@ -382,8 +435,8 @@ function plot(c,S,x0,x1,y0,y1,r,axisX='t',axisY='Amplitude'){const x=c.getContex
  x.beginPath();x.moveTo(X(0),oy);x.lineTo(X(0),oy+hh);x.stroke();
  x.fillStyle=col('mut');x.font='12px system-ui';x.textAlign='right';x.fillText(axisX,w-8,oy+hh-7);
  x.textAlign='left';
-x.fillText(axisY,Math.max(8,X(0)+8),oy+15);
- S.forEach(s=>{x.strokeStyle=x.fillStyle=col(s.c);x.lineWidth=s.lw||2;x.setLineDash(s.d||[]);
+ x.fillText(axisY,Math.max(8,X(0)+8),oy+5);
+  S.forEach(s=>{x.strokeStyle=x.fillStyle=col(s.c);x.lineWidth=s.lw||2;x.setLineDash(s.d||[]);
   if(s.pts){s.pts.forEach(([t,v])=>{x.beginPath();x.moveTo(X(t),Y(0));x.lineTo(X(t),Y(v));x.stroke();x.beginPath();x.arc(X(t),Y(v),4,0,7);x.fill()})}
   else{x.beginPath();let n=0,lx=0;for(let i=0;i<=w;i++){const t=x0+i/w*(x1-x0);if(s.to!==undefined&&t>s.to)break;const v=s.f(t);n++?x.lineTo(i,Y(v)):x.moveTo(i,Y(v));lx=i}
    if(s.fill){x.lineTo(lx,Y(0));x.lineTo(0,Y(0));x.closePath();x.globalAlpha=.3;x.fill();x.globalAlpha=1}else x.stroke()}});x.restore();x.setLineDash([])}
@@ -630,63 +683,140 @@ W('small',{cap:'Interactive 5.2',title:'Small-angle approximation',ctl:[{k:'th',
 // ---- quiz
 const Q=[{q:'Π((t−1)/2) is a pulse…',o:['centred at t = 1, width 2','centred at t = −1, width 2','centred at t = 1, width ½','centred at t = 2, width 1'],a:0,e:'Shift right by 1, expand by 2.'},
 {q:'The power of A·cos(2πf₀t) is…',o:['A²','A²/2','A/2','∞'],a:1,e:'P = A²/2; it is a power signal with infinite energy.'},
-{q:'Which system is time-varying?',o:['y = 3x(t)','y = dx/dt','y = x(t)cos(2πf₀t)','y = x(t − 2)'],a:2,e:'The explicit carrier makes the response depend on absolute time.'},
-{q:'For t ≥ 0, u(t) ⊛ e^(−at)u(t) equals…',o:['e^(−at)','(1/a)(1 − e^(−at))','a·e^(−at)','t·e^(−at)'],a:1,e:'The integral of e^(−a(t−τ)) from 0 to t.'}];
+{q:'Which system is time-varying?',o:['y(t) = 3x(t)','y(t) = dx/dt','y(t) = x(t)cos(2πf₀t)','y(t) = x(t − 2)'],a:2,e:'The explicit carrier makes the response depend on absolute time.'},
+{q:'For t ≥ 0, u(t) ⊛ exp(−at)u(t) equals…',o:['exp(−at)','(1/a)(1 − exp(−at))','a·exp(−at)','t·exp(−at)'],a:1,e:'The integral of e^(−a(t−τ)) from 0 to t.'}];
 const qb=document.getElementById('quizbox');Q.forEach((q,j)=>{const d=document.createElement('div');d.className='q';
  d.innerHTML=`<p>${j+1}. ${q.q}</p>`+q.o.map((o,k)=>`<label><input type="radio" name="q${j}" value="${k}"> ${o}</label>`).join('')+'<button class="chk">Check</button> <span></span>';
  d.querySelector('button').onclick=()=>{const s=d.querySelector('input:checked'),f=d.querySelector('span');if(!s){f.textContent='Pick an answer.';return}const ok=+s.value===q.a;f.className=ok?'ok':'bad';f.textContent=ok?'✓ '+q.e:'✗ Not quite, try again.'};qb.appendChild(d)});
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>UPS.forEach(f=>f()));
 W('unitcircle', {
-    target: 'unitcircle',
     cap: 'Interactive',
     title: 'Trigonometric functions and the unit circle',
 
     ctl: [
         {
             k: 'theta',
-            l: 'Angle θ (degrees)',
+            l: 'Angle θ (radians)',
             min: 0,
-            max: 360,
-            step: 5,
-            v: 45
+            max: 6.28,
+            step: 0.05,
+            v: 0.79
         }
     ],
 
     draw(c, v) {
-        const th = v.theta * Math.PI / 180;
+        const x = c.getContext('2d');
+        const w = c.width;
+        const h = c.height;
+
+        const th = v.theta;
         const co = Math.cos(th);
         const si = Math.sin(th);
 
+        // Clear canvas
+        x.clearRect(0, 0, w, h);
+
+        // Equal scaling: same number of pixels per unit
+        const scale = Math.min(w, h) * 0.36;
+        const cx = w / 2;
+        const cy = h / 2;
+
+        const X = a => cx + a * scale;
+        const Y = a => cy - a * scale;
+
+        // Drawing helpers
+        function line(x1, y1, x2, y2, color, width = 2) {
+            x.beginPath();
+            x.moveTo(x1, y1);
+            x.lineTo(x2, y2);
+            x.strokeStyle = color;
+            x.lineWidth = width;
+            x.stroke();
+        }
+
+        function point(px, py, color, radius = 6) {
+            x.beginPath();
+            x.arc(px, py, radius, 0, 2 * Math.PI);
+            x.fillStyle = color;
+            x.fill();
+        }
+
+        // Colors
+        const axisColor = '#000000';
+        const circleColor = '#2878b5';
+        const radiusColor = '#d9534f';
+        const projectionColor = '#17a2a4';
+
+        // Coordinate axes
+        line(X(-1.25), Y(0), X(1.25), Y(0), axisColor, 2);
+        line(X(0), Y(-1.25), X(0), Y(1.25), axisColor, 2);
+
+        // Axis labels
+        x.fillStyle = axisColor;
+        x.font = '18px system-ui';
+        x.textAlign = 'center';
+        x.fillText('Real', X(1.32), Y(0) + 6);
+
+        x.save();
+        x.translate(X(0) - 12, Y(1.32));
+        x.rotate(-Math.PI / 2);
+        x.fillText('Imaginary', 0, 0);
+        x.restore();
+
         // Unit circle
-        const upper = t =>
-            Math.sqrt(Math.max(0, 1-t*t));
+        x.beginPath();
+        x.arc(cx, cy, scale, 0, 2 * Math.PI);
+        x.strokeStyle = circleColor;
+        x.lineWidth = 2.5;
+        x.stroke();
 
-        const lower = t =>
-            -Math.sqrt(Math.max(0, 1-t*t));
+        // Coordinates of e^(j theta)
+        const px = X(co);
+        const py = Y(si);
 
-        // Rotating radius
-        const radius = t => {
-            if (Math.abs(co) < 0.02) return NaN;
+        // Projection lines
+        line(px, py, px, Y(0), projectionColor, 2);
+        line(px, py, X(0), py, projectionColor, 2);
 
-            return (
-                t * si / co
-            );
-        };
+        // Radius: center to point only
+        line(X(0), Y(0), px, py, radiusColor, 2.5);
 
-        plot(c, [
-            {f: upper, c:'b'},
-            {f: lower, c:'b'},
-            {
-                f: radius,
-                c:'a',
-                d:[]
-            }
-        ], -1.2, 1.2, -1.2, 1.2, undefined, 'cos θ', 'sin θ');
+        // Point on the unit circle
+        point(px, py, radiusColor, 6);
+
+        // Projection labels
+        x.fillStyle = projectionColor;
+        x.font = '17px system-ui';
+        x.textAlign = 'center';
+
+        x.fillText('cos(θ)', px, Y(0) + 25);
+
+        x.textAlign = 'left';
+        x.fillText('sin(θ)', X(0) + 12, py - 8);
+
+        // Point label
+        x.fillStyle = radiusColor;
+        x.font = '17px system-ui';
+        x.textAlign = co >= 0 ? 'left' : 'right';
+        x.fillText('e^(jθ)', px + (co >= 0 ? 10 : -10), py - 12);
+
+        // Angle arc
+        x.beginPath();
+        x.arc(cx, cy, scale * 0.22, 0, -th, th < 0);
+        x.strokeStyle = radiusColor;
+        x.lineWidth = 2;
+        x.stroke();
+
+        // Angle label
+        x.fillStyle = radiusColor;
+        x.font = '16px system-ui';
+        x.textAlign = 'left';
+        x.fillText('θ', X(0.27), Y(0.12));
 
         return `
             <div style="text-align:center">
                 \\[
-                \\theta=${v.theta}^{\\circ}
+                \\theta=${th.toFixed(2)}\\text{ rad}
                 \\]
 
                 \\[
