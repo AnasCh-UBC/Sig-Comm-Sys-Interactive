@@ -1,17 +1,83 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Preliminaries</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102b46">
+  <title>APSC 270 · Signals and Communication Systems</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f4f7fa;
+      --surface: rgba(255,255,255,.88);
+      --text: #172638;
+      --muted: #607184;
+      --accent: #087f8c;
+      --accent2: #155e75;
+      --line: rgba(23,38,56,.12);
+      --shadow: 0 22px 65px rgba(15,39,58,.12);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg:#0d1722; --surface:rgba(21,35,49,.9); --text:#edf5fa; --muted:#a9bac8; --accent:#54c4c5; --accent2:#8ad9d5; --line:rgba(237,245,250,.13); --shadow:0 22px 65px rgba(0,0,0,.28); }
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0; min-height:100vh; display:grid; place-items:center; padding:36px 20px;
+      color:var(--text); background:
+        radial-gradient(ellipse at 12% 12%, rgba(8,127,140,.15), transparent 36%),
+        radial-gradient(ellipse at 90% 82%, rgba(21,94,117,.13), transparent 34%), var(--bg);
+      font:16px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    .shell { width:min(100%,1000px); }
+    .topline { display:flex; align-items:center; gap:12px; margin:0 0 22px 4px; color:var(--muted); font-size:.78rem; font-weight:750; letter-spacing:.16em; text-transform:uppercase; }
+    .mark { width:34px; height:34px; display:grid; place-items:center; border:1px solid var(--line); border-radius:10px; color:var(--accent); font-weight:800; letter-spacing:0; }
+    .hero { position:relative; overflow:hidden; padding:clamp(30px,7vw,72px); border:1px solid var(--line); border-radius:28px; background:var(--surface); box-shadow:var(--shadow); backdrop-filter:blur(14px); }
+    .hero:after { content:""; position:absolute; width:340px; height:340px; right:-115px; top:-145px; border:1px solid rgba(8,127,140,.22); border-radius:50%; box-shadow:0 0 0 28px rgba(8,127,140,.035),0 0 0 58px rgba(8,127,140,.025); pointer-events:none; }
+    .eyebrow { margin:0 0 12px; color:var(--accent); font-size:.82rem; font-weight:800; letter-spacing:.15em; text-transform:uppercase; }
+    h1 { max-width:720px; margin:0; font:700 clamp(2.5rem,7vw,5rem)/1.03 Georgia,"Times New Roman",serif; letter-spacing:-.045em; }
+    .subtitle { max-width:650px; margin:22px 0 0; color:var(--muted); font-size:clamp(1.02rem,2vw,1.2rem); }
+    .rule { width:72px; height:4px; margin:30px 0; border-radius:4px; background:linear-gradient(90deg,var(--accent),var(--accent2)); }
+    .section-label { margin:0 0 14px; color:var(--muted); font-size:.76rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; }
+    .pages { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+    .page { display:flex; flex-direction:column; min-height:190px; padding:24px; border:1px solid var(--line); border-radius:18px; color:inherit; text-decoration:none; background:rgba(127,150,170,.055); transition:transform .18s ease,border-color .18s ease,background .18s ease; }
+    .page:hover { transform:translateY(-4px); border-color:var(--accent); background:rgba(8,127,140,.075); }
+    .page:focus-visible { outline:3px solid var(--accent); outline-offset:4px; }
+    .number { color:var(--accent); font-size:.76rem; font-weight:800; letter-spacing:.12em; }
+    .page h2 { margin:12px 0 7px; font:700 1.55rem/1.2 Georgia,"Times New Roman",serif; }
+    .page p { margin:0; color:var(--muted); font-size:.94rem; }
+    .open { display:flex; align-items:center; justify-content:space-between; margin-top:auto; padding-top:22px; color:var(--accent); font-size:.9rem; font-weight:750; }
+    .arrow { font-size:1.3rem; transition:transform .18s ease; }
+    .page:hover .arrow { transform:translateX(4px); }
+    footer { margin:20px 4px 0; color:var(--muted); font-size:.8rem; }
+    @media(max-width:640px) { .pages { grid-template-columns:1fr; } .page { min-height:160px; } .hero { border-radius:22px; } }
+    @media(prefers-reduced-motion:reduce) { *,*:before,*:after { transition:none!important; } }
+  </style>
 </head>
-<body style="margin: 0; padding: 0;">
-
-    <iframe
-        src="preliminaries.html"
-        style="width: 100%; height: 100vh; border: none;">
-    </iframe>
-
+<body>
+  <main class="shell">
+    <div class="topline"><span class="mark">270</span><span>Course learning portal</span></div>
+    <section class="hero" aria-labelledby="course-title">
+      <p class="eyebrow">APSC 270</p>
+      <h1 id="course-title">Signals and<br>Communication Systems</h1>
+      <p class="subtitle">Welcome to the course. Explore the foundational mathematical tools and concepts behind signals, systems, and the communication technologies that connect our world.</p>
+      <div class="rule" aria-hidden="true"></div>
+      <p class="section-label">Choose a section to begin</p>
+      <nav class="pages" aria-label="Course pages">
+        <a class="page" href="preliminaries.html">
+          <span class="number">01 · FOUNDATIONS</span>
+          <h2>Preliminaries</h2>
+          <p>Review the mathematical and signal concepts that prepare you for the course.</p>
+          <span class="open">Explore preliminaries <span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+        <a class="page" href="introduction.html">
+          <span class="number">02 · COURSE INTRODUCTION</span>
+          <h2>Introduction</h2>
+          <p>Learn about communication systems, their history, applications, and course structure.</p>
+          <span class="open">Explore introduction <span class="arrow" aria-hidden="true">→</span></span>
+        </a>
+      </nav>
+    </section>
+    <footer>APSC 270 · Signals and Communication Systems</footer>
+  </main>
 </body>
 </html>
