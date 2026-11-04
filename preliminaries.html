@@ -73,7 +73,7 @@ MathJax = {
         <li>Classify a system as linear, time-invariant, and causal, 
             and compute the convolution:
             \[
-            y(t)=x(t)\ast h(t)
+            y(t)=x(t)\circledast h(t)
             =\int_{-\infty}^{\infty}x(\tau)h(t-\tau)\,d\tau.
             \]
         </li>
@@ -178,7 +178,7 @@ MathJax = {
     <li>
         <b>Scale:</b>
         \(x(at)\), \(a>0\), is contracted along the time axis
-        if \(a>1\) and expanded if \(0<a<1\).
+        if \(a>1\) and expanded if \(  0<a<1 \).
     </li>
 
     <li>
@@ -186,7 +186,7 @@ MathJax = {
         \(x(-t)\) is \(x(t)\) flipped about the vertical axis.
     </li>
 </ul>
-<p>Operations can be combined with each other and with amplitude scaling, addition and multiplication. The playground below builds \(y(t) = Ax(\pm a(t − t_0))\); try one operation at a time first.</p>
+<p>Operations can be combined with each other and with amplitude scaling, addition and multiplication. The playground below builds \(y(t) = Ax(\pm a(t - t_0))\); try one operation at a time first.</p>
 <div data-w="ops"></div>
 <div class="ex"><span class="tag">Example 2.1 · Combining operations</span><p>Plot \(x(t) = 2\Pi((t − 1)/2)\). Use the button above to load it, then check against the solution.</p>
 <details><summary>Show solution</summary><p>Start from \(\Pi(t)\), a unit pulse centred at <i>t</i> = 0 with width 1. Shifting right by 1 moves the centre to <i>t</i> = 1; the factor ½ inside expands the width to 2; the factor 2 doubles the height. Check by evaluating: \(\Pi(s) = 0\) for \(|s| > ½\), so \(\Pi((t − 1)/2) = 0\) when \((t − 1)/2 < −½ \) or \(> ½\), i.e. \(t< 0\) or \(t> 2\), and it equals 1 for \(0 \leq  t \leq  2\). Hence \(x(t)\) is a pulse of height 2 on [0, 2].</p></details></div>
@@ -268,12 +268,44 @@ W('gal',{cap:'Interactive 1.1',title:'Signal gallery: Select a signal to plot. S
   plot(c,[...g.s.map(s=>({f:s.f,c:s.c})),...pts],g.r[0],g.r[1],g.y[0],g.y[1]);
   return g.d+(g.st?'':'<br><b>Probe:</b> '+g.s.map(s=>`${s.n} at t = ${t.toFixed(1)} → ${s.f(t).toFixed(3)}`).join(' · '))}});
 // ---- 2 operations
-const BASE=[['\(\Pi(t)\)',PI_],['\(\Lambda(t)\)',LA],['sinc(t)',sinc],['u(t)',U]];
-W('ops',{cap:'Interactive 2.1',title:'Shift, scale, reverse: \(y(t) = Ax(\pm a(t − t_0))\)',ctl:[{t:'s',k:'s',l:'Signal x(t)',o:BASE.map(b=>b[0])},
- {k:'A',l:'Amplitude A',min:-2,max:2,step:.5,v:1},{k:'t0',l:'Shift t₀ (right if &gt; 0)',min:-3,max:3,step:.25,v:0},{k:'a',l:'Scale a (&gt; 1 contracts)',min:.25,max:3,step:.25,v:1},{k:'r',l:'Time reversal (0 = off, 1 = on)',min:0,max:1,step:1,v:0},
- {t:'b',l:'Load Example 2.1: \(2\Pi((t−1)/2)\)',set:{s:0,A:2,t0:1,a:.5,r:0}}],
- draw(c,v){const x=BASE[v.s][1],g=v.r?-1:1;plot(c,[{f:x,c:'b',d:[5,4]},{f:t=>v.A*x(g*v.a*(t-v.t0)),c:'a'}],-4,4,-2.5,2.5);
-  return `Blue: y(t) = ${v.A}·x(${v.r?'−':''}${v.a}(t − ${v.t0})); red dashed: x(t).`+(v.s==0&&!v.r?` For \(\Pi\): centre at t = ${v.t0}, width ${(1/v.a).toFixed(2)}, height ${v.A}.`:'')}});
+const BASE=[
+    ['\\(\\Pi(t)\\)',PI_],
+    ['\\(\\Lambda(t)\\)',LA],
+    ['\\(\\operatorname{sinc}(t)\\)',sinc],
+    ['\\(u(t)\\)',U]
+];
+
+W('ops',{
+    cap:'Interactive 2.1',
+    title:'Shift, scale, reverse: \\(y(t)=Ax(\\pm a(t-t_0))\\)',
+    ctl:[
+        {t:'s',k:'s',l:'Signal x(t)',o:BASE.map(b=>b[0])},
+        {k:'A',l:'Amplitude A',min:-2,max:2,step:.5,v:1},
+        {k:'t0',l:'Shift t₀ (right if > 0)',min:-3,max:3,step:.25,v:0},
+        {k:'a',l:'Scale a (> 1 contracts)',min:.25,max:3,step:.25,v:1},
+        {k:'r',l:'Time reversal (0 = off, 1 = on)',min:0,max:1,step:1,v:0},
+        {
+            t:'b',
+            l:'Load Example 2.1: \\(2\\Pi((t-1)/2)\\)',
+            set:{s:0,A:2,t0:1,a:.5,r:0}
+        }
+    ],
+
+    draw(c,v){
+        const x=BASE[v.s][1],g=v.r?-1:1;
+
+        plot(c,[
+            {f:x,c:'b',d:[5,4]},
+            {f:t=>v.A*x(g*v.a*(t-v.t0)),c:'a'}
+        ],-4,4,-2.5,2.5);
+
+        return `Blue: y(t) = ${v.A}·x(${v.r?'−':''}${v.a}(t − ${v.t0}));
+        red dashed: x(t).`+
+        (v.s==0&&!v.r?
+        ` For Π: centre at t = ${v.t0}, width ${(1/v.a).toFixed(2)}, height ${v.A}.`
+        :'');
+    }
+});
 // ---- 3 energy & power
 W('ep',{cap:'Interactive 3.1',title:'Energy and power over a window of length T',ctl:[{t:'s',k:'s',l:'Signal',o:['Rectangular pulse A·Π(t/p)','Sinusoid A·cos(2πpt)','Decaying exponential A·e^(−pt)·u(t)']},
  {k:'A',l:'Amplitude A',min:.5,max:3,step:.5,v:1},{k:'p',l:'Parameter p (width, frequency or decay rate)',min:.5,max:4,step:.5,v:1},{k:'T',l:'Window length T',min:4,max:100,step:4,v:40}],
