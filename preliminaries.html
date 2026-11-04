@@ -279,10 +279,136 @@ footer{border-top:1px solid var(--ln);padding:20px;text-align:center;font-size:.
 <p>So <i>y</i>(<i>t</i>) = 0 for <i>t</i> &lt; 0 and (1/<i>a</i>)(1 − e<sup>−<i>at</i></sup>) for <i>t</i> ≥ 0. Compare with the bottom plot of the widget above.</p></details></div>
 
 <h2 id="s5"><small>5</small>Trigonometric identities and calculus</h2><p class="sub">Identities used throughout APSC 270</p>
-<div class="eq">2 cos<i>a</i> cos<i>b</i> = cos(<i>a</i>−<i>b</i>) + cos(<i>a</i>+<i>b</i>) &nbsp;·&nbsp; 2 sin<i>a</i> sin<i>b</i> = cos(<i>a</i>−<i>b</i>) − cos(<i>a</i>+<i>b</i>) &nbsp;·&nbsp; 2 sin<i>a</i> cos<i>b</i> = sin(<i>a</i>−<i>b</i>) + sin(<i>a</i>+<i>b</i>)<br>
-sin(<i>a</i>±<i>b</i>) = sin<i>a</i> cos<i>b</i> ± cos<i>a</i> sin<i>b</i> &nbsp;·&nbsp; cos(<i>a</i>±<i>b</i>) = cos<i>a</i> cos<i>b</i> ∓ sin<i>a</i> sin<i>b</i><br>
-cos²<i>a</i> = (1 + cos 2<i>a</i>)/2 &nbsp;·&nbsp; sin²<i>a</i> = (1 − cos 2<i>a</i>)/2 &nbsp;·&nbsp; cos<i>a</i> = sin(<i>a</i> + π/2) &nbsp;·&nbsp; sin<i>a</i> = cos(<i>a</i> − π/2)<br>
-e<sup><i>jθ</i></sup> = cos<i>θ</i> + <i>j</i> sin<i>θ</i> &nbsp;·&nbsp; cos<i>θ</i> = (e<sup><i>jθ</i></sup> + e<sup>−<i>jθ</i></sup>)/2 &nbsp;·&nbsp; sin<i>θ</i> = (e<sup><i>jθ</i></sup> − e<sup>−<i>jθ</i></sup>)/2<i>j</i></div>
+<div class="eq-box">
+    <div class="eq-grid">
+
+        <!-- LEFT COLUMN: TRIGONOMETRIC IDENTITIES -->
+        <div class="eq-column">
+
+            \[
+            \begin{aligned}
+            2\cos a\cos b
+                &=\cos(a-b)+\cos(a+b)\\[5pt]
+            2\sin a\sin b
+                &=\cos(a-b)-\cos(a+b)\\[5pt]
+            2\sin a\cos b
+                &=\sin(a-b)+\sin(a+b)
+            \end{aligned}
+            \]
+
+            \[
+            \begin{aligned}
+            \sin(a\pm b)
+                &=\sin a\cos b\pm\cos a\sin b\\[5pt]
+            \cos(a\pm b)
+                &=\cos a\cos b\mp\sin a\sin b
+            \end{aligned}
+            \]
+
+            \[
+            \begin{aligned}
+            \cos^2a&=\frac{1+\cos 2a}{2}\\[5pt]
+            \sin^2a&=\frac{1-\cos 2a}{2}
+            \end{aligned}
+            \]
+
+            \[
+            \begin{aligned}
+            \cos a&=\sin\left(a+\frac{\pi}{2}\right)\\[5pt]
+            \sin a&=\cos\left(a-\frac{\pi}{2}\right)
+            \end{aligned}
+            \]
+
+            \[
+            \begin{aligned}
+            e^{j\theta}&=\cos\theta+j\sin\theta\\[5pt]
+            \cos\theta&=\frac{e^{j\theta}+e^{-j\theta}}{2}\\[5pt]
+            \sin\theta&=\frac{e^{j\theta}-e^{-j\theta}}{2j}
+            \end{aligned}
+            \]
+
+        </div>
+
+        <!-- RIGHT COLUMN: INTERACTIVE UNIT CIRCLE -->
+        <div class="eq-column">
+            <div id="unitcircle"></div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+W('unitcircle', {
+    cap: 'Interactive',
+    title: 'Trigonometric functions and the unit circle',
+
+    ctl: [
+        {
+            k: 'theta',
+            l: 'Angle θ (degrees)',
+            min: 0,
+            max: 360,
+            step: 5,
+            v: 45
+        }
+    ],
+
+    draw(c, v) {
+        const th = v.theta * Math.PI / 180;
+        const co = Math.cos(th);
+        const si = Math.sin(th);
+
+        // Unit circle
+        const upper = t =>
+            Math.sqrt(Math.max(0, 1-t*t));
+
+        const lower = t =>
+            -Math.sqrt(Math.max(0, 1-t*t));
+
+        // Rotating radius
+        const radius = t => {
+            if (Math.abs(co) < 0.02) return NaN;
+
+            return (
+                t * si / co
+            );
+        };
+
+        plot(c, [
+            {f: upper, c:'b'},
+            {f: lower, c:'b'},
+            {
+                f: radius,
+                c:'a',
+                d:[]
+            }
+        ], -1.2, 1.2, -1.2, 1.2);
+
+        return `
+            <div style="text-align:center">
+                \\[
+                \\theta=${v.theta}^{\\circ}
+                \\]
+
+                \\[
+                \\cos\\theta=${co.toFixed(3)}
+                \\]
+
+                \\[
+                \\sin\\theta=${si.toFixed(3)}
+                \\]
+
+                \\[
+                e^{j\\theta}
+                =${co.toFixed(3)}
+                +j(${si.toFixed(3)})
+                \\]
+            </div>
+        `;
+    }
+});
+</script>
+
 <p>Pick an identity and move <i>a</i> and <i>b</i>: the two sides trace the same curve, and the numbers agree to machine precision.</p>
 <div data-w="trig"></div>
 <p>For small angles, cos<i>θ</i> ≈ 1 and sin<i>θ</i> ≈ <i>θ</i> when |<i>θ</i>| ≪ 1. See how quickly the approximation degrades:</p>
