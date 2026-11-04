@@ -292,7 +292,7 @@ const SG=[
 {n:'Unit step u(t)',r:[-3,3],y:[-.5,1.5],s:[{f:U,c:'a',n:'u(t)'}],d:'Zero for <i>t</i> &lt; 0 and one for <i>t</i> ≥ 0; the running integral of δ(<i>t</i>).'},
 {n:'Unit impulse δ(t)',r:[-3,3],y:[-.5,1.5],s:[],st:1,d:'Zero everywhere except <i>t</i> = 0, with unit area. It is drawn as an arrow of height 1, and δ(<i>t</i>) = d<i>u</i>/d<i>t</i>.'},
 {n:'Sign function',r:[-3,3],y:[-1.5,1.5],s:[{f:t=>Math.sign(t),c:'a',n:'sign(t)'}],d:'+1 for <i>t</i> &gt; 0, −1 for <i>t</i> &lt; 0, and 0 at <i>t</i> = 0.'}];
-W('gal',{cap:'Interactive 1.1',title:'Signal gallery',h:'Select a signal to plot. See comments below selected signal for a description.',ctl:[{t:'s',k:'s',l:'Signal',o:SG.map(g=>g.n)},{k:'t',l:'Probe time t',min:-6,max:6,step:.1,v:.5}],
+W('gal',{cap:'Interactive 1.1',title:'Signal gallery',ctl:[{t:'s',k:'s',l:'Signal',o:SG.map(g=>g.n)},{k:'t',l:'Probe time t',min:-6,max:6,step:.1,v:.5}],
  draw(c,v){const g=SG[v.s],t=Math.max(g.r[0],Math.min(g.r[1],v.t)),pts=g.st?[{pts:[[0,1]],c:'a'}]:g.s.map(s=>({pts:[[t,s.f(t)]],c:s.c,lw:1}));
   plot(c,[...g.s.map(s=>({f:s.f,c:s.c})),...pts],g.r[0],g.r[1],g.y[0],g.y[1]);
   return g.d+(g.st?'':'<br><b>Probe:</b> '+g.s.map(s=>`${s.n} at t = ${t.toFixed(1)} → ${s.f(t).toFixed(3)}`).join(' · '))}});
