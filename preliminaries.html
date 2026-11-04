@@ -387,7 +387,7 @@ W('unitcircle', {
                 c:'a',
                 d:[]
             }
-        ], -1.2, 1.2, -1.2, 1.2);
+        ], -1.2, 1.2, -1.2, 1.2, undefined, 'cos θ', 'sin θ');
 
         return `
             <div style="text-align:center">
@@ -416,7 +416,21 @@ W('unitcircle', {
 
 <p>For small angles, cos<i>θ</i> ≈ 1 and sin<i>θ</i> ≈ <i>θ</i> when |<i>θ</i>| ≪ 1. See how quickly the approximation degrades:</p>
 <div data-w="small"></div>
-<p>The course also involves many differentiation and integration problems (like Example 4.1). You are expected to handle derivatives and integrals with the standard methods from APSC 172 and APSC 173.</p>
+<div style="
+    border: 1.5px solid #dc3545;
+    border-left: 5px solid #dc3545;
+    border-radius: 8px;
+    padding: 12px 18px;
+    margin: 15px 0;
+    background: rgba(220, 53, 69, 0.08);
+    color: #b02a37;
+">
+    <strong>Important:</strong>
+    The course also involves many differentiation and integration
+    problems (like Example 4.1). You are expected to handle
+    derivatives and integrals with the standard methods from
+    APSC 172 and APSC 173.
+</div>
 
 <h2 id="quiz"><small>▸</small>Check yourself</h2><p class="sub">Four quick questions</p><div id="quizbox" class="card"></div>
 
@@ -432,10 +446,14 @@ W('unitcircle', {
 <footer><b>Dr. Anas Chaaban, P.Eng.</b> · School of Engineering · University of British Columbia (UBC) · <a href="mailto:anas.chaaban@ubc.ca">anas.chaaban@ubc.ca</a><br>© Anas Chaaban. Not to be copied, used, revised, or distributed without explicit written permission from the copyright owner.</footer>
 <script>
 const col=k=>getComputedStyle(document.documentElement).getPropertyValue('--'+k).trim(),UPS=[];
-function plot(c,S,x0,x1,y0,y1,r){const x=c.getContext('2d'),w=c.width,oy=r?r[0]:0,hh=r?r[1]:c.height,X=t=>(t-x0)/(x1-x0)*w,Y=v=>oy+hh-(v-y0)/(y1-y0)*hh;
+function plot(c,S,x0,x1,y0,y1,r,axisX='t',axisY='Amplitude'){const x=c.getContext('2d'),w=c.width,oy=r?r[0]:0,hh=r?r[1]:c.height,X=t=>(t-x0)/(x1-x0)*w,Y=v=>oy+hh-(v-y0)/(y1-y0)*hh;
  if(!r)x.clearRect(0,0,w,c.height);x.save();x.beginPath();x.rect(0,oy,w,hh);x.clip();x.font='12px system-ui';x.lineWidth=1;x.setLineDash([]);
  for(let k=Math.ceil(x0);k<=x1;k++){x.strokeStyle=col('ln');x.beginPath();x.moveTo(X(k),oy);x.lineTo(X(k),oy+hh);x.stroke();if(k){x.fillStyle=col('mut');x.fillText(k,X(k)+3,Y(0)+13)}}
+ for(let k=Math.ceil(y0);k<=y1;k++){if(k===0)continue;x.strokeStyle=col('ln');x.beginPath();x.moveTo(0,Y(k));x.lineTo(w,Y(k));x.stroke();x.fillStyle=col('mut');x.fillText(k,Math.max(3,X(0)+5),Y(k)-3)}
  x.strokeStyle=col('mut');x.beginPath();x.moveTo(0,Y(0));x.lineTo(w,Y(0));x.stroke();
+ x.beginPath();x.moveTo(X(0),oy);x.lineTo(X(0),oy+hh);x.stroke();
+ x.fillStyle=col('mut');x.font='12px system-ui';x.textAlign='right';x.fillText(axisX,w-8,oy+hh-7);
+ x.save();x.translate(Math.max(13,X(0)-9),oy+15);x.rotate(-Math.PI/2);x.textAlign='left';x.fillText(axisY,0,0);x.restore();
  S.forEach(s=>{x.strokeStyle=x.fillStyle=col(s.c);x.lineWidth=s.lw||2;x.setLineDash(s.d||[]);
   if(s.pts){s.pts.forEach(([t,v])=>{x.beginPath();x.moveTo(X(t),Y(0));x.lineTo(X(t),Y(v));x.stroke();x.beginPath();x.arc(X(t),Y(v),4,0,7);x.fill()})}
   else{x.beginPath();let n=0,lx=0;for(let i=0;i<=w;i++){const t=x0+i/w*(x1-x0);if(s.to!==undefined&&t>s.to)break;const v=s.f(t);n++?x.lineTo(i,Y(v)):x.moveTo(i,Y(v));lx=i}
