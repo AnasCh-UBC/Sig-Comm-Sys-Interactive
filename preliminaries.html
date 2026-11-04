@@ -229,17 +229,53 @@ footer{border-top:1px solid var(--ln);padding:20px;text-align:center;font-size:.
 <div data-w="ep"></div>
 
 <h2 id="s4"><small>4</small>LTI systems and convolution</h2><p class="sub">Linearity, time invariance, causality, and the impulse response</p>
-<p>Let the output for input <i>x</i><sub><i>i</i></sub>(<i>t</i>) be <i>y</i><sub><i>i</i></sub>(<i>t</i>).</p>
-<ul><li><b>Linearity:</b> input <i>a</i><sub>1</sub><i>x</i><sub>1</sub> + <i>a</i><sub>2</sub><i>x</i><sub>2</sub> gives <i>a</i><sub>1</sub><i>y</i><sub>1</sub> + <i>a</i><sub>2</sub><i>y</i><sub>2</sub>.</li><li><b>Time invariance:</b> <i>x</i>(<i>t</i> − <i>t</i><sub>0</sub>) gives <i>y</i>(<i>t</i> − <i>t</i><sub>0</sub>) for any <i>t</i><sub>0</sub>: a delayed input produces a delayed output.</li><li><b>Causality:</b> <i>y</i>(<i>t</i><sub>0</sub>) depends only on <i>x</i>(<i>t</i>) for <i>t</i> ≤ <i>t</i><sub>0</sub>.</li></ul>
+<p>Let the output for input \(x_i(t)\) be \(y_i(t)\).</p>
+
+<ul>
+  <li><b>Linearity:</b> input
+    \(a_1 x_1(t) + a_2 x_2(t)\) gives
+    \(a_1 y_1(t) + a_2 y_2(t)\).
+  </li>
+
+  <li><b>Time invariance:</b>
+    \(x(t - t_0)\) gives \(y(t - t_0)\) for any \(t_0\):
+    a delayed input produces a delayed output.
+  </li>
+
+  <li><b>Causality:</b>
+    \(y(t_0)\) depends only on \(x(t)\) for \(t \leq t_0\).
+  </li>
+</ul>
 <p>Pick a system and test it: the top plot checks time invariance (do the two curves coincide?), the bottom plot checks superposition.</p>
+<p>The output of the system is denoted S[input signal], and y(t) = S[x(t)].</p>
 <div data-w="sys"></div>
 <p>A system that is both linear and time-invariant is an <b>LTI system</b>, characterized by its impulse response <i>h</i>(<i>t</i>) (its output for input <i>δ</i>(<i>t</i>)). Its output for any input is the convolution</p>
-<div class="eq"><i>y</i>(<i>t</i>) = <i>x</i>(<i>t</i>) ⊛ <i>h</i>(<i>t</i>) = ∫<sub>−∞</sub><sup>∞</sup> <i>x</i>(<i>τ</i>) <i>h</i>(<i>t</i> − <i>τ</i>) d<i>τ</i></div>
-<p>To evaluate it: <b>(1)</b> plot <i>x</i>(<i>τ</i>) and <i>h</i>(<i>τ</i>); <b>(2)</b> plot the time-reversed <i>h</i>(−<i>τ</i>); <b>(3)</b> shift it by <i>t</i> to get <i>h</i>(<i>t</i> − <i>τ</i>); <b>(4)</b> multiply by <i>x</i>(<i>τ</i>) and integrate over <i>τ</i>; <b>(5)</b> repeat for all <i>t</i>.</p>
+<div class="eq">
+    \[
+    y(t) = x(t) \circledast h(t)
+    = \int_{-\infty}^{\infty} x(\tau)\,h(t-\tau)\,d\tau
+    \]
+  </div>
+  <p>To evaluate it: <b>(1)</b> plot <i>x</i>(<i>τ</i>) and <i>h</i>(<i>τ</i>); <b>(2)</b> plot the time-reversed <i>h</i>(−<i>τ</i>); <b>(3)</b> shift it by <i>t</i> to get <i>h</i>(<i>t</i> − <i>τ</i>); <b>(4)</b> multiply by <i>x</i>(<i>τ</i>) and integrate over <i>τ</i>; <b>(5)</b> repeat for all <i>t</i>.</p>
 <div data-w="conv"></div>
-<div class="ex"><span class="tag">Example 4.1 · Step input, decaying-exponential system</span><p>Let <i>x</i>(<i>t</i>) = <i>u</i>(<i>t</i>) and <i>h</i>(<i>t</i>) = <i>e</i><sup>−<i>at</i></sup><i>u</i>(<i>t</i>), <i>a</i> ≥ 0. Find <i>y</i>(<i>t</i>) = <i>x</i>(<i>t</i>) ⊛ <i>h</i>(<i>t</i>).</p>
-<details><summary>Show solution</summary><p>The shape of <i>x</i>(<i>τ</i>) tells us which cases to consider. For <i>t</i> &lt; 0, <i>h</i>(<i>t</i> − <i>τ</i>) lies entirely where <i>x</i>(<i>τ</i>) = 0, so the product is zero and <i>y</i>(<i>t</i>) = 0. For <i>t</i> ≥ 0 the product is nonzero for 0 ≤ <i>τ</i> ≤ <i>t</i>:</p>
-<div class="eq"><i>y</i>(<i>t</i>) = ∫<sub>0</sub><sup><i>t</i></sup> e<sup>−<i>a</i>(<i>t</i>−<i>τ</i>)</sup> d<i>τ</i> = e<sup>−<i>at</i></sup> ∫<sub>0</sub><sup><i>t</i></sup> e<sup><i>aτ</i></sup> d<i>τ</i> = e<sup>−<i>at</i></sup> <span class="fr"><i>e<sup>at</sup> − 1</i><i>a</i></span> = <span class="fr"><i>1</i><i>a</i></span>(1 − e<sup>−<i>at</i></sup>)</div>
+<div class="ex"><span class="tag">Example 4.1 · Step input, decaying-exponential system</span>
+    <p>
+        Let \(x(t) = u(t)\) and
+        \(h(t) = e^{-at}u(t)\), \(a \geq 0\).
+        Find
+        \[
+          y(t) = x(t) \circledast h(t).
+        \]
+      </p>
+      <details><summary>Show solution</summary>
+        <p>
+            The shape of \(x(\tau)\) tells us which cases to consider.
+            For \(t < 0\), \(h(t-\tau)\) lies entirely where \(x(\tau)=0\),
+            so the product is zero and \(y(t)=0\).
+            For \(t \geq 0\), the product is nonzero for
+            \(0 \leq \tau \leq t\):
+          </p>
+          <div class="eq"><i>y</i>(<i>t</i>) = ∫<sub>0</sub><sup><i>t</i></sup> e<sup>−<i>a</i>(<i>t</i>−<i>τ</i>)</sup> d<i>τ</i> = e<sup>−<i>at</i></sup> ∫<sub>0</sub><sup><i>t</i></sup> e<sup><i>aτ</i></sup> d<i>τ</i> = e<sup>−<i>at</i></sup> <span class="fr"><i>e<sup>at</sup> − 1</i><i>a</i></span> = <span class="fr"><i>1</i><i>a</i></span>(1 − e<sup>−<i>at</i></sup>)</div>
 <p>So <i>y</i>(<i>t</i>) = 0 for <i>t</i> &lt; 0 and (1/<i>a</i>)(1 − e<sup>−<i>at</i></sup>) for <i>t</i> ≥ 0. Compare with the bottom plot of the widget above.</p></details></div>
 
 <h2 id="s5"><small>5</small>Trigonometric identities and calculus</h2><p class="sub">Identities used throughout APSC 270</p>
@@ -438,7 +474,7 @@ W('ep',{
             o:[
                 'Rectangular pulse \\(A\\Pi(t/p)\\)',
                 'Sinusoid \\(A\\cos(2\\pi pt)\\)',
-                'Decaying exponential \\(A e^{-pt}u(t)\\)'
+                'Decaying exponential \\(A \\exp(-pt)u(t)\\)'
             ]
         },
         {k:'A',l:'Amplitude A',min:.5,max:3,step:.5,v:1},
@@ -502,7 +538,7 @@ W('conv',{cap:'Interactive 4.2',title:'Convolution step by step: u(t) ⊛ e^(−
  draw(c,v){const a=v.a,h=t=>t>=0?Math.exp(-a*t):0,hs=t=>h(v.t-t),yt=t=>t<0?0:(1-Math.exp(-a*t))/a,ym=1/a;c.getContext('2d').clearRect(0,0,720,380);
   plot(c,[{f:t=>U(t)*hs(t),c:'g',fill:1,lw:1},{f:U,c:'a'},{f:hs,c:'b'}],-1,5,-.2,1.4,[0,185]);
   plot(c,[{f:yt,c:'a',lw:1,d:[3,3]},{f:yt,c:'a',lw:3,to:v.t},{pts:[[v.t,yt(v.t)]],c:'b'}],-1,5,-.12*ym,1.15*ym,[195,185]);
-  return `Top: x(τ) = u(τ) (blue), h(t−τ) (red) and their product (green area). Bottom: y(t) is that area. At t = ${v.t.toFixed(1)}: y = <b>${yt(v.t).toFixed(3)}</b> = (1 − e<sup>−${a}·${v.t.toFixed(1)}</sup>)/${a} for t ≥ 0.`}});
+  return `Top: x(τ) = u(τ) (blue), h(t−τ) (red) and their product (boundary of green area). Bottom: y(t) is that area. At t = ${v.t.toFixed(1)}: y = <b>${yt(v.t).toFixed(3)}</b> = (1 − e<sup>−${a}·${v.t.toFixed(1)}</sup>)/${a} for t ≥ 0.`}});
 // ---- 5 trig
 const ID=[['2cos a cos b = cos(a−b)+cos(a+b)',(a,b)=>2*Math.cos(a)*Math.cos(b),(a,b)=>Math.cos(a-b)+Math.cos(a+b)],['2sin a sin b = cos(a−b)−cos(a+b)',(a,b)=>2*Math.sin(a)*Math.sin(b),(a,b)=>Math.cos(a-b)-Math.cos(a+b)],
 ['2sin a cos b = sin(a−b)+sin(a+b)',(a,b)=>2*Math.sin(a)*Math.cos(b),(a,b)=>Math.sin(a-b)+Math.sin(a+b)],['sin(a+b) = sin a cos b + cos a sin b',(a,b)=>Math.sin(a+b),(a,b)=>Math.sin(a)*Math.cos(b)+Math.cos(a)*Math.sin(b)],
