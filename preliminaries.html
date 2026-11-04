@@ -192,8 +192,23 @@ MathJax = {
 <details><summary>Show solution</summary><p>Start from \(\Pi(t)\), a unit pulse centred at <i>t</i> = 0 with width 1. Shifting right by 1 moves the centre to <i>t</i> = 1; the factor ½ inside expands the width to 2; the factor 2 doubles the height. Check by evaluating: \(\Pi(s) = 0\) for \(|s| > ½\), so \(\Pi((t − 1)/2) = 0\) when \((t − 1)/2 < −½ \) or \(> ½\), i.e. \(t< 0\) or \(t> 2\), and it equals 1 for \(0 \leq  t \leq  2\). Hence \(x(t)\) is a pulse of height 2 on [0, 2].</p></details></div>
 
 <h2 id="s3"><small>3</small>Signal energy and power</h2><p class="sub">Which signals have finite energy, and which have finite power?</p>
-<div class="eq"><i>E</i> = lim<sub><i>T</i>→∞</sub> ∫<sub>−<i>T</i>/2</sub><sup><i>T</i>/2</sup> |<i>x</i>(<i>t</i>)|² d<i>t</i> &nbsp;&nbsp; <i>P</i> = lim<sub><i>T</i>→∞</sub> <span class="fr"><i>1</i><i>T</i></span> ∫<sub>−<i>T</i>/2</sub><sup><i>T</i>/2</sup> |<i>x</i>(<i>t</i>)|² d<i>t</i> &nbsp;&nbsp; <i>P</i> = <span class="fr"><i>1</i><i>T</i><sub>0</sub></span> ∫<sub>−<i>T</i><sub>0</sub>/2</sub><sup><i>T</i><sub>0</sub>/2</sup> |<i>x</i>(<i>t</i>)|² d<i>t</i> (periodic)</div>
-<p>These expressions are unitless, which keeps them general. If the signal is a current in amperes through a load of 1 Ω, then <i>P</i> is in watts. Use the window slider to see the limit in action: for an energy signal <i>E</i><sub><i>T</i></sub> settles while <i>P</i><sub><i>T</i></sub> → 0; for a power signal <i>E</i><sub><i>T</i></sub> keeps growing while <i>P</i><sub><i>T</i></sub> settles.</p>
+<div class="eq">
+    \[
+    \begin{aligned}
+    E &= \lim_{T\to\infty}
+    \int_{-T/2}^{T/2}|x(t)|^2\,dt
+    \\[10pt]
+    P &= \lim_{T\to\infty}
+    \frac{1}{T}
+    \int_{-T/2}^{T/2}|x(t)|^2\,dt
+    \\[10pt]
+    P &= \frac{1}{T_0}
+    \int_{-T_0/2}^{T_0/2}|x(t)|^2\,dt
+    \qquad \text{(periodic)}
+    \end{aligned}
+    \]
+    </div>
+    <p>These expressions are unitless, which keeps them general. If the signal is a current in amperes through a load of 1 Ω, then <i>P</i> is in watts. Use the window slider to see the limit in action: for an energy signal \(E_T\) settles while \(P_T\to 0\); for a power signal \(E_T\) keeps growing while \(P\) settles.</p>
 <div data-w="ep"></div>
 
 <h2 id="s4"><small>4</small>LTI systems and convolution</h2><p class="sub">Linearity, time invariance, causality, and the impulse response</p>
@@ -267,7 +282,7 @@ const SG=[
 {n:'Unit step u(t)',r:[-3,3],y:[-.5,1.5],s:[{f:U,c:'a',n:'u(t)'}],d:'Zero for <i>t</i> &lt; 0 and one for <i>t</i> ≥ 0; the running integral of δ(<i>t</i>).'},
 {n:'Unit impulse δ(t)',r:[-3,3],y:[-.5,1.5],s:[],st:1,d:'Zero everywhere except <i>t</i> = 0, with unit area. It is drawn as an arrow of height 1, and δ(<i>t</i>) = d<i>u</i>/d<i>t</i>.'},
 {n:'Sign function',r:[-3,3],y:[-1.5,1.5],s:[{f:t=>Math.sign(t),c:'a',n:'sign(t)'}],d:'+1 for <i>t</i> &gt; 0, −1 for <i>t</i> &lt; 0, and 0 at <i>t</i> = 0.'}];
-W('gal',{cap:'Interactive 1.1',title:'Signal gallery: Select a signal to plot. See comments below selected signal for a description.',ctl:[{t:'s',k:'s',l:'Signal',o:SG.map(g=>g.n)},{k:'t',l:'Probe time t',min:-6,max:6,step:.1,v:.5}],
+W('gal',{cap:'Interactive 1.1',title:'Signal gallery',h:'Select a signal to plot. See comments below selected signal for a description.',ctl:[{t:'s',k:'s',l:'Signal',o:SG.map(g=>g.n)},{k:'t',l:'Probe time t',min:-6,max:6,step:.1,v:.5}],
  draw(c,v){const g=SG[v.s],t=Math.max(g.r[0],Math.min(g.r[1],v.t)),pts=g.st?[{pts:[[0,1]],c:'a'}]:g.s.map(s=>({pts:[[t,s.f(t)]],c:s.c,lw:1}));
   plot(c,[...g.s.map(s=>({f:s.f,c:s.c})),...pts],g.r[0],g.r[1],g.y[0],g.y[1]);
   return g.d+(g.st?'':'<br><b>Probe:</b> '+g.s.map(s=>`${s.n} at t = ${t.toFixed(1)} → ${s.f(t).toFixed(3)}`).join(' · '))}});
@@ -311,11 +326,62 @@ W('ops',{
     }
 });
 // ---- 3 energy & power
-W('ep',{cap:'Interactive 3.1',title:'Energy and power over a window of length T',ctl:[{t:'s',k:'s',l:'Signal',o:['Rectangular pulse A·Π(t/p)','Sinusoid A·cos(2πpt)','Decaying exponential A·e^(−pt)·u(t)']},
- {k:'A',l:'Amplitude A',min:.5,max:3,step:.5,v:1},{k:'p',l:'Parameter p (width, frequency or decay rate)',min:.5,max:4,step:.5,v:1},{k:'T',l:'Window length T',min:4,max:100,step:4,v:40}],
- draw(c,v){const{A,p,T}=v,f=[t=>Math.abs(t)<p/2?A:0,t=>A*Math.cos(TP*p*t),t=>t>=0?A*Math.exp(-p*t):0][v.s];let E=0;const n=20000,dt=T/n;for(let i=0;i<n;i++){const t=-T/2+(i+.5)*dt;E+=f(t)**2*dt}
-  plot(c,[{f,c:'a'}],-5,5,-3.4,3.4);const th=[[A*A*p,0,'energy signal'],[Infinity,A*A/2,'power signal'],[A*A/(2*p),0,'energy signal']][v.s];
-  return `<b>E<sub>T</sub></b> = ${E.toFixed(3)} · <b>P<sub>T</sub> = E<sub>T</sub>/T</b> = ${(E/T).toFixed(4)}<br>As T → ∞: E = ${th[0]===Infinity?'∞':th[0].toFixed(3)}, P = ${th[1]===0?'0':th[1].toFixed(3)} ⇒ <b>${th[2]}</b>.`}});
+W('ep',{
+    cap:'Interactive 3.1',
+    title:'Energy and power over a window of length \\(T\\)',
+
+    ctl:[
+        {
+            t:'s',k:'s',l:'Signal',
+            o:[
+                'Rectangular pulse \\(A\\Pi(t/p)\\)',
+                'Sinusoid \\(A\\cos(2\\pi pt)\\)',
+                'Decaying exponential \\(Ae^{-pt}u(t)\\)'
+            ]
+        },
+        {k:'A',l:'Amplitude A',min:.5,max:3,step:.5,v:1},
+        {k:'p',l:'Parameter p (width, frequency or decay rate)',min:.5,max:4,step:.5,v:1},
+        {k:'T',l:'Window length T',min:4,max:100,step:4,v:40}
+    ],
+
+    draw(c,v){
+        const {A,p,T}=v;
+
+        const f=[
+            t=>Math.abs(t)<p/2?A:0,
+            t=>A*Math.cos(TP*p*t),
+            t=>t>=0?A*Math.exp(-p*t):0
+        ][v.s];
+
+        let E=0;
+        const n=20000,dt=T/n;
+
+        for(let i=0;i<n;i++){
+            const t=-T/2+(i+.5)*dt;
+            E+=f(t)**2*dt;
+        }
+
+        plot(c,[{f,c:'a'}],-5,5,-3.4,3.4);
+
+        const th=[
+            [A*A*p,0,'energy signal'],
+            [Infinity,A*A/2,'power signal'],
+            [A*A/(2*p),0,'energy signal']
+        ][v.s];
+
+        return `
+            \\(E_T\\) = ${E.toFixed(3)}
+            &nbsp; · &nbsp;
+            \\(P_T=\\frac{E_T}{T}\\) = ${(E/T).toFixed(4)}
+            <br><br>
+            As \\(T\\to\\infty\\):
+            \\(E=${th[0]===Infinity?'\\infty':th[0].toFixed(3)}\\),
+            \\(P=${th[1]===0?'0':th[1].toFixed(3)}\\)
+            \\(\\Rightarrow\\)
+            <b>${th[2]}</b>.
+        `;
+    }
+});
 // ---- 4 systems
 const SY=[['y = 2x(t)',(x,t)=>2*x(t),[1,1,1],'Scaling by a constant.'],['y = x²(t)',(x,t)=>x(t)**2,[0,1,1],'Squaring breaks superposition: (x₁ + x₂)² ≠ x₁² + x₂².'],
 ['y = x(t)cos(2πt)',(x,t)=>x(t)*Math.cos(TP*t),[1,0,1],'A modulator: the carrier depends explicitly on t, so a delayed input does not give a delayed output.'],
