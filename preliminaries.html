@@ -335,9 +335,9 @@ footer{border-top:1px solid var(--ln);padding:20px;text-align:center;font-size:.
         </div>
 
         <!-- RIGHT COLUMN: INTERACTIVE UNIT CIRCLE -->
-        <div class="eq-column">
-            <div id="unitcircle"></div>
-        </div>
+<div class="eq-column">
+    <div data-w="unitcircle"></div>
+</div>
 
     </div>
 </div>
@@ -381,7 +381,8 @@ function plot(c,S,x0,x1,y0,y1,r,axisX='t',axisY='Amplitude'){const x=c.getContex
  x.strokeStyle=col('mut');x.beginPath();x.moveTo(0,Y(0));x.lineTo(w,Y(0));x.stroke();
  x.beginPath();x.moveTo(X(0),oy);x.lineTo(X(0),oy+hh);x.stroke();
  x.fillStyle=col('mut');x.font='12px system-ui';x.textAlign='right';x.fillText(axisX,w-8,oy+hh-7);
- x.save();x.translate(Math.max(13,X(0)-9),oy+15);x.rotate(-Math.PI/2);x.textAlign='left';x.fillText(axisY,0,0);x.restore();
+ x.textAlign='left';
+x.fillText(axisY,Math.max(8,X(0)+8),oy+15);
  S.forEach(s=>{x.strokeStyle=x.fillStyle=col(s.c);x.lineWidth=s.lw||2;x.setLineDash(s.d||[]);
   if(s.pts){s.pts.forEach(([t,v])=>{x.beginPath();x.moveTo(X(t),Y(0));x.lineTo(X(t),Y(v));x.stroke();x.beginPath();x.arc(X(t),Y(v),4,0,7);x.fill()})}
   else{x.beginPath();let n=0,lx=0;for(let i=0;i<=w;i++){const t=x0+i/w*(x1-x0);if(s.to!==undefined&&t>s.to)break;const v=s.f(t);n++?x.lineTo(i,Y(v)):x.moveTo(i,Y(v));lx=i}
@@ -636,6 +637,7 @@ const qb=document.getElementById('quizbox');Q.forEach((q,j)=>{const d=document.c
  d.querySelector('button').onclick=()=>{const s=d.querySelector('input:checked'),f=d.querySelector('span');if(!s){f.textContent='Pick an answer.';return}const ok=+s.value===q.a;f.className=ok?'ok':'bad';f.textContent=ok?'✓ '+q.e:'✗ Not quite, try again.'};qb.appendChild(d)});
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>UPS.forEach(f=>f()));
 W('unitcircle', {
+    target: 'unitcircle',
     cap: 'Interactive',
     title: 'Trigonometric functions and the unit circle',
 
