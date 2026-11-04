@@ -252,7 +252,11 @@ function W(id,o){const host=document.querySelector(`[data-w="${id}"]`),d=documen
   else{l.innerHTML=`${c.l}: <b></b><input type="range" min="${c.min}" max="${c.max}" step="${c.step}" value="${c.v}">`;inp[c.k]=l.querySelector('input');bs[c.k]=l.querySelector('b')}
   ctl.appendChild(l)});
  const up=()=>{const v={};for(const k in inp){v[k]=+inp[k].value;if(bs[k])bs[k].textContent=inp[k].value}d.querySelector('.note').innerHTML=o.draw(d.querySelector('canvas'),v)};
- d.addEventListener('input',up);host.appendChild(d);up();UPS.push(up)}
+ d.addEventListener('input',up);host.appendChild(d);up();UPS.push(up)
+ if (window.MathJax?.typesetPromise) {
+    MathJax.typesetPromise();
+}
+}
 const sinc=t=>t==0?1:Math.sin(Math.PI*t)/(Math.PI*t),PI_=t=>Math.abs(t)<.5?1:0,LA=t=>Math.max(0,1-Math.abs(t)),U=t=>t>=0?1:0,TP=2*Math.PI;
 // ---- 1 gallery
 const SG=[
