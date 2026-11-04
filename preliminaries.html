@@ -342,78 +342,6 @@ footer{border-top:1px solid var(--ln);padding:20px;text-align:center;font-size:.
     </div>
 </div>
 
-<script>
-W('unitcircle', {
-    cap: 'Interactive',
-    title: 'Trigonometric functions and the unit circle',
-
-    ctl: [
-        {
-            k: 'theta',
-            l: 'Angle θ (degrees)',
-            min: 0,
-            max: 360,
-            step: 5,
-            v: 45
-        }
-    ],
-
-    draw(c, v) {
-        const th = v.theta * Math.PI / 180;
-        const co = Math.cos(th);
-        const si = Math.sin(th);
-
-        // Unit circle
-        const upper = t =>
-            Math.sqrt(Math.max(0, 1-t*t));
-
-        const lower = t =>
-            -Math.sqrt(Math.max(0, 1-t*t));
-
-        // Rotating radius
-        const radius = t => {
-            if (Math.abs(co) < 0.02) return NaN;
-
-            return (
-                t * si / co
-            );
-        };
-
-        plot(c, [
-            {f: upper, c:'b'},
-            {f: lower, c:'b'},
-            {
-                f: radius,
-                c:'a',
-                d:[]
-            }
-        ], -1.2, 1.2, -1.2, 1.2, undefined, 'cos θ', 'sin θ');
-
-        return `
-            <div style="text-align:center">
-                \\[
-                \\theta=${v.theta}^{\\circ}
-                \\]
-
-                \\[
-                \\cos\\theta=${co.toFixed(3)}
-                \\]
-
-                \\[
-                \\sin\\theta=${si.toFixed(3)}
-                \\]
-
-                \\[
-                e^{j\\theta}
-                =${co.toFixed(3)}
-                +j(${si.toFixed(3)})
-                \\]
-            </div>
-        `;
-    }
-});
-</script>
-
 <p>For small angles, cos<i>θ</i> ≈ 1 and sin<i>θ</i> ≈ <i>θ</i> when |<i>θ</i>| ≪ 1. See how quickly the approximation degrades:</p>
 <div data-w="small"></div>
 <div style="
@@ -707,4 +635,73 @@ const qb=document.getElementById('quizbox');Q.forEach((q,j)=>{const d=document.c
  d.innerHTML=`<p>${j+1}. ${q.q}</p>`+q.o.map((o,k)=>`<label><input type="radio" name="q${j}" value="${k}"> ${o}</label>`).join('')+'<button class="chk">Check</button> <span></span>';
  d.querySelector('button').onclick=()=>{const s=d.querySelector('input:checked'),f=d.querySelector('span');if(!s){f.textContent='Pick an answer.';return}const ok=+s.value===q.a;f.className=ok?'ok':'bad';f.textContent=ok?'✓ '+q.e:'✗ Not quite, try again.'};qb.appendChild(d)});
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>UPS.forEach(f=>f()));
+W('unitcircle', {
+    cap: 'Interactive',
+    title: 'Trigonometric functions and the unit circle',
+
+    ctl: [
+        {
+            k: 'theta',
+            l: 'Angle θ (degrees)',
+            min: 0,
+            max: 360,
+            step: 5,
+            v: 45
+        }
+    ],
+
+    draw(c, v) {
+        const th = v.theta * Math.PI / 180;
+        const co = Math.cos(th);
+        const si = Math.sin(th);
+
+        // Unit circle
+        const upper = t =>
+            Math.sqrt(Math.max(0, 1-t*t));
+
+        const lower = t =>
+            -Math.sqrt(Math.max(0, 1-t*t));
+
+        // Rotating radius
+        const radius = t => {
+            if (Math.abs(co) < 0.02) return NaN;
+
+            return (
+                t * si / co
+            );
+        };
+
+        plot(c, [
+            {f: upper, c:'b'},
+            {f: lower, c:'b'},
+            {
+                f: radius,
+                c:'a',
+                d:[]
+            }
+        ], -1.2, 1.2, -1.2, 1.2, undefined, 'cos θ', 'sin θ');
+
+        return `
+            <div style="text-align:center">
+                \\[
+                \\theta=${v.theta}^{\\circ}
+                \\]
+
+                \\[
+                \\cos\\theta=${co.toFixed(3)}
+                \\]
+
+                \\[
+                \\sin\\theta=${si.toFixed(3)}
+                \\]
+
+                \\[
+                e^{j\\theta}
+                =${co.toFixed(3)}
+                +j(${si.toFixed(3)})
+                \\]
+            </div>
+        `;
+    }
+});
 </script></body></html>
