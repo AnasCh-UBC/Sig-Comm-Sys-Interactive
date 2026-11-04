@@ -20,7 +20,8 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 <p class="lede">From everyday messages to the technologies that move information around the world. Explore what communication systems do, how they evolved, and what you will learn in this course.</p>
 <div class="meta"><div><b>Instructor</b>Dr. Anas Chaaban, P.Eng.<br>UBC School of Engineering</div><div><b>Course</b>APSC 270 · Signals and Communication Systems</div><div><b>Focus</b>Analog communication, signals, systems, and practical implementation</div></div>
 <div class="card"><h3>Contents</h3><ol class="toc">
-<li><b>1</b><a href="#instructor">About the instructor</a></li><li><b>2</b><a href="#motivation">Why communication matters</a></li><li><b>3</b><a href="#history">A brief history</a></li><li><b>4</b><a href="#system">A communication system</a></li><li><b>5</b><a href="#classification">Classifying systems</a></li><li><b>6</b><a href="#analog">Analog communication</a></li><li><b>7</b><a href="#expectations">Course expectations</a></li><li><b>8</b><a href="#format">Course format and assessment</a></li><li><b>9</b><a href="#outline">Tentative course outline</a></li></ol></div>
+<li><b>1</b><a href="#instructor">About the instructor</a></li>
+<li><b>2</b><a href="#motivation">Why communication matters</a></li><li><b>3</b><a href="#history">A brief history</a></li><li><b>4</b><a href="#system">A communication system</a></li><li><b>5</b><a href="#classification">Classifying systems</a></li><li><b>6</b><a href="#analog">Analog communication</a></li><li><b>7</b><a href="#expectations">Course expectations</a></li><li><b>8</b><a href="#format">Course format and assessment</a></li><li><b>9</b><a href="#outline">Tentative course outline</a></li></ol></div>
 
 <h2 id="instructor"><small>1</small>About the instructor</h2><p class="sub">Background, experience, and research interests</p>
 <div class="card"><h3>Dr. Anas Chaaban, P.Eng.</h3><div class="grid">
@@ -30,7 +31,41 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 <p><b>Office:</b> EME 3215 · Tuesdays 11 a.m.–4 p.m.; open door 10 a.m.–4 p.m. on most weekdays. Email to confirm availability: <a href="mailto:anas.chaaban@ubc.ca">anas.chaaban@ubc.ca</a>.</p></div>
 
 <h2 id="motivation"><small>2</small>Why communication matters</h2><p class="sub">Information moves between people, devices, and systems every day</p>
-<div class="grid"><div class="tile"><b class="tag">Information</b><h3>What do we communicate?</h3><p>Information may be analog or digital, and can take many forms:</p><span class="pill">Voice and audio</span><span class="pill">Video and images</span><span class="pill">Text and files</span><span class="pill">Sensor data</span></div><div class="tile"><b class="tag">Applications</b><h3>Where do we see it?</h3><p>Examples of communication systems:</p><span class="pill">Radio and TV</span><span class="pill">Telephone and cable</span><span class="pill">Cellular and satellite</span><span class="pill">Internet and IoT</span></div></div>
+<div class="grid">
+    
+    <div class="tile tile-dark"><b class="tag">Information</b><h3>What do we communicate?</h3><p>Information may be analog or digital, and can take many forms:</p>
+        <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><filter id="infoGlow" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs></svg>
+        <div class="info-grid">
+        
+        <div class="info-card"><svg viewBox="0 0 160 100" role="img" aria-label="Audio waveform"><rect width="160" height="100" rx="8" fill="#050d22"/><path d="M14 45V55M22 41V59M30 35V65M38 28V72M46 36V64M54 22V78M62 15V85M70 30V70M78 19V81M86 33V67M94 25V75M102 38V62M110 31V69M118 42V58M126 37V63M134 44V56M142 46V54" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" filter="url(#infoGlow)"/><path d="M10 50H150" stroke="#1d6dff" stroke-opacity=".5"/></svg>
+        <span class="pill">Voice and audio</span><small>analog</small></div>
+        
+        <div class="info-card"><svg viewBox="0 0 160 100" role="img" aria-label="Video frame with play button"><rect width="160" height="100" rx="8" fill="#050d22"/><g fill="none" stroke="#38bdf8" stroke-width="2" stroke-linejoin="round" filter="url(#infoGlow)"><rect x="18" y="14" width="124" height="72" rx="8"/><path d="M18 86L58 48L82 70L104 54L142 86" stroke="#1d6dff"/><circle cx="112" cy="34" r="8" stroke="#7dd3fc"/></g><circle cx="80" cy="50" r="16" fill="#050d22" fill-opacity=".75" stroke="#7dd3fc" stroke-width="2" filter="url(#infoGlow)"/><path d="M75 42V58L90 50Z" fill="#7dd3fc"/></svg>
+        <span class="pill">Video and images</span><small>analog</small></div>
+        
+        <div class="info-card"><svg viewBox="0 0 160 100" role="img" aria-label="Text document with bits"><rect width="160" height="100" rx="8" fill="#050d22"/><g fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" filter="url(#infoGlow)"><path d="M46 12H98L120 34V88H46Z"/><path d="M98 12V34H120" stroke="#7dd3fc"/><path d="M56 48H110M56 58H104M56 68H110M56 78H88" stroke="#1d6dff"/></g><text x="56" y="34" fill="#7dd3fc" font-family="ui-monospace,Menlo,monospace" font-size="13">Aa</text><text x="10" y="94" fill="#38bdf8" fill-opacity=".6" font-family="ui-monospace,Menlo,monospace" font-size="9">0110 1001</text></svg>
+        <span class="pill">Text and files</span><small>digital</small></div>
+        
+        <div class="info-card"><svg viewBox="0 0 160 100" role="img" aria-label="Sensor signal trace"><rect width="160" height="100" rx="8" fill="#050d22"/><path d="M12 84H148M12 16V84" stroke="#1d6dff" stroke-opacity=".5"/><path d="M14 62H40L48 62L54 30L62 80L68 54L74 62H100L108 46L114 62H146" fill="none" stroke="#38bdf8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" filter="url(#infoGlow)"/><g fill="#7dd3fc"><circle cx="54" cy="30" r="3"/><circle cx="62" cy="80" r="3"/><circle cx="108" cy="46" r="3"/></g><g fill="none" stroke="#38bdf8" stroke-width="1.6" stroke-linecap="round" filter="url(#infoGlow)"><circle cx="132" cy="26" r="2.5" fill="#38bdf8"/><path d="M127 21Q123 26 127 31M137 21Q141 26 137 31" /><path d="M123 16Q116 26 123 36M141 16Q148 26 141 36" stroke-opacity=".6"/></g></svg>
+        <span class="pill">Sensor data</span><small>analog or digital</small></div>
+        
+        </div></div>
+        <style>
+        .tile.tile-dark{position:relative;overflow:hidden;background:radial-gradient(120% 140% at 0% 0%,#0b2a66 0%,#071433 45%,#040a18 100%);color:#cfe6ff;border:1px solid rgba(56,189,248,.3);border-radius:16px;padding:22px 22px 18px;box-shadow:0 12px 40px rgba(4,10,24,.45)}
+        .tile-dark::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;background-image:linear-gradient(rgba(29,109,255,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(29,109,255,.14) 1px,transparent 1px);background-size:24px 24px}
+        .tile-dark>*{position:relative}
+        .tile-dark .tag{display:inline-block;padding:3px 12px;border-radius:99px;background:rgba(56,189,248,.14);border:1px solid rgba(56,189,248,.45);color:#7dd3fc;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase}
+        .tile-dark h3{color:#fff;margin:.6em 0 .2em;font-size:1.35rem}
+        .tile-dark p{color:#9db8dc;margin:0 0 14px}
+        .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+        .info-card{border:1px solid rgba(56,189,248,.25);border-radius:12px;background:rgba(6,18,48,.65);padding:8px 8px 12px;text-align:center;transition:border-color .2s,transform .2s}
+        .info-card:hover{border-color:#38bdf8;transform:translateY(-2px)}
+        .info-card svg{display:block;width:100%;height:auto}
+        .tile-dark .pill{display:inline-block;margin:10px 0 2px;padding:4px 12px;border-radius:99px;background:rgba(29,109,255,.22);border:1px solid rgba(56,189,248,.45);color:#cfe6ff;font-size:.85rem}
+        .info-card small{display:block;color:#7aa2d6;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase}
+        </style>
+        
+    <div class="tile"><b class="tag">Applications</b><h3>Where do we see it?</h3><p>Examples of communication systems:</p><span class="pill">Radio and TV</span><span class="pill">Telephone and cable</span><span class="pill">Cellular and satellite</span><span class="pill">Internet and IoT</span></div></div>
 <div class="card"><h3>The central idea</h3><p>Communication is the task of <b>delivering information</b> from a source (transmitter) to a destination (receiver) in a <b>recognizable form</b>.</p><b>Course focus:</b> The underlying techniques that make these systems work.</div>
 
 <h2 id="history"><small>3</small>A brief history</h2><p class="sub">Milestones that transformed communication from telegraphy to global networks</p>
