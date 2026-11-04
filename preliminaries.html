@@ -204,7 +204,7 @@ MathJax = {
     \\[10pt]
     P &= \frac{1}{T_0}
     \int_{-T_0/2}^{T_0/2}|x(t)|^2\,dt
-    \qquad \text{(periodic)}
+    \qquad \text{(periodic with period \(T_0\))}
     \end{aligned}
     \]
     </div>
@@ -336,7 +336,7 @@ W('ep',{
             o:[
                 'Rectangular pulse \\(A\\Pi(t/p)\\)',
                 'Sinusoid \\(A\\cos(2\\pi pt)\\)',
-                'Decaying exponential \\(Ae^{-pt}u(t)\\)'
+                'Decaying exponential \\(A e^{-pt}u(t)\\)'
             ]
         },
         {k:'A',l:'Amplitude A',min:.5,max:3,step:.5,v:1},
@@ -379,7 +379,7 @@ W('ep',{
             \\(P=${th[1]===0?'0':th[1].toFixed(3)}\\)
             \\(\\Rightarrow\\)
             <b>${th[2]}</b>.
-        `;
+        ';
     }
 });
 // ---- 4 systems
