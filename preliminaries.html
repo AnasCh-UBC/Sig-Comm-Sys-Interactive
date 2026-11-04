@@ -91,11 +91,19 @@ MathJax = {
 <h2 id="s1"><small>1</small>Common signals</h2><p class="sub">The shapes that appear throughout signals, systems and communications</p>
 <p>You are expected to know these signals and to be able to plot them. Pick one below to see its definition and plot, and drag the probe to read its value at any time <i>t</i>.</p>
 <style>
+.eq-box {
+    border: 1.5px solid #17a2a4;
+    border-radius: 10px;
+    padding: 18px 24px;
+    margin: 15px 0;
+    background: rgba(23, 162, 164, 0.04);
+}
+
 .eq-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
-    align-items: start;
+    align-items: center;
 }
 
 .eq-column {
@@ -110,59 +118,61 @@ MathJax = {
 }
 </style>
 
-<div class="eq-grid">
+<div class="eq-box">
+    <div class="eq-grid">
 
-    <div class="eq-column">
-        \[
-        \Pi(t)=
-        \begin{cases}
-        1, & |t|<\frac{1}{2},\\
-        0, & \text{otherwise}
-        \end{cases}
-        \]
+        <div class="eq-column">
+            \[
+            \Pi(t)=
+            \begin{cases}
+            1, & |t|<\frac{1}{2},\\
+            0, & \text{otherwise}
+            \end{cases}
+            \]
 
-        \[
-        \Lambda(t)=
-        \begin{cases}
-        1-|t|, & |t|\leq 1,\\
-        0, & \text{otherwise}
-        \end{cases}
-        \]
+            \[
+            \Lambda(t)=
+            \begin{cases}
+            1-|t|, & |t|\leq 1,\\
+            0, & \text{otherwise}
+            \end{cases}
+            \]
 
-        \[
-        \operatorname{sinc}(t)=
-   \begin{cases}
-   \frac{\sin(\pi t)}{\pi t}, & t\neq 0\\
-       1 & t=0
-   \end{cases}
-        \]
+            \[
+            \operatorname{sinc}(t)=
+            \begin{cases}
+            \frac{\sin(\pi t)}{\pi t}, & t\neq 0\\
+            1, & t=0
+            \end{cases}
+            \]
+        </div>
+
+        <div class="eq-column">
+            \[
+            u(t)=
+            \begin{cases}
+            1, & t\geq 0,\\
+            0, & \text{otherwise}
+            \end{cases}
+            \]
+
+            \[
+            \operatorname{sign}(t)=
+            \begin{cases}
+            1, & t>0,\\
+            0, & t=0,\\
+            -1, & t<0
+            \end{cases}
+            \]
+
+            \[
+            \delta(t)=\frac{d}{dt}u(t),
+            \qquad
+            u(t)=\int_{-\infty}^{t}\delta(\tau)\,d\tau
+            \]
+        </div>
+
     </div>
-
-    <div class="eq-column">
-        \[
-        u(t)=
-        \begin{cases}
-        1, & t\geq 0,\\
-        0, & \text{otherwise}
-        \end{cases}
-        \]
-
-        \[
-        \operatorname{sign}(t)=
-        \begin{cases}
-        1, & t>0,\\
-        0, & t=0,\\
-        -1, & t<0
-        \end{cases}
-        \]
-
-        \[
-        \delta(t)=\frac{d}{dt}u(t),
-        \qquad
-        u(t)=\int_{-\infty}^{t}\delta(\tau)\,d\tau
-        \]
-    </div>
-
 </div>
 
 <div data-w="gal"></div>
@@ -379,7 +389,7 @@ W('ep',{
             \\(P=${th[1]===0?'0':th[1].toFixed(3)}\\)
             \\(\\Rightarrow\\)
             <b>${th[2]}</b>.
-        ';
+        `;
     }
 });
 // ---- 4 systems
