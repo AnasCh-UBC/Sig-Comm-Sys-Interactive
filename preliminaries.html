@@ -54,66 +54,142 @@ MathJax = {
 <p class="over">APSC 270 · Preliminaries</p>
 <h1>What you are expected to know</h1>
 <p class="lede">This page summarizes the preliminary material you should know from previous courses, and repeats some of the key topics from the review lectures on signals and systems (Lectures 2 and 3). Review it carefully: it is required for solving problems in APSC 270.</p>
-<div class="card"><h4>Learning objectives</h4><ul>
-<li>Recognize and sketch the common signals: sinusoids, Π, Λ, sinc, step, impulse and sign</li>
-<li>Apply shifting, time-scaling and time-reversal, alone and combined</li>
-<li>Compute the energy and power of a signal</li>
-<li>Classify a system as linear, time-invariant and causal, and compute the convolution y(t) = x(t) ⊛ h(t)</li>
-<li>Use trigonometric identities, Euler’s formula and small-angle approximations</li></ul></div>
-<div class="meta"><div><b>Instructor</b><b>Dr. Anas Chaaban, P.Eng. </b> UBC School of Engineering</div><div><b>Course</b>APSC 270 · Signal and Communication Systems</div><div><b>Topics</b>Signals · operations · energy &amp; power · LTI systems · trigonometry</div></div>
+<div class="card">
+    <h4>Learning objectives</h4>
+    <ul>
+        <li>Recognize and sketch the common signals: sinusoids, 
+            \(\Pi(t)\), \(\Lambda(t)\), \(\operatorname{sinc}(t)\), 
+            \(u(t)\), \(\delta(t)\), and \(\operatorname{sign}(t)\).
+        </li>
+
+        <li>Apply shifting, time-scaling, and time-reversal, 
+            alone and combined.
+        </li>
+
+        <li>Compute the energy and power of a signal:
+            \(E_x = \int_{-\infty}^{\infty}|x(t)|^2\,dt\).
+        </li>
+
+        <li>Classify a system as linear, time-invariant, and causal, 
+            and compute the convolution:
+            \[
+            y(t)=x(t)\ast h(t)
+            =\int_{-\infty}^{\infty}x(\tau)h(t-\tau)\,d\tau.
+            \]
+        </li>
+
+        <li>Use trigonometric identities, Euler's formula 
+            \(e^{j\theta}=\cos(\theta)+j\sin(\theta)\), 
+            and small-angle approximations.
+        </li>
+    </ul>
+</div>
+<div class="meta"><div><b>Instructor</b>Dr. Anas Chaaban, P.Eng. <br> UBC School of Engineering</div><div><b>Course</b>APSC 270 · Signal and Communication Systems</div><div><b>Topics</b>Signals · operations · energy &amp; power · LTI systems · trigonometry</div></div>
 <div class="card"><h4>Contents</h4><ol class="toc" style="list-style:none">
 <li><b>1</b><a href="#s1">Common signals</a></li><li><b>2</b><a href="#s2">Some important signal operations</a></li><li><b>3</b><a href="#s3">Signal energy and power</a></li><li><b>4</b><a href="#s4">LTI systems and convolution</a></li><li><b>5</b><a href="#s5">Trigonometric identities and calculus</a></li><li><b>▸</b><a href="#quiz">Check yourself</a></li><li><b>▸</b><a href="#key">Key formulas</a></li></ol></div>
 
 <h2 id="s1"><small>1</small>Common signals</h2><p class="sub">The shapes that appear throughout signals, systems and communications</p>
 <p>You are expected to know these signals and to be able to plot them. Pick one below to see its definition and plot, and drag the probe to read its value at any time <i>t</i>.</p>
-<div class="eq">
-\[
-\begin{aligned}
-\Pi(t) &= 
-\begin{cases}
-1, & |t| < \frac{1}{2},\\
-0, & \text{otherwise}
-\end{cases}
-\\[6pt]
-\Lambda(t) &=
-\begin{cases}
-1-|t|, & |t|\leq 1,\\
-0, & \text{otherwise}
-\end{cases}
-\\[6pt]
-\operatorname{sinc}(t) &= \frac{\sin(\pi t)}{\pi t},
-\qquad \operatorname{sinc}(0)=1
-\\[10pt]
-u(t) &=
-\begin{cases}
-1, & t\geq 0,\\
-0, & \text{otherwise}
-\end{cases}
-\\[6pt]
-\operatorname{sign}(t) &=
-\begin{cases}
-1, & t>0,\\
-0, & t=0,\\
--1, & t<0
-\end{cases}
-\\[6pt]
-\delta(t) &= \frac{d}{dt}u(t),
-\qquad
-u(t)=\int_{-\infty}^{t}\delta(\tau)\,d\tau
-\end{aligned}
-\]
+<style>
+.eq-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+.eq-column {
+    text-align: center;
+    min-width: 0;
+}
+
+@media (max-width: 650px) {
+    .eq-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<div class="eq-grid">
+
+    <div class="eq-column">
+        \[
+        \Pi(t)=
+        \begin{cases}
+        1, & |t|<\frac{1}{2},\\
+        0, & \text{otherwise}
+        \end{cases}
+        \]
+
+        \[
+        \Lambda(t)=
+        \begin{cases}
+        1-|t|, & |t|\leq 1,\\
+        0, & \text{otherwise}
+        \end{cases}
+        \]
+
+        \[
+        \operatorname{sinc}(t)=
+   \begin{cases}
+   \frac{\sin(\pi t)}{\pi t}, & t\neq 0\\
+       1 & t=0
+   \end{cases}
+        \]
+    </div>
+
+    <div class="eq-column">
+        \[
+        u(t)=
+        \begin{cases}
+        1, & t\geq 0,\\
+        0, & \text{otherwise}
+        \end{cases}
+        \]
+
+        \[
+        \operatorname{sign}(t)=
+        \begin{cases}
+        1, & t>0,\\
+        0, & t=0,\\
+        -1, & t<0
+        \end{cases}
+        \]
+
+        \[
+        \delta(t)=\frac{d}{dt}u(t),
+        \qquad
+        u(t)=\int_{-\infty}^{t}\delta(\tau)\,d\tau
+        \]
+    </div>
+
 </div>
 
 <div data-w="gal"></div>
 
 <h2 id="s2"><small>2</small>Some important signal operations</h2><p class="sub">Shifting, time-scaling and time-reversal</p>
-<ul><li><b>Shift:</b> <i>x</i>(<i>t</i> − <i>t</i><sub>0</sub>) is <i>x</i>(<i>t</i>) shifted to the right by <i>t</i><sub>0</sub> if <i>t</i><sub>0</sub> &gt; 0, and to the left if <i>t</i><sub>0</sub> &lt; 0.</li>
-<li><b>Scale:</b> <i>x</i>(<i>at</i>), <i>a</i> &gt; 0, is contracted along the time axis if <i>a</i> &gt; 1 and expanded if <i>a</i> &lt; 1.</li>
-<li><b>Reverse:</b> <i>x</i>(−<i>t</i>) is <i>x</i>(<i>t</i>) flipped about the vertical axis.</li></ul>
-<p>Operations can be combined with each other and with amplitude scaling, addition and multiplication. The playground below builds <i>y</i>(<i>t</i>) = <i>A</i> · <i>x</i>(±<i>a</i>(<i>t</i> − <i>t</i><sub>0</sub>)); try one operation at a time first.</p>
+<ul>
+    <li>
+        <b>Shift:</b>
+        \(x(t-t_0)\) is \(x(t)\) shifted to the right by
+        \(t_0\) if \(t_0>0\), and to the left if \(t_0<0\).
+    </li>
+
+    <li>
+        <b>Scale:</b>
+        \(x(at)\), \(a>0\), is contracted along the time axis
+        if \(a>1\) and expanded if \(0<a<1\).
+    </li>
+
+    <li>
+        <b>Reverse:</b>
+        \(x(-t)\) is \(x(t)\) flipped about the vertical axis.
+    </li>
+</ul>
+<p>Operations can be combined with each other and with amplitude scaling, addition and multiplication. The playground below builds \(y(t) = Ax(\pm a(t − t_0))\); try one operation at a time first.</p>
 <div data-w="ops"></div>
-<div class="ex"><span class="tag">Example 2.1 · Combining operations</span><p>Plot <i>x</i>(<i>t</i>) = 2<i>Π</i>((<i>t</i> − 1)/2). Use the button above to load it, then check against the solution.</p>
-<details><summary>Show solution</summary><p>Start from <i>Π</i>(<i>t</i>), a unit pulse centred at <i>t</i> = 0 with width 1. Shifting right by 1 moves the centre to <i>t</i> = 1; the factor ½ inside expands the width to 2; the factor 2 doubles the height. Check by evaluating: <i>Π</i>(<i>s</i>) = 0 for |<i>s</i>| &gt; ½, so <i>Π</i>((<i>t</i> − 1)/2) = 0 when (<i>t</i> − 1)/2 &lt; −½ or &gt; ½, i.e. <i>t</i> &lt; 0 or <i>t</i> &gt; 2, and it equals 1 for 0 ≤ <i>t</i> ≤ 2. Hence <i>x</i>(<i>t</i>) is a pulse of height 2 on [0, 2].</p></details></div>
+<div class="ex"><span class="tag">Example 2.1 · Combining operations</span><p>Plot \(x(t) = 2\Pi((t − 1)/2)\). Use the button above to load it, then check against the solution.</p>
+<details><summary>Show solution</summary><p>Start from \(\Pi(t)\), a unit pulse centred at <i>t</i> = 0 with width 1. Shifting right by 1 moves the centre to <i>t</i> = 1; the factor ½ inside expands the width to 2; the factor 2 doubles the height. Check by evaluating: \(\Pi(s) = 0\) for \(|s| > ½\), so \(\Pi((t − 1)/2) = 0\) when \((t − 1)/2 < −½ \) or \(> ½\), i.e. \(t< 0\) or \(t> 2\), and it equals 1 for \(0 \leq  t \leq  2\). Hence \(x(t)\) is a pulse of height 2 on [0, 2].</p></details></div>
 
 <h2 id="s3"><small>3</small>Signal energy and power</h2><p class="sub">Which signals have finite energy, and which have finite power?</p>
 <div class="eq"><i>E</i> = lim<sub><i>T</i>→∞</sub> ∫<sub>−<i>T</i>/2</sub><sup><i>T</i>/2</sup> |<i>x</i>(<i>t</i>)|² d<i>t</i> &nbsp;&nbsp; <i>P</i> = lim<sub><i>T</i>→∞</sub> <span class="fr"><i>1</i><i>T</i></span> ∫<sub>−<i>T</i>/2</sub><sup><i>T</i>/2</sup> |<i>x</i>(<i>t</i>)|² d<i>t</i> &nbsp;&nbsp; <i>P</i> = <span class="fr"><i>1</i><i>T</i><sub>0</sub></span> ∫<sub>−<i>T</i><sub>0</sub>/2</sub><sup><i>T</i><sub>0</sub>/2</sup> |<i>x</i>(<i>t</i>)|² d<i>t</i> (periodic)</div>
@@ -187,17 +263,17 @@ const SG=[
 {n:'Unit step u(t)',r:[-3,3],y:[-.5,1.5],s:[{f:U,c:'a',n:'u(t)'}],d:'Zero for <i>t</i> &lt; 0 and one for <i>t</i> ≥ 0; the running integral of δ(<i>t</i>).'},
 {n:'Unit impulse δ(t)',r:[-3,3],y:[-.5,1.5],s:[],st:1,d:'Zero everywhere except <i>t</i> = 0, with unit area. It is drawn as an arrow of height 1, and δ(<i>t</i>) = d<i>u</i>/d<i>t</i>.'},
 {n:'Sign function',r:[-3,3],y:[-1.5,1.5],s:[{f:t=>Math.sign(t),c:'a',n:'sign(t)'}],d:'+1 for <i>t</i> &gt; 0, −1 for <i>t</i> &lt; 0, and 0 at <i>t</i> = 0.'}];
-W('gal',{cap:'Interactive 1.1',title:'Signal gallery',ctl:[{t:'s',k:'s',l:'Signal',o:SG.map(g=>g.n)},{k:'t',l:'Probe time t',min:-6,max:6,step:.1,v:.5}],
+W('gal',{cap:'Interactive 1.1',title:'Signal gallery: Select a signal to plot. See comments below selected signal for a description.',ctl:[{t:'s',k:'s',l:'Signal',o:SG.map(g=>g.n)},{k:'t',l:'Probe time t',min:-6,max:6,step:.1,v:.5}],
  draw(c,v){const g=SG[v.s],t=Math.max(g.r[0],Math.min(g.r[1],v.t)),pts=g.st?[{pts:[[0,1]],c:'a'}]:g.s.map(s=>({pts:[[t,s.f(t)]],c:s.c,lw:1}));
   plot(c,[...g.s.map(s=>({f:s.f,c:s.c})),...pts],g.r[0],g.r[1],g.y[0],g.y[1]);
   return g.d+(g.st?'':'<br><b>Probe:</b> '+g.s.map(s=>`${s.n} at t = ${t.toFixed(1)} → ${s.f(t).toFixed(3)}`).join(' · '))}});
 // ---- 2 operations
-const BASE=[['Π(t)',PI_],['Λ(t)',LA],['sinc(t)',sinc],['u(t)',U]];
-W('ops',{cap:'Interactive 2.1',title:'Shift, scale, reverse: y(t) = A·x(±a(t − t₀))',ctl:[{t:'s',k:'s',l:'Signal x(t)',o:BASE.map(b=>b[0])},
+const BASE=[['\(\Pi(t)\)',PI_],['\(\Lambda(t)\)',LA],['sinc(t)',sinc],['u(t)',U]];
+W('ops',{cap:'Interactive 2.1',title:'Shift, scale, reverse: \(y(t) = Ax(\pm a(t − t_0))\)',ctl:[{t:'s',k:'s',l:'Signal x(t)',o:BASE.map(b=>b[0])},
  {k:'A',l:'Amplitude A',min:-2,max:2,step:.5,v:1},{k:'t0',l:'Shift t₀ (right if &gt; 0)',min:-3,max:3,step:.25,v:0},{k:'a',l:'Scale a (&gt; 1 contracts)',min:.25,max:3,step:.25,v:1},{k:'r',l:'Time reversal (0 = off, 1 = on)',min:0,max:1,step:1,v:0},
- {t:'b',l:'Load Example 2.1: 2Π((t−1)/2)',set:{s:0,A:2,t0:1,a:.5,r:0}}],
+ {t:'b',l:'Load Example 2.1: \(2\Pi((t−1)/2)\)',set:{s:0,A:2,t0:1,a:.5,r:0}}],
  draw(c,v){const x=BASE[v.s][1],g=v.r?-1:1;plot(c,[{f:x,c:'b',d:[5,4]},{f:t=>v.A*x(g*v.a*(t-v.t0)),c:'a'}],-4,4,-2.5,2.5);
-  return `Blue: y(t) = ${v.A}·x(${v.r?'−':''}${v.a}(t − ${v.t0})); red dashed: x(t).`+(v.s==0&&!v.r?` For Π: centre at t = ${v.t0}, width ${(1/v.a).toFixed(2)}, height ${v.A}.`:'')}});
+  return `Blue: y(t) = ${v.A}·x(${v.r?'−':''}${v.a}(t − ${v.t0})); red dashed: x(t).`+(v.s==0&&!v.r?` For \(\Pi\): centre at t = ${v.t0}, width ${(1/v.a).toFixed(2)}, height ${v.A}.`:'')}});
 // ---- 3 energy & power
 W('ep',{cap:'Interactive 3.1',title:'Energy and power over a window of length T',ctl:[{t:'s',k:'s',l:'Signal',o:['Rectangular pulse A·Π(t/p)','Sinusoid A·cos(2πpt)','Decaying exponential A·e^(−pt)·u(t)']},
  {k:'A',l:'Amplitude A',min:.5,max:3,step:.5,v:1},{k:'p',l:'Parameter p (width, frequency or decay rate)',min:.5,max:4,step:.5,v:1},{k:'T',l:'Window length T',min:4,max:100,step:4,v:40}],
