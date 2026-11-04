@@ -428,21 +428,125 @@ footer{border-top:1px solid var(--ln);padding:20px;text-align:center;font-size:.
 <footer><b>Dr. Anas Chaaban, P.Eng.</b> · School of Engineering · University of British Columbia (UBC) · <a href="mailto:anas.chaaban@ubc.ca">anas.chaaban@ubc.ca</a><br>© Anas Chaaban. Not to be copied, used, revised, or distributed without explicit written permission from the copyright owner.</footer>
 <script>
 const col=k=>getComputedStyle(document.documentElement).getPropertyValue('--'+k).trim(),UPS=[];
-function plot(c,S,x0,x1,y0,y1,r,axisX='t',axisY='Amplitude'){const x=c.getContext('2d'),w=c.width,oy=r?r[0]:0,hh=r?r[1]:c.height,X=t=>(t-x0)/(x1-x0)*w,Y=v=>oy+hh-(v-y0)/(y1-y0)*hh;
- if(!r)x.clearRect(0,0,w,c.height);x.save();x.beginPath();x.rect(0,oy,w,hh);x.clip();x.font='12px system-ui';x.lineWidth=1;x.setLineDash([]);
- for(let k=Math.ceil(x0);k<=x1;k++){x.strokeStyle=col('ln');x.beginPath();x.moveTo(X(k),oy);x.lineTo(X(k),oy+hh);x.stroke();if(k){x.fillStyle=col('mut');x.fillText(k,X(k)+3,Y(0)+13)}}
- for(let k=Math.ceil(y0);k<=y1;k++){if(k===0)continue;x.strokeStyle=col('ln');x.beginPath();x.moveTo(0,Y(k));x.lineTo(w,Y(k));x.stroke();x.fillStyle=col('mut');x.fillText(k,Math.max(3,X(0)+5),Y(k)-3)}
- x.strokeStyle=col('mut');x.beginPath();x.moveTo(0,Y(0));x.lineTo(w,Y(0));x.stroke();
- x.beginPath();x.moveTo(X(0),oy);x.lineTo(X(0),oy+hh);x.stroke();
- x.fillStyle=col('mut');x.font='12px system-ui';x.textAlign='right';
-x.textAlign = 'right';
-x.fillText(axisX, w-8, oy+hh+16);
-x.textAlign = 'right';
-x.fillText(axisY, Math.max(45,X(0)-12), oy+20);
-   S.forEach(s=>{x.strokeStyle=x.fillStyle=col(s.c);x.lineWidth=s.lw||2;x.setLineDash(s.d||[]);
-  if(s.pts){s.pts.forEach(([t,v])=>{x.beginPath();x.moveTo(X(t),Y(0));x.lineTo(X(t),Y(v));x.stroke();x.beginPath();x.arc(X(t),Y(v),4,0,7);x.fill()})}
-  else{x.beginPath();let n=0,lx=0;for(let i=0;i<=w;i++){const t=x0+i/w*(x1-x0);if(s.to!==undefined&&t>s.to)break;const v=s.f(t);n++?x.lineTo(i,Y(v)):x.moveTo(i,Y(v));lx=i}
-   if(s.fill){x.lineTo(lx,Y(0));x.lineTo(0,Y(0));x.closePath();x.globalAlpha=.3;x.fill();x.globalAlpha=1}else x.stroke()}});x.restore();x.setLineDash([])}
+function plot(c,S,x0,x1,y0,y1,r,axisX='t',axisY='Amplitude'){
+    const x=c.getContext('2d'),
+        w=c.width,
+        oy=r?r[0]:0,
+        hh=r?r[1]:c.height,
+        X=t=>(t-x0)/(x1-x0)*w,
+        Y=v=>oy+hh-(v-y0)/(y1-y0)*hh;
+
+    if(!r)x.clearRect(0,0,w,c.height);
+
+    x.save();
+    x.beginPath();
+    x.rect(0,oy,w,hh);
+    x.clip();
+    x.font='12px system-ui';
+    x.lineWidth=1;
+    x.setLineDash([]);
+
+    for(let k=Math.ceil(x0);k<=x1;k++){
+        x.strokeStyle=col('ln');
+        x.beginPath();
+        x.moveTo(X(k),oy);
+        x.lineTo(X(k),oy+hh);
+        x.stroke();
+
+        if(k){
+            x.fillStyle=col('mut');
+            x.fillText(k,X(k)+3,Y(0)+13);
+        }
+    }
+
+    for(let k=Math.ceil(y0);k<=y1;k++){
+        if(k===0)continue;
+
+        x.strokeStyle=col('ln');
+        x.beginPath();
+        x.moveTo(0,Y(k));
+        x.lineTo(w,Y(k));
+        x.stroke();
+
+        x.fillStyle=col('mut');
+        x.fillText(k,Math.max(3,X(0)+5),Y(k)-3);
+    }
+
+    // Horizontal axis
+    x.strokeStyle=col('mut');
+    x.beginPath();
+    x.moveTo(0,Y(0));
+    x.lineTo(w,Y(0));
+    x.stroke();
+
+    // Vertical axis
+    x.beginPath();
+    x.moveTo(X(0),oy);
+    x.lineTo(X(0),oy+hh);
+    x.stroke();
+
+    // Axis labels
+    x.fillStyle=col('mut');
+    x.font='12px system-ui';
+    x.textBaseline='top';
+
+    // Time: far right, below horizontal axis
+    x.textAlign='right';
+    x.fillText(axisX,w-8,Y(0)+6);
+
+    // Amplitude: left of vertical axis
+    x.textAlign='right';
+    x.textBaseline='alphabetic';
+    x.fillText(axisY,Math.max(45,X(0)-12),oy+20);
+
+    // Plot signals
+    S.forEach(s=>{
+        x.strokeStyle=x.fillStyle=col(s.c);
+        x.lineWidth=s.lw||2;
+        x.setLineDash(s.d||[]);
+
+        if(s.pts){
+            s.pts.forEach(([t,v])=>{
+                x.beginPath();
+                x.moveTo(X(t),Y(0));
+                x.lineTo(X(t),Y(v));
+                x.stroke();
+
+                x.beginPath();
+                x.arc(X(t),Y(v),4,0,7);
+                x.fill();
+            });
+        }
+        else{
+            x.beginPath();
+            let n=0,lx=0;
+
+            for(let i=0;i<=w;i++){
+                const t=x0+i/w*(x1-x0);
+                if(s.to!==undefined&&t>s.to)break;
+
+                const v=s.f(t);
+                n++?x.lineTo(i,Y(v)):x.moveTo(i,Y(v));
+                lx=i;
+            }
+
+            if(s.fill){
+                x.lineTo(lx,Y(0));
+                x.lineTo(0,Y(0));
+                x.closePath();
+                x.globalAlpha=.3;
+                x.fill();
+                x.globalAlpha=1;
+            }
+            else{
+                x.stroke();
+            }
+        }
+    });
+
+    x.restore();
+    x.setLineDash([]);
+}
 
    function W(id,o) {
     const host = document.querySelector(`[data-w="${id}"]`);
@@ -461,7 +565,7 @@ x.fillText(axisY, Math.max(45,X(0)-12), oy+20);
     d.innerHTML = `
         <div class="cap">${o.cap}</div>
         <h4>${o.title}</h4>
-        <canvas width="720" height="${o.h || 260}"></canvas>
+        <canvas width="720" height="${o.h || 320}"></canvas>
         <div class="ctl"></div>
         <p class="note"></p>
     `;
@@ -695,6 +799,7 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>UPS.for
 W('unitcircle', {
     cap: 'Interactive',
     title: 'Trigonometric functions and the unit circle',
+    h: 460,
 
     ctl: [
         {
@@ -702,142 +807,143 @@ W('unitcircle', {
             l: 'Angle θ (radians)',
             min: 0,
             max: 6.28,
-            step: 0.05,
+            step: 0.01,
             v: 0.79
         }
     ],
 
     draw(c, v) {
-    const x = c.getContext('2d');
-    const w = c.width;
-    const h = c.height;
+        const x = c.getContext('2d');
+        const w = c.width;
+        const h = c.height;
 
-    const th = v.theta;
-    const co = Math.cos(th);
-    const si = Math.sin(th);
+        const th = v.theta;
+        const co = Math.cos(th);
+        const si = Math.sin(th);
 
-    x.clearRect(0, 0, w, h);
+        x.clearRect(0, 0, w, h);
 
-    // Equal scaling; larger circle
-    const scale = Math.min(w, h) * 0.46;
-    const cx = w / 2;
-    const cy = h / 2;
+        // Square drawing area with room above for the y-axis label
+        const scale = Math.min(w, h) * 0.37;
+        const cx = w / 2;
+        const cy = h / 2 + 25;
 
-    const X = a => cx + a * scale;
-    const Y = a => cy - a * scale;
+        const X = a => cx + a * scale;
+        const Y = a => cy - a * scale;
 
-    function line(x1, y1, x2, y2, color, width = 2) {
+        function line(x1, y1, x2, y2, color, width = 2) {
+            x.beginPath();
+            x.moveTo(x1, y1);
+            x.lineTo(x2, y2);
+            x.strokeStyle = color;
+            x.lineWidth = width;
+            x.stroke();
+        }
+
+        function point(px, py, color, radius = 6) {
+            x.beginPath();
+            x.arc(px, py, radius, 0, 2 * Math.PI);
+            x.fillStyle = color;
+            x.fill();
+        }
+
+        const axisColor = '#000000';
+        const circleColor = '#2878b5';
+        const radiusColor = '#d9534f';
+        const projectionColor = '#17a2a4';
+
+        // Coordinate axes
+        line(X(-1.12), Y(0), X(1.12), Y(0), axisColor, 2);
+        line(X(0), Y(-1.12), X(0), Y(1.12), axisColor, 2);
+
+        // Axis labels
+        x.fillStyle = axisColor;
+        x.font = '18px system-ui';
+        x.textAlign = 'center';
+
+        // Real: to the right of the horizontal axis
+        x.fillText('Real', X(1.12) + 30, Y(0) + 6);
+
+        // Imaginary: above the vertical axis
+        x.fillText('Imaginary', X(0), Y(1.12) - 12);
+
+        // Unit circle
         x.beginPath();
-        x.moveTo(x1, y1);
-        x.lineTo(x2, y2);
-        x.strokeStyle = color;
-        x.lineWidth = width;
+        x.arc(cx, cy, scale, 0, 2 * Math.PI);
+        x.strokeStyle = circleColor;
+        x.lineWidth = 2.5;
         x.stroke();
-    }
 
-    function point(px, py, color, radius = 6) {
+        // Point representing e^(j theta)
+        const px = X(co);
+        const py = Y(si);
+
+        // Projections
+        line(px, py, px, Y(0), projectionColor, 2);
+        line(px, py, X(0), py, projectionColor, 2);
+
+        // Radius
+        line(X(0), Y(0), px, py, radiusColor, 2.5);
+        point(px, py, radiusColor, 6);
+
+        // Projection labels
+        x.fillStyle = projectionColor;
+        x.font = '17px system-ui';
+        x.textAlign = 'center';
+        x.fillText('cos(θ)', px, Y(0) + 27);
+
+        x.textAlign = 'left';
+        x.fillText('sin(θ)', X(0) + 12, py - 8);
+
+        // Point label
+        x.fillStyle = radiusColor;
+        x.font = '17px system-ui';
+        x.textAlign = co >= 0 ? 'left' : 'right';
+        x.fillText(
+            'e^(jθ)',
+            px + (co >= 0 ? 10 : -10),
+            py - 12
+        );
+
+        // Counterclockwise angle arc
+        const arcRadius = scale * 0.24;
+
         x.beginPath();
-        x.arc(px, py, radius, 0, 2 * Math.PI);
-        x.fillStyle = color;
-        x.fill();
+        x.arc(cx, cy, arcRadius, 0, -th, true);
+        x.strokeStyle = radiusColor;
+        x.lineWidth = 2;
+        x.stroke();
+
+        // Angle label
+        const mid = th / 2;
+        const labelR = scale * 0.36;
+
+        x.fillStyle = radiusColor;
+        x.font = '17px system-ui';
+        x.textAlign = 'center';
+        x.fillText(
+            'θ',
+            cx + labelR * Math.cos(mid),
+            cy - labelR * Math.sin(mid)
+        );
+
+        // Two-column mathematical information
+        return `
+            <div style="
+                display:grid;
+                grid-template-columns:1fr 1fr;
+                gap:18px 16px;
+                text-align:center;
+                font-size:0.95em;
+                line-height:1.7;
+                padding:18px 8px 12px;
+            ">
+                <div>\\(\\theta=${th.toFixed(2)}\\text{ rad}\\)</div>
+                <div>\\(\\cos\\theta=${co.toFixed(3)}\\)</div>
+                <div>\\(\\sin\\theta=${si.toFixed(3)}\\)</div>
+                <div>\\(e^{j\\theta}=${co.toFixed(3)}+j(${si.toFixed(3)})\\)</div>
+            </div>
+        `;
     }
-
-    const axisColor = '#000000';
-    const circleColor = '#2878b5';
-    const radiusColor = '#d9534f';
-    const projectionColor = '#17a2a4';
-
-    // Coordinate axes
-    line(X(-1.12), Y(0), X(1.12), Y(0), axisColor, 2);
-    line(X(0), Y(-1.12), X(0), Y(1.12), axisColor, 2);
-
-    // Axis labels
-    x.fillStyle = axisColor;
-    x.font = '18px system-ui';
-    x.textAlign = 'center';
-
-    // Real: to the right of the horizontal axis
-    x.fillText('Real', X(1.12) + 30, Y(0) + 6);
-
-    // Imaginary: horizontal, above the vertical axis
-    x.fillText('Imaginary', X(0), Y(1.12) - 12);
-
-    // Unit circle
-    x.beginPath();
-    x.arc(cx, cy, scale, 0, 2 * Math.PI);
-    x.strokeStyle = circleColor;
-    x.lineWidth = 2.5;
-    x.stroke();
-
-    // Point representing e^(j theta)
-    const px = X(co);
-    const py = Y(si);
-
-    // Projections
-    line(px, py, px, Y(0), projectionColor, 2);
-    line(px, py, X(0), py, projectionColor, 2);
-
-    // Radius
-    line(X(0), Y(0), px, py, radiusColor, 2.5);
-    point(px, py, radiusColor, 6);
-
-    // Projection labels
-    x.fillStyle = projectionColor;
-    x.font = '17px system-ui';
-    x.textAlign = 'center';
-    x.fillText('cos(θ)', px, Y(0) + 27);
-
-    x.textAlign = 'left';
-    x.fillText('sin(θ)', X(0) + 12, py - 8);
-
-    // Point label
-    x.fillStyle = radiusColor;
-    x.font = '17px system-ui';
-    x.textAlign = co >= 0 ? 'left' : 'right';
-    x.fillText(
-        'e^(jθ)',
-        px + (co >= 0 ? 10 : -10),
-        py - 12
-    );
-
-    // Counterclockwise angle arc
-    const arcRadius = scale * 0.24;
-
-    x.beginPath();
-    x.arc(cx, cy, arcRadius, 0, -th, true);
-    x.strokeStyle = radiusColor;
-    x.lineWidth = 2;
-    x.stroke();
-
-    // Angle label
-    const mid = th / 2;
-    const labelR = scale * 0.36;
-
-    x.fillStyle = radiusColor;
-    x.font = '17px system-ui';
-    x.textAlign = 'center';
-    x.fillText(
-        'θ',
-        cx + labelR * Math.cos(mid),
-        cy - labelR * Math.sin(mid)
-    );
-
-    // Two-column mathematical information
-    return `
-        <div style="
-            display:grid;
-            grid-template-columns:1fr 1fr;
-            gap:2px 12px;
-            text-align:center;
-            font-size:0.78em;
-            line-height:1;
-        ">
-            <div>\\(\\theta=${th.toFixed(2)}\\text{ rad}\\)</div>
-            <div>\\(\\cos\\theta=${co.toFixed(3)}\\)</div>
-            <div>\\(\\sin\\theta=${si.toFixed(3)}\\)</div>
-            <div>\\(e^{j\\theta}=${co.toFixed(3)}+j(${si.toFixed(3)})\\)</div>
-        </div>
-    `;
-}
 });
 </script></body></html>
