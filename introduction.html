@@ -177,14 +177,20 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 
 <!-- timeline -->
 <style>
+    .timeline-figure {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 18px 5% 20px;
+    border: 1px solid rgba(65, 170, 220, 0.4);
+    border-radius: 14px;
+    background: rgba(5, 18, 35, 0.35);
+    overflow: visible;
+}
+
 /* Timeline container */
 .timeline-scroll {
     width: 100%;
-    max-width: 100%;
-    overflow: hidden;
-    margin: 24px 0 30px;
-    padding: 5px 0 12px;
-    box-sizing: border-box;
+    overflow: visible;
 }
 
 /* One continuous timeline with 12 positions */
@@ -293,18 +299,6 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
     flex-direction: column;
     gap: 4px;
     z-index: 2;
-}
-
-/* Keep the first card inside the left edge */
-.tl-event:first-child .tl-card {
-    margin-left: 0;
-    width: calc(200% - 5px);
-}
-
-/* Keep the last card inside the right edge */
-.tl-event:last-child .tl-card {
-    margin-left: calc(-100% + 5px);
-    width: calc(200% - 5px);
 }
 
 /* Images */
@@ -419,7 +413,7 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
     }
 }
     </style>
-    
+ <div class="timeline-figure">   
     <div class="timeline-scroll">
         <div class="timeline-track">
 
@@ -632,6 +626,7 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 
     </div>
 </div>
+</div>  
 
 <div class="card"><h3>Communication today</h3><ul><li>Analog communication developed mainly in the early twentieth century and remains in use.</li><li>Digital communication has become increasingly prominent, while many digital techniques build on analog concepts.</li><li>Current research explores THz and mmWave communication and ultra-massive MIMO systems.</li></ul></div>
 <p class="lede">How does it work? What are the main principles and techniques?</p>
