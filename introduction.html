@@ -177,15 +177,17 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 
 <!-- timeline -->
 <style>
+/* Timeline container */
 .timeline-scroll {
     width: 100%;
     max-width: 100%;
     overflow: hidden;
     margin: 24px 0 30px;
     padding: 5px 0 12px;
+    box-sizing: border-box;
 }
 
-/* One continuous timeline */
+/* One continuous timeline with 12 positions */
 .timeline-track {
     position: relative;
     width: 100%;
@@ -194,11 +196,11 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
     grid-template-rows: 48px 22px 170px 170px 170px;
     column-gap: 5px;
     row-gap: 0;
-    padding: 0 12px 0 12px;
+    padding: 0 12px;
     box-sizing: border-box;
 }
 
-/* The single continuous arrow */
+/* One continuous arrow */
 .timeline-track::before {
     content: "";
     position: absolute;
@@ -211,7 +213,7 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
     z-index: 0;
 }
 
-/* One arrowhead, at the far right */
+/* Arrowhead */
 .timeline-track::after {
     content: "";
     position: absolute;
@@ -223,13 +225,13 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
     z-index: 1;
 }
 
-/* Each milestone occupies one date position */
+/* Milestone wrapper */
 .tl-event {
     position: relative;
     display: contents;
 }
 
-/* Dates above the arrow */
+/* Dates */
 .tl-date {
     grid-row: 1;
     align-self: center;
@@ -242,7 +244,7 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
     min-width: 0;
 }
 
-/* Milestone dots — centered on the timeline arrow */
+/* Dots centered on the arrow */
 .tl-dot {
     position: absolute;
     top: 59px;
@@ -257,26 +259,28 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
     z-index: 2;
 }
 
-/* Connector lines */
+/* Connector stems */
 .tl-stem {
-    grid-row: 2 / span 1;
+    grid-row: 2;
     justify-self: center;
+    align-self: start;
     width: 2px;
-    height: 0;
+    margin-top: 14px;
     background: var(--blue);
     z-index: 1;
 }
 
-/* Cards: span the space between adjacent stem lines */
+/* Cards span approximately two columns */
 .tl-card {
     position: relative;
     align-self: start;
     min-width: 0;
-    width: calc(200% - 12px);
-    margin-left: calc(-50% + 6px);
+    width: calc(200% - 10px);
+    margin-left: calc(-50% + 5px);
     height: 155px;
     overflow: hidden;
     padding: 7px;
+    box-sizing: border-box;
     background: var(--card);
     border: 1px solid var(--ln);
     border-top: 3px solid var(--blue);
@@ -288,7 +292,19 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
     z-index: 2;
 }
 
-/* Card image */
+/* Keep the first card inside the left edge */
+.tl-event:first-child .tl-card {
+    margin-left: 0;
+    width: calc(200% - 5px);
+}
+
+/* Keep the last card inside the right edge */
+.tl-event:last-child .tl-card {
+    margin-left: calc(-100% + 5px);
+    width: calc(200% - 5px);
+}
+
+/* Images */
 .tl-card img {
     display: block;
     width: 100%;
@@ -300,7 +316,7 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
     border: 1px solid var(--ln);
 }
 
-/* Card text */
+/* Card headings */
 .tl-card h3 {
     font-size: .72rem;
     line-height: 1.15;
@@ -308,6 +324,7 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
     color: var(--acc);
 }
 
+/* Card descriptions */
 .tl-card p {
     font-size: .62rem;
     line-height: 1.25;
@@ -316,6 +333,7 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
     overflow: hidden;
 }
 
+/* Milestone labels */
 .tl-year {
     font-size: .57rem;
     color: var(--mut);
@@ -324,7 +342,7 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
     text-transform: uppercase;
 }
 
-/* Card positions: 3 interleaved rows */
+/* Three interleaved card rows */
 .tl-event:nth-child(3n + 1) .tl-card {
     grid-row: 3;
 }
@@ -337,25 +355,26 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
     grid-row: 5;
 }
 
-/* Card connector lines extend from the arrow to the card */
+/* Connector lengths: arrow to the top of each card row */
 .tl-event:nth-child(3n + 1) .tl-stem {
-    height: 75px;
+    height: 8px;
 }
 
 .tl-event:nth-child(3n + 2) .tl-stem {
-    height: 245px;
+    height: 178px;
 }
 
 .tl-event:nth-child(3n) .tl-stem {
-    height: 415px;
+    height: 348px;
 }
 
-/* Responsive adjustments */
+/* Smaller screens: retain all 12 timeline positions */
 @media (max-width: 700px) {
     .timeline-track {
-        grid-template-columns: repeat(15, minmax(0, 1fr));
+        grid-template-columns: repeat(12, minmax(0, 1fr));
         grid-template-rows: 42px 20px 145px 145px 145px;
         column-gap: 3px;
+        padding: 0 9px;
     }
 
     .tl-date {
@@ -382,6 +401,18 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 
     .tl-year {
         font-size: .49rem;
+    }
+
+    .tl-event:nth-child(3n + 1) .tl-stem {
+        height: 8px;
+    }
+
+    .tl-event:nth-child(3n + 2) .tl-stem {
+        height: 153px;
+    }
+
+    .tl-event:nth-child(3n) .tl-stem {
+        height: 298px;
     }
 }
     </style>
@@ -483,7 +514,7 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
         <article class="tl-event">
             <div class="tl-date" style="grid-column: 7;">1929</div>
             <span class="tl-dot" style="grid-column: 7;"></span>
-            <span class="tl-stem style="grid-column: 7;""></span>
+            <span class="tl-stem" style="grid-column: 7;"></span>
 
             <div class="tl-card" style="grid-column: 7;">
                 <div class="tl-year">Milestone 07</div>
