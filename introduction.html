@@ -266,11 +266,13 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
     z-index: 1;
 }
 
-/* Cards */
+/* Cards: span the space between adjacent stem lines */
 .tl-card {
     position: relative;
     align-self: start;
     min-width: 0;
+    width: calc(200% - 12px);
+    margin-left: calc(-50% + 6px);
     height: 155px;
     overflow: hidden;
     padding: 7px;
@@ -282,6 +284,7 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
     display: flex;
     flex-direction: column;
     gap: 4px;
+    z-index: 2;
 }
 
 /* Card image */
