@@ -661,7 +661,7 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 <!--block diagram of comms sys.-->
 <style>
     .comm-flow-wrap{width:100%;max-width:100%;margin:0 auto;overflow-x:hidden;overflow-y:visible;padding:8px 0 16px;box-sizing:border-box}
-    .comm-flow{--gap:clamp(30px,4.5vw,58px);display:grid;grid-template-columns:minmax(0,.82fr) var(--gap) minmax(0,.82fr) var(--gap) minmax(0,.82fr) var(--gap) minmax(0,.82fr) var(--gap) minmax(0,.82fr);width:100%;min-width:0;align-items:stretch;font-family:system-ui,sans-serif;box-sizing:border-box}
+    .comm-flow{--gap:clamp(46px,6vw,76px);display:grid;grid-template-columns:minmax(0,.58fr) var(--gap) minmax(0,.58fr) var(--gap) minmax(0,.58fr) var(--gap) minmax(0,.58fr) var(--gap) minmax(0,.58fr);width:100%;min-width:0;align-items:stretch;font-family:system-ui,sans-serif;box-sizing:border-box}
     .comm-stage{position:relative;min-width:0;text-align:center;padding:8px 4px 10px;border:1px solid rgba(56,189,248,.35);border-radius:14px;background:radial-gradient(circle at 50% 0%,#102c5c,#040a18 75%);color:#cfe6ff;box-shadow:0 6px 18px rgba(0,0,0,.3)}
     .comm-stage svg{display:block;width:100%;max-width:104px;height:auto;aspect-ratio:140/100;margin:0 auto 5px;shape-rendering:geometricPrecision;text-rendering:geometricPrecision}
     .comm-stage b{display:block;color:#7dd3fc;font-size:clamp(.68rem,.95vw,.88rem);margin-bottom:3px}
@@ -699,7 +699,7 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
     @media(prefers-reduced-motion:reduce){.comm-stage,.comm-link .sig,.comm-link .w{animation:none!important}.comm-link .sig{opacity:1}.comm-link .w{stroke-dashoffset:0}}
     
     @media(max-width:680px){
-    .comm-flow{--gap:clamp(20px,3.2vw,30px);grid-template-columns:minmax(0,.82fr) var(--gap) minmax(0,.82fr) var(--gap) minmax(0,.82fr) var(--gap) minmax(0,.82fr) var(--gap) minmax(0,.82fr)}
+    .comm-flow{--gap:clamp(34px,5vw,48px);grid-template-columns:minmax(0,.58fr) var(--gap) minmax(0,.58fr) var(--gap) minmax(0,.58fr) var(--gap) minmax(0,.58fr) var(--gap) minmax(0,.58fr)}
     .comm-stage{padding:6px 2px 8px;border-radius:9px}
     .comm-stage b{font-size:clamp(.58rem,1.8vw,.72rem)}
     .comm-link{padding-top:18px}
@@ -734,6 +734,7 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
     <path d="M51 42Q57 50 51 58" stroke="url(#cfG)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/><rect x="64" y="24" width="62" height="42" rx="6" stroke="url(#cfG)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none" fill="rgba(56,189,248,.13)"/><path d="M95 66V75M83 75H107" stroke="url(#cfG)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M72 55H78V38H88V55H98V38H108V55H118" stroke="#7dd3fc" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" fill="none"/></g></svg><b>Sink</b><small>Delivers recovered information to the user</small></div>
     </div>
     </div>
+    
     
     
     
