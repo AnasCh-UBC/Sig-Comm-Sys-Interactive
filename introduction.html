@@ -175,284 +175,447 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 <h2 id="history"><small>2</small>A brief history</h2>
 <p class="sub">Milestones that transformed communication from telegraphy to global networks</p>
 
+<!-- timeline -->
 <style>
     .timeline.timeline-dark {
         width: 100%;
-        overflow: hidden;
-        border-radius: 12px;
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 25px 20px;
+        box-sizing: border-box;
+        border-radius: 14px;
         border: 1px solid rgba(56,189,248,.3);
+        background: linear-gradient(135deg, #040a18, #0b1f4a);
         box-shadow: 0 8px 24px rgba(4,10,24,.4);
-        background: #040a18;
+        overflow: hidden;
     }
     
-    .timeline-dark svg {
-        display: block;
+    .timeline-dark *,
+    .timeline-dark *::before,
+    .timeline-dark *::after {
+        box-sizing: border-box;
+    }
+    
+    .timeline-heading {
+        color: #7dd3fc;
+        text-align: center;
+        font-size: 25px;
+        margin: 0 0 28px;
+    }
+    
+    .timeline-list {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+    
+    /* Vertical timeline arrow */
+    .timeline-list::before {
+        content: "";
+        position: absolute;
+        left: 48px;
+        top: 0;
+        bottom: 18px;
+        width: 12px;
+        border-radius: 8px;
+        background: linear-gradient(
+            to bottom,
+            #0b3d91,
+            #1d6dff,
+            #38bdf8
+        );
+        box-shadow: 0 0 12px rgba(56,189,248,.55);
+    }
+    
+    .timeline-list::after {
+        content: "";
+        position: absolute;
+        left: 32px;
+        bottom: 0;
+        border-left: 22px solid transparent;
+        border-right: 22px solid transparent;
+        border-top: 28px solid #38bdf8;
+        filter: drop-shadow(0 0 5px rgba(56,189,248,.5));
+    }
+    
+    /* Each event row */
+    .tl-event {
+        position: relative;
+        display: grid;
+        grid-template-columns: 115px minmax(0, 1fr);
+        align-items: center;
+        min-height: 135px;
+    }
+    
+    /* Year marker */
+    .tl-marker {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .tl-marker span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: #061230;
+        border: 3px solid #7dd3fc;
+        color: #7dd3fc;
+        font-size: 14px;
+        font-weight: 800;
+        box-shadow: 0 0 12px rgba(56,189,248,.4);
+    }
+    
+    /* Event card */
+    .tl-card {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 210px;
+        gap: 20px;
+        align-items: center;
+        min-height: 125px;
+        padding: 17px 20px;
+        border-radius: 12px;
+        background: #061230;
+        border: 1px solid rgba(56,189,248,.5);
+        transition: border-color .2s, background .2s;
+    }
+    
+    .tl-card:hover {
+        border-color: #38bdf8;
+        background: #0a1b3d;
+    }
+    
+    .tl-card h3 {
+        margin: 0 0 9px;
+        color: #7dd3fc;
+        font-size: 21px;
+    }
+    
+    .tl-card p {
+        margin: 0;
+        color: #d8eaff;
+        font-size: 16px;
+        line-height: 1.55;
+    }
+    
+    /* Image area */
+    .tl-image {
+        position: relative;
         width: 100%;
-        height: auto;
-        font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+        height: 100px;
+        min-height: 100px;
+        border: 1px dashed rgba(125,211,252,.6);
+        border-radius: 8px;
+        background: rgba(15,45,85,.65);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
     }
     
-    .tl-event rect {
-        transition: stroke .2s, fill .2s;
+    .tl-image span {
+        position: absolute;
+        color: #7dd3fc;
+        font-size: 14px;
+        font-weight: 600;
     }
     
-    .tl-event:hover rect {
-        stroke: #38bdf8;
-        fill: #0a1b3d;
+    .tl-image img {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        background: #061230;
     }
     
-    .tl-year {
-        fill: #7dd3fc;
-        font-size: 18px;
-        font-weight: 700;
-    }
+    /* Smaller screens */
+    @media (max-width: 700px) {
+        .timeline.timeline-dark {
+            padding: 15px 8px;
+        }
     
-    .tl-description {
-        fill: #d8eaff;
-        font-size: 15px;
-    }
+        .timeline-list::before {
+            left: 22px;
+            width: 8px;
+        }
     
-    .tl-dot {
-        fill: #061230;
-        stroke: #7dd3fc;
-        stroke-width: 3;
+        .timeline-list::after {
+            left: 11px;
+            border-left-width: 17px;
+            border-right-width: 17px;
+            border-top-width: 22px;
+        }
+    
+        .tl-event {
+            grid-template-columns: 52px minmax(0, 1fr);
+        }
+    
+        .tl-marker span {
+            width: 38px;
+            height: 38px;
+            font-size: 11px;
+        }
+    
+        .tl-card {
+            grid-template-columns: minmax(0, 1fr);
+            gap: 12px;
+            padding: 14px;
+        }
+    
+        .tl-card h3 {
+            font-size: 18px;
+        }
+    
+        .tl-card p {
+            font-size: 14px;
+        }
+    
+        .tl-image {
+            height: 130px;
+        }
     }
     </style>
     
     <div class="timeline timeline-dark">
-    <svg viewBox="0 0 1000 1450" role="img"
-         aria-labelledby="tlT tlD">
-    <title id="tlT">Timeline of communication technology</title>
-    <desc id="tlD">
-    Major developments in mathematics, communication and information
-    theory, from the early 1800s to today.
-    </desc>
     
-    <defs>
-        <linearGradient id="tlBg" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stop-color="#040a18"/>
-            <stop offset="1" stop-color="#0b1f4a"/>
-        </linearGradient>
+        <h2 class="timeline-heading">
+            History of Communication Technology
+        </h2>
     
-        <linearGradient id="tlArrow" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#0b3d91"/>
-            <stop offset=".55" stop-color="#1d6dff"/>
-            <stop offset="1" stop-color="#38bdf8"/>
-        </linearGradient>
+        <div class="timeline-list">
     
-        <pattern id="tlGrid" width="25" height="25"
-                 patternUnits="userSpaceOnUse">
-            <path d="M25 0H0V25" fill="none"
-                  stroke="#1d6dff" stroke-opacity=".12"/>
-        </pattern>
+            <!-- 1 -->
+            <div class="tl-event">
+                <div class="tl-marker"><span>1</span></div>
+                <div class="tl-card">
+                    <div>
+                        <h3>1800–1820s</h3>
+                        <p>J. Fourier introduces the Fourier series and Fourier transform.</p>
+                    </div>
+                    <div class="tl-image">
+                        <span>1.png</span>
+                        <img src="images/1.png" alt="Fourier portrait or illustration"
+                             onerror="this.style.display='none'">
+                    </div>
+                </div>
+            </div>
     
-        <filter id="tlGlow" x="-20%" y="-10%" width="140%" height="120%">
-            <feGaussianBlur stdDeviation="2" result="blur"/>
-            <feMerge>
-                <feMergeNode in="blur"/>
-                <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-        </filter>
-    </defs>
+            <!-- 2 -->
+            <div class="tl-event">
+                <div class="tl-marker"><span>2</span></div>
+                <div class="tl-card">
+                    <div>
+                        <h3>1830s</h3>
+                        <p>S. Morse develops the telegraph; Faraday advances electromagnetic induction.</p>
+                    </div>
+                    <div class="tl-image">
+                        <span>2.png</span>
+                        <img src="images/2.png" alt="Telegraph or electromagnetic induction"
+                             onerror="this.style.display='none'">
+                    </div>
+                </div>
+            </div>
     
-    <!-- Background -->
-    <rect width="1000" height="1450" fill="url(#tlBg)"/>
-    <rect width="1000" height="1450" fill="url(#tlGrid)"/>
+            <!-- 3 -->
+            <div class="tl-event">
+                <div class="tl-marker"><span>3</span></div>
+                <div class="tl-card">
+                    <div>
+                        <h3>1858</h3>
+                        <p>First transatlantic telegraph cable.</p>
+                    </div>
+                    <div class="tl-image">
+                        <span>3.png</span>
+                        <img src="images/3.png" alt="Transatlantic telegraph cable"
+                             onerror="this.style.display='none'">
+                    </div>
+                </div>
+            </div>
     
-    <!-- Vertical timeline arrow -->
-    <path d="M91 30 H129 V1395 L110 1425 L91 1395 Z"
-          fill="url(#tlArrow)"
-          stroke="#7dd3fc"
-          stroke-opacity=".8"
-          stroke-width="1.5"
-          filter="url(#tlGlow)"/>
+            <!-- 4 -->
+            <div class="tl-event">
+                <div class="tl-marker"><span>4</span></div>
+                <div class="tl-card">
+                    <div>
+                        <h3>1870s</h3>
+                        <p>A. G. Bell develops the telephone; E. Baudot develops a telegraph code.</p>
+                    </div>
+                    <div class="tl-image">
+                        <span>4.png</span>
+                        <img src="images/4.png" alt="Early telephone or telegraph"
+                             onerror="this.style.display='none'">
+                    </div>
+                </div>
+            </div>
     
-    <path d="M96 40 V1385"
-          stroke="#fff" stroke-opacity=".22" stroke-width="2"/>
+            <!-- 5 -->
+            <div class="tl-event">
+                <div class="tl-marker"><span>5</span></div>
+                <div class="tl-card">
+                    <div>
+                        <h3>1895</h3>
+                        <p>G. Marconi demonstrates wireless telegraphy.</p>
+                    </div>
+                    <div class="tl-image">
+                        <span>5.png</span>
+                        <img src="images/5.png" alt="Early wireless telegraphy equipment"
+                             onerror="this.style.display='none'">
+                    </div>
+                </div>
+            </div>
     
-    <!-- 1: 1800–1820s -->
-    <g class="tl-event">
-        <circle class="tl-dot" cx="110" cy="70" r="7"/>
-        <path d="M117 70 H175" stroke="#38bdf8"
-              stroke-width="2" stroke-dasharray="4 4"/>
-        <rect x="175" y="25" width="790" height="90" rx="12"
-              fill="#061230" stroke="rgba(56,189,248,.5)" stroke-width="1.5"/>
-        <text class="tl-year" x="205" y="57">1800–1820s</text>
-        <text class="tl-description" x="205" y="86">
-            J. Fourier introduces the Fourier series and Fourier transform.
-        </text>
-    </g>
+            <!-- 6 -->
+            <div class="tl-event">
+                <div class="tl-marker"><span>6</span></div>
+                <div class="tl-card">
+                    <div>
+                        <h3>1910s–1920s</h3>
+                        <p>Transcontinental telephone service; E. Armstrong advances AM and FM radio.</p>
+                    </div>
+                    <div class="tl-image">
+                        <span>6.png</span>
+                        <img src="images/6.png" alt="Early telephone and radio equipment"
+                             onerror="this.style.display='none'">
+                    </div>
+                </div>
+            </div>
     
-    <!-- 2: 1830s -->
-    <g class="tl-event">
-        <circle class="tl-dot" cx="110" cy="170" r="7"/>
-        <path d="M117 170 H175" stroke="#38bdf8"
-              stroke-width="2" stroke-dasharray="4 4"/>
-        <rect x="175" y="125" width="790" height="90" rx="12"
-              fill="#061230" stroke="rgba(56,189,248,.5)" stroke-width="1.5"/>
-        <text class="tl-year" x="205" y="157">1830s</text>
-        <text class="tl-description" x="205" y="186">
-            S. Morse develops the telegraph; Faraday advances electromagnetic induction.
-        </text>
-    </g>
+            <!-- 7 -->
+            <div class="tl-event">
+                <div class="tl-marker"><span>7</span></div>
+                <div class="tl-card">
+                    <div>
+                        <h3>1928</h3>
+                        <p>H. Nyquist formulates the Nyquist sampling theory.</p>
+                    </div>
+                    <div class="tl-image">
+                        <span>7.png</span>
+                        <img src="images/7.png" alt="Nyquist sampling illustration"
+                             onerror="this.style.display='none'">
+                    </div>
+                </div>
+            </div>
     
-    <!-- 3: 1858 -->
-    <g class="tl-event">
-        <circle class="tl-dot" cx="110" cy="270" r="7"/>
-        <path d="M117 270 H175" stroke="#38bdf8"
-              stroke-width="2" stroke-dasharray="4 4"/>
-        <rect x="175" y="225" width="790" height="90" rx="12"
-              fill="#061230" stroke="rgba(56,189,248,.5)" stroke-width="1.5"/>
-        <text class="tl-year" x="205" y="257">1858</text>
-        <text class="tl-description" x="205" y="286">
-            First transatlantic telegraph cable.
-        </text>
-    </g>
+            <!-- 8 -->
+            <div class="tl-event">
+                <div class="tl-marker"><span>8</span></div>
+                <div class="tl-card">
+                    <div>
+                        <h3>1929</h3>
+                        <p>V. Zworykin advances electronic television technology.</p>
+                    </div>
+                    <div class="tl-image">
+                        <span>8.png</span>
+                        <img src="images/8.png" alt="Early television technology"
+                             onerror="this.style.display='none'">
+                    </div>
+                </div>
+            </div>
     
-    <!-- 4: 1870s -->
-    <g class="tl-event">
-        <circle class="tl-dot" cx="110" cy="370" r="7"/>
-        <path d="M117 370 H175" stroke="#38bdf8"
-              stroke-width="2" stroke-dasharray="4 4"/>
-        <rect x="175" y="325" width="790" height="90" rx="12"
-              fill="#061230" stroke="rgba(56,189,248,.5)" stroke-width="1.5"/>
-        <text class="tl-year" x="205" y="357">1870s</text>
-        <text class="tl-description" x="205" y="386">
-            A. G. Bell develops the telephone; E. Baudot develops a telegraph code.
-        </text>
-    </g>
+            <!-- 9 -->
+            <div class="tl-event">
+                <div class="tl-marker"><span>9</span></div>
+                <div class="tl-card">
+                    <div>
+                        <h3>1947</h3>
+                        <p>J. Bardeen, W. Brattain, and W. Shockley invent the transistor.</p>
+                    </div>
+                    <div class="tl-image">
+                        <span>9.png</span>
+                        <img src="images/9.png" alt="First transistor"
+                             onerror="this.style.display='none'">
+                    </div>
+                </div>
+            </div>
     
-    <!-- 5: 1895 -->
-    <g class="tl-event">
-        <circle class="tl-dot" cx="110" cy="470" r="7"/>
-        <path d="M117 470 H175" stroke="#38bdf8"
-              stroke-width="2" stroke-dasharray="4 4"/>
-        <rect x="175" y="425" width="790" height="90" rx="12"
-              fill="#061230" stroke="rgba(56,189,248,.5)" stroke-width="1.5"/>
-        <text class="tl-year" x="205" y="457">1895</text>
-        <text class="tl-description" x="205" y="486">
-            G. Marconi demonstrates wireless telegraphy.
-        </text>
-    </g>
+            <!-- 10 -->
+            <div class="tl-event">
+                <div class="tl-marker"><span>10</span></div>
+                <div class="tl-card">
+                    <div>
+                        <h3>1948</h3>
+                        <p>C. Shannon develops Information Theory, a modern foundation of digital communication theory.</p>
+                    </div>
+                    <div class="tl-image">
+                        <span>10.png</span>
+                        <img src="images/10.png" alt="Claude Shannon or information theory illustration"
+                             onerror="this.style.display='none'">
+                    </div>
+                </div>
+            </div>
     
-    <!-- 6: 1910s–1920s -->
-    <g class="tl-event">
-        <circle class="tl-dot" cx="110" cy="570" r="7"/>
-        <path d="M117 570 H175" stroke="#38bdf8"
-              stroke-width="2" stroke-dasharray="4 4"/>
-        <rect x="175" y="525" width="790" height="90" rx="12"
-              fill="#061230" stroke="rgba(56,189,248,.5)" stroke-width="1.5"/>
-        <text class="tl-year" x="205" y="557">1910s–1920s</text>
-        <text class="tl-description" x="205" y="586">
-            Transcontinental telephone service; E. Armstrong advances AM and FM radio.
-        </text>
-    </g>
+            <!-- 11 -->
+            <div class="tl-event">
+                <div class="tl-marker"><span>11</span></div>
+                <div class="tl-card">
+                    <div>
+                        <h3>1958</h3>
+                        <p>J. Kilby builds the first integrated circuit.</p>
+                    </div>
+                    <div class="tl-image">
+                        <span>11.png</span>
+                        <img src="images/11.png" alt="First integrated circuit"
+                             onerror="this.style.display='none'">
+                    </div>
+                </div>
+            </div>
     
-    <!-- 7: 1928 -->
-    <g class="tl-event">
-        <circle class="tl-dot" cx="110" cy="670" r="7"/>
-        <path d="M117 670 H175" stroke="#38bdf8"
-              stroke-width="2" stroke-dasharray="4 4"/>
-        <rect x="175" y="625" width="790" height="90" rx="12"
-              fill="#061230" stroke="rgba(56,189,248,.5)" stroke-width="1.5"/>
-        <text class="tl-year" x="205" y="657">1928</text>
-        <text class="tl-description" x="205" y="686">
-            H. Nyquist formulates the Nyquist sampling theory.
-        </text>
-    </g>
+            <!-- 12 -->
+            <div class="tl-event">
+                <div class="tl-marker"><span>12</span></div>
+                <div class="tl-card">
+                    <div>
+                        <h3>1960</h3>
+                        <p>T. Maiman builds the first laser.</p>
+                    </div>
+                    <div class="tl-image">
+                        <span>12.png</span>
+                        <img src="images/12.png" alt="First laser"
+                             onerror="this.style.display='none'">
+                    </div>
+                </div>
+            </div>
     
-    <!-- 8: 1929 -->
-    <g class="tl-event">
-        <circle class="tl-dot" cx="110" cy="770" r="7"/>
-        <path d="M117 770 H175" stroke="#38bdf8"
-              stroke-width="2" stroke-dasharray="4 4"/>
-        <rect x="175" y="725" width="790" height="90" rx="12"
-              fill="#061230" stroke="rgba(56,189,248,.5)" stroke-width="1.5"/>
-        <text class="tl-year" x="205" y="757">1929</text>
-        <text class="tl-description" x="205" y="786">
-            V. Zworykin advances electronic television technology.
-        </text>
-    </g>
+            <!-- 13 -->
+            <div class="tl-event">
+                <div class="tl-marker"><span>13</span></div>
+                <div class="tl-card">
+                    <div>
+                        <h3>1962</h3>
+                        <p>First active communications satellite.</p>
+                    </div>
+                    <div class="tl-image">
+                        <span>13.png</span>
+                        <img src="images/13.png" alt="Telstar communications satellite"
+                             onerror="this.style.display='none'">
+                    </div>
+                </div>
+            </div>
     
-    <!-- 9: 1947 -->
-    <g class="tl-event">
-        <circle class="tl-dot" cx="110" cy="870" r="7"/>
-        <path d="M117 870 H175" stroke="#38bdf8"
-              stroke-width="2" stroke-dasharray="4 4"/>
-        <rect x="175" y="825" width="790" height="90" rx="12"
-              fill="#061230" stroke="rgba(56,189,248,.5)" stroke-width="1.5"/>
-        <text class="tl-year" x="205" y="857">1947</text>
-        <text class="tl-description" x="205" y="886">
-            J. Bardeen, W. Brattain, and W. Shockley invent the transistor.
-        </text>
-    </g>
+            <!-- 14 -->
+            <div class="tl-event">
+                <div class="tl-marker"><span>14</span></div>
+                <div class="tl-card">
+                    <div>
+                        <h3>Today</h3>
+                        <p>Fiber optics, cable, LAN, cellular networks, and modern digital communications.</p>
+                    </div>
+                    <div class="tl-image">
+                        <span>14.png</span>
+                        <img src="images/14.png" alt="Modern communication technologies"
+                             onerror="this.style.display='none'">
+                    </div>
+                </div>
+            </div>
     
-    <!-- 10: 1948 -->
-    <g class="tl-event">
-        <circle class="tl-dot" cx="110" cy="970" r="7"/>
-        <path d="M117 970 H175" stroke="#38bdf8"
-              stroke-width="2" stroke-dasharray="4 4"/>
-        <rect x="175" y="925" width="790" height="90" rx="12"
-              fill="#061230" stroke="rgba(56,189,248,.5)" stroke-width="1.5"/>
-        <text class="tl-year" x="205" y="957">1948</text>
-        <text class="tl-description" x="205" y="986">
-            C. Shannon develops Information Theory, a modern foundation of digital communication theory.
-        </text>
-    </g>
-    
-    <!-- 11: 1958 -->
-    <g class="tl-event">
-        <circle class="tl-dot" cx="110" cy="1070" r="7"/>
-        <path d="M117 1070 H175" stroke="#38bdf8"
-              stroke-width="2" stroke-dasharray="4 4"/>
-        <rect x="175" y="1025" width="790" height="90" rx="12"
-              fill="#061230" stroke="rgba(56,189,248,.5)" stroke-width="1.5"/>
-        <text class="tl-year" x="205" y="1057">1958</text>
-        <text class="tl-description" x="205" y="1086">
-            J. Kilby builds the first integrated circuit.
-        </text>
-    </g>
-    
-    <!-- 12: 1960 -->
-    <g class="tl-event">
-        <circle class="tl-dot" cx="110" cy="1170" r="7"/>
-        <path d="M117 1170 H175" stroke="#38bdf8"
-              stroke-width="2" stroke-dasharray="4 4"/>
-        <rect x="175" y="1125" width="790" height="90" rx="12"
-              fill="#061230" stroke="rgba(56,189,248,.5)" stroke-width="1.5"/>
-        <text class="tl-year" x="205" y="1157">1960</text>
-        <text class="tl-description" x="205" y="1186">
-            T. Maiman builds the first laser.
-        </text>
-    </g>
-    
-    <!-- 13: 1962 -->
-    <g class="tl-event">
-        <circle class="tl-dot" cx="110" cy="1270" r="7"/>
-        <path d="M117 1270 H175" stroke="#38bdf8"
-              stroke-width="2" stroke-dasharray="4 4"/>
-        <rect x="175" y="1225" width="790" height="90" rx="12"
-              fill="#061230" stroke="rgba(56,189,248,.5)" stroke-width="1.5"/>
-        <text class="tl-year" x="205" y="1257">1962</text>
-        <text class="tl-description" x="205" y="1286">
-            First active communications satellite.
-        </text>
-    </g>
-    
-    <!-- 14: Today -->
-    <g class="tl-event">
-        <circle class="tl-dot" cx="110" cy="1370" r="7"/>
-        <path d="M117 1370 H175" stroke="#38bdf8"
-              stroke-width="2" stroke-dasharray="4 4"/>
-        <rect x="175" y="1325" width="790" height="90" rx="12"
-              fill="#061230" stroke="rgba(56,189,248,.5)" stroke-width="1.5"/>
-        <text class="tl-year" x="205" y="1357">Today</text>
-        <text class="tl-description" x="205" y="1386">
-            Fiber optics, cable, LAN, cellular networks, and modern digital communications.
-        </text>
-    </g>
-    
-    </svg>
+        </div>
     </div>
 
 <div class="card"><h3>Communication today</h3><ul><li>Analog communication developed mainly in the early twentieth century and remains in use.</li><li>Digital communication has become increasingly prominent, while many digital techniques build on analog concepts.</li><li>Current research explores THz and mmWave communication and ultra-massive MIMO systems.</li></ul></div>
