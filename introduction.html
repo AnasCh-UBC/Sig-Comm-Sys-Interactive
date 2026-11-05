@@ -181,82 +181,74 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
     width: 100%;
     max-width: 100%;
     overflow: hidden;
-    margin: 22px 0 28px;
-    padding: 4px 0 10px;
+    margin: 24px 0 30px;
+    padding: 5px 0 12px;
 }
 
+/* One continuous timeline */
 .timeline-track {
-    --event-w: 100%;
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 12px 8px;
+    position: relative;
     width: 100%;
+    display: grid;
+    grid-template-columns: repeat(15, minmax(0, 1fr));
+    grid-template-rows: 48px 22px 170px 170px 170px;
+    column-gap: 5px;
+    row-gap: 0;
     padding: 0;
 }
 
-/* Each milestone */
-.tl-event {
-    position: relative;
-    height: 350px;
-    min-width: 0;
-}
-
-/* Date above the timeline */
-.tl-date {
-    height: 48px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    text-align: center;
-    color: var(--acc);
-    font-weight: 800;
-    font-size: .76rem;
-    line-height: 1.2;
-    padding: 0 2px;
-}
-
-/* Horizontal timeline line */
-.tl-event::before {
+/* The single continuous arrow */
+.timeline-track::before {
     content: "";
     position: absolute;
-    left: -4px;
-    right: -4px;
-    top: 61px;
+    left: 8px;
+    right: 15px;
+    top: 59px;
     height: 6px;
-    border-radius: 6px;
+    border-radius: 8px;
     background: linear-gradient(90deg, #22c6d6, #3679e8);
     z-index: 0;
 }
 
-/* Start and end of each row */
-.tl-event:nth-child(5n + 1)::before {
-    left: 50%;
-}
-
-.tl-event:nth-child(5n)::before {
-    right: 50%;
-}
-
-/* Arrowhead at the end of each row */
-.tl-event:nth-child(5n)::after {
+/* One arrowhead, at the far right */
+.timeline-track::after {
     content: "";
     position: absolute;
-    top: 53px;
-    right: -3px;
-    border-left: 12px solid #3679e8;
+    right: 3px;
+    top: 51px;
+    border-left: 15px solid #3679e8;
     border-top: 11px solid transparent;
     border-bottom: 11px solid transparent;
     z-index: 1;
 }
 
-/* Milestone dot */
+/* Each milestone occupies one date position */
+.tl-event {
+    position: relative;
+    display: contents;
+}
+
+/* Dates above the arrow */
+.tl-date {
+    grid-row: 1;
+    align-self: center;
+    text-align: center;
+    font-size: .68rem;
+    line-height: 1.15;
+    font-weight: 800;
+    color: var(--acc);
+    padding: 0 1px;
+    min-width: 0;
+}
+
+/* Milestone dots */
 .tl-dot {
-    position: absolute;
-    top: 52px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 22px;
-    height: 22px;
+    grid-row: 2;
+    justify-self: center;
+    align-self: start;
+    margin-top: 0;
+    width: 17px;
+    height: 17px;
     border: 4px solid var(--bg);
     border-radius: 50%;
     background: #22c6d6;
@@ -264,286 +256,206 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
     z-index: 2;
 }
 
-/* Connector from line to card */
+/* Connector lines */
 .tl-stem {
-    position: absolute;
-    left: 50%;
-    top: 74px;
+    grid-row: 2 / span 1;
+    justify-self: center;
     width: 2px;
+    height: 0;
     background: var(--blue);
-    transform: translateX(-50%);
+    z-index: 1;
 }
 
 /* Cards */
 .tl-card {
-    position: absolute;
-    left: 0;
-    right: 0;
-    min-height: 0;
-    padding: 8px;
+    position: relative;
+    align-self: start;
+    min-width: 0;
+    height: 155px;
+    overflow: hidden;
+    padding: 7px;
     background: var(--card);
     border: 1px solid var(--ln);
     border-top: 3px solid var(--blue);
-    border-radius: 9px;
+    border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,.10);
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 4px;
 }
 
-/* Alternate cards vertically */
-.tl-event:nth-child(odd) .tl-card {
-    top: 112px;
-}
-
-.tl-event:nth-child(odd) .tl-stem {
-    height: 38px;
-}
-
-.tl-event:nth-child(even) .tl-card {
-    top: 220px;
-}
-
-.tl-event:nth-child(even) .tl-stem {
-    height: 146px;
-}
-
-/* Images inside cards */
+/* Card image */
 .tl-card img {
     display: block;
     width: 100%;
-    height: 65px;
+    height: 55px;
+    flex-shrink: 0;
     object-fit: cover;
     border-radius: 5px;
     background: linear-gradient(135deg, #102b50, #1c6387);
     border: 1px solid var(--ln);
 }
 
-/* Text */
+/* Card text */
 .tl-card h3 {
-    font-size: .78rem;
-    line-height: 1.2;
+    font-size: .72rem;
+    line-height: 1.15;
     margin: 0;
     color: var(--acc);
 }
 
 .tl-card p {
-    font-size: .68rem;
-    line-height: 1.3;
+    font-size: .62rem;
+    line-height: 1.25;
     margin: 0;
     color: var(--fg);
+    overflow: hidden;
 }
 
 .tl-year {
-    font-size: .62rem;
+    font-size: .57rem;
     color: var(--mut);
     font-weight: 700;
     letter-spacing: .03em;
     text-transform: uppercase;
 }
 
-/* Smaller screens */
+/* Card positions: 3 interleaved rows */
+.tl-event:nth-child(3n + 1) .tl-card {
+    grid-row: 3;
+}
+
+.tl-event:nth-child(3n + 2) .tl-card {
+    grid-row: 4;
+}
+
+.tl-event:nth-child(3n) .tl-card {
+    grid-row: 5;
+}
+
+/* Card connector lines extend from the arrow to the card */
+.tl-event:nth-child(3n + 1) .tl-stem {
+    height: 75px;
+}
+
+.tl-event:nth-child(3n + 2) .tl-stem {
+    height: 245px;
+}
+
+.tl-event:nth-child(3n) .tl-stem {
+    height: 415px;
+}
+
+/* Responsive adjustments */
 @media (max-width: 700px) {
     .timeline-track {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 10px 6px;
+        grid-template-columns: repeat(15, minmax(0, 1fr));
+        grid-template-rows: 42px 20px 145px 145px 145px;
+        column-gap: 3px;
     }
 
-    .tl-event {
-        height: 340px;
+    .tl-date {
+        font-size: .55rem;
+    }
+
+    .tl-card {
+        height: 132px;
+        padding: 5px;
+        gap: 3px;
     }
 
     .tl-card img {
-        height: 58px;
+        height: 42px;
     }
 
     .tl-card h3 {
-        font-size: .73rem;
+        font-size: .62rem;
     }
 
     .tl-card p {
-        font-size: .64rem;
+        font-size: .53rem;
     }
 
-    /* Three-column rows need a different arrow position */
-    .tl-event:nth-child(5n + 1)::before,
-    .tl-event:nth-child(5n)::before {
-        left: -4px;
-        right: -4px;
-    }
-
-    .tl-event:nth-child(5n)::after {
-        display: none;
-    }
-
-    .tl-event:nth-child(3n + 1)::before {
-        left: 50%;
-    }
-
-    .tl-event:nth-child(3n)::before {
-        right: 50%;
-    }
-
-    .tl-event:nth-child(3n)::after {
-        content: "";
-        display: block;
-        position: absolute;
-        top: 53px;
-        right: -3px;
-        border-left: 12px solid #3679e8;
-        border-top: 11px solid transparent;
-        border-bottom: 11px solid transparent;
-    }
-}
-
-@media (max-width: 420px) {
-    .timeline-track {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .tl-event {
-        height: 330px;
-    }
-
-    .tl-event:nth-child(3n + 1)::before,
-    .tl-event:nth-child(3n)::before {
-        left: -4px;
-        right: -4px;
-    }
-
-    .tl-event:nth-child(3n)::after {
-        display: none;
-    }
-
-    .tl-event:nth-child(2n + 1)::before {
-        left: 50%;
-    }
-
-    .tl-event:nth-child(2n)::before {
-        right: 50%;
-    }
-
-    .tl-event:nth-child(2n)::after {
-        content: "";
-        display: block;
-        position: absolute;
-        top: 53px;
-        right: -3px;
-        border-left: 12px solid #3679e8;
-        border-top: 11px solid transparent;
-        border-bottom: 11px solid transparent;
+    .tl-year {
+        font-size: .49rem;
     }
 }
     </style>
     
-    <div class="timeline-scroll"
-     aria-label="Scrollable horizontal timeline of communication milestones">
-
-    <div class="timeline-track">
+    <div class="timeline-scroll">
+        <div class="timeline-track">
 
         <!-- 1. Fourier -->
         <article class="tl-event">
-            <div class="tl-date">1800–1820s</div>
-            <span class="tl-dot"></span>
-            <span class="tl-stem"></span>
-
-            <div class="tl-card">
+            <div class="tl-date" style="grid-column: 1;">1800–1820s</div>
+            <span class="tl-dot" style="grid-column: 1;"></span>
+            <span class="tl-stem" style="grid-column: 1;"></span>
+            <div class="tl-card" style="grid-column: 1;">
                 <div class="tl-year">Milestone 01</div>
-                <h3>Fourier series and transforms</h3>
-                <img src="images/1.png"
-                     alt="Fourier series and transforms"
-                     onerror="this.style.display='none'">
-                <p>
-                    J. Fourier introduces Fourier series and develops
-                    the mathematical foundations of Fourier analysis,
-                    including the Fourier transform.
-                </p>
+                <h3>Fourier analysis</h3>
+                <img src="images/1.png" alt="Fourier analysis">
+                <p>J. Fourier introduces Fourier series and develops the mathematical foundations of Fourier analysis.</p>
             </div>
         </article>
 
         <!-- 2. Telegraph -->
         <article class="tl-event">
-            <div class="tl-date">1830s</div>
-            <span class="tl-dot"></span>
-            <span class="tl-stem"></span>
-
-            <div class="tl-card">
+            <div class="tl-date" style="grid-column: 2;">1830s</div>
+            <span class="tl-dot" style="grid-column: 2;"></span>
+            <span class="tl-stem" style="grid-column: 2;"></span>
+            <div class="tl-card" style="grid-column: 2;">
                 <div class="tl-year">Milestone 02</div>
-                <h3>Telegraphy and induction</h3>
-                <img src="images/2.png"
-                     alt="Telegraphy and induction"
-                     onerror="this.style.display='none'">
-                <p>
-                    S. Morse develops practical electric telegraphy,
-                    while M. Faraday discovers electromagnetic induction.
-                </p>
+                <h3>Telegraphy</h3>
+                <img src="images/2.png" alt="Telegraphy">
+                <p>S. Morse develops practical electric telegraphy, while M. Faraday discovers electromagnetic induction.</p>
             </div>
         </article>
 
         <!-- 3. Transatlantic cable -->
         <article class="tl-event">
-            <div class="tl-date">1858</div>
-            <span class="tl-dot"></span>
-            <span class="tl-stem"></span>
-
-            <div class="tl-card">
+            <div class="tl-date" style="grid-column: 3;">1858</div>
+            <span class="tl-dot" style="grid-column: 3;"></span>
+            <span class="tl-stem" style="grid-column: 3;"></span>
+            <div class="tl-card" style="grid-column: 3;">
                 <div class="tl-year">Milestone 03</div>
                 <h3>Transatlantic cable</h3>
-                <img src="images/3.png"
-                     alt="Transatlantic cable"
-                     onerror="this.style.display='none'">
-                <p>
-                    The first transatlantic telegraph cable is completed,
-                    connecting communication networks across the Atlantic.
-                </p>
+                <img src="images/3.png" alt="Transatlantic cable">
+                <p>The first transatlantic telegraph cable is completed, connecting communication networks across the Atlantic.</p>
             </div>
         </article>
 
-        <!-- 4. Telephone -->
+        <!-- 4. Baudot -->
         <article class="tl-event">
-            <div class="tl-date">1870s</div>
-            <span class="tl-dot"></span>
-            <span class="tl-stem"></span>
-
-            <div class="tl-card">
+            <div class="tl-date" style="grid-column: 4;">1870s</div>
+            <span class="tl-dot" style="grid-column: 4;"></span>
+            <span class="tl-stem" style="grid-column: 4;"></span>
+            <div class="tl-card" style="grid-column: 4;">
                 <div class="tl-year">Milestone 04</div>
-                <h3>Telephone and telegraph code</h3>
-                <img src="images/4.png"
-                     alt="Telephone and telegraph code"
-                     onerror="this.style.display='none'">
-                <p>
-                    A. G. Bell patents the telephone; É. Baudot develops
-                    a practical telegraph code for multiplexed telegraphy.
-                </p>
+                <h3>Baudot code</h3>
+                <img src="images/4.png" alt="Baudot code">
+                <p>É. Baudot develops a practical telegraph code, helping advance multiplexed telegraphy.</p>
             </div>
         </article>
 
-        <!-- 5. Wireless telegraphy -->
+        <!-- 5. Telephone -->
         <article class="tl-event">
-            <div class="tl-date">1895</div>
-            <span class="tl-dot"></span>
-            <span class="tl-stem"></span>
-
-            <div class="tl-card">
+            <div class="tl-date" style="grid-column: 5;">1876</div>
+            <span class="tl-dot" style="grid-column: 5;"></span>
+            <span class="tl-stem" style="grid-column: 5;"></span>
+            <div class="tl-card" style="grid-column: 5;">
                 <div class="tl-year">Milestone 05</div>
-                <h3>Wireless telegraphy</h3>
-                <img src="images/5.png"
-                     alt="Wireless telegraphy"
-                     onerror="this.style.display='none'">
-                <p>
-                    G. Marconi demonstrates practical wireless telegraphy,
-                    helping launch radio communication.
-                </p>
+                <h3>Telephone</h3>
+                <img src="images/15.png" alt="Telephone">
+                <p>A. G. Bell invents the telephone, enabling speech transmission over electrical wires.</p>
             </div>
         </article>
 
         <!-- 6. Long-distance telephone and radio -->
         <article class="tl-event">
-            <div class="tl-date">1910s–1920s</div>
-            <span class="tl-dot"></span>
-            <span class="tl-stem"></span>
-
-            <div class="tl-card">
+            <div class="tl-date" style="grid-column: 6;">1910s–1920s</div>
+            <span class="tl-dot" style="grid-column: 6;"></span>
+            <span class="tl-stem" style="grid-column: 6;"></span>
+            <div class="tl-card" style="grid-column: 6;">
                 <div class="tl-year">Milestone 06</div>
                 <h3>Long-distance telephony and radio</h3>
                 <img src="images/6.png"
@@ -558,11 +470,11 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 
         <!-- 7. Nyquist -->
         <article class="tl-event">
-            <div class="tl-date">1928</div>
-            <span class="tl-dot"></span>
-            <span class="tl-stem"></span>
+            <div class="tl-date" style="grid-column: 7;">1928</div>
+            <span class="tl-dot" style="grid-column: 7;"></span>
+            <span class="tl-stem" style="grid-column: 7;"></span>
 
-            <div class="tl-card">
+            <div class="tl-card" style="grid-column: 7;">
                 <div class="tl-year">Milestone 07</div>
                 <h3>Nyquist sampling theory</h3>
                 <img src="images/7.png"
@@ -578,11 +490,11 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 
         <!-- 8. Television -->
         <article class="tl-event">
-            <div class="tl-date">1929</div>
-            <span class="tl-dot"></span>
-            <span class="tl-stem"></span>
+            <div class="tl-date" style="grid-column: 8;">1929</div>
+            <span class="tl-dot" style="grid-column: 8;"></span>
+            <span class="tl-stem style="grid-column: 8;""></span>
 
-            <div class="tl-card">
+            <div class="tl-card" style="grid-column: 8;">
                 <div class="tl-year">Milestone 08</div>
                 <h3>Electronic television</h3>
                 <img src="images/8.png"
@@ -597,11 +509,11 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 
         <!-- 9. Transistor -->
         <article class="tl-event">
-            <div class="tl-date">1947</div>
-            <span class="tl-dot"></span>
-            <span class="tl-stem"></span>
+            <div class="tl-date"  style="grid-column: 9;">1947</div>
+            <span class="tl-dot" style="grid-column: 9;"></span>
+            <span class="tl-stem" style="grid-column: 9;"></span>
 
-            <div class="tl-card">
+            <div class="tl-card" style="grid-column: 9;">
                 <div class="tl-year">Milestone 09</div>
                 <h3>The transistor</h3>
                 <img src="images/9.png"
@@ -616,11 +528,11 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 
         <!-- 10. Shannon -->
         <article class="tl-event">
-            <div class="tl-date">1948</div>
-            <span class="tl-dot"></span>
-            <span class="tl-stem"></span>
+            <div class="tl-date"  style="grid-column: 10;">1948</div>
+            <span class="tl-dot" style="grid-column: 10;"></span>
+            <span class="tl-stem" style="grid-column: 10;"></span>
 
-            <div class="tl-card">
+            <div class="tl-card" style="grid-column: 10;">
                 <div class="tl-year">Milestone 10</div>
                 <h3>Information Theory</h3>
                 <img src="images/10.png"
@@ -635,11 +547,11 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 
         <!-- 11. Integrated circuit -->
         <article class="tl-event">
-            <div class="tl-date">1958</div>
-            <span class="tl-dot"></span>
-            <span class="tl-stem"></span>
+            <div class="tl-date"  style="grid-column: 11;">1958</div>
+            <span class="tl-dot" style="grid-column: 11;"></span>
+            <span class="tl-stem" style="grid-column: 11;"></span>
 
-            <div class="tl-card">
+            <div class="tl-card" style="grid-column: 11;">
                 <div class="tl-year">Milestone 11</div>
                 <h3>Integrated circuit</h3>
                 <img src="images/11.png"
@@ -654,11 +566,11 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 
         <!-- 12. Laser -->
         <article class="tl-event">
-            <div class="tl-date">1960</div>
-            <span class="tl-dot"></span>
-            <span class="tl-stem"></span>
+            <div class="tl-date" style="grid-column: 12;">1960</div>
+            <span class="tl-dot" style="grid-column: 12;"></span>
+            <span class="tl-stem" style="grid-column: 12;"></span>
 
-            <div class="tl-card">
+            <div class="tl-card" style="grid-column: 12;">
                 <div class="tl-year">Milestone 12</div>
                 <h3>First laser</h3>
                 <img src="images/12.png"
@@ -673,11 +585,11 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 
         <!-- 13. Communications satellite -->
         <article class="tl-event">
-            <div class="tl-date">1962</div>
-            <span class="tl-dot"></span>
-            <span class="tl-stem"></span>
+            <div class="tl-date" style="grid-column: 13;">1962</div>
+            <span class="tl-dot" style="grid-column: 13;"></span>
+            <span class="tl-stem" style="grid-column: 13;"></span>
 
-            <div class="tl-card">
+            <div class="tl-card" style="grid-column: 13;">
                 <div class="tl-year">Milestone 13</div>
                 <h3>Active communications satellite</h3>
                 <img src="images/13.png"
@@ -693,11 +605,11 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 
         <!-- 14. Today -->
         <article class="tl-event">
-            <div class="tl-date">Today</div>
-            <span class="tl-dot"></span>
-            <span class="tl-stem"></span>
+            <div class="tl-date" style="grid-column: 14;">Today</div>
+            <span class="tl-dot" style="grid-column: 14;"></span>
+            <span class="tl-stem" style="grid-column: 14;"></span>
 
-            <div class="tl-card">
+            <div class="tl-card" style="grid-column: 14;">
                 <div class="tl-year">Milestone 14</div>
                 <h3>Global digital communication</h3>
                 <img src="images/14.png"
