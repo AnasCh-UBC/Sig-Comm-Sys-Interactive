@@ -176,59 +176,412 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 <p class="sub">Milestones that transformed communication from telegraphy to global networks</p>
 
 <style>
-    .timeline.timeline-dark{overflow-x:auto;border-radius:16px;border:1px solid rgba(56,189,248,.3);box-shadow:0 12px 40px rgba(4,10,24,.45);background:#040a18}
-    .timeline-dark svg{display:block;width:100%;min-width:980px;height:auto;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
-    .tl-card rect{transition:stroke .2s}.tl-card:hover rect{stroke:#38bdf8}
+    .timeline.timeline-dark {
+        width: 100%;
+        overflow: hidden;
+        border-radius: 12px;
+        border: 1px solid rgba(56,189,248,.3);
+        box-shadow: 0 8px 24px rgba(4,10,24,.4);
+        background: #040a18;
+    }
+    
+    .timeline-dark svg {
+        display: block;
+        width: 100%;
+        height: auto;
+        font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+    }
+    
+    .tl-card rect {
+        transition: stroke .2s;
+    }
+    
+    .tl-card:hover rect {
+        stroke: #38bdf8;
+    }
     </style>
-    <div class="timeline timeline-dark"><svg viewBox="0 0 1200 500" role="img" aria-labelledby="tlT tlD"><title id="tlT">Timeline of communication technology</title>
-    <desc id="tlD">1830s: Morse telegraph and Faraday electromagnetic induction. 1858: first transatlantic cable. 1870s: Bell telephony and Baudot telegraph code. 1895: Marconi wireless telegraphy. 1910s to 1920s: transcontinental telephone and Armstrong AM/FM. 1929: Zworykin television. 1940s to 1960s: transistor, digital switching, integrated circuit and laser. Today: fiber optic communication, cable, LAN, cellular and more.</desc>
-    <defs><linearGradient id="tlBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#040a18"/><stop offset="1" stop-color="#0b1f4a"/></linearGradient>
-    <linearGradient id="tlArrow" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0b3d91"/><stop offset=".55" stop-color="#1d6dff"/><stop offset="1" stop-color="#38bdf8"/></linearGradient>
-    <pattern id="tlGrid" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M25 0H0V25" fill="none" stroke="#1d6dff" stroke-opacity=".12"/></pattern>
-    <pattern id="tlTick" x="0" y="220" width="45" height="60" patternUnits="userSpaceOnUse"><path d="M0 0V10M0 50V60" stroke="#7dd3fc" stroke-opacity=".5"/></pattern>
-    <filter id="tlGlow" filterUnits="userSpaceOnUse" x="0" y="0" width="1200" height="500"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-    <rect width="1200" height="500" fill="url(#tlBg)"/><rect width="1200" height="500" fill="url(#tlGrid)"/>
-    <path d="M30 220H1135L1188 250L1135 280H30Q20 280 20 270V230Q20 220 30 220Z" fill="url(#tlArrow)" stroke="#7dd3fc" stroke-opacity=".7" stroke-width="2" filter="url(#tlGlow)"/>
-    <rect x="22" y="220" width="1110" height="60" fill="url(#tlTick)"/><path d="M30 224H1130" stroke="#fff" stroke-opacity=".18" stroke-width="2"/>
-    <g class="tl-card"><path d="M130 168V220" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 4" filter="url(#tlGlow)"/><circle cx="130" cy="220" r="5" fill="#050d22" stroke="#7dd3fc" stroke-width="2"/>
-    <rect x="15" y="100" width="230" height="68" rx="12" fill="rgba(6,18,48,.8)" stroke="rgba(56,189,248,.4)" stroke-width="1.5"/>
-    <text x="130" y="130" text-anchor="middle" fill="#cfe6ff" font-size="13.5"><tspan x="130" dy="0">S. Morse (telegraph),</tspan><tspan x="130" dy="17">Faraday (EM induction)</tspan></text></g>
-    <text x="130" y="256" text-anchor="middle" fill="#fff" font-size="16" font-weight="700" letter-spacing=".3">1830s</text>
-    <g class="tl-card"><path d="M265 280V332" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 4" filter="url(#tlGlow)"/><circle cx="265" cy="280" r="5" fill="#050d22" stroke="#7dd3fc" stroke-width="2"/>
-    <rect x="150" y="332" width="230" height="51" rx="12" fill="rgba(6,18,48,.8)" stroke="rgba(56,189,248,.4)" stroke-width="1.5"/>
-    <text x="265" y="362" text-anchor="middle" fill="#cfe6ff" font-size="13.5"><tspan x="265" dy="0">1st transatlantic cable</tspan></text></g>
-    <text x="265" y="256" text-anchor="middle" fill="#fff" font-size="16" font-weight="700" letter-spacing=".3">1858</text>
-    <g class="tl-card"><path d="M400 168V220" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 4" filter="url(#tlGlow)"/><circle cx="400" cy="220" r="5" fill="#050d22" stroke="#7dd3fc" stroke-width="2"/>
-    <rect x="285" y="83" width="230" height="85" rx="12" fill="rgba(6,18,48,.8)" stroke="rgba(56,189,248,.4)" stroke-width="1.5"/>
-    <text x="400" y="113" text-anchor="middle" fill="#cfe6ff" font-size="13.5"><tspan x="400" dy="0">A. G. Bell (telephony),</tspan><tspan x="400" dy="17">E. Baudot (code for</tspan><tspan x="400" dy="17">telegraphy)</tspan></text></g>
-    <text x="400" y="256" text-anchor="middle" fill="#fff" font-size="16" font-weight="700" letter-spacing=".3">1870s</text>
-    <g class="tl-card"><path d="M535 280V332" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 4" filter="url(#tlGlow)"/><circle cx="535" cy="280" r="5" fill="#050d22" stroke="#7dd3fc" stroke-width="2"/>
-    <rect x="420" y="332" width="230" height="68" rx="12" fill="rgba(6,18,48,.8)" stroke="rgba(56,189,248,.4)" stroke-width="1.5"/>
-    <text x="535" y="362" text-anchor="middle" fill="#cfe6ff" font-size="13.5"><tspan x="535" dy="0">G. Marconi (wireless</tspan><tspan x="535" dy="17">telegraphy)</tspan></text></g>
-    <text x="535" y="256" text-anchor="middle" fill="#fff" font-size="16" font-weight="700" letter-spacing=".3">1895</text>
-    <g class="tl-card"><path d="M670 168V220" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 4" filter="url(#tlGlow)"/><circle cx="670" cy="220" r="5" fill="#050d22" stroke="#7dd3fc" stroke-width="2"/>
-    <rect x="555" y="100" width="230" height="68" rx="12" fill="rgba(6,18,48,.8)" stroke="rgba(56,189,248,.4)" stroke-width="1.5"/>
-    <text x="670" y="130" text-anchor="middle" fill="#cfe6ff" font-size="13.5"><tspan x="670" dy="0">Transcontinental telephone,</tspan><tspan x="670" dy="17">E. Armstrong (AM/FM)</tspan></text></g>
-    <text x="670" y="256" text-anchor="middle" fill="#fff" font-size="16" font-weight="700" letter-spacing=".3">1910s–1920s</text>
-    <g class="tl-card"><path d="M805 280V332" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 4" filter="url(#tlGlow)"/><circle cx="805" cy="280" r="5" fill="#050d22" stroke="#7dd3fc" stroke-width="2"/>
-    <rect x="690" y="332" width="230" height="51" rx="12" fill="rgba(6,18,48,.8)" stroke="rgba(56,189,248,.4)" stroke-width="1.5"/>
-    <text x="805" y="362" text-anchor="middle" fill="#cfe6ff" font-size="13.5"><tspan x="805" dy="0">Zworykin (TV)</tspan></text></g>
-    <text x="805" y="256" text-anchor="middle" fill="#fff" font-size="16" font-weight="700" letter-spacing=".3">1929</text>
-    <g class="tl-card"><path d="M940 168V220" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 4" filter="url(#tlGlow)"/><circle cx="940" cy="220" r="5" fill="#050d22" stroke="#7dd3fc" stroke-width="2"/>
-    <rect x="825" y="83" width="230" height="85" rx="12" fill="rgba(6,18,48,.8)" stroke="rgba(56,189,248,.4)" stroke-width="1.5"/>
-    <text x="940" y="113" text-anchor="middle" fill="#cfe6ff" font-size="13.5"><tspan x="940" dy="0">Transistor, digital</tspan><tspan x="940" dy="17">switching, integrated</tspan><tspan x="940" dy="17">circuit, laser</tspan></text></g>
-    <text x="940" y="256" text-anchor="middle" fill="#fff" font-size="16" font-weight="700" letter-spacing=".3">1940s–1960s</text>
-    <g class="tl-card"><path d="M1075 280V332" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 4" filter="url(#tlGlow)"/><circle cx="1075" cy="280" r="5" fill="#050d22" stroke="#7dd3fc" stroke-width="2"/>
-    <rect x="960" y="332" width="230" height="68" rx="12" fill="rgba(6,18,48,.8)" stroke="rgba(56,189,248,.4)" stroke-width="1.5"/>
-    <text x="1075" y="362" text-anchor="middle" fill="#cfe6ff" font-size="13.5"><tspan x="1075" dy="0">Fiber optic comm., cable,</tspan><tspan x="1075" dy="17">LAN, Cellular, etc.</tspan></text></g>
-    <text x="1075" y="256" text-anchor="middle" fill="#fff" font-size="16" font-weight="700" letter-spacing=".3">Today</text>
-    </svg></div>
+    
+    <div class="timeline timeline-dark">
+    <svg viewBox="0 0 1000 340" role="img" aria-labelledby="tlT tlD">
+    <title id="tlT">Timeline of communication technology</title>
+    <desc id="tlD">Major developments in communication technology from the 1830s to today.</desc>
+    
+    <defs>
+        <linearGradient id="tlBg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#040a18"/>
+            <stop offset="1" stop-color="#0b1f4a"/>
+        </linearGradient>
+    
+        <linearGradient id="tlArrow" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#0b3d91"/>
+            <stop offset=".55" stop-color="#1d6dff"/>
+            <stop offset="1" stop-color="#38bdf8"/>
+        </linearGradient>
+    
+        <pattern id="tlGrid" width="25" height="25" patternUnits="userSpaceOnUse">
+            <path d="M25 0H0V25" fill="none" stroke="#1d6dff" stroke-opacity=".12"/>
+        </pattern>
+    
+        <filter id="tlGlow" x="-10%" y="-20%" width="120%" height="140%">
+            <feGaussianBlur stdDeviation="1.5" result="b"/>
+            <feMerge>
+                <feMergeNode in="b"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+    </defs>
+    
+    <!-- Background -->
+    <rect width="1000" height="340" fill="url(#tlBg)"/>
+    <rect width="1000" height="340" fill="url(#tlGrid)"/>
+    
+    <!-- Timeline arrow -->
+    <path d="M18 145 H950 L980 170 L950 195 H18 Q10 195 10 187 V153 Q10 145 18 145Z"
+          fill="url(#tlArrow)" stroke="#7dd3fc" stroke-opacity=".7"
+          stroke-width="1.5" filter="url(#tlGlow)"/>
+    
+    <path d="M25 149 H950" stroke="#fff" stroke-opacity=".2" stroke-width="1.5"/>
+    
+    <!-- 1: 1830s -->
+    <g class="tl-card">
+        <path d="M65 110 V145" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <circle cx="65" cy="145" r="4" fill="#050d22" stroke="#7dd3fc" stroke-width="2"/>
+        <rect x="10" y="28" width="110" height="82" rx="8"
+              fill="#061230" stroke="rgba(56,189,248,.5)" stroke-width="1.2"/>
+        <text x="65" y="52" text-anchor="middle" fill="#7dd3fc" font-size="11" font-weight="700">1830s</text>
+        <text x="65" y="70" text-anchor="middle" fill="#cfe6ff" font-size="10.5">
+            <tspan x="65">S. Morse</tspan>
+            <tspan x="65" dy="13">Telegraph</tspan>
+            <tspan x="65" dy="13">Faraday: EM induction</tspan>
+        </text>
+    </g>
+    
+    <!-- 2: 1858 -->
+    <g class="tl-card">
+        <path d="M190 195 V230" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <circle cx="190" cy="195" r="4" fill="#050d22" stroke="#7dd3fc" stroke-width="2"/>
+        <rect x="135" y="230" width="110" height="65" rx="8"
+              fill="#061230" stroke="rgba(56,189,248,.5)" stroke-width="1.2"/>
+        <text x="190" y="250" text-anchor="middle" fill="#7dd3fc" font-size="11" font-weight="700">1858</text>
+        <text x="190" y="270" text-anchor="middle" fill="#cfe6ff" font-size="10.5">
+            <tspan x="190">First transatlantic</tspan>
+            <tspan x="190" dy="13">cable</tspan>
+        </text>
+    </g>
+    
+    <!-- 3: 1870s -->
+    <g class="tl-card">
+        <path d="M315 110 V145" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <circle cx="315" cy="145" r="4" fill="#050d22" stroke="#7dd3fc" stroke-width="2"/>
+        <rect x="260" y="28" width="110" height="82" rx="8"
+              fill="#061230" stroke="rgba(56,189,248,.5)" stroke-width="1.2"/>
+        <text x="315" y="52" text-anchor="middle" fill="#7dd3fc" font-size="11" font-weight="700">1870s</text>
+        <text x="315" y="70" text-anchor="middle" fill="#cfe6ff" font-size="10.5">
+            <tspan x="315">A. G. Bell</tspan>
+            <tspan x="315" dy="13">Telephony</tspan>
+            <tspan x="315" dy="13">E. Baudot: code</tspan>
+        </text>
+    </g>
+    
+    <!-- 4: 1895 -->
+    <g class="tl-card">
+        <path d="M440 195 V230" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <circle cx="440" cy="195" r="4" fill="#050d22" stroke="#7dd3fc" stroke-width="2"/>
+        <rect x="385" y="230" width="110" height="65" rx="8"
+              fill="#061230" stroke="rgba(56,189,248,.5)" stroke-width="1.2"/>
+        <text x="440" y="250" text-anchor="middle" fill="#7dd3fc" font-size="11" font-weight="700">1895</text>
+        <text x="440" y="270" text-anchor="middle" fill="#cfe6ff" font-size="10.5">
+            <tspan x="440">G. Marconi</tspan>
+            <tspan x="440" dy="13">Wireless telegraphy</tspan>
+        </text>
+    </g>
+    
+    <!-- 5: 1910s–1920s -->
+    <g class="tl-card">
+        <path d="M565 110 V145" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <circle cx="565" cy="145" r="4" fill="#050d22" stroke="#7dd3fc" stroke-width="2"/>
+        <rect x="510" y="28" width="110" height="82" rx="8"
+              fill="#061230" stroke="rgba(56,189,248,.5)" stroke-width="1.2"/>
+        <text x="565" y="49" text-anchor="middle" fill="#7dd3fc" font-size="10.5" font-weight="700">1910s–1920s</text>
+        <text x="565" y="68" text-anchor="middle" fill="#cfe6ff" font-size="10.5">
+            <tspan x="565">Transcontinental</tspan>
+            <tspan x="565" dy="13">telephone</tspan>
+            <tspan x="565" dy="13">Armstrong: AM/FM</tspan>
+        </text>
+    </g>
+    
+    <!-- 6: 1929 -->
+    <g class="tl-card">
+        <path d="M690 195 V230" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <circle cx="690" cy="195" r="4" fill="#050d22" stroke="#7dd3fc" stroke-width="2"/>
+        <rect x="635" y="230" width="110" height="65" rx="8"
+              fill="#061230" stroke="rgba(56,189,248,.5)" stroke-width="1.2"/>
+        <text x="690" y="250" text-anchor="middle" fill="#7dd3fc" font-size="11" font-weight="700">1929</text>
+        <text x="690" y="270" text-anchor="middle" fill="#cfe6ff" font-size="10.5">
+            <tspan x="690">Zworykin</tspan>
+            <tspan x="690" dy="13">Television</tspan>
+        </text>
+    </g>
+    
+    <!-- 7: 1940s–1960s -->
+    <g class="tl-card">
+        <path d="M815 110 V145" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <circle cx="815" cy="145" r="4" fill="#050d22" stroke="#7dd3fc" stroke-width="2"/>
+        <rect x="760" y="28" width="110" height="82" rx="8"
+              fill="#061230" stroke="rgba(56,189,248,.5)" stroke-width="1.2"/>
+        <text x="815" y="49" text-anchor="middle" fill="#7dd3fc" font-size="10.5" font-weight="700">1940s–1960s</text>
+        <text x="815" y="68" text-anchor="middle" fill="#cfe6ff" font-size="10.5">
+            <tspan x="815">Transistor</tspan>
+            <tspan x="815" dy="13">Digital switching</tspan>
+            <tspan x="815" dy="13">IC and laser</tspan>
+        </text>
+    </g>
+    
+    <!-- 8: Today -->
+    <g class="tl-card">
+        <path d="M940 195 V230" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <circle cx="940" cy="195" r="4" fill="#050d22" stroke="#7dd3fc" stroke-width="2"/>
+        <rect x="885" y="230" width="110" height="65" rx="8"
+              fill="#061230" stroke="rgba(56,189,248,.5)" stroke-width="1.2"/>
+        <text x="940" y="250" text-anchor="middle" fill="#7dd3fc" font-size="11" font-weight="700">Today</text>
+        <text x="940" y="270" text-anchor="middle" fill="#cfe6ff" font-size="10.5">
+            <tspan x="940">Fiber optics, cable</tspan>
+            <tspan x="940" dy="13">LAN, cellular, etc.</tspan>
+        </text>
+    </g>
+    
+    <!-- Timeline dates -->
+    <g fill="#fff" font-size="10.5" font-weight="700" text-anchor="middle">
+        <text x="65" y="174">1830s</text>
+        <text x="190" y="174">1858</text>
+        <text x="315" y="174">1870s</text>
+        <text x="440" y="174">1895</text>
+        <text x="565" y="174">1910s</text>
+        <text x="690" y="174">1929</text>
+        <text x="815" y="174">1940s</text>
+        <text x="940" y="174">Today</text>
+    </g>
+    
+    </svg>
+    </div>
 
 <div class="card"><h3>Communication today</h3><ul><li>Analog communication developed mainly in the early twentieth century and remains in use.</li><li>Digital communication has become increasingly prominent, while many digital techniques build on analog concepts.</li><li>Current research explores THz and mmWave communication and ultra-massive MIMO systems.</li></ul></div>
 <p class="lede">How does it work? What are the main principles and techniques?</p>
 
-<h2 id="system"><small>3</small>What is a communication system?</h2><p class="sub">Four essential elements work together to deliver information</p>
-<div class="flow"><div class="stage"><span class="symbol">✉</span><b>Source</b><small>Generates information: voice, images, text, data</small></div><div class="stage"><span class="symbol">↗</span><b>Transmitter</b><small>Creates a signal suitable for transmission</small></div><div class="stage"><span class="symbol">〰</span><b>Channel</b><small>Physical medium; adds noise, interference, and distortion</small></div><div class="stage"><span class="symbol">⌕</span><b>Receiver</b><small>Processes the received signal to recover information</small></div></div>
+<h2 id="system"><small>3</small>What is a communication system?</h2>
+<p class="sub">Four essential elements work together to deliver information</p>
+
+<style>
+    .comm-flow {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 10px;
+        align-items: stretch;
+        font-family: system-ui, sans-serif;
+    }
+    
+    .comm-stage {
+        position: relative;
+        min-width: 0;
+        text-align: center;
+        padding: 10px 7px;
+        border: 1px solid rgba(56,189,248,.35);
+        border-radius: 12px;
+        background: radial-gradient(circle at 50% 0%, #102c5c, #040a18 75%);
+        color: #cfe6ff;
+        box-shadow: 0 6px 18px rgba(0,0,0,.3);
+    }
+    
+    .comm-stage:not(:last-child)::after {
+        content: "›";
+        position: absolute;
+        right: -12px;
+        top: 40%;
+        z-index: 2;
+        color: #38bdf8;
+        font-size: 22px;
+        font-weight: bold;
+    }
+    
+    .comm-stage svg {
+        display: block;
+        width: 100%;
+        max-width: 125px;
+        height: 85px;
+        margin: 0 auto 5px;
+    }
+    
+    .comm-stage b {
+        display: block;
+        color: #7dd3fc;
+        font-size: .9rem;
+        margin-bottom: 4px;
+    }
+    
+    .comm-stage small {
+        display: block;
+        color: #9db8dc;
+        font-size: .68rem;
+        line-height: 1.35;
+    }
+    
+    @media(max-width:650px) {
+        .comm-flow {
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+        .comm-stage {
+            display: grid;
+            grid-template-columns: 85px 1fr;
+            grid-template-rows: auto auto;
+            text-align: left;
+            align-items: center;
+            column-gap: 12px;
+        }
+        .comm-stage svg {
+            grid-row: 1 / 3;
+            height: 65px;
+        }
+        .comm-stage:not(:last-child)::after {
+            content: "↓";
+            top: auto;
+            right: 50%;
+            bottom: -16px;
+        }
+    }
+    </style>
+    
+    <div class="comm-flow">
+    
+    <!-- SOURCE -->
+    <div class="comm-stage">
+    <svg viewBox="0 0 140 100" role="img" aria-label="Microphone and camera">
+        <rect x="2" y="2" width="136" height="96" rx="9" fill="#050d22"/>
+        <g fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Microphone -->
+            <rect x="27" y="17" width="22" height="39" rx="11"/>
+            <path d="M19 43V48A19 19 0 0 0 57 48V43"/>
+            <path d="M38 67V77M28 77H48"/>
+            <path d="M32 25H44M32 32H44M32 39H44"/>
+            <!-- Camera -->
+            <rect x="76" y="32" width="43" height="34" rx="5"/>
+            <path d="M119 42L132 34V64L119 56Z"/>
+            <path d="M85 32L91 23H105L111 32"/>
+            <circle cx="97" cy="49" r="9" stroke="#7dd3fc"/>
+        </g>
+        <g fill="#38bdf8">
+            <circle cx="38" cy="14" r="2"/>
+            <circle cx="97" cy="49" r="3"/>
+        </g>
+    </svg>
+    <b>Source</b>
+    <small>Generates information: voice, images, text, data</small>
+    </div>
+    
+    <!-- TRANSMITTER -->
+    <div class="comm-stage">
+    <svg viewBox="0 0 140 100" role="img" aria-label="Transmitting antenna">
+        <rect x="2" y="2" width="136" height="96" rx="9" fill="#050d22"/>
+        <g fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round">
+            <path d="M70 30V80M52 80H88"/>
+            <path d="M62 80L70 30L78 80"/>
+            <path d="M58 49H82"/>
+            <circle cx="70" cy="26" r="4" fill="#7dd3fc"/>
+            <path d="M53 18Q39 26 53 35"/>
+            <path d="M87 18Q101 26 87 35"/>
+            <path d="M44 10Q22 26 44 43" stroke-opacity=".65"/>
+            <path d="M96 10Q118 26 96 43" stroke-opacity=".65"/>
+        </g>
+        <path d="M70 30V12" stroke="#7dd3fc" stroke-width="2" filter="url(#none)"/>
+        <circle cx="70" cy="12" r="3" fill="#7dd3fc"/>
+    </svg>
+    <b>Transmitter</b>
+    <small>Creates a signal suitable for transmission</small>
+    </div>
+    
+    <!-- CHANNEL -->
+    <div class="comm-stage">
+    <svg viewBox="0 0 140 100" role="img" aria-label="Signal with noise and interference">
+        <rect x="2" y="2" width="136" height="96" rx="9" fill="#050d22"/>
+        <g fill="none" stroke="#1d6dff" stroke-width="1" opacity=".5">
+            <path d="M12 50H128"/>
+            <path d="M12 25H128M12 75H128"/>
+        </g>
+        <!-- Main signal -->
+        <path d="M12 50
+                 C20 50 20 20 28 20
+                 S36 80 44 80
+                 S52 50 60 50
+                 S68 20 76 20
+                 S84 80 92 80
+                 S100 50 108 50
+                 S116 20 128 20"
+              fill="none" stroke="#38bdf8" stroke-width="2.5"
+              stroke-linecap="round"/>
+        <!-- Noise -->
+        <path d="M12 43L18 37L23 47L29 39L35 52L42 44
+                 L48 55L54 40L60 48L67 35L73 51L80 42
+                 L87 57L93 40L99 49L105 36L112 53L118 42L128 48"
+              fill="none" stroke="#7dd3fc" stroke-width="1.5"
+              stroke-dasharray="2 2"/>
+        <g fill="#38bdf8">
+            <circle cx="28" cy="20" r="2.5"/>
+            <circle cx="44" cy="80" r="2.5"/>
+            <circle cx="76" cy="20" r="2.5"/>
+            <circle cx="92" cy="80" r="2.5"/>
+        </g>
+    </svg>
+    <b>Channel</b>
+    <small>Physical medium; adds noise, interference, and distortion</small>
+    </div>
+    
+    <!-- RECEIVER -->
+    <div class="comm-stage">
+    <svg viewBox="0 0 140 100" role="img" aria-label="Receiving antenna">
+        <rect x="2" y="2" width="136" height="96" rx="9" fill="#050d22"/>
+        <g fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round">
+            <path d="M70 30V80M52 80H88"/>
+            <path d="M62 80L70 30L78 80"/>
+            <path d="M58 49H82"/>
+            <circle cx="70" cy="26" r="4" fill="#7dd3fc"/>
+            <!-- Incoming waves -->
+            <path d="M87 18Q101 26 87 35"/>
+            <path d="M96 10Q118 26 96 43" stroke-opacity=".65"/>
+            <path d="M53 18Q39 26 53 35"/>
+            <path d="M44 10Q22 26 44 43" stroke-opacity=".65"/>
+        </g>
+        <g fill="#7dd3fc">
+            <circle cx="70" cy="12" r="3"/>
+        </g>
+    </svg>
+    <b>Receiver</b>
+    <small>Processes the received signal to recover information</small>
+    </div>
+    
+    <!-- SINK -->
+    <div class="comm-stage">
+    <svg viewBox="0 0 140 100" role="img" aria-label="Speaker and display screen">
+        <rect x="2" y="2" width="136" height="96" rx="9" fill="#050d22"/>
+        <!-- Screen -->
+        <g fill="none" stroke="#38bdf8" stroke-width="2.3" stroke-linejoin="round">
+            <rect x="65" y="17" width="62" height="43" rx="4"/>
+            <path d="M96 60V69M82 69H110"/>
+            <path d="M72 50L88 35L99 44L111 29" stroke="#7dd3fc"/>
+        </g>
+        <!-- Speaker -->
+        <g fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linejoin="round">
+            <path d="M16 39H27L42 27V67L27 55H16Z"/>
+            <path d="M48 37Q60 47 48 57"/>
+            <path d="M52 29Q71 47 52 65" stroke-opacity=".65"/>
+        </g>
+        <circle cx="88" cy="35" r="2" fill="#7dd3fc"/>
+    </svg>
+    <b>Sink</b>
+    <small>Delivers recovered information to the user</small>
+    </div>
+    
+    </div>
+    
 <div class="eq">Information source → Transmitter → Channel → Receiver → Information sink</div>
 <ul><li><b>Source:</b> Generates information, such as analog voice/video or digital text/files.</li><li><b>Transmitter:</b> Converts the source information into an electrical, electromagnetic, or optical signal suitable for the channel.</li><li><b>Channel:</b> The physical medium—wire, optical fiber, or free space—through which the signal travels. It may distort the signal.</li><li><b>Receiver:</b> Extracts the transmitted information from the distorted received signal.</li></ul>
 <div class="card"><h3>Communication is a resource-allocation problem</h3><p>Transmitter design must use limited resources efficiently:</p><span class="pill">Transmission power</span><span class="pill">Bandwidth</span><span class="pill">Time</span><span class="pill">Space and antennas</span><span class="pill">Computation</span><span class="pill">Infrastructure</span><p>Communication schemes balance these resources, often through engineering trade-offs.</p></div>
