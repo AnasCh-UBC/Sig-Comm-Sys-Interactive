@@ -30,7 +30,8 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 <li><b>8</b><a href="#outline">Tentative course outline</a></li></ol></div>
 
 
-<h2 id="motivation"><small>1</small>Why communication matters</h2><p class="sub">Information moves between people, devices, and systems every day through communication systems</p>
+<h2 id="motivation"><small>1</small>Why communication matters</h2>
+<p class="sub"><u>Information</u> moves between people, devices, and systems every day through <u>communication systems</u></p>
 <div class="grid">
     
     <div class="tile tile-dark"><b class="tag">Information</b><h3>What do we communicate?</h3><p>Information may be analog or digital, and can take many forms:</p>
@@ -104,7 +105,7 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
             
             .info-grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fit,minmax(110px,1fr));
+                grid-template-columns: repeat(2, minmax(0, 1fr));
                 gap: 6px;
             }
             
@@ -171,8 +172,44 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 
     <div class="card"><h3>The central idea</h3><p>Communication is the task of <b>delivering information</b> from a source (transmitter) to a destination (receiver) in a <b>recognizable form</b>.</p><b>Course focus:</b> The underlying techniques that make these systems work.</div>
 
-<h2 id="history"><small>2</small>A brief history</h2><p class="sub">Milestones that transformed communication from telegraphy to global networks</p>
-<div class="timeline"><div class="event"><b>1837–1858</b><p>Faraday's electromagnetic induction, Maxwell's electromagnetic theory, and Morse's telegraph.</p></div><div class="event"><b>1875–1895</b><p>Bell's telephone, Baudot's telegraph code, Marconi's wireless telegraphy, and the first transatlantic cable.</p></div><div class="event"><b>1915–1960</b><p>Transcontinental telephone, television, AM/FM, transistors, digital switching, integrated circuits, and lasers.</p></div><div class="event"><b>Modern era</b><p>Satellite communication, fiber optics, cable, LANs, cellular systems, and high-speed networks.</p></div></div>
+<h2 id="history"><small>2</small>A brief history</h2>
+<p class="sub">Milestones that transformed communication from telegraphy to global networks</p>
+
+<style>
+    .timeline.timeline-dark{overflow-x:auto;border-radius:16px;border:1px solid rgba(56,189,248,.3);box-shadow:0 12px 40px rgba(4,10,24,.45);background:#040a18}
+    .timeline-dark svg{display:block;width:100%;min-width:760px;height:auto;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+    .tl-card rect{transition:stroke .2s}.tl-card:hover rect{stroke:#38bdf8}
+    </style>
+    <div class="timeline timeline-dark"><svg viewBox="0 0 1000 520" role="img" aria-labelledby="tlT tlD"><title id="tlT">Timeline of communication technology</title>
+    <desc id="tlD">1837 to 1858: Faraday, Maxwell and Morse. 1875 to 1895: Bell, Baudot, Marconi and the first transatlantic cable. 1915 to 1960: transcontinental telephone, television, AM/FM, transistors, digital switching, integrated circuits and lasers. Modern era: satellite, fiber optics, cable, LANs, cellular and high-speed networks.</desc>
+    <defs><linearGradient id="tlBg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#040a18"/><stop offset="1" stop-color="#0b1f4a"/></linearGradient>
+    <linearGradient id="tlArrow" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0b3d91"/><stop offset=".55" stop-color="#1d6dff"/><stop offset="1" stop-color="#38bdf8"/></linearGradient>
+    <filter id="tlGlow" filterUnits="userSpaceOnUse" x="0" y="0" width="1000" height="520"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+    <rect width="1000" height="520" fill="url(#tlBg)"/><path d="M0 0V520M25 0V520M50 0V520M75 0V520M100 0V520M125 0V520M150 0V520M175 0V520M200 0V520M225 0V520M250 0V520M275 0V520M300 0V520M325 0V520M350 0V520M375 0V520M400 0V520M425 0V520M450 0V520M475 0V520M500 0V520M525 0V520M550 0V520M575 0V520M600 0V520M625 0V520M650 0V520M675 0V520M700 0V520M725 0V520M750 0V520M775 0V520M800 0V520M825 0V520M850 0V520M875 0V520M900 0V520M925 0V520M950 0V520M975 0V520M1000 0V520M0 0H1000M0 25H1000M0 50H1000M0 75H1000M0 100H1000M0 125H1000M0 150H1000M0 175H1000M0 200H1000M0 225H1000M0 250H1000M0 275H1000M0 300H1000M0 325H1000M0 350H1000M0 375H1000M0 400H1000M0 425H1000M0 450H1000M0 475H1000M0 500H1000" stroke="#1d6dff" stroke-opacity=".12" fill="none"/>
+    <path d="M30 240H925L980 270L925 300H30Q20 300 20 290V250Q20 240 30 240Z" fill="url(#tlArrow)" stroke="#7dd3fc" stroke-opacity=".7" stroke-width="2" filter="url(#tlGlow)"/>
+    <path d="M30 244H922" stroke="#fff" stroke-opacity=".18" stroke-width="2"/><path d="M60 240V250M60 290V300M100 240V250M100 290V300M140 240V250M140 290V300M180 240V250M180 290V300M220 240V250M220 290V300M260 240V250M260 290V300M300 240V250M300 290V300M340 240V250M340 290V300M380 240V250M380 290V300M420 240V250M420 290V300M460 240V250M460 290V300M500 240V250M500 290V300M540 240V250M540 290V300M580 240V250M580 290V300M620 240V250M620 290V300M660 240V250M660 290V300M700 240V250M700 290V300M740 240V250M740 290V300M780 240V250M780 290V300M820 240V250M820 290V300M860 240V250M860 290V300M900 240V250M900 290V300" stroke="#7dd3fc" stroke-opacity=".5"/>
+    
+    <g class="tl-card"><path d="M130 182V240" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 4" filter="url(#tlGlow)"/><circle cx="130" cy="240" r="5" fill="#050d22" stroke="#7dd3fc" stroke-width="2"/>
+    <rect x="14" y="64" width="232" height="118" rx="12" fill="rgba(6,18,48,.8)" stroke="rgba(56,189,248,.4)" stroke-width="1.5"/>
+    <text x="130" y="102" text-anchor="middle" fill="#cfe6ff" font-size="13.5"><tspan x="130" dy="0">Faraday’s electromagnetic</tspan><tspan x="130" dy="17">induction, Maxwell’s</tspan><tspan x="130" dy="17">electromagnetic theory, and</tspan><tspan x="130" dy="17">Morse’s telegraph.</tspan></text></g>
+    <text x="130" y="276" text-anchor="middle" fill="#fff" font-size="18" font-weight="700" letter-spacing=".5">1837–1858</text>
+    
+    <g class="tl-card"><path d="M350 300V352" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 4" filter="url(#tlGlow)"/><circle cx="350" cy="300" r="5" fill="#050d22" stroke="#7dd3fc" stroke-width="2"/>
+    <rect x="234" y="352" width="232" height="118" rx="12" fill="rgba(6,18,48,.8)" stroke="rgba(56,189,248,.4)" stroke-width="1.5"/>
+    <text x="350" y="390" text-anchor="middle" fill="#cfe6ff" font-size="13.5"><tspan x="350" dy="0">Bell’s telephone, Baudot’s</tspan><tspan x="350" dy="17">telegraph code, Marconi’s</tspan><tspan x="350" dy="17">wireless telegraphy, and the</tspan><tspan x="350" dy="17">first transatlantic cable.</tspan></text></g>
+    <text x="350" y="276" text-anchor="middle" fill="#fff" font-size="18" font-weight="700" letter-spacing=".5">1875–1895</text>
+    
+    <g class="tl-card"><path d="M570 182V240" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 4" filter="url(#tlGlow)"/><circle cx="570" cy="240" r="5" fill="#050d22" stroke="#7dd3fc" stroke-width="2"/>
+    <rect x="454" y="64" width="232" height="118" rx="12" fill="rgba(6,18,48,.8)" stroke="rgba(56,189,248,.4)" stroke-width="1.5"/>
+    <text x="570" y="93.5" text-anchor="middle" fill="#cfe6ff" font-size="13.5"><tspan x="570" dy="0">Transcontinental telephone,</tspan><tspan x="570" dy="17">television, AM/FM,</tspan><tspan x="570" dy="17">transistors, digital</tspan><tspan x="570" dy="17">switching, integrated</tspan><tspan x="570" dy="17">circuits, and lasers.</tspan></text></g>
+    <text x="570" y="276" text-anchor="middle" fill="#fff" font-size="18" font-weight="700" letter-spacing=".5">1915–1960</text>
+    
+    <g class="tl-card"><path d="M790 300V352" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4 4" filter="url(#tlGlow)"/><circle cx="790" cy="300" r="5" fill="#050d22" stroke="#7dd3fc" stroke-width="2"/>
+    <rect x="674" y="352" width="232" height="118" rx="12" fill="rgba(6,18,48,.8)" stroke="rgba(56,189,248,.4)" stroke-width="1.5"/>
+    <text x="790" y="390" text-anchor="middle" fill="#cfe6ff" font-size="13.5"><tspan x="790" dy="0">Satellite communication, fiber</tspan><tspan x="790" dy="17">optics, cable, LANs, cellular</tspan><tspan x="790" dy="17">systems, and high-speed</tspan><tspan x="790" dy="17">networks.</tspan></text></g>
+    <text x="790" y="276" text-anchor="middle" fill="#fff" font-size="18" font-weight="700" letter-spacing=".5">Modern era</text>
+    </svg></div>
+    
 <div class="card"><h3>Communication today</h3><ul><li>Analog communication developed mainly in the early twentieth century and remains in use.</li><li>Digital communication has become increasingly prominent, while many digital techniques build on analog concepts.</li><li>Current research explores THz and mmWave communication and ultra-massive MIMO systems.</li></ul></div>
 <p class="lede">How does it work? What are the main principles and techniques?</p>
 
