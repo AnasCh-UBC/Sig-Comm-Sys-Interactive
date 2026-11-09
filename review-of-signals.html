@@ -130,6 +130,20 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
     <span class="pill">Choose a signal</span>
   </div>
 
+  <div class="demo-controls">
+    <label>
+      Choose a signal
+      <select id="sigType">
+        <option value="sine">Sinusoidal signal</option>
+        <option value="step">Unit step signal</option>
+        <option value="rect">Rectangular pulse</option>
+        <option value="tri">Triangular signal</option>
+        <option value="sinc">Sinc signal</option>
+        <option value="impulse">Impulse (delta) signal</option>
+      </select>
+    </label>
+  </div>
+
   <div class="signal-card" id="signalDefinition" aria-live="polite">
     <h3 id="signalTitle">Sinusoidal signal</h3>
 
