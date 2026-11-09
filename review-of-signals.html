@@ -166,8 +166,7 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
   </canvas>
 
   <p id="signalExplorerNote" class="demo-note">
-    Select any of the six signals to display its definition and waveform.
-    Amplitude scales the signal; frequency changes the sinusoid.
+    Select any of the six signals to display its mathematical definition and corresponding waveform.
   </p>
 </div>
 
@@ -501,19 +500,110 @@ function plotMini(canvas,kind){
 }
 document.querySelectorAll('.mini-plot').forEach(c=>plotMini(c,c.dataset.kind));
 
-const signalType=document.getElementById('sigType'),sigAmp=document.getElementById('sigAmp'),sigFreq=document.getElementById('sigFreq');
-function drawExplorer(){
- const c=document.getElementById('signalExplorer'),{ctx,w,h}=setupCanvas(c),kind=signalType.value,A=+sigAmp.value,f=+sigFreq.value;
- const r=axes(ctx,w,h,-4,4,-3.4,3.4);
- if(kind==='step'||kind==='rect'){
-  ctx.strokeStyle=C.blue;ctx.lineWidth=3;ctx.beginPath();
-  if(kind==='step'){ctx.moveTo(r.X(-4),r.Y(0));ctx.lineTo(r.X(0),r.Y(0));ctx.lineTo(r.X(0),r.Y(A));ctx.lineTo(r.X(4),r.Y(A));}
-  else{ctx.moveTo(r.X(-4),r.Y(0));ctx.lineTo(r.X(-.5),r.Y(0));ctx.lineTo(r.X(-.5),r.Y(A));ctx.lineTo(r.X(.5),r.Y(A));ctx.lineTo(r.X(.5),r.Y(0));ctx.lineTo(r.X(4),r.Y(0));}
-  ctx.stroke();
- }else path(ctx,t=>value(kind,t,A,f),r,C.blue,3);
- document.getElementById('sigAmpOut').textContent=A.toFixed(1);document.getElementById('sigFreqOut').textContent=f.toFixed(1);
+const signalType=document.getElementById('sigType');
+
+const signalInfo={
+ sine:{
+  title:'Sinusoidal signal',
+  formula:String.raw`\[x(t)=A\cos(2\pi f_0t+\theta)\]`,
+  description:String.raw`A periodic signal that oscillates between \(-A\) and \(A\). Here, \(A\) is the amplitude, \(f_0\) is the frequency, and \(\theta\) is the phase.`
+ },
+ step:{
+  title:'Unit step signal',
+  formula:String.raw`\[u(t)=\begin{cases}1,&t\geq 0\\0,&t<0\end{cases}\]`,
+  description:String.raw`The unit step is zero for negative time and one for nonnegative time. It represents a signal that is switched on at \(t=0\).`
+ },
+ rect:{
+  title:'Rectangular pulse',
+  formula:String.raw`\[\Pi(t)=\begin{cases}1,&|t|\leq \frac{1}{2}\\0,&|t|>\frac{1}{2}\end{cases}\]`,
+  description:String.raw`A rectangular pulse with unit amplitude and unit duration, centered at the origin.`
+ },
+ tri:{
+  title:'Triangular signal',
+  formula:String.raw`\[\Lambda(t)=\begin{cases}1-|t|,&|t|\leq 1\\0,&|t|>1\end{cases}\]`,
+  description:String.raw`A triangular pulse that reaches its maximum value at \(t=0\) and decreases linearly to zero at \(t=-1\) and \(t=1\).`
+ },
+ sinc:{
+  title:'Sinc signal',
+  formula:String.raw`\[\operatorname{sinc}(t)=\begin{cases}\dfrac{\sin(\pi t)}{\pi t},&t\neq 0\\1,&t=0\end{cases}\]`,
+  description:String.raw`The sinc signal has a maximum value of one at the origin, with oscillating side lobes that decay away from the origin.`
+ },
+ impulse:{
+  title:'Impulse (delta) signal',
+  formula:String.raw`\[\delta(t),\qquad \int_{-\infty}^{\infty}\delta(t)\,dt=1\]`,
+  description:String.raw`The ideal impulse is zero everywhere except at \(t=0\), and has unit area. Its arrow in the plot represents the ideal impulse, not an ordinary finite-height pulse.`
+ }
+};
+
+function updateSignalDefinition(){
+ const info=signalInfo[signalType.value];
+ if(!info)return;
+ const title=document.getElementById('signalTitle');
+ const formula=document.getElementById('signalFormula');
+ const description=document.getElementById('signalDescription');
+ title.textContent=info.title;
+ formula.innerHTML=info.formula;
+ description.innerHTML=info.description;
+ if(window.MathJax&&MathJax.typesetPromise){
+  if(MathJax.typesetClear)MathJax.typesetClear([formula,description]);
+  MathJax.typesetPromise([formula,description]);
+ }
 }
-[signalType,sigAmp,sigFreq].forEach(x=>x.addEventListener('input',drawExplorer));drawExplorer();
+
+function drawExplorer(){
+ const canvas=document.getElementById('signalExplorer');
+ if(!canvas||!signalType)return;
+ const {ctx,w,h}=setupCanvas(canvas);
+ const kind=signalType.value;
+ const r=axes(ctx,w,h,-4,4,-1.5,1.5);
+
+ if(kind==='impulse'){
+  const x=r.X(0),y0=r.Y(0),yt=r.Y(1.2);
+  ctx.strokeStyle=C.orange;
+  ctx.fillStyle=C.orange;
+  ctx.lineWidth=3;
+  ctx.beginPath();
+  ctx.moveTo(x,y0);
+  ctx.lineTo(x,yt);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x,yt);
+  ctx.lineTo(x-6,yt+10);
+  ctx.lineTo(x+6,yt+10);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle=C.text;
+  ctx.textAlign='left';
+  ctx.fillText('unit area = 1',x+12,yt+4);
+ }else if(kind==='step'||kind==='rect'){
+  ctx.strokeStyle=C.blue;
+  ctx.lineWidth=3;
+  ctx.beginPath();
+  if(kind==='step'){
+   ctx.moveTo(r.X(-4),r.Y(0));
+   ctx.lineTo(r.X(0),r.Y(0));
+   ctx.lineTo(r.X(0),r.Y(1));
+   ctx.lineTo(r.X(4),r.Y(1));
+  }else{
+   ctx.moveTo(r.X(-4),r.Y(0));
+   ctx.lineTo(r.X(-.5),r.Y(0));
+   ctx.lineTo(r.X(-.5),r.Y(1));
+   ctx.lineTo(r.X(.5),r.Y(1));
+   ctx.lineTo(r.X(.5),r.Y(0));
+   ctx.lineTo(r.X(4),r.Y(0));
+  }
+  ctx.stroke();
+ }else{
+  path(ctx,t=>value(kind,t,1,1),r,C.blue,3);
+ }
+}
+
+signalType.addEventListener('change',()=>{
+ updateSignalDefinition();
+ drawExplorer();
+});
+updateSignalDefinition();
+drawExplorer();
 
 const shift=document.getElementById('shift'),scale=document.getElementById('scale'),amp=document.getElementById('amp');
 function baseRamp(t){return t>0&&t<1?t:0;}
@@ -610,169 +700,6 @@ window.addEventListener('resize',()=>{
 });
 })();
 
-// Get the signal selector
-const signalType = document.getElementById('sigType');
-
-
-// Definitions of the six signals
-const signalInfo = {
-  sine: {
-    title: 'Sinusoidal signal',
-    formula: String.raw`\[x(t)=\cos(2\pi f_0t+\theta)\]`,
-    description: String.raw`A periodic signal that oscillates between \(-1\) and \(1\). The frequency is \(f_0\), and the phase is \(\theta\).`
-  },
-
-  step: {
-    title: 'Unit step signal',
-    formula: String.raw`\[u(t)=\begin{cases}1,&t\geq 0\\0,&t<0\end{cases}\]`,
-    description: String.raw`The unit step is zero for negative time and one for nonnegative time. It represents a signal that is switched on at \(t=0\).`
-  },
-
-  rect: {
-    title: 'Rectangular pulse',
-    formula: String.raw`\[\Pi(t)=\begin{cases}1,&|t|\leq \frac{1}{2}\\0,&|t|>\frac{1}{2}\end{cases}\]`,
-    description: String.raw`A rectangular pulse with unit amplitude and unit duration, centered at the origin.`
-  },
-
-  tri: {
-    title: 'Triangular signal',
-    formula: String.raw`\[\Lambda(t)=\begin{cases}1-|t|,&|t|\leq 1\\0,&|t|>1\end{cases}\]`,
-    description: String.raw`A triangular pulse that reaches its maximum value at \(t=0\) and decreases linearly to zero at \(t=-1\) and \(t=1\).`
-  },
-
-  sinc: {
-    title: 'Sinc signal',
-    formula: String.raw`\[\operatorname{sinc}(t)=\begin{cases}\dfrac{\sin(\pi t)}{\pi t},&t\neq 0\\1,&t=0\end{cases}\]`,
-    description: String.raw`The sinc signal has a maximum value of one at the origin, with oscillating side lobes that decay away from the origin.`
-  },
-
-  impulse: {
-    title: 'Impulse (delta) signal',
-    formula: String.raw`\[\delta(t),\qquad \int_{-\infty}^{\infty}\delta(t)\,dt=1\]`,
-    description: String.raw`The ideal impulse is zero everywhere except at \(t=0\), and has unit area. Its arrow in the plot represents the ideal impulse, not an ordinary finite-height pulse.`
-  }
-};
-
-
-// Update the signal title, definition, and description
-function updateSignalDefinition() {
-
-  const info = signalInfo[signalType.value];
-
-  const formula = document.getElementById('signalFormula');
-  const description = document.getElementById('signalDescription');
-
-  document.getElementById('signalTitle').textContent = info.title;
-
-  formula.innerHTML = info.formula;
-  description.innerHTML = info.description;
-
-  // Render the updated equations using MathJax
-  if (window.MathJax && MathJax.typesetPromise) {
-
-    if (MathJax.typesetClear) {
-      MathJax.typesetClear([formula, description]);
-    }
-
-    MathJax.typesetPromise([formula, description]);
-  }
-}
-
-
-// Draw the selected signal
-function drawExplorer() {
-
-  const canvas = document.getElementById('signalExplorer');
-  const { ctx, w, h } = setupCanvas(canvas);
-
-  const kind = signalType.value;
-
-  const r = axes(ctx, w, h, -4, 4, -1.5, 1.5);
-
-  // Impulse signal
-  if (kind === 'impulse') {
-
-    const x = r.X(0);
-    const y0 = r.Y(0);
-    const yt = r.Y(1.25);
-
-    ctx.strokeStyle = C.orange;
-    ctx.fillStyle = C.orange;
-    ctx.lineWidth = 3;
-
-    ctx.beginPath();
-    ctx.moveTo(x, y0);
-    ctx.lineTo(x, yt);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(x, yt);
-    ctx.lineTo(x - 6, yt + 10);
-    ctx.lineTo(x + 6, yt + 10);
-    ctx.closePath();
-    ctx.fill();
-
-    ctx.fillStyle = C.text;
-    ctx.textAlign = 'left';
-    ctx.fillText('unit area = 1', x + 12, yt + 4);
-  }
-
-  // Unit step signal
-  else if (kind === 'step') {
-
-    ctx.strokeStyle = C.blue;
-    ctx.lineWidth = 3;
-
-    ctx.beginPath();
-    ctx.moveTo(r.X(-4), r.Y(0));
-    ctx.lineTo(r.X(0), r.Y(0));
-    ctx.lineTo(r.X(0), r.Y(1));
-    ctx.lineTo(r.X(4), r.Y(1));
-    ctx.stroke();
-  }
-
-  // Rectangular pulse
-  else if (kind === 'rect') {
-
-    ctx.strokeStyle = C.blue;
-    ctx.lineWidth = 3;
-
-    ctx.beginPath();
-    ctx.moveTo(r.X(-4), r.Y(0));
-    ctx.lineTo(r.X(-0.5), r.Y(0));
-    ctx.lineTo(r.X(-0.5), r.Y(1));
-    ctx.lineTo(r.X(0.5), r.Y(1));
-    ctx.lineTo(r.X(0.5), r.Y(0));
-    ctx.lineTo(r.X(4), r.Y(0));
-    ctx.stroke();
-  }
-
-  // Sinusoidal, triangular, and sinc signals
-  else {
-
-    path(
-      ctx,
-      t => value(kind, t, 1, 1),
-      r,
-      C.blue,
-      3
-    );
-  }
-}
-
-
-// When the student selects a different signal
-signalType.addEventListener('change', function() {
-
-  updateSignalDefinition();
-  drawExplorer();
-
-});
-
-
-// Initial display
-updateSignalDefinition();
-drawExplorer();
 </script>
 </body>
 </html>
