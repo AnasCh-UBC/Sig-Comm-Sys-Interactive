@@ -113,7 +113,7 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
 <p>In a communication system, signals are used to transmit information over a communication channel.</p>
 <ul>
 <li>In communications, we often see signals that are functions of time, written as \(x(t)\), where \(t\) denotes time.</li>
-<li>In <b>information-bearing signal</b> is a signal that contains information (for example, speech or video).</li>
+<li>An <b>information-bearing signal</b> is a signal that contains information (for example, speech or video).</li>
 <li>It is important to understand the properties of signals and how signals are processed.</li>
 </ul>
 <p>The lecture covers signals, signal operations, their properties, and special signals frequently encountered in communications.</p>
@@ -183,36 +183,35 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
 
 <h2 id="operations"><small>3</small>Basic operations on signals</h2>
 <p class="sub">Shifting, reversing, and scaling modify the signal along the time axis.</p>
+
+<p>Compared to a given signal \(x(t)\):</p>
+
 <div class="two-col">
-  <div class="card">
+  <div class="eq-box">
     <h3>Time shifting</h3>
-    <p>Given a signal \(x(t)\), the signal \(x(t-t_0)\) is shifted by \(t_0\).</p>
+    <p>the signal \(x(t-t_0)\) is shifted by \(t_0\):</p>
     <ul>
-      <li>If \(t_0>0\), \(x(t-t_0)\) shifts to the right and is delayed by \(t_0\).</li>
-      <li>\(x(t+t_0)\) shifts to the left when \(t_0>0\).</li>
-      <li>If \(t_0<0\), the direction is reversed.</li>
+      <li>to the right (delayed) if \(t_0>0\).</li>
+      <li>to the left (advanced) if \(t_0<0\).</li>
+      <li>\(x(t+t_0)=x(t-(-t_0)\) shifts in the opposite directions.</li>
     </ul>
-    <div class="eq-box">\[y(t)=x(t-t_0)\]</div>
   </div>
-  <div class="card">
+  <div class="eq-box">
     <h3>Time reversal</h3>
-    <p>The signal \(x(-t)\) is the time-reversed version of \(x(t)\), flipped around the vertical axis.</p>
-    <div class="eq-box">\[y(t)=x(-t)\]</div>
+    <p>the signal \(x(-t)\) is time-reversed, i.e., flipped around the vertical axis.</p>
   </div>
-  <div class="card">
+  <div class="eq-box">
     <h3>Time scaling</h3>
-    <p>The signal \(x(at)\), for \(a>0\), is contracted or expanded along the time axis.</p>
+    <p>the signal \(x(at)\) is:</p>
     <ul>
-      <li>If \(a>1\), \(x(at)\) is contracted.</li>
-      <li>If \(0<a<1\), \(x(at)\) is expanded.</li>
+      <li>contracted along the time axis if \(a>1\).</li>
+      <li>expanded along the time axis if \(0 \lt a \lt 1\).</li>
     </ul>
-    <div class="eq-box">\[y(t)=x(at)\]</div>
   </div>
-  <div class="card">
+  <div class="eq-box">
     <h3>Combined operation</h3>
-    <p>These operations can be combined. A useful general form is:</p>
-    <div class="eq-box">\[y(t)=A\,x\!\left(a(t-t_0)\right)\]</div>
-    <p>The parameter \(A\) scales amplitude, \(a\) scales time, and \(t_0\) shifts the result.</p>
+    <p>the signal \( A\,x\!\left(a(t-t_0)\right)\) is 
+      amplitude-scaled by \(A\), time-scaled by \(a\), and time-shifted by \(t_0\).</p>
   </div>
 </div>
 
@@ -574,7 +573,7 @@ function drawExplorer(){
   ctx.fill();
   ctx.fillStyle=C.text;
   ctx.textAlign='left';
-  ctx.fillText('unit area = 1',x+12,yt+4);
+  ctx.fillText('area = 1',x+12,yt+4);
  }else if(kind==='step'||kind==='rect'){
   ctx.strokeStyle=C.blue;
   ctx.lineWidth=3;
