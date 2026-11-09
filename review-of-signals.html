@@ -193,12 +193,8 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
     <ul>
       <li>to the right (delayed) if \(t_0>0\).</li>
       <li>to the left (advanced) if \(t_0<0\).</li>
-      <li>\(x(t+t_0)=x(t-(-t_0)\) shifts in the opposite directions.</li>
+      <li>\(x(t+t_0)=x(t-(-t_0))\) shifts in the opposite directions.</li>
     </ul>
-  </div>
-  <div class="eq-box">
-    <h3>Time reversal</h3>
-    <p>the signal \(x(-t)\) is time-reversed, i.e., flipped around the vertical axis.</p>
   </div>
   <div class="eq-box">
     <h3>Time scaling</h3>
@@ -207,6 +203,10 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
       <li>contracted along the time axis if \(a>1\).</li>
       <li>expanded along the time axis if \(0 \lt a \lt 1\).</li>
     </ul>
+  </div>
+  <div class="eq-box">
+    <h3>Time reversal</h3>
+    <p>the signal \(x(-t)\) is time-reversed, i.e., flipped around the vertical axis.</p>
   </div>
   <div class="eq-box">
     <h3>Combined operation</h3>
@@ -224,8 +224,8 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
 <button id="resetTransform" type="button">Reset</button>
 </div>
 <canvas id="transformPlot" class="demo-canvas" width="900" height="320" aria-label="Original and transformed signal plot"></canvas>
-<div class="readout"><span id="transformFormula">\(y(t)=x(t-t_0)\)</span><span id="transformDescription">Positive shift: delayed to the right.</span></div>
-<p class="demo-note">The reference signal is \(x(t)=t\) for \(0<t<1\), and zero otherwise. The transformed signal is \(y(t)=A\,x(a(t-t_0))\). Negative \(a\) produces time reversal as well as scaling.</p>
+<div class="readout"><span id="transformFormula">\(y(t)=A x(a(t-t_0))\)</span><span id="transformDescription">Positive shift: delayed to the right.</span></div>
+<p class="demo-note">The reference signal is \(x(t)=t\) for \(0 \lt t \lt 1\), and zero otherwise. The transformed signal is \(y(t)=A\,x(a(t-t_0))\). Negative \(a\) produces time reversal as well as scaling.</p>
 </div>
 
 <h2 id="classification"><small>4</small>Classification of signals</h2>
