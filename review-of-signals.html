@@ -231,47 +231,29 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
 <h2 id="classification"><small>4</small>Classification of signals</h2>
 <p class="sub">Signals can be classified according to their independent variable, predictability, periodicity, time support, symmetry, and energy or power.</p>
 
-<div class="signal-grid">
-<div class="signal-card">
-<h3>Continuous-time vs. discrete-time</h3>
-<p>A continuous-time signal has a real-valued independent variable, such as \(x(t)\), \(t\in\mathbb R\). A discrete-time signal is defined on a discrete set, such as \(y[n]\), \(n\in\mathbb Z\).</p>
-<div class="eq-box">\[y[n]=x(nT),\qquad n\in\mathbb Z\]</div>
-<p>A discrete-time signal can be obtained by sampling a continuous-time signal.</p>
+<div class="demo-card" id="classificationExplorer">
+  <div class="demo-head">
+    <h3>Interactive: classification of signals</h3>
+    <span class="pill">Choose a property</span>
+  </div>
+
+  <div class="demo-controls">
+    <label>
+      Signal property
+      <select id="classificationType">
+        <option value="ctdt">Continuous-time vs. discrete-time</option>
+        <option value="det">Deterministic vs. random</option>
+        <option value="periodic">Periodic vs. nonperiodic</option>
+        <option value="causal">Causal vs. noncausal</option>
+        <option value="evenodd">Even vs. odd</option>
+        <option value="energy">Energy-type vs. power-type</option>
+      </select>
+    </label>
+  </div>
+
+  <div id="classificationContent"></div>
 </div>
-<div class="signal-card">
-<h3>Deterministic vs. random</h3>
-<p>A deterministic signal can be completely specified by a function of its independent variable.</p>
-<p>A random (stochastic) signal takes random values and is described statistically, using probabilities.</p>
-</div>
-<div class="signal-card">
-<h3>Periodic vs. nonperiodic</h3>
-<p>A continuous-time signal is periodic if there exists \(T_0>0\) such that:</p>
-<div class="eq-box">\[x(t)=x(t+T_0),\quad \forall t\in\mathbb R\]</div>
-<p>For discrete time, periodicity means \(x[n]=x[n+N_0]\) for all \(n\in\mathbb Z\), for some positive integer \(N_0\).</p>
-</div>
-<div class="signal-card">
-<h3>Causal, noncausal, and anticausal</h3>
-<ul>
-<li><b>Causal:</b> \(x(t)=0\) for all \(t<0\).</li>
-<li><b>Noncausal:</b> not zero for all \(t<0\).</li>
-<li><b>Anticausal:</b> \(x(t)=0\) for all \(t>0\).</li>
-</ul>
-<p>A causal signal is supported on the nonnegative-time side; an anticausal signal is supported on the nonpositive-time side.</p>
-</div>
-<div class="signal-card">
-<h3>Even and odd</h3>
-<p>An even signal satisfies \(x(t)=x(-t)\); an odd signal satisfies \(x(t)=-x(-t)\).</p>
-<div class="eq-box">\[x_e(t)=\frac{x(t)+x(-t)}{2}\]</div>
-<div class="eq-box">\[x_o(t)=\frac{x(t)-x(-t)}{2}\]</div>
-<p>Any signal can be decomposed as \(x(t)=x_e(t)+x_o(t)\).</p>
-</div>
-<div class="signal-card">
-<h3>Energy-type and power-type</h3>
-<p>Energy-type signals have finite energy. Power-type signals have finite, nonzero average power.</p>
-<div class="eq-box">\[E_x=\int_{-\infty}^{\infty}|x(t)|^2\,dt\]</div>
-<div class="eq-box">\[P_x=\lim_{T\to\infty}\frac{1}{T}\int_{-T/2}^{T/2}|x(t)|^2\,dt\]</div>
-</div>
-</div>
+
 
 <div class="demo-card">
 <h3>Interactive: continuous-time signal and its samples</h3>
@@ -611,7 +593,7 @@ function drawTransform(){
  path(ctx,baseRamp,r,C.cyan,2.2);
  path(ctx,t=>Math.abs(a)<.001?0:A*baseRamp(a*(t-t0)),r,C.orange,3);
  document.getElementById('shiftOut').textContent=t0.toFixed(1);document.getElementById('scaleOut').textContent=a.toFixed(1);document.getElementById('ampOut').textContent=A.toFixed(1);
- document.getElementById('transformDescription').textContent=Math.abs(a)<.001?'a = 0: the transformed signal is zero except at the boundary convention.':a<0?'Negative a: time reversal and scaling.':a>1?'a > 1: time contraction.':a<1?'0 < a < 1: time expansion.':(t0>0?'Positive shift: delayed to the right.':t0<0?'Negative shift: advanced to the left.':'No time shift.');
+ document.getElementById('transformDescription').textContent=Math.abs(a)<.001?'a = 0: the transformed signal is zero.':a<0?'Negative a: time reversal and scaling.':a>1?'a > 1: time contraction.':a<1?'0 < a < 1: time expansion.':(t0>0?'Positive shift: delayed to the right.':t0<0?'Negative shift: advanced to the left.':'No time shift.');
 }
 [shift,scale,amp].forEach(x=>x.addEventListener('input',drawTransform));document.getElementById('resetTransform').addEventListener('click',()=>{shift.value=.8;scale.value=1;amp.value=1;drawTransform();});drawTransform();
 
@@ -698,6 +680,334 @@ window.addEventListener('resize',()=>{
  drawExplorer();drawTransform();drawSampling();drawSym();drawEnergy();drawComplex();
 });
 })();
+
+const classificationType =
+  document.getElementById('classificationType');
+
+const classificationData = {
+
+  ctdt: {
+    title: 'Continuous-time vs. discrete-time',
+    definition: String.raw`
+      A <b>continuous-time signal</b> has a real-valued independent
+      variable, such as \(x(t)\), where \(t\in\mathbb{R}\).
+      A <b>discrete-time signal</b> is defined only at discrete
+      values of its independent variable, such as \(y[n]\),
+      where \(n\in\mathbb{Z}\).
+
+      <div class="eq-box">
+        \[y[n]=x(nT),\qquad n\in\mathbb{Z}\]
+      </div>
+      Sampling a continuous-time signal produces a discrete-time
+      signal.
+    `,
+    note: 'The discrete-time example is obtained by sampling the continuous-time example.',
+    plots: [
+      {
+        title: 'Continuous-time signal',
+        formula: String.raw`\(x(t)=\sin\left(\frac{\pi}{2}t\right)\)`,
+        xmin: -2, xmax: 2, ymin: -1.3, ymax: 1.3,
+        fn: t => Math.sin(Math.PI*t/2)
+      },
+      {
+        title: 'Discrete-time signal',
+        formula: String.raw`\(y[n]=\sin\left(\frac{\pi}{10}n\right)\)`,
+        xmin: -10, xmax: 10, ymin: -1.3, ymax: 1.3,
+        samples: Array.from({length:21},(_,i)=>{
+          const n=i-10;
+          return [n,Math.sin(Math.PI*n/10)];
+        })
+      }
+    ]
+  },
+
+  det: {
+    title: 'Deterministic vs. random',
+    definition: String.raw`
+      A <b>deterministic signal</b> can be completely specified
+      by a mathematical function of its independent variable.
+
+      A <b>random (stochastic) signal</b> takes random values.
+      It is described statistically, using probabilities.
+    `,
+    note: 'The random plot shows one possible realization of a random signal. A different realization would generally look different.',
+    plots: [
+      {
+        title: 'Deterministic signal',
+        formula: String.raw`
+          \[
+          x(t)=
+          \begin{cases}
+          1,& |t|<1\\
+          0,& \text{otherwise}
+          \end{cases}
+          \]
+        `,
+        xmin: -2, xmax: 2, ymin: -0.3, ymax: 1.4,
+        fn: t => Math.abs(t)<1 ? 1 : 0
+      },
+      {
+        title: 'Random signal',
+        formula: String.raw`One possible random realization`,
+        xmin: -10, xmax: 10, ymin: -2.5, ymax: 2.5,
+        samples: [
+          [ -10, .2],[-9, .5],[-8,-.3],[-7,1.1],
+          [-6,1.2],[-5,-.8],[-4,.4],[-3,-1.2],
+          [-2,-.3],[-1,.7],[0,-.9],[1,1.5],
+          [2,-1.1],[3,.2],[4,1.3],[5,-.5],
+          [6,-1.8],[7,.8],[8,-.2],[9,1.1],[10,.3]
+        ]
+      }
+    ]
+  },
+
+  periodic: {
+    title: 'Periodic vs. nonperiodic',
+    definition: String.raw`
+      A continuous-time signal is <b>periodic</b> if there exists
+      a positive number \(T_0\) such that
+
+      <div class="eq-box">
+        \[x(t)=x(t+T_0),\qquad \forall t\in\mathbb{R}\]
+      </div>
+
+      A signal that does not satisfy this condition is
+      <b>nonperiodic</b>.
+
+      For a discrete-time signal, periodicity means
+      \(x[n]=x[n+N_0]\), for all \(n\in\mathbb{Z}\),
+      for some positive integer \(N_0\).
+    `,
+    note: 'A periodic sinusoid repeats indefinitely. The decaying exponential does not repeat.',
+    plots: [
+      {
+        title: 'Periodic signal',
+        formula: String.raw`
+          \[x(t)=2\cos\left(\pi t+\frac{\pi}{4}\right),
+          \qquad T_0=2\]
+        `,
+        xmin: -2, xmax: 2, ymin: -2.5, ymax: 2.5,
+        fn: t => 2*Math.cos(Math.PI*t+Math.PI/4)
+      },
+      {
+        title: 'Nonperiodic signal',
+        formula: String.raw`\(x(t)=e^{-|t|}\)`,
+        xmin: -2, xmax: 2, ymin: -0.2, ymax: 1.3,
+        fn: t => Math.exp(-Math.abs(t))
+      }
+    ]
+  },
+
+  causal: {
+    title: 'Causal vs. noncausal',
+    definition: String.raw`
+      A signal is <b>causal</b> if it is zero for all negative time:
+
+      <div class="eq-box">
+        \[x(t)=0,\qquad t<0\]
+      </div>
+
+      A signal that is not zero for all \(t<0\) is
+      <b>noncausal</b>.
+
+      An <b>anticausal</b> signal is zero for all positive time:
+      \[
+        x(t)=0,\qquad t>0.
+      \]
+    `,
+    note: String.raw`
+      An anticausal signal is a special one-sided case.
+      For example, \(u(-t)\) is anticausal.
+    `,
+    plots: [
+      {
+        title: 'Causal signal',
+        formula: String.raw`\(x(t)=u(t)\)`,
+        xmin: -2, xmax: 2, ymin: -0.3, ymax: 1.4,
+        fn: t => t>=0 ? 1 : 0
+      },
+      {
+        title: 'Noncausal signal',
+        formula: String.raw`\(x(t)=\cos(3t)\)`,
+        xmin: -2, xmax: 2, ymin: -1.4, ymax: 1.4,
+        fn: t => Math.cos(3*t)
+      }
+    ]
+  },
+
+  evenodd: {
+    title: 'Even vs. odd',
+    definition: String.raw`
+      An <b>even signal</b> satisfies
+
+      \[
+        x(t)=x(-t).
+      \]
+
+      An <b>odd signal</b> satisfies
+
+      \[
+        x(t)=-x(-t).
+      \]
+
+      An even signal is symmetric about the vertical axis,
+      whereas an odd signal is antisymmetric about the origin.
+
+      Any signal can be decomposed into even and odd parts:
+
+      <div class="eq-box">
+        \[
+          x_e(t)=\frac{x(t)+x(-t)}{2}
+        \]
+        \[
+          x_o(t)=\frac{x(t)-x(-t)}{2}
+        \]
+        \[
+          x(t)=x_e(t)+x_o(t)
+        \]
+      </div>
+    `,
+    note: 'The first example is symmetric about the vertical axis. The second is antisymmetric about the origin.',
+    plots: [
+      {
+        title: 'Even signal',
+        formula: String.raw`\(x(t)=e^{-|t|}\)`,
+        xmin: -2, xmax: 2, ymin: -0.2, ymax: 1.3,
+        fn: t => Math.exp(-Math.abs(t))
+      },
+      {
+        title: 'Odd signal',
+        formula: String.raw`\(x(t)=\tanh(t)\)`,
+        xmin: -2, xmax: 2, ymin: -1.3, ymax: 1.3,
+        fn: t => Math.tanh(t)
+      }
+    ]
+  },
+
+  energy: {
+    title: 'Energy-type vs. power-type',
+    definition: String.raw`
+      An <b>energy-type signal</b> has finite energy:
+
+      <div class="eq-box">
+        \[
+          E_x=\int_{-\infty}^{\infty}|x(t)|^2\,dt
+          <\infty
+        \]
+      </div>
+
+      A <b>power-type signal</b> has finite, nonzero average power:
+
+      <div class="eq-box">
+        \[
+          P_x=\lim_{T\to\infty}
+          \frac{1}{T}
+          \int_{-T/2}^{T/2}|x(t)|^2\,dt
+        \]
+        \[
+          0<P_x<\infty
+        \]
+      </div>
+    `,
+    note: 'A finite-duration pulse is an energy-type signal. A nonzero periodic sinusoid is a power-type signal.',
+    plots: [
+      {
+        title: 'Energy-type signal',
+        formula: String.raw`
+          \[
+          x(t)=
+          \begin{cases}
+          1,& |t|<1\\
+          0,& \text{otherwise}
+          \end{cases}
+          \]
+        `,
+        xmin: -3, xmax: 3, ymin: -0.3, ymax: 1.4,
+        fn: t => Math.abs(t)<1 ? 1 : 0
+      },
+      {
+        title: 'Power-type signal',
+        formula: String.raw`\(x(t)=\cos(\pi t)\)`,
+        xmin: -3, xmax: 3, ymin: -1.4, ymax: 1.4,
+        fn: t => Math.cos(Math.PI*t)
+      }
+    ]
+  }
+};
+
+
+// Draw one example plot using the existing plotting helpers.
+function drawClassificationPlot(canvas, spec) {
+  const {ctx,w,h} = setupCanvas(canvas);
+  const r = axes(ctx,w,h,
+    spec.xmin,spec.xmax,spec.ymin,spec.ymax);
+
+  if (spec.samples) {
+    ctx.strokeStyle = C.orange;
+    ctx.fillStyle = C.orange;
+    ctx.lineWidth = 1.8;
+
+    spec.samples.forEach(([x,y]) => {
+      ctx.beginPath();
+      ctx.moveTo(r.X(x),r.Y(0));
+      ctx.lineTo(r.X(x),r.Y(y));
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(r.X(x),r.Y(y),3.5,0,2*Math.PI);
+      ctx.fill();
+    });
+  } else {
+    path(ctx,spec.fn,r,C.blue,2.8);
+  }
+}
+
+
+// Update the displayed classification.
+function drawClassification() {
+  const data = classificationData[classificationType.value];
+  const target = document.getElementById('classificationContent');
+
+  target.innerHTML = `
+    <div class="signal-card" style="margin-bottom:12px">
+      <h3>${data.title}</h3>
+      <p>${data.definition}</p>
+      <p class="demo-note">${data.note}</p>
+    </div>
+
+    <div class="signal-grid">
+      ${data.plots.map((p,i) => `
+        <div class="signal-card">
+          <h3>${p.title}</h3>
+          <p>${p.formula}</p>
+          <canvas
+            id="classificationPlot${i}"
+            class="demo-canvas"
+            width="720"
+            height="240"
+            aria-label="${p.title}">
+          </canvas>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  data.plots.forEach((p,i) => {
+    drawClassificationPlot(
+      document.getElementById(`classificationPlot${i}`),
+      p
+    );
+  });
+
+  if (window.MathJax?.typesetPromise) {
+    MathJax.typesetPromise([target]);
+  }
+}
+
+classificationType.addEventListener('change',drawClassification);
+drawClassification();
+
+window.addEventListener('resize',drawClassification);
 
 </script>
 </body>
