@@ -938,27 +938,127 @@ const classificationData = {
 
 // Draw one example plot using the existing plotting helpers.
 function drawClassificationPlot(canvas, spec) {
-  const {ctx,w,h} = setupCanvas(canvas);
-  const r = axes(ctx,w,h,
-    spec.xmin,spec.xmax,spec.ymin,spec.ymax);
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  const rect = canvas.getBoundingClientRect();
+
+  if (!rect.width || !rect.height) return;
+
+  const dpr = window.devicePixelRatio || 1;
+  const w = rect.width;
+  const h = rect.height;
+
+  canvas.width = Math.round(w * dpr);
+  canvas.height = Math.round(h * dpr);
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, w, h);
+
+  const left = 48, right = 15, top = 15, bottom = 32;
+  const pw = w - left - right;
+  const ph = h - top - bottom;
+
+  const X = x => left + (x - spec.xmin) /
+    (spec.xmax - spec.xmin) * pw;
+
+  const Y = y => top + (spec.ymax - y) /
+    (spec.ymax - spec.ymin) * ph;
+
+  const grid = getComputedStyle(document.documentElement)
+    .getPropertyValue('--ln').trim() || '#555';
+
+  const textColor = getComputedStyle(document.documentElement)
+    .getPropertyValue('--mut').trim() || '#999';
+
+  const axisColor = getComputedStyle(document.documentElement)
+    .getPropertyValue('--fg').trim() || '#222';
+
+  // Grid
+  ctx.strokeStyle = grid;
+  ctx.lineWidth = 0.7;
+
+  for (let i = 0; i <= 8; i++) {
+    const x = left + i * pw / 8;
+    ctx.beginPath();
+    ctx.moveTo(x, top);
+    ctx.lineTo(x, top + ph);
+    ctx.stroke();
+  }
+
+  for (let i = 0; i <= 4; i++) {
+    const y = top + i * ph / 4;
+    ctx.beginPath();
+    ctx.moveTo(left, y);
+    ctx.lineTo(left + pw, y);
+    ctx.stroke();
+  }
+
+  // Axes
+  ctx.strokeStyle = axisColor;
+  ctx.lineWidth = 1.3;
+
+  if (spec.ymin <= 0 && spec.ymax >= 0) {
+    ctx.beginPath();
+    ctx.moveTo(left, Y(0));
+    ctx.lineTo(left + pw, Y(0));
+    ctx.stroke();
+  }
+
+  if (spec.xmin <= 0 && spec.xmax >= 0) {
+    ctx.beginPath();
+    ctx.moveTo(X(0), top);
+    ctx.lineTo(X(0), top + ph);
+    ctx.stroke();
+  }
+
+  // Axis labels
+  ctx.fillStyle = textColor;
+  ctx.font = '11px system-ui';
+  ctx.textAlign = 'center';
+  ctx.fillText('Time', left + pw / 2, h - 5);
+
+  ctx.textAlign = 'right';
+  ctx.fillText(spec.xmin, left, h - 17);
+  ctx.fillText(spec.xmax, left + pw, h - 17);
+
+  // Signal
+  ctx.strokeStyle = '#38bdf8';
+  ctx.fillStyle = '#38bdf8';
+  ctx.lineWidth = 2.5;
 
   if (spec.samples) {
-    ctx.strokeStyle = C.orange;
-    ctx.fillStyle = C.orange;
-    ctx.lineWidth = 1.8;
-
-    spec.samples.forEach(([x,y]) => {
+    // Discrete-time signal: stems and sample markers
+    spec.samples.forEach(([x, y]) => {
       ctx.beginPath();
-      ctx.moveTo(r.X(x),r.Y(0));
-      ctx.lineTo(r.X(x),r.Y(y));
+      ctx.moveTo(X(x), Y(0));
+      ctx.lineTo(X(x), Y(y));
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.arc(r.X(x),r.Y(y),3.5,0,2*Math.PI);
+      ctx.arc(X(x), Y(y), 3.5, 0, 2 * Math.PI);
       ctx.fill();
     });
+
   } else {
-    path(ctx,spec.fn,r,C.blue,2.8);
+    // Continuous-time signal
+    ctx.beginPath();
+
+    const N = 600;
+
+    for (let i = 0; i <= N; i++) {
+      const x = spec.xmin +
+        i / N * (spec.xmax - spec.xmin);
+
+      const y = spec.fn(x);
+
+      if (!Number.isFinite(y)) continue;
+
+      if (i === 0) ctx.moveTo(X(x), Y(y));
+      else ctx.lineTo(X(x), Y(y));
+    }
+
+    ctx.stroke();
   }
 }
 
@@ -992,6 +1092,7 @@ function drawClassification() {
     </div>
   `;
 
+  // Draw both plots
   data.plots.forEach((p,i) => {
     drawClassificationPlot(
       document.getElementById(`classificationPlot${i}`),
@@ -999,7 +1100,12 @@ function drawClassification() {
     );
   });
 
-  if (window.MathJax?.typesetPromise) {
+  // Wait for MathJax to finish loading before typesetting
+  if (window.MathJax?.startup?.promise) {
+    MathJax.startup.promise.then(() => {
+      MathJax.typesetPromise([target]);
+    });
+  } else if (window.MathJax?.typesetPromise) {
     MathJax.typesetPromise([target]);
   }
 }
