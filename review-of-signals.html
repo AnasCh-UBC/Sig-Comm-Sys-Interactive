@@ -708,8 +708,8 @@ const classificationData = {
         formula: String.raw`\(y[n]=\sin\left(\frac{2\pi}{4}\frac{n}{5}\right)\)`,
         xmin: -2, xmax: 2, ymin: -1.3, ymax: 1.3,
         samples: Array.from({length:21},(_,i)=>{
-          const n=i-2;
-          return [n,Math.sin(Math.PI*n/10)];
+          const n=i-10;
+          return [n/10,Math.sin(Math.PI*n/10)];
         })
       }
     ]
@@ -753,13 +753,7 @@ const classificationData = {
     title: 'Periodic vs. nonperiodic',
     definition: String.raw`
       A continuous-time signal is <b>periodic</b> if there exists
-      a positive number \(T_0\) such that
-
-      <div class="eq-box">
-        \[x(t)=x(t+T_0),\qquad \forall t\in\mathbb{R}\]
-      </div>
-
-      A signal that does not satisfy this condition is
+      a positive number \(T_0\) such that \(x(t)=x(t+T_0),\qquad \forall t\in\mathbb{R}\). A signal that does not satisfy this condition is
       <b>nonperiodic</b>.
 
       For a discrete-time signal, periodicity means
