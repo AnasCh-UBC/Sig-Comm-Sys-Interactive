@@ -695,7 +695,7 @@ const classificationData = {
       values of its independent variable, such as \(y[n]\),
       where \(n\in\mathbb{Z}\).
     `,
-    note: 'A discrete-time signal y[n]=x(nT),\qquad n\in\mathbb{Z} can be obtained by <b>sampling</b> a continuous-time signal x(t) every T seconds.',
+    note: String.raw`A discrete-time signal \(y[n]=x(nT)\) for \(n\in\mathbb{Z}\) can be obtained by <b>sampling</b> a continuous-time signal \(x(t)\) every \(T\) seconds.`,
     plots: [
       {
         title: 'Continuous-time signal',
@@ -708,7 +708,7 @@ const classificationData = {
         formula: String.raw`\(y[n]=\sin\left(\frac{2\pi}{4}\frac{n}{5}\right)\)`,
         xmin: -2, xmax: 2, ymin: -1.3, ymax: 1.3,
         samples: Array.from({length:21},(_,i)=>{
-          const n=i-10;
+          const n=i-2;
           return [n,Math.sin(Math.PI*n/10)];
         })
       }
@@ -729,13 +729,7 @@ const classificationData = {
       {
         title: 'Deterministic signal',
         formula: String.raw`
-          \[
-          x(t)=
-          \begin{cases}
-          1,& |t|<1\\
-          0,& \text{otherwise}
-          \end{cases}
-          \]
+          \(x(t)=\Pi(t/2)\)
         `,
         xmin: -2, xmax: 2, ymin: -0.3, ymax: 1.4,
         fn: t => Math.abs(t)<1 ? 1 : 0
