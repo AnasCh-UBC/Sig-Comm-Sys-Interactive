@@ -184,7 +184,7 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
 
 <h2 id="operations"><small>3</small>Basic operations on signals</h2>
 <p class="sub">Shifting, reversing, and scaling modify the signal along the time axis.</p>
-<h3>Given a signal \(x(t)\):</h3>
+<p>Compared to a given signal \(x(t)\):</p>
 <div class="two-col">
   <div class="card">
     <h3>Time shifting</h3>
@@ -195,27 +195,22 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
       <li> to the left (advanced) if \(t_0<0\).</li>
       <li> Note: \(x(t+t_0)=x(t-(-t_0)\), i.e., it shifts in the opposite directions.</li>
     </ul>
-    <div class="eq-box">\[y(t)=x(t-t_0)\]</div>
   </div>
   <div class="card">
     <h3>Time reversal</h3>
-    <p>The signal \(x(-t)\) is the time-reversed version of \(x(t)\), flipped around the vertical axis.</p>
-    <div class="eq-box">\[y(t)=x(-t)\]</div>
+    <p>The signal \(x(-t)\) is time-reversed, i.e., flipped around the vertical axis.</p>
   </div>
   <div class="card">
     <h3>Time scaling</h3>
-    <p>The signal \(x(at)\), for \(a>0\), is contracted or expanded along the time axis.</p>
+    <p>The signal \(x(at)\) is:</p>
     <ul>
-      <li>If \(a>1\), \(x(at)\) is contracted.</li>
-      <li>If \(0<a<1\), \(x(at)\) is expanded.</li>
+      <li>contracted  along the time axis if \(a>1\).</li>
+      <li>Expanded along the time axis if \( 0<a<1 \).</li>
     </ul>
-    <div class="eq-box">\[y(t)=x(at)\]</div>
   </div>
   <div class="card">
     <h3>Combined operation</h3>
-    <p>These operations can be combined. A useful general form is:</p>
-    <div class="eq-box">\[y(t)=A\,x\!\left(a(t-t_0)\right)\]</div>
-    <p>The parameter \(A\) scales amplitude, \(a\) scales time, and \(t_0\) shifts the result.</p>
+    <p>The signal \[A\,x\!\left(a(t-t_0)\right)\] is amplitude-scaled (by \(A\)), time-scaled (by \(a\)), and time-shifted (by \(t_0\)).</p>
   </div>
 </div>
 
