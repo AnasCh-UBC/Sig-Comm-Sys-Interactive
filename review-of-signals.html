@@ -283,7 +283,7 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
   <div class="demo-controls">
     <label>Example signal
       <select id="symDecompType">
-        <option value="mix">\(x(t)=e^{-t}u(t)\)</option>
+        <option value="mix">\(x(t)=exp(-t)u(t)\)</option>
         <option value="ramp">\(x(t)=t\,u(t)\)</option>
         <option value="sine">\(x(t)=\sin(t)+0.35\)</option>
       </select>
@@ -294,26 +294,13 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
 
   <canvas id="symDecompCanvas"
           class="demo-canvas"
-          width="1100" height="480"
+          width="1100" height="400"
           aria-label="Animated even and odd signal decomposition">
   </canvas>
 
   <div class="readout">
     <span id="symDecompStatus">The original signal is ready.</span>
   </div>
-
-  <p class="demo-note">
-    The even and odd components are calculated from
-    \[
-      x_e(t)=\frac{x(t)+x(-t)}{2},
-      \qquad
-      x_o(t)=\frac{x(t)-x(-t)}{2}.
-    \]
-    Their sum reconstructs the original signal:
-    \[
-      x(t)=x_e(t)+x_o(t).
-    \]
-  </p>
 </div>
 
 <!--
@@ -1041,8 +1028,13 @@ window.addEventListener('resize',drawClassification);
   if (!root) return;
 
   const canvas = root.querySelector('#symDecompCanvas');
-  const ctx = canvas.getContext('2d');
-  const selector = root.querySelector('#symDecompType');
+const ctx = canvas.getContext('2d');
+const selector = root.querySelector('#symDecompType');
+
+// Set positioning for the LaTeX legends
+root.style.position = 'relative';
+canvas.style.display = 'block';
+
   const replay = root.querySelector('#symDecompPlay');
   const status = root.querySelector('#symDecompStatus');
 
@@ -1085,17 +1077,17 @@ window.addEventListener('resize',drawClassification);
   const duration = 8500;
 
   function resizeCanvas() {
-    const rect = canvas.getBoundingClientRect();
-    if (!rect.width) return;
+  const rect = canvas.getBoundingClientRect();
+  if (!rect.width) return;
 
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = Math.round(rect.width * dpr);
-    canvas.height = Math.round(480 * dpr);
-    canvas.style.height = '480px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = Math.round(rect.width * dpr);
+  canvas.height = Math.round(400 * dpr);
+  canvas.style.height = '400px';
 
-    draw();
-  }
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  draw();
+}
 
   function panel(x, y, w, h, title, equation, color) {
     ctx.fillStyle = 'rgba(15,35,55,0.75)';
@@ -1109,16 +1101,38 @@ window.addEventListener('resize',drawClassification);
     ctx.font = 'bold 14px Arial';
     ctx.textAlign = 'center';
     ctx.fillText(title, x + w / 2, y + 23);
-
-    ctx.fillStyle = colors.text;
-    ctx.font = '13px Arial';
-    ctx.fillText(equation, x + w / 2, y + h - 12);
   }
 
   function roundedRect(x, y, w, h, r) {
     ctx.beginPath();
     ctx.roundRect(x, y, w, h, r);
   }
+
+  function addLatexLegend(x, y, w, title, latex, color) {
+  let legend = root.querySelector(`[data-legend="${latex}"]`);
+
+  if (!legend) {
+    legend = document.createElement('div');
+    legend.dataset.legend = latex;
+    legend.style.position = 'absolute';
+    legend.style.pointerEvents = 'none';
+    legend.style.whiteSpace = 'nowrap';
+    legend.style.fontSize = '13px';
+    legend.style.color = color;
+    legend.style.zIndex = '2';
+    root.appendChild(legend);
+
+    legend.innerHTML = `\\(${latex}\\)`;
+
+    if (window.MathJax && MathJax.typesetPromise) {
+      MathJax.typesetPromise([legend]);
+    }
+  }
+
+  legend.style.left = `${x + w / 2}px`;
+  legend.style.top = `${y + 8}px`;
+  legend.style.transform = 'translateX(-50%)';
+}
 
   function arrow(x1, y1, x2, y2, alpha = 1) {
     ctx.save();
@@ -1241,7 +1255,7 @@ window.addEventListener('resize',drawClassification);
   function draw() {
     const rect = canvas.getBoundingClientRect();
     const W = rect.width;
-    const H = 480;
+    const H = 400;
 
     if (!W) return;
 
@@ -1265,14 +1279,18 @@ window.addEventListener('resize',drawClassification);
     const x2 = x1 + leftW + gap + arrowW * 0.25;
     const x3 = x2 + middleW + gap + arrowW * 0.5;
 
-    const top = 40;
-    const boxH = 390;
+    const top = 35;
+    const boxH = 350;
     const componentGap = 14;
     const componentH = (boxH - componentGap) / 2;
 
     // Stage 1: original signal
-    panel(x1, top, leftW, boxH,
-      'Original signal', 'x(t)', colors.original);
+    // Original signal
+panel(x1, top, leftW, boxH,
+  'Original signal', '', colors.original);
+
+addLatexLegend(x1, top, leftW, 'Original signal', 'x(t)', colors.original);
+
 
     if (progress > 0) {
       const reveal = Math.min(1, progress / 0.18);
@@ -1295,12 +1313,20 @@ window.addEventListener('resize',drawClassification);
     const componentX = x2;
     const componentW = middleW;
 
-    panel(componentX, top, componentW, componentH,
-      'Even component', 'xe(t)', colors.even);
+    // Even component
+panel(componentX, top, componentW, componentH,
+  'Even component', '', colors.even);
 
-    panel(componentX, top + componentH + componentGap,
-      componentW, componentH,
-      'Odd component', 'xo(t)', colors.odd);
+addLatexLegend(componentX, top, componentW,
+  'Even component', 'x_e(t)', colors.even);
+
+    // Odd component
+panel(componentX, top + componentH + componentGap,
+  componentW, componentH,
+  'Odd component', '', colors.odd);
+
+addLatexLegend(componentX, top + componentH + componentGap,
+  componentW, 'Odd component', 'x_o(t)', colors.odd);
 
     if (progress > 0.32) {
       const reveal = Math.min(1, (progress - 0.32) / 0.28);
@@ -1327,8 +1353,12 @@ window.addEventListener('resize',drawClassification);
     }
 
     // Reconstructed signal
-    panel(x3, top, rightW, boxH,
-      'Reconstructed signal', 'xe(t) + xo(t)', colors.reconstructed);
+    // Reconstructed signal
+panel(x3, top, rightW, boxH,
+  'Reconstructed signal', '', colors.reconstructed);
+
+addLatexLegend(x3, top, rightW,
+  'Reconstructed signal', 'x_e(t)+x_o(t)', colors.reconstructed);
 
     if (progress > 0.75) {
       const reveal = Math.min(1, (progress - 0.75) / 0.25);
