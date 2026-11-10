@@ -69,6 +69,47 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 .two-col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 
 @media(max-width:700px){.signal-grid,.eq-grid,.quiz-grid,.two-col{grid-template-columns:1fr}.demo-controls label{width:100%;justify-content:space-between}.demo-controls input[type=range]{width:48%}}
+
+.euler-layout {
+  display: grid;
+  grid-template-columns: 1fr 180px;
+  gap: 20px;
+  align-items: center;
+}
+
+.euler-equations {
+  min-width: 0;
+}
+
+.euler-portrait {
+  text-align: center;
+}
+
+.euler-portrait img {
+  width: 100%;
+  max-width: 170px;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid rgba(85, 200, 242, 0.5);
+  object-fit: cover;
+}
+
+.euler-portrait small {
+  display: block;
+  margin-top: 7px;
+  color: #9fb5c7;
+  font-size: 0.78rem;
+}
+
+@media (max-width: 600px) {
+  .euler-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .euler-portrait img {
+    max-width: 140px;
+  }
+}
 </style>
 <script>
 window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},svg:{fontCache:'global'}};
@@ -381,9 +422,31 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
 </div>
 <div class="card">
   <h3>Euler's formula</h3>
-  <div class="eq-box">\[e^{j\phi}=\cos(\phi)+j\sin(\phi)\]</div>
-  <p>It follows that:</p>
-  <div class="eq-box">\(\cos(\phi)=\frac{e^{j\phi}+e^{-j\phi}}{2},\quad \sin(\phi)=\frac{e^{j\phi}-e^{-j\phi}}{2j}\)</div>
+
+  <div class="euler-layout">
+
+    <div class="euler-equations">
+      <div class="eq-box">
+        \[e^{j\phi}=\cos(\phi)+j\sin(\phi)\]
+      </div>
+
+      <p>It follows that:</p>
+
+      <div class="eq-box">
+        \[
+        \cos(\phi)=\frac{e^{j\phi}+e^{-j\phi}}{2},
+        \quad
+        \sin(\phi)=\frac{e^{j\phi}-e^{-j\phi}}{2j}
+        \]
+      </div>
+    </div>
+
+    <div class="euler-portrait">
+      <img src="images/euler_portrait.png" alt="Portrait of Leonhard Euler">
+      <small>Leonhard Euler (1707–1783)</small>
+    </div>
+
+  </div>
 </div>
 </div>
 
