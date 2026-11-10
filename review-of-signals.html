@@ -38,6 +38,10 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 .readout small {
   font-size: 0.72rem;
 }
+.readout .equation {
+  display: block;
+  margin: 4px 0;
+}
 .readout span{border:1px solid var(--ln);background:var(--card);border-radius:7px;padding:6px 10px;font-size:.88rem}
 .eq-box{border:1px solid var(--ln);border-left:3px solid var(--acc);border-radius:8px;background:var(--card);padding:10px 10px;margin:10px 0;overflow-x:auto}
 .eq-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
@@ -432,19 +436,20 @@ x(t)=Ae^{j(2\pi f_0t+\theta)}
 
 <div class="readout-grid">
   <div class="readout small">
-    <strong>Real:</strong><small>\(A\cos(2\pi ft+\phi)\)</small><br>
-    <div id="realOut">1.000</div>
+    <strong>Real:</strong>
+    <small class="equation">\(A\cos(2\pi ft+\phi)\)</small><br>
+    <div id="realOut">1.0</div>
   </div>
 
   <div class="readout small">
-    <strong>Imaginary:</strong><small>\(A\sin(2\pi ft+\phi)\)</small><br>
-    <div id="imagOut">0.000</div>
+    <strong>Imaginary:</strong><small class="equation">\(A\sin(2\pi ft+\phi)\)</small><br>
+    <div id="imagOut">0.0</div>
     
   </div>
 
   <div class="readout small">
     <strong>Magnitude:</strong><br>
-    <div id="complexMag">1.000</div>
+    <div id="complexMag">1.0</div>
   </div>
 
   <div class="readout small">
@@ -958,18 +963,18 @@ const imag = A * Math.sin(theta);
   // ----------------------------------------
 
   document.getElementById('realOut').textContent =
-    real.toFixed(3);
+    real.toFixed(1);
 
   document.getElementById('imagOut').textContent =
-    imag.toFixed(3);
+    imag.toFixed(1);
 
   document.getElementById('complexMag').textContent =
-    mag.toFixed(3);
+    mag.toFixed(1);
 
-  complexPhase.textContent = `${theta.toFixed(2)} rad`;
+  complexPhase.textContent = `${theta.toFixed(1)} rad`;
 
   document.getElementById('complexPolar').textContent =
-    `z(t) = ${A.toFixed(2)} ∠ ${theta.toFixed(2)} rad`;
+    `z(t) = ${A.toFixed(1)} ∠ ${theta.toFixed(1)} rad`;
 
   // Control readouts
   document.getElementById('complexMagnitudeOut').textContent =
@@ -979,7 +984,7 @@ const imag = A * Math.sin(theta);
     f.toFixed(1);
 
   complexPhaseShiftOut.textContent =
-    (+complexPhaseShift.value).toFixed(2);
+    (+complexPhaseShift.value).toFixed(1);
 }
 
 
@@ -2107,8 +2112,17 @@ if (!energyCanvas || !energyType || !energyT ||
 const ctx = energyCanvas.getContext('2d');
 
 // Reuse the shared dark-theme plotting colors
-const energyColors = C;
-
+// Dark-theme plotting colors
+const energyColors = {
+  background: '#0b1b2b',
+  grid: 'rgba(160,190,210,0.14)',
+  axis: 'rgba(210,225,240,0.75)',
+  text: '#eaf3fa',
+  muted: '#9fb5c7',
+  blue: '#55c8f2',
+  green: '#62d99a',
+  orange: '#f3b45f'
+};
 
 // Canvas setup
 function setupCanvas() {
