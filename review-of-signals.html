@@ -430,25 +430,24 @@ x(t)=Ae^{j(2\pi f_0t+\theta)}
 
 <div class="readout-grid">
   <div class="readout small">
-    <strong>Real part</strong>
+    <strong>Real:</strong><small>\(A\cos(2\pi ft+\phi)\)</small>
     <div id="realOut">1.000</div>
-    <small>\(A\cos(2\pi ft+\phi)\)</small>
   </div>
 
   <div class="readout small">
-    <strong>Imaginary part</strong>
+    <strong>Imaginary:</strong><small>\(A\sin(2\pi ft+\phi)\)</small>
     <div id="imagOut">0.000</div>
-    <small>\(A\sin(2\pi ft+\phi)\)</small>
+    
   </div>
 
   <div class="readout small">
-    <strong>Magnitude</strong>
+    <strong>Magnitude:</strong>
     <div id="complexMag">1.000</div>
   </div>
 
   <div class="readout small">
-    <strong>Instantaneous phase</strong>
-    <div id="complexPhase">0.0°</div>
+    <strong>Instantaneous phase:</strong>
+    <div id="complexPhase">0.0</div>
   </div>
 </div>
 
@@ -965,10 +964,10 @@ const imag = A * Math.sin(theta);
     mag.toFixed(3);
 
   document.getElementById('complexPhase').textContent =
-    phaseDeg.toFixed(1) + '°';
+    phaseDeg.toFixed(1);
 
   document.getElementById('complexPolar').textContent =
-    `z(t) = ${A.toFixed(2)} ∠ ${phaseDeg.toFixed(1)}°`;
+    `z(t) = ${A.toFixed(2)} ∠ ${phaseDeg.toFixed(1)}`;
 
   // Control readouts
   document.getElementById('complexMagnitudeOut').textContent =
@@ -986,22 +985,25 @@ const imag = A * Math.sin(theta);
 // Animation
 // ------------------------------------------
 
-function animateComplex(timestamp){
+function animateComplex(timestamp) {
 
-  if(!complexPlaying) return;
+if (!complexPlaying) {
+  complexRaf = null;
+  return;
+}
 
-  if(complexLastTime===null){
-    complexLastTime=timestamp;
-  }
+if (complexLastTime === null) {
+  complexLastTime = timestamp;
+}
 
-  const dt=(timestamp-complexLastTime)/1000;
-  complexLastTime=timestamp;
+const dt = (timestamp - complexLastTime) / 1000;
+complexLastTime = timestamp;
 
-  complexTime+=dt;
+complexTime += dt;
 
-  drawComplex();
+drawComplex();
 
-  complexRaf=requestAnimationFrame(animateComplex);
+complexRaf = requestAnimationFrame(animateComplex);
 }
 
 
@@ -1048,18 +1050,25 @@ function toggleComplexAnimation(){
 });
 
 complexPlay.addEventListener('click', () => {
-  complexPlaying = !complexPlaying;
 
-  if (complexPlaying) {
-    complexPlay.textContent = 'Pause animation';
-    lastFrameTime = null;
-    animate();
-  } else {
-    complexPlay.textContent = 'Run animation';
-    if (raf) cancelAnimationFrame(raf);
-    raf = null;
-    drawComplex();
+complexPlaying = !complexPlaying;
+
+if (complexPlaying) {
+  complexPlay.textContent = 'Pause animation';
+  complexLastTime = null;
+  complexRaf = requestAnimationFrame(animateComplex);
+
+} else {
+  complexPlay.textContent = 'Run animation';
+
+  if (complexRaf !== null) {
+    cancelAnimationFrame(complexRaf);
+    complexRaf = null;
   }
+
+  complexLastTime = null;
+  drawComplex();
+}
 });
 
 // ------------------------------------------
