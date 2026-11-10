@@ -621,40 +621,12 @@ function drawTransform(){
 }
 [shift,scale,amp].forEach(x=>x.addEventListener('input',drawTransform));document.getElementById('resetTransform').addEventListener('click',()=>{shift.value=.8;scale.value=1;amp.value=1;drawTransform();});drawTransform();
 
-const sampleT=document.getElementById('sampleT'),sampleF=document.getElementById('sampleF');
-function drawSampling(){
- const c=document.getElementById('samplingPlot'),{ctx,w,h}=setupCanvas(c),T=+sampleT.value,f=+sampleF.value,r=axes(ctx,w,h,-4,4,-1.5,1.5);
- path(ctx,t=>Math.sin(2*Math.PI*f*t),r,C.cyan,2.5);
- ctx.strokeStyle=C.orange;ctx.fillStyle=C.orange;ctx.lineWidth=1.6;
- for(let n=Math.ceil(-4/T);n<=Math.floor(4/T);n++){let t=n*T,y=Math.sin(2*Math.PI*f*t),x=r.X(t),yp=r.Y(y),y0=r.Y(0);ctx.beginPath();ctx.moveTo(x,y0);ctx.lineTo(x,yp);ctx.stroke();ctx.beginPath();ctx.arc(x,yp,3.5,0,Math.PI*2);ctx.fill();}
- document.getElementById('sampleTOut').textContent=T.toFixed(2);document.getElementById('sampleFOut').textContent=f.toFixed(2);
-}
-[sampleT,sampleF].forEach(x=>x.addEventListener('input',drawSampling));drawSampling();
+// Sampling demo is not present in this HTML version, so its old handlers
+// are omitted to keep the remaining demos independent.
 
-const symType=document.getElementById('symType');
-function xSym(t){
- if(symType.value==='mix')return t>=0?Math.exp(-t):0;
- if(symType.value==='ramp')return t>=0?t:0;
- return Math.sin(t)+.35;
-}
-function drawSym(){
- const c=document.getElementById('symPlot'),{ctx,w,h}=setupCanvas(c),r=axes(ctx,w,h,-3,3,-2.5,2.5);
- path(ctx,xSym,r,C.text,1.8);path(ctx,t=>(xSym(t)+xSym(-t))/2,r,C.cyan,2.8);path(ctx,t=>(xSym(t)-xSym(-t))/2,r,C.orange,2.8);
- ctx.fillStyle=C.text;ctx.fillText('Original',w-100,22);ctx.fillStyle=C.cyan;ctx.fillText('Even part',w-100,40);ctx.fillStyle=C.orange;ctx.fillText('Odd part',w-100,58);
-}
-symType.addEventListener('change',drawSym);drawSym();
-
-const energyType=document.getElementById('energyType'),energyT=document.getElementById('energyT');
-function eSignal(t){if(energyType.value==='pulse')return Math.abs(t)<.8?1:0;if(energyType.value==='decay')return Math.exp(-Math.abs(t));return Math.cos(2*Math.PI*.5*t);}
-function drawEnergy(){
- const c=document.getElementById('energyPlot'),{ctx,w,h}=setupCanvas(c),T=+energyT.value,r=axes(ctx,w,h,-T/2,T/2,-1.4,1.4);
- path(ctx,eSignal,r,C.blue,2.8);
- let N=3000,dt=T/N,E=0;for(let i=0;i<N;i++){let t=-T/2+(i+.5)*dt,v=eSignal(t);E+=v*v*dt;}
- const P=E/T;document.getElementById('energyTOut').textContent=T.toFixed(0);
- let label=energyType.value==='sine'?'Periodic sinusoid: power-type signal':energyType.value==='pulse'?'Finite pulse: energy-type signal':'Decaying exponential: energy-type signal';
- document.getElementById('energyReadout').textContent=`Window estimate: E ≈ ${E.toFixed(3)} · P ≈ ${P.toFixed(3)} · ${label}`;
-}
-[energyType,energyT].forEach(x=>x.addEventListener('input',drawEnergy));drawEnergy();
+// The previous static even/odd and energy demos were removed from the HTML.
+// Their old handlers are intentionally not initialized here; the animated
+// even/odd demo has its own isolated script below.
 
 const realPart=document.getElementById('realPart'),imagPart=document.getElementById('imagPart'),phaseAnimate=document.getElementById('phaseAnimate');
 let phase=0,raf=null;
@@ -701,7 +673,7 @@ document.querySelectorAll('[data-quiz]').forEach(card=>{
 });
 window.addEventListener('resize',()=>{
  document.querySelectorAll('.mini-plot').forEach(c=>plotMini(c,c.dataset.kind));
- drawExplorer();drawTransform();drawSampling();drawSym();drawEnergy();drawComplex();
+ drawExplorer();drawTransform();drawComplex();
 });
 })();
 
