@@ -294,7 +294,7 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
 
   <canvas id="symDecompCanvas"
           class="demo-canvas"
-          width="1100" height="400"
+          width="1100" height="350"
           aria-label="Animated even and odd signal decomposition">
   </canvas>
 
@@ -302,19 +302,6 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
     <span id="symDecompStatus">The original signal is ready.</span>
   </div>
 </div>
-
-<!--
-<div class="demo-card">
-<h3>Interactive: even and odd decomposition</h3>
-<div class="demo-controls">
-<label>Example signal
-<select id="symType"><option value="mix">\(x(t)=e^{-t}u(t)\)</option><option value="ramp">\(x(t)=t\,u(t)\)</option><option value="sine">\(x(t)=\sin(t)+0.35\)</option></select>
-</label>
-</div>
-<canvas id="symPlot" class="demo-canvas" width="900" height="280" aria-label="Even and odd signal decomposition"></canvas>
-<p class="demo-note">The even and odd components are calculated from \(x_e(t)=\frac{x(t)+x(-t)}2\) and \(x_o(t)=\frac{x(t)-x(-t)}2\).</p>
-</div>
--->
 
 <h2 id="complex"><small>5</small>Complex-valued signals</h2>
 <p class="sub">Complex numbers provide a compact representation of rotating sinusoids and are central to many signal-processing tools.</p>
@@ -1041,7 +1028,7 @@ canvas.style.display = 'block';
   const signals = {
     mix: {
       name: 'Causal exponential',
-      fn: t => t >= 0 ? Math.exp(-t) : 0,
+      fn: t => t === 0 ? 0.5 : (t > 0 ? Math.exp(-t) : 0),
       xmin: -4, xmax: 4, ymin: -0.7, ymax: 1.3
     },
     ramp: {
@@ -1082,8 +1069,8 @@ canvas.style.display = 'block';
 
   const dpr = window.devicePixelRatio || 1;
   canvas.width = Math.round(rect.width * dpr);
-  canvas.height = Math.round(400 * dpr);
-  canvas.style.height = '400px';
+  canvas.height = Math.round(350 * dpr);
+  canvas.style.height = '350px';
 
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   draw();
@@ -1259,7 +1246,7 @@ canvas.style.display = 'block';
   function draw() {
     const rect = canvas.getBoundingClientRect();
     const W = rect.width;
-    const H = 400;
+    const H = 350;
 
     if (!W) return;
 
@@ -1283,8 +1270,8 @@ canvas.style.display = 'block';
     const x2 = x1 + leftW + gap + arrowW * 0.25;
     const x3 = x2 + middleW + gap + arrowW * 0.5;
 
-    const top = 35;
-    const boxH = 350;
+    const top = 25;
+    const boxH = 310;
     const componentGap = 14;
     const componentH = (boxH - componentGap) / 2;
 
@@ -1362,7 +1349,7 @@ panel(x3, top, rightW, boxH,
   'Reconstructed signal', '', colors.reconstructed);
 
 addLatexLegend(x3, top, rightW,
-  'Reconstructed signal', 'x_e(t)+x_o(t)', colors.reconstructed);
+  'Reconstructed', 'x_e(t)+x_o(t)', colors.reconstructed);
 
     if (progress > 0.75) {
       const reveal = Math.min(1, (progress - 0.75) / 0.25);
