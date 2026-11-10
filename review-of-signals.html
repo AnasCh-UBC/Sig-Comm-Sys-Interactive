@@ -20,15 +20,24 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 .demo-card{border:1px solid var(--ln);border-radius:12px;background:var(--card);padding:16px;margin:16px 0;box-shadow:0 8px 22px rgba(0,0,0,.16)}
 .demo-card h3{margin-top:0}
 .demo-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.demo-controls{display:flex;gap:12px 18px;align-items:center;flex-wrap:wrap;margin:12px 0}
-.demo-controls label{display:flex;align-items:center;gap:8px;color:var(--mut);font-size:.9rem}
-.demo-controls input[type=range]{width:125px;accent-color:#38bdf8}
+.demo-controls{display:flex;gap:10px 14px;align-items:center;flex-wrap:wrap;margin:10px 0}
+.demo-controls label{display:flex;align-items:center;gap:6px;color:var(--mut);font-size:.85rem}
+.demo-controls input[type=range]{width:75px;accent-color:#38bdf8}
 .demo-controls select,.demo-controls button,.demo-controls input[type=number]{background:var(--card);color:var(--fg);border:1px solid var(--ln);border-radius:7px;padding:6px 9px}
-.demo-controls button{cursor:pointer}
+.demo-controls button{cursor:pointer;padding:7px 12px;font-size:.85rem}
 .demo-controls button:hover{border-color:var(--acc);background:var(--bg)}
 .demo-canvas{display:block;width:100%;height:280px;min-height:190px;border:1px solid var(--ln);border-radius:9px;background:var(--bg)}
 .demo-note{color:var(--mut);font-size:.88rem;margin:10px 0 0}
 .readout{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.readout-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+.readout small {
+  font-size: 0.72rem;
+}
 .readout span{border:1px solid var(--ln);background:var(--card);border-radius:7px;padding:6px 10px;font-size:.88rem}
 .eq-box{border:1px solid var(--ln);border-left:3px solid var(--acc);border-radius:8px;background:var(--card);padding:10px 10px;margin:10px 0;overflow-x:auto}
 .eq-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
@@ -198,6 +207,54 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
   <li>Zero average power implies finite energy for the signal classes considered in this course.</li>
   </ul>
   </div>
+
+<!--energy demo card-->
+<div class="demo-card">
+  <h3>Energy and Average Power</h3>
+  
+  <div class="demo-controls">
+  
+  <label>
+  Signal
+  <select id="energyType">
+      <option value="pulse">Finite rectangular pulse</option>
+      <option value="decay">Decaying exponential</option>
+      <option value="sine">Periodic sinusoid</option>
+  </select>
+  </label>
+  
+  <label>
+  Observation window T
+  <input id="energyT"
+         type="range"
+         min="2"
+         max="20"
+         step="1"
+         value="8">
+  <output id="energyTOut">8</output>
+  </label>
+  
+  </div>
+  
+  <canvas id="energyPlot"
+          class="demo-canvas"
+          width="900"
+          height="320"
+          aria-label="Energy and power demonstration">
+  </canvas>
+  
+  <div class="readout">
+  <span id="energyReadout">
+  Move the slider to estimate energy and average power.
+  </span>
+  </div>
+  
+  <p class="demo-note">
+  Blue shading: observation interval
+  \( -T/2 \le t \le T/2 \). Green region: quantity being integrated, i.e., \(|x(t)|^2\).
+  </p>
+  
+  </div>
   
 
 <h2 id="operations"><small>3</small>Basic operations on signals</h2>
@@ -283,7 +340,7 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
   <div class="demo-controls">
     <label>Example signal
       <select id="symDecompType">
-        <option value="mix">\(x(t)=e^{-t}u(t)\)</option>
+        <option value="mix">\(x(t)=exp(-t)u(t)\)</option>
         <option value="ramp">\(x(t)=t\,u(t)\)</option>
         <option value="sine">\(x(t)=\sin(t)+0.35\)</option>
       </select>
@@ -294,63 +351,35 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
 
   <canvas id="symDecompCanvas"
           class="demo-canvas"
-          width="1100" height="480"
+          width="1100" height="350"
           aria-label="Animated even and odd signal decomposition">
   </canvas>
 
   <div class="readout">
     <span id="symDecompStatus">The original signal is ready.</span>
   </div>
-
-  <p class="demo-note">
-    The even and odd components are calculated from
-    \[
-      x_e(t)=\frac{x(t)+x(-t)}{2},
-      \qquad
-      x_o(t)=\frac{x(t)-x(-t)}{2}.
-    \]
-    Their sum reconstructs the original signal:
-    \[
-      x(t)=x_e(t)+x_o(t).
-    \]
-  </p>
 </div>
-
-<!--
-<div class="demo-card">
-<h3>Interactive: even and odd decomposition</h3>
-<div class="demo-controls">
-<label>Example signal
-<select id="symType"><option value="mix">\(x(t)=e^{-t}u(t)\)</option><option value="ramp">\(x(t)=t\,u(t)\)</option><option value="sine">\(x(t)=\sin(t)+0.35\)</option></select>
-</label>
-</div>
-<canvas id="symPlot" class="demo-canvas" width="900" height="280" aria-label="Even and odd signal decomposition"></canvas>
-<p class="demo-note">The even and odd components are calculated from \(x_e(t)=\frac{x(t)+x(-t)}2\) and \(x_o(t)=\frac{x(t)-x(-t)}2\).</p>
-</div>
--->
 
 <h2 id="complex"><small>5</small>Complex-valued signals</h2>
 <p class="sub">Complex numbers provide a compact representation of rotating sinusoids and are central to many signal-processing tools.</p>
 <div class="two-col">
 <div class="card">
 <h3>Complex numbers</h3>
-<p>A complex number has the form:</p>
-<div class="eq-box">\[z=a+jb,\qquad a,b\in\mathbb R,\quad j=\sqrt{-1}\]</div>
-<p>Here, \(a\) is the real part and \(b\) is the imaginary part.</p>
-<h3>Euler's formula</h3>
-<div class="eq-box">\[e^{j\phi}=\cos(\phi)+j\sin(\phi)\]</div>
-<p>It follows that:</p>
-<div class="eq-box">\[\cos(\phi)=\frac{e^{j\phi}+e^{-j\phi}}{2}\]</div>
-<div class="eq-box">\[\sin(\phi)=\frac{e^{j\phi}-e^{-j\phi}}{2j}\]</div>
+<div class="eq-box">
+  <b>Rectangular form:</b> A complex number \(z\in\mathbb{C}\) can be written as
+  \(z=a+jb,\ a,b\in\mathbb R,\ j=\sqrt{-1}\), where \(a\) and \(b\) are its real and imaginary parts.
+</div>
+<div class="eq-box">
+  <b>Polar form:</b> A complex number \(z\in\mathbb{C}\) can be written as \(z=re^{j\theta}\), where \(r=|z|=\sqrt{a^2+b^2}\)
+  is its magnitude and \(\theta=\angle z\) is its phase.
+</div>
+<p class="sub">Thus: \(a=r\cos(\theta), b=r\sin(\theta)\).</p>
 </div>
 <div class="card">
-<h3>Rectangular and polar forms</h3>
-<p>A complex number can also be written as:</p>
-<div class="eq-box">\[z=re^{j\theta}\]</div>
-<p>where the magnitude and phase are:</p>
-<div class="eq-box">\[r=|z|=\sqrt{a^2+b^2},\qquad \theta=\angle z\]</div>
-<p>Thus:</p>
-<div class="eq-box">\[a=r\cos(\theta),\qquad b=r\sin(\theta)\]</div>
+  <h3>Euler's formula</h3>
+  <div class="eq-box">\[e^{j\phi}=\cos(\phi)+j\sin(\phi)\]</div>
+  <p>It follows that:</p>
+  <div class="eq-box">\(\cos(\phi)=\frac{e^{j\phi}+e^{-j\phi}}{2},\quad \sin(\phi)=\frac{e^{j\phi}-e^{-j\phi}}{2j}\)</div>
 </div>
 </div>
 
@@ -365,30 +394,84 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
 x(t)=Ae^{j(2\pi f_0t+\theta)}
 =A\cos(2\pi f_0t+\theta)+jA\sin(2\pi f_0t+\theta)
 \]</div>
-<p>Its magnitude is \(A\), and its phase is \(2\pi f_0t+\theta\). The real and imaginary parts are:</p>
-<div class="eq-grid">
-<div class="eq-box">\[x_r(t)=A\cos(2\pi f_0t+\theta)\]</div>
-<div class="eq-box">\[x_i(t)=A\sin(2\pi f_0t+\theta)\]</div>
-</div>
+<p>Its real and imaginary parts are:</p>
+<div class="eq-box">\[x_r(t)=A\cos(2\pi f_0t+\theta),\qquad x_i(t)=A\sin(2\pi f_0t+\theta)\]</div>
+<p>Its magnitude and phase are:</p>
 <div class="eq-box">\[|x(t)|=\sqrt{x_r^2(t)+x_i^2(t)}=A,\qquad \angle x(t)=2\pi f_0t+\theta\]</div>
 </div>
 
 <div class="demo-card">
 <div class="demo-head"><h3>Interactive: complex number and rotating phasor</h3><span class="pill">Complex plane</span></div>
 <div class="demo-controls">
-<label>Real part \(a\) <input id="realPart" type="range" min="-3" max="3" step="0.1" value="1.5"><output id="realOut">1.5</output></label>
-<label>Imaginary part \(b\) <input id="imagPart" type="range" min="-3" max="3" step="0.1" value="1.5"><output id="imagOut">1.5</output></label>
-<label>Animate phase <input id="phaseAnimate" type="checkbox" checked></label>
+  <label>
+    Magnitude \(A\):
+    <input type="range" id="complexMagnitude"
+           min="0" max="3" step="0.1" value="2">
+    <span id="complexMagnitudeOut">2.0</span>
+  </label>
+
+  <label>
+    Freq. \(f\) (Hz):
+    <input type="range" id="complexFrequency"
+           min="0.1" max="2" step="0.1" value="0.5">
+    <span id="complexFrequencyOut">0.5</span>
+  </label>
+
+  <label>
+    Phase shift \(\phi\) (rad.):
+    <input type="range" id="complexPhaseShift"
+           min="-3.14" max="3.14" step="0.1" value="0">
+    <span id="complexPhaseShiftOut">0.00</span>
+  </label>
+
+  <button id="complexPlay">Run</button>
 </div>
+<div id="complexPolar" class="demo-note"></div>
+
 <canvas id="complexPlot" class="demo-canvas" width="900" height="340" aria-label="Complex plane vector plot"></canvas>
-<div class="readout"><span id="complexMag">Magnitude: —</span><span id="complexPhase">Phase: —</span><span id="complexPolar">Polar form: —</span></div>
-<p class="demo-note">Move the sliders to change \(z=a+jb\). When animation is enabled, the phasor rotates while keeping its magnitude fixed to illustrate \(e^{j\phi}\).</p>
+
+<div class="readout-grid">
+  <div class="readout small">
+    <strong>Real:</strong><small>\(A\cos(2\pi ft+\phi)\)</small><br>
+    <div id="realOut">1.000</div>
+  </div>
+
+  <div class="readout small">
+    <strong>Imaginary:</strong><small>\(A\sin(2\pi ft+\phi)\)</small><br>
+    <div id="imagOut">0.000</div>
+    
+  </div>
+
+  <div class="readout small">
+    <strong>Magnitude:</strong><br>
+    <div id="complexMag">1.000</div>
+  </div>
+
+  <div class="readout small">
+    <strong>Inst. phase (rad):</strong><br>
+    <div id="complexPhase">0.0</div>
+  </div>
 </div>
 
-<div class="question-callout">
-<div class="question-icon">!</div>
-<p>In practice, physical signals are real-valued. Complex-valued representations are nevertheless widely used in signal processing, including Fourier transforms and modulation, and often make mathematical derivations easier to understand.</p>
+<p class="demo-note">Move the sliders to change \(z=a+jb\). 
+  When animation is enabled, the phasor rotates while keeping its magnitude fixed to illustrate \(e^{j\phi}\).</p>
 </div>
+
+<div style="
+    border: 1.5px solid #dc3545;
+    border-left: 5px solid #dc3545;
+    border-radius: 8px;
+    padding: 12px 18px;
+    margin: 15px 0;
+    background: rgba(220, 53, 69, 0.08);
+    color: #b02a37;
+">
+    <strong>Important:</strong>
+    In practice, physical signals are real-valued. 
+    Complex-valued representations are widely used in signal processing to model physical signals.
+    It makes mathematical analysis of signals and systems easier.
+</div>
+
 
 <h2 id="self-assessment"><small>6</small>Self-assessment quizzes</h2>
 <p class="sub">Check your understanding of signal definitions, operations, classifications, and complex-valued signals.</p>
@@ -450,234 +533,579 @@ x(t)=Ae^{j(2\pi f_0t+\theta)}
 </footer>
 </main>
 
+
 <script>
-(function(){
-'use strict';
-const darkTheme=window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-const C=darkTheme
- ? {grid:'#34445c',axis:'#9aaec4',text:'#d7e6f5',blue:'#38bdf8',cyan:'#7dd3fc',orange:'#f59e0b',green:'#4ade80',red:'#fb7185'}
- : {grid:'#dce4ef',axis:'#53657b',text:'#35465c',blue:'#1268c4',cyan:'#0785a3',orange:'#c56a08',green:'#168653',red:'#c43e52'};
-function setupCanvas(canvas){
-  const dpr=window.devicePixelRatio||1, w=canvas.clientWidth||canvas.width, h=canvas.clientHeight||canvas.height;
-  canvas.width=Math.round(w*dpr); canvas.height=Math.round(h*dpr);
-  const ctx=canvas.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
-  return {ctx,w,h};
-}
-function axes(ctx,w,h,xmin,xmax,ymin,ymax){
-  const L=48,R=14,T=14,B=30, pw=w-L-R,ph=h-T-B;
-  const X=x=>L+(x-xmin)/(xmax-xmin)*pw, Y=y=>T+(ymax-y)/(ymax-ymin)*ph;
-  ctx.clearRect(0,0,w,h); ctx.font='12px system-ui'; ctx.lineWidth=1;
-  ctx.strokeStyle=C.grid;
-  for(let i=0;i<=8;i++){let x=L+pw*i/8;ctx.beginPath();ctx.moveTo(x,T);ctx.lineTo(x,T+ph);ctx.stroke();}
-  for(let i=0;i<=4;i++){let y=T+ph*i/4;ctx.beginPath();ctx.moveTo(L,y);ctx.lineTo(L+pw,y);ctx.stroke();}
-  ctx.strokeStyle=C.axis;ctx.lineWidth=1.2;
-  if(ymin<0&&ymax>0){ctx.beginPath();ctx.moveTo(L,Y(0));ctx.lineTo(L+pw,Y(0));ctx.stroke();}
-  if(xmin<0&&xmax>0){ctx.beginPath();ctx.moveTo(X(0),T);ctx.lineTo(X(0),T+ph);ctx.stroke();}
-  ctx.fillStyle=C.text;ctx.textAlign='center';ctx.fillText('Time',L+pw/2,h-7);
-  ctx.textAlign='right';ctx.fillText(ymax.toFixed(1),L-7,T+4);ctx.fillText(ymin.toFixed(1),L-7,T+ph);
-  ctx.textAlign='left';ctx.fillText(xmin.toFixed(1),L,T+ph+17);ctx.textAlign='right';ctx.fillText(xmax.toFixed(1),L+pw,T+ph+17);
-  return {X,Y,L,R,T,B,pw,ph};
-}
-function path(ctx,fn,range,style,width=2.5){
- const {X,Y}=range;ctx.beginPath();let started=false;
- for(let i=0;i<=700;i++){let x=-4+8*i/700,y=fn(x);if(!Number.isFinite(y))continue;let px=X(x),py=Y(y);if(!started){ctx.moveTo(px,py);started=true}else ctx.lineTo(px,py);}
- ctx.strokeStyle=style;ctx.lineWidth=width;ctx.lineJoin='round';ctx.stroke();
-}
-function value(kind,t,A=1,f=1){
- if(kind==='sine')return A*Math.cos(2*Math.PI*f*t);
- if(kind==='step')return t>=0?A:0;
- if(kind==='rect')return Math.abs(t)<=.5?A:0;
- if(kind==='tri')return Math.abs(t)<=1?A*(1-Math.abs(t)):0;
- if(kind==='sinc')return Math.abs(t)<1e-7?A:A*Math.sin(Math.PI*t)/(Math.PI*t);
- if(kind==='impulse')return 0;
- return 0;
-}
-function plotMini(canvas,kind){
- const {ctx,w,h}=setupCanvas(canvas),r=axes(ctx,w,h,-4,4,-1.3,1.5);
- if(kind==='impulse'){
-   const x=r.X(0),y=r.Y(0);ctx.strokeStyle=C.orange;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,r.Y(1.25));ctx.stroke();ctx.fillStyle=C.orange;ctx.beginPath();ctx.arc(x,r.Y(1.25),4,0,Math.PI*2);ctx.fill();ctx.fillStyle=C.text;ctx.fillText('area = 1',x+8,r.Y(1.15));
- } else if(kind==='step'||kind==='rect'){
-   ctx.strokeStyle=C.blue;ctx.lineWidth=2.5;ctx.beginPath();
-   if(kind==='step'){ctx.moveTo(r.X(-4),r.Y(0));ctx.lineTo(r.X(0),r.Y(0));ctx.lineTo(r.X(0),r.Y(1));ctx.lineTo(r.X(4),r.Y(1));}
-   else{ctx.moveTo(r.X(-4),r.Y(0));ctx.lineTo(r.X(-.5),r.Y(0));ctx.lineTo(r.X(-.5),r.Y(1));ctx.lineTo(r.X(.5),r.Y(1));ctx.lineTo(r.X(.5),r.Y(0));ctx.lineTo(r.X(4),r.Y(0));}
-   ctx.stroke();
- } else path(ctx,t=>value(kind,t),r,C.blue);
-}
-document.querySelectorAll('.mini-plot').forEach(c=>plotMini(c,c.dataset.kind));
-
-const signalType=document.getElementById('sigType');
-
-const signalInfo={
- sine:{
-  title:'Sinusoidal signal',
-  formula:String.raw`\[x(t)=A\cos(2\pi f_0t+\theta)\]`,
-  description:String.raw`A periodic signal that oscillates between \(-A\) and \(A\). Here, \(A\) is the amplitude, \(f_0\) is the frequency, and \(\theta\) is the phase.`
- },
- step:{
-  title:'Unit step signal',
-  formula:String.raw`\[u(t)=\begin{cases}1,&t\geq 0\\0,&t<0\end{cases}\]`,
-  description:String.raw`The unit step is zero for negative time and one for nonnegative time. It represents a signal that is switched on at \(t=0\).`
- },
- rect:{
-  title:'Rectangular pulse',
-  formula:String.raw`\[\Pi(t)=\begin{cases}1,&|t|\leq \frac{1}{2}\\0,&|t|>\frac{1}{2}\end{cases}\]`,
-  description:String.raw`A rectangular pulse with unit amplitude and unit duration, centered at the origin.`
- },
- tri:{
-  title:'Triangular signal',
-  formula:String.raw`\[\Lambda(t)=\begin{cases}1-|t|,&|t|\leq 1\\0,&|t|>1\end{cases}\]`,
-  description:String.raw`A triangular pulse that reaches its maximum value at \(t=0\) and decreases linearly to zero at \(t=-1\) and \(t=1\).`
- },
- sinc:{
-  title:'Sinc signal',
-  formula:String.raw`\[\operatorname{sinc}(t)=\begin{cases}\dfrac{\sin(\pi t)}{\pi t},&t\neq 0\\1,&t=0\end{cases}\]`,
-  description:String.raw`The sinc signal has a maximum value of one at the origin, with oscillating side lobes that decay away from the origin.`
- },
- impulse:{
-  title:'Impulse (delta) signal',
-  formula:String.raw`\[\delta(t),\qquad \int_{-\infty}^{\infty}\delta(t)\,dt=1\]`,
-  description:String.raw`The ideal impulse is zero everywhere except at \(t=0\), and has unit area. Its arrow in the plot represents the ideal impulse, not an ordinary finite-height pulse.`
- }
-};
-
-function updateSignalDefinition(){
- const info=signalInfo[signalType.value];
- if(!info)return;
- const title=document.getElementById('signalTitle');
- const formula=document.getElementById('signalFormula');
- const description=document.getElementById('signalDescription');
- title.textContent=info.title;
- formula.innerHTML=info.formula;
- description.innerHTML=info.description;
- if(window.MathJax&&MathJax.typesetPromise){
-  if(MathJax.typesetClear)MathJax.typesetClear([formula,description]);
-  MathJax.typesetPromise([formula,description]);
- }
-}
-
-function drawExplorer(){
- const canvas=document.getElementById('signalExplorer');
- if(!canvas||!signalType)return;
- const {ctx,w,h}=setupCanvas(canvas);
- const kind=signalType.value;
- const r=axes(ctx,w,h,-4,4,-1.5,1.5);
-
- if(kind==='impulse'){
-  const x=r.X(0),y0=r.Y(0),yt=r.Y(1.2);
-  ctx.strokeStyle=C.orange;
-  ctx.fillStyle=C.orange;
-  ctx.lineWidth=3;
-  ctx.beginPath();
-  ctx.moveTo(x,y0);
-  ctx.lineTo(x,yt);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(x,yt);
-  ctx.lineTo(x-6,yt+10);
-  ctx.lineTo(x+6,yt+10);
-  ctx.closePath();
-  ctx.fill();
-  ctx.fillStyle=C.text;
-  ctx.textAlign='left';
-  ctx.fillText('area = 1',x+12,yt+4);
- }else if(kind==='step'||kind==='rect'){
-  ctx.strokeStyle=C.blue;
-  ctx.lineWidth=3;
-  ctx.beginPath();
-  if(kind==='step'){
-   ctx.moveTo(r.X(-4),r.Y(0));
-   ctx.lineTo(r.X(0),r.Y(0));
-   ctx.lineTo(r.X(0),r.Y(1));
-   ctx.lineTo(r.X(4),r.Y(1));
-  }else{
-   ctx.moveTo(r.X(-4),r.Y(0));
-   ctx.lineTo(r.X(-.5),r.Y(0));
-   ctx.lineTo(r.X(-.5),r.Y(1));
-   ctx.lineTo(r.X(.5),r.Y(1));
-   ctx.lineTo(r.X(.5),r.Y(0));
-   ctx.lineTo(r.X(4),r.Y(0));
+  (function(){
+  'use strict';
+  // Shared dark plotting palette used by every canvas in this script.
+  const C = {
+    background: '#0b1b2b',
+    panel: '#10263a',
+    grid: 'rgba(160,190,210,0.14)',
+    axis: 'rgba(210,225,240,0.75)',
+    text: '#eaf3fa',
+    muted: '#9fb5c7',
+    blue: '#55c8f2',
+    cyan: '#7dd3fc',
+    orange: '#f3b45f',
+    green: '#62d99a',
+    red: '#fb7185'
+  };
+  function setupCanvas(canvas){
+    const dpr=window.devicePixelRatio||1, w=canvas.clientWidth||canvas.width, h=canvas.clientHeight||canvas.height;
+    canvas.width=Math.round(w*dpr); canvas.height=Math.round(h*dpr);
+    const ctx=canvas.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
+    return {ctx,w,h};
   }
-  ctx.stroke();
- }else{
-  path(ctx,t=>value(kind,t,1,1),r,C.blue,3);
- }
-}
-
-signalType.addEventListener('change',()=>{
- updateSignalDefinition();
- drawExplorer();
-});
-updateSignalDefinition();
-drawExplorer();
-
-const shift=document.getElementById('shift'),scale=document.getElementById('scale'),amp=document.getElementById('amp');
-function baseRamp(t){return t>0&&t<1?t:0;}
-function drawTransform(){
- const c=document.getElementById('transformPlot'),{ctx,w,h}=setupCanvas(c),t0=+shift.value,a=+scale.value,A=+amp.value,r=axes(ctx,w,h,-3,4,-2.2,2.2);
- path(ctx,baseRamp,r,C.cyan,2.2);
- path(ctx,t=>Math.abs(a)<.001?0:A*baseRamp(a*(t-t0)),r,C.orange,3);
- document.getElementById('shiftOut').textContent=t0.toFixed(1);document.getElementById('scaleOut').textContent=a.toFixed(1);document.getElementById('ampOut').textContent=A.toFixed(1);
- document.getElementById('transformDescription').textContent=Math.abs(a)<.001?'a = 0: the transformed signal is zero.':a<0?'Negative a: time reversal and scaling.':a>1?'a > 1: time contraction.':a<1?'0 < a < 1: time expansion.':(t0>0?'Positive shift: delayed to the right.':t0<0?'Negative shift: advanced to the left.':'No time shift.');
-}
-[shift,scale,amp].forEach(x=>x.addEventListener('input',drawTransform));document.getElementById('resetTransform').addEventListener('click',()=>{shift.value=.8;scale.value=1;amp.value=1;drawTransform();});drawTransform();
-
-// Sampling demo is not present in this HTML version, so its old handlers
-// are omitted to keep the remaining demos independent.
-
-// The previous static even/odd and energy demos were removed from the HTML.
-// Their old handlers are intentionally not initialized here; the animated
-// even/odd demo has its own isolated script below.
-
-const realPart=document.getElementById('realPart'),imagPart=document.getElementById('imagPart'),phaseAnimate=document.getElementById('phaseAnimate');
-let phase=0,raf=null;
-function drawComplex(){
- const c=document.getElementById('complexPlot'),{ctx,w,h}=setupCanvas(c),a=+realPart.value,b=+imagPart.value,mag=Math.hypot(a,b),ang=Math.atan2(b,a);
- const cx=w/2,cy=h/2,scalePx=Math.min((w-100)/7,(h-65)/7),X=x=>cx+x*scalePx,Y=y=>cy-y*scalePx;
- ctx.clearRect(0,0,w,h);ctx.strokeStyle=C.grid;ctx.lineWidth=1;
- for(let k=-3;k<=3;k++){ctx.beginPath();ctx.moveTo(X(k),15);ctx.lineTo(X(k),h-30);ctx.stroke();ctx.beginPath();ctx.moveTo(40,Y(k));ctx.lineTo(w-20,Y(k));ctx.stroke();}
- ctx.strokeStyle=C.axis;ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(35,cy);ctx.lineTo(w-20,cy);ctx.moveTo(cx,15);ctx.lineTo(cx,h-25);ctx.stroke();
- ctx.fillStyle=C.text;ctx.font='13px system-ui';ctx.fillText('Real',w-52,cy-9);ctx.fillText('Imaginary',cx+9,23);
- const drawVec=(vx,vy,color,width)=>{ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=width;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(X(vx),Y(vy));ctx.stroke();ctx.beginPath();ctx.arc(X(vx),Y(vy),4,0,Math.PI*2);ctx.fill();};
- drawVec(a,b,C.cyan,3);
- if(phaseAnimate.checked&&mag>0){let px=mag*Math.cos(phase),py=mag*Math.sin(phase);drawVec(px,py,C.orange,2.5);ctx.setLineDash([5,5]);ctx.strokeStyle=C.orange;ctx.beginPath();ctx.arc(cx,cy,mag*scalePx,0,-phase,false);ctx.stroke();ctx.setLineDash([]);}
- ctx.fillStyle=C.text;ctx.fillText(`z = ${a.toFixed(1)} ${b<0?'−':'+ j'} ${Math.abs(b).toFixed(1)}j`,48,25);
- document.getElementById('realOut').textContent=a.toFixed(1);document.getElementById('imagOut').textContent=b.toFixed(1);
- document.getElementById('complexMag').textContent=`Magnitude: ${mag.toFixed(3)}`;
- document.getElementById('complexPhase').textContent=`Phase: ${(ang*180/Math.PI).toFixed(1)}°`;
- document.getElementById('complexPolar').textContent=`Polar form: ${mag.toFixed(3)} ∠ ${(ang*180/Math.PI).toFixed(1)}°`;
-}
-function animate(){
- if(!phaseAnimate.checked){drawComplex();return;}
- phase+=.018;drawComplex();raf=requestAnimationFrame(animate);
-}
-[realPart,imagPart].forEach(x=>x.addEventListener('input',drawComplex));
-phaseAnimate.addEventListener('change',()=>{if(phaseAnimate.checked){if(raf)cancelAnimationFrame(raf);animate();}else{if(raf)cancelAnimationFrame(raf);drawComplex();}});
-drawComplex();if(phaseAnimate.checked)animate();
-
-document.querySelectorAll('[data-quiz]').forEach(card=>{
- card.querySelector('.check-quiz').addEventListener('click',()=>{
-  let score=0,total=0;
-  card.querySelectorAll('.quiz-question').forEach(q=>{
-   total++;const chosen=q.querySelector('input:checked'),fb=q.querySelector('.quiz-feedback'),correct=chosen&&chosen.value===q.dataset.answer;
-   if(correct)score++;
-   fb.textContent=chosen?(correct?'Correct. ': 'Not quite. ')+q.dataset.feedback:'Please select an answer.';
-   fb.className='quiz-feedback '+(correct?'correct':chosen?'incorrect':'');
+  function axes(ctx,w,h,xmin,xmax,ymin,ymax){
+    const L=48,R=14,T=14,B=30, pw=w-L-R,ph=h-T-B;
+    const X=x=>L+(x-xmin)/(xmax-xmin)*pw, Y=y=>T+(ymax-y)/(ymax-ymin)*ph;
+    ctx.clearRect(0,0,w,h); ctx.fillStyle=C.background; ctx.fillRect(0,0,w,h); ctx.font='12px system-ui'; ctx.lineWidth=1;
+    ctx.strokeStyle=C.grid;
+    for(let i=0;i<=8;i++){let x=L+pw*i/8;ctx.beginPath();ctx.moveTo(x,T);ctx.lineTo(x,T+ph);ctx.stroke();}
+    for(let i=0;i<=4;i++){let y=T+ph*i/4;ctx.beginPath();ctx.moveTo(L,y);ctx.lineTo(L+pw,y);ctx.stroke();}
+    ctx.strokeStyle=C.axis;ctx.lineWidth=1.2;
+    if(ymin<0&&ymax>0){ctx.beginPath();ctx.moveTo(L,Y(0));ctx.lineTo(L+pw,Y(0));ctx.stroke();}
+    if(xmin<0&&xmax>0){ctx.beginPath();ctx.moveTo(X(0),T);ctx.lineTo(X(0),T+ph);ctx.stroke();}
+    ctx.fillStyle=C.text;ctx.textAlign='center';ctx.fillText('Time',L+pw/2,h-7);
+    ctx.textAlign='right';ctx.fillText(ymax.toFixed(1),L-7,T+4);ctx.fillText(ymin.toFixed(1),L-7,T+ph);
+    ctx.textAlign='left';ctx.fillText(xmin.toFixed(1),L,T+ph+17);ctx.textAlign='right';ctx.fillText(xmax.toFixed(1),L+pw,T+ph+17);
+    return {X,Y,L,R,T,B,pw,ph,xmin,xmax};
+  }
+  function path(ctx,fn,range,style,width=2.5){
+   const {X,Y}=range;ctx.beginPath();let started=false;
+   for(let i=0;i<=700;i++){let x=range.xmin+(range.xmax-range.xmin)*i/700,y=fn(x);if(!Number.isFinite(y))continue;let px=X(x),py=Y(y);if(!started){ctx.moveTo(px,py);started=true}else ctx.lineTo(px,py);}
+   ctx.strokeStyle=style;ctx.lineWidth=width;ctx.lineJoin='round';ctx.stroke();
+  }
+  function value(kind,t,A=1,f=1){
+   if(kind==='sine')return A*Math.cos(2*Math.PI*f*t);
+   if(kind==='step')return t>=0?A:0;
+   if(kind==='rect')return Math.abs(t)<=.5?A:0;
+   if(kind==='tri')return Math.abs(t)<=1?A*(1-Math.abs(t)):0;
+   if(kind==='sinc')return Math.abs(t)<1e-7?A:A*Math.sin(Math.PI*t)/(Math.PI*t);
+   if(kind==='impulse')return 0;
+   return 0;
+  }
+  function plotMini(canvas,kind){
+   const {ctx,w,h}=setupCanvas(canvas),r=axes(ctx,w,h,-4,4,-1.3,1.5);
+   if(kind==='impulse'){
+     const x=r.X(0),y=r.Y(0);ctx.strokeStyle=C.orange;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,r.Y(1.25));ctx.stroke();ctx.fillStyle=C.orange;ctx.beginPath();
+     ctx.arc(x,r.Y(1.25),4,0,Math.PI*2);ctx.fill();ctx.fillStyle=C.text;ctx.fillText('area = 1',x+8,r.Y(1.15));
+   } else if(kind==='step'||kind==='rect'){
+     ctx.strokeStyle=C.blue;ctx.lineWidth=2.5;ctx.beginPath();
+     if(kind==='step'){ctx.moveTo(r.X(-4),r.Y(0));ctx.lineTo(r.X(0),r.Y(0));ctx.lineTo(r.X(0),r.Y(1));ctx.lineTo(r.X(4),r.Y(1));}
+     else{ctx.moveTo(r.X(-4),r.Y(0));ctx.lineTo(r.X(-.5),r.Y(0));ctx.lineTo(r.X(-.5),r.Y(1));ctx.lineTo(r.X(.5),r.Y(1));ctx.lineTo(r.X(.5),r.Y(0));ctx.lineTo(r.X(4),r.Y(0));}
+     ctx.stroke();
+   } else path(ctx,t=>value(kind,t),r,C.blue);
+  }
+  document.querySelectorAll('.mini-plot').forEach(c=>plotMini(c,c.dataset.kind));
+  
+  const signalType=document.getElementById('sigType');
+  
+  const signalInfo={
+   sine:{
+    title:'Sinusoidal signal',
+    formula:String.raw`\[x(t)=A\cos(2\pi f_0t+\theta)\]`,
+    description:String.raw`A periodic signal that oscillates between \(-A\) and \(A\). Here, \(A\) is the amplitude, \(f_0\) is the frequency, and \(\theta\) is the phase.`
+   },
+   step:{
+    title:'Unit step signal',
+    formula:String.raw`\[u(t)=\begin{cases}1,&t\geq 0\\0,&t<0\end{cases}\]`,
+    description:String.raw`The unit step is zero for negative time and one for nonnegative time. It represents a signal that is switched on at \(t=0\).`
+   },
+   rect:{
+    title:'Rectangular pulse',
+    formula:String.raw`\[\Pi(t)=\begin{cases}1,&|t|\leq \frac{1}{2}\\0,&|t|>\frac{1}{2}\end{cases}\]`,
+    description:String.raw`A rectangular pulse with unit amplitude and unit duration, centered at the origin.`
+   },
+   tri:{
+    title:'Triangular signal',
+    formula:String.raw`\[\Lambda(t)=\begin{cases}1-|t|,&|t|\leq 1\\0,&|t|>1\end{cases}\]`,
+    description:String.raw`A triangular pulse that reaches its maximum value at \(t=0\) and decreases linearly to zero at \(t=-1\) and \(t=1\).`
+   },
+   sinc:{
+    title:'Sinc signal',
+    formula:String.raw`\[\operatorname{sinc}(t)=\begin{cases}\dfrac{\sin(\pi t)}{\pi t},&t\neq 0\\1,&t=0\end{cases}\]`,
+    description:String.raw`The sinc signal has a maximum value of one at the origin, with oscillating side lobes that decay away from the origin.`
+   },
+   impulse:{
+    title:'Impulse (delta) signal',
+    formula:String.raw`\[\delta(t),\qquad \int_{-\infty}^{\infty}\delta(t)\,dt=1\]`,
+    description:String.raw`The ideal impulse is zero everywhere except at \(t=0\), and has unit area. Its arrow in the plot represents the ideal impulse, not an ordinary finite-height pulse.`
+   }
+  };
+  
+  function updateSignalDefinition(){
+   const info=signalInfo[signalType.value];
+   if(!info)return;
+   const title=document.getElementById('signalTitle');
+   const formula=document.getElementById('signalFormula');
+   const description=document.getElementById('signalDescription');
+   title.textContent=info.title;
+   formula.innerHTML=info.formula;
+   description.innerHTML=info.description;
+   if(window.MathJax&&MathJax.typesetPromise){
+    if(MathJax.typesetClear)MathJax.typesetClear([formula,description]);
+    MathJax.typesetPromise([formula,description]);
+   }
+  }
+  
+  function drawExplorer(){
+   const canvas=document.getElementById('signalExplorer');
+   if(!canvas||!signalType)return;
+   const {ctx,w,h}=setupCanvas(canvas);
+   const kind=signalType.value;
+   const r=axes(ctx,w,h,-4,4,-1.5,1.5);
+  
+   if(kind==='impulse'){
+    const x=r.X(0),y0=r.Y(0),yt=r.Y(1.2);
+    ctx.strokeStyle=C.orange;
+    ctx.fillStyle=C.orange;
+    ctx.lineWidth=3;
+    ctx.beginPath();
+    ctx.moveTo(x,y0);
+    ctx.lineTo(x,yt);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x,yt);
+    ctx.lineTo(x-6,yt+10);
+    ctx.lineTo(x+6,yt+10);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle=C.text;
+    ctx.textAlign='left';
+    ctx.fillText('area = 1',x+12,yt+4);
+   }else if(kind==='step'||kind==='rect'){
+    ctx.strokeStyle=C.blue;
+    ctx.lineWidth=3;
+    ctx.beginPath();
+    if(kind==='step'){
+     ctx.moveTo(r.X(-4),r.Y(0));
+     ctx.lineTo(r.X(0),r.Y(0));
+     ctx.lineTo(r.X(0),r.Y(1));
+     ctx.lineTo(r.X(4),r.Y(1));
+    }else{
+     ctx.moveTo(r.X(-4),r.Y(0));
+     ctx.lineTo(r.X(-.5),r.Y(0));
+     ctx.lineTo(r.X(-.5),r.Y(1));
+     ctx.lineTo(r.X(.5),r.Y(1));
+     ctx.lineTo(r.X(.5),r.Y(0));
+     ctx.lineTo(r.X(4),r.Y(0));
+    }
+    ctx.stroke();
+   }else{
+    path(ctx,t=>value(kind,t,1,1),r,C.blue,3);
+   }
+  }
+  
+  signalType.addEventListener('change',()=>{
+   updateSignalDefinition();
+   drawExplorer();
   });
-  card.querySelector('.quiz-score').textContent=`Score: ${score}/${total}`;
- });
- card.querySelector('.reset-quiz').addEventListener('click',()=>{
-  card.querySelectorAll('input').forEach(i=>i.checked=false);
-  card.querySelectorAll('.quiz-feedback').forEach(f=>{f.textContent='';f.className='quiz-feedback';});
-  card.querySelector('.quiz-score').textContent='';
- });
-});
-window.addEventListener('resize',()=>{
- document.querySelectorAll('.mini-plot').forEach(c=>plotMini(c,c.dataset.kind));
- drawExplorer();drawTransform();drawComplex();
-});
-})();
+  updateSignalDefinition();
+  drawExplorer();
+  
+  const shift=document.getElementById('shift'),scale=document.getElementById('scale'),amp=document.getElementById('amp');
+  function baseRamp(t){return t>0&&t<1?t:0;}
+  function drawTransform(){
+   const c=document.getElementById('transformPlot'),{ctx,w,h}=setupCanvas(c),t0=+shift.value,a=+scale.value,A=+amp.value,r=axes(ctx,w,h,-3,4,-2.2,2.2);
+   path(ctx,baseRamp,r,C.cyan,2.2);
+   path(ctx,t=>Math.abs(a)<.001?0:A*baseRamp(a*(t-t0)),r,C.orange,3);
+   document.getElementById('shiftOut').textContent=t0.toFixed(1);document.getElementById('scaleOut').textContent=a.toFixed(1);document.getElementById('ampOut').textContent=A.toFixed(1);
+   document.getElementById('transformDescription').textContent=Math.abs(a)<.001?'a = 0: the transformed signal is zero.':a<0?'Negative a: time reversal and scaling.':a>1?'a > 1: time contraction.':a<1?'0 < a < 1: time expansion.':(t0>0?'Positive shift: delayed to the right.':t0<0?'Negative shift: advanced to the left.':'No time shift.');
+  }
+  [shift,scale,amp].forEach(x=>x.addEventListener('input',drawTransform));document.getElementById('resetTransform').addEventListener('click',()=>{shift.value=.8;scale.value=1;amp.value=1;drawTransform();});drawTransform();
+  
+  // Sampling demo is not present in this HTML version, so its old handlers
+  // are omitted to keep the remaining demos independent.
+  
+  // The previous static even/odd and energy demos were removed from the HTML.
+  // Their old handlers are intentionally not initialized here; the animated
+  // even/odd demo has its own isolated script below.
+  
+  const complexMagnitude = document.getElementById('complexMagnitude');
+const complexFrequency = document.getElementById('complexFrequency');
+const complexPhaseShift = document.getElementById('complexPhaseShift');
+const complexPlay = document.getElementById('complexPlay');
+const complexPhaseShiftOut = document.getElementById('complexPhaseShiftOut');
+const complexPhase = document.getElementById('complexPhase');
 
-const classificationType =
+let complexTime = 0;
+let complexPlaying = false;
+let complexRaf = null;
+let complexLastTime = null;
+
+
+// ------------------------------------------
+// Draw the complex plane and rotating phasor
+// ------------------------------------------
+
+function drawComplex() {
+
+  const c = document.getElementById('complexPlot');
+  if (!c || !complexMagnitude || !complexFrequency || !complexPhaseShift) return;
+  const {ctx,w,h} = setupCanvas(c);
+
+  const A = +complexMagnitude.value;
+const f = +complexFrequency.value;
+const phi = +complexPhaseShift.value;
+
+complexPhaseShiftOut.textContent = phi.toFixed(2);
+
+const theta = 2 * Math.PI * f * complexTime + phi;
+
+complexPhase.textContent = `${theta.toFixed(2)} rad`;
+
+const real = A * Math.cos(theta);
+const imag = A * Math.sin(theta);
+
+  // Magnitude and phase
+  const mag = Math.hypot(real,imag);
+
+  // Canvas coordinates
+  const cx = w / 2;
+  const cy = h / 2;
+
+  const scalePx = Math.min((w-110)/7,(h-90)/7);
+
+  const X = x => cx + x * scalePx;
+  const Y = y => cy - y * scalePx;
+
+  // ----------------------------------------
+  // Background
+  // ----------------------------------------
+
+  ctx.clearRect(0,0,w,h);
+
+  ctx.fillStyle = C.background;
+  ctx.fillRect(0,0,w,h);
+
+  // ----------------------------------------
+  // Grid
+  // ----------------------------------------
+
+  ctx.strokeStyle = C.grid;
+  ctx.lineWidth = 1;
+
+  for(let k=-3;k<=3;k++){
+
+    ctx.beginPath();
+    ctx.moveTo(X(k),15);
+    ctx.lineTo(X(k),h-35);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(35,Y(k));
+    ctx.lineTo(w-20,Y(k));
+    ctx.stroke();
+  }
+
+  // ----------------------------------------
+  // Real and imaginary axes
+  // ----------------------------------------
+
+  ctx.strokeStyle = C.axis;
+  ctx.lineWidth = 1.5;
+
+  ctx.beginPath();
+
+  ctx.moveTo(30,cy);
+  ctx.lineTo(w-20,cy);
+
+  ctx.moveTo(cx,15);
+  ctx.lineTo(cx,h-25);
+
+  ctx.stroke();
+
+  // Axis labels
+  ctx.fillStyle = C.text;
+  ctx.font = '13px system-ui';
+
+  ctx.textAlign = 'right';
+  ctx.fillText('Real',w-25,cy-10);
+
+  ctx.textAlign = 'left';
+  ctx.fillText('Imaginary',cx+10,22);
+
+  // ----------------------------------------
+  // Tick labels
+  // ----------------------------------------
+
+  ctx.fillStyle = C.muted;
+  ctx.font = '11px system-ui';
+
+  ctx.textAlign = 'center';
+
+  for(let k=-3;k<=3;k++){
+    ctx.fillText(k.toString(),X(k),cy+16);
+    ctx.fillText(k.toString(),cx-10,Y(k)+4);
+  }
+
+  // ----------------------------------------
+  // Draw the rotating circle
+  // ----------------------------------------
+
+  if(A>0){
+
+    ctx.beginPath();
+    ctx.arc(cx,cy,A*scalePx,0,2*Math.PI);
+
+    ctx.strokeStyle = 'rgba(243,180,95,0.35)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([5,5]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // ----------------------------------------
+  // Draw the rotating phasor
+  // ----------------------------------------
+
+  const px = X(real);
+  const py = Y(imag);
+
+  // Phasor vector
+  ctx.beginPath();
+  ctx.moveTo(cx,cy);
+  ctx.lineTo(px,py);
+
+  ctx.strokeStyle = C.orange;
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  // Arrowhead
+  const angle = Math.atan2(py-cy,px-cx);
+  const arrowSize = 10;
+
+  ctx.beginPath();
+
+  ctx.moveTo(px,py);
+
+  ctx.lineTo(
+    px-arrowSize*Math.cos(angle-Math.PI/6),
+    py-arrowSize*Math.sin(angle-Math.PI/6)
+  );
+
+  ctx.lineTo(
+    px-arrowSize*Math.cos(angle+Math.PI/6),
+    py-arrowSize*Math.sin(angle+Math.PI/6)
+  );
+
+  ctx.closePath();
+
+  ctx.fillStyle = C.orange;
+  ctx.fill();
+
+  // Rotating point
+  ctx.beginPath();
+  ctx.arc(px,py,5,0,2*Math.PI);
+  ctx.fillStyle = C.orange;
+  ctx.fill();
+
+  // ----------------------------------------
+  // Projection lines
+  // ----------------------------------------
+
+  ctx.setLineDash([4,4]);
+  ctx.lineWidth = 1.5;
+
+  // Real projection
+  ctx.strokeStyle = C.cyan;
+  ctx.beginPath();
+  ctx.moveTo(px,py);
+  ctx.lineTo(px,cy);
+  ctx.stroke();
+
+  // Imaginary projection
+  ctx.strokeStyle = C.green;
+  ctx.beginPath();
+  ctx.moveTo(px,py);
+  ctx.lineTo(cx,py);
+  ctx.stroke();
+
+  ctx.setLineDash([]);
+
+  // ----------------------------------------
+  // Labels for projections
+  // ----------------------------------------
+
+  ctx.font = '12px system-ui';
+
+  ctx.fillStyle = C.cyan;
+  ctx.textAlign = 'center';
+  ctx.fillText(`Re = ${real.toFixed(2)}`,px,cy+30);
+
+  ctx.fillStyle = C.green;
+  ctx.textAlign = 'left';
+  ctx.fillText(`Im = ${imag.toFixed(2)}`,cx+12,py-8);
+
+  // ----------------------------------------
+  // Angle arc
+  // ----------------------------------------
+
+  if(A>0){
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, Math.min(35, A * scalePx * 0.3), 0, -theta, theta > 0);
+
+    ctx.strokeStyle = C.orange;
+    ctx.lineWidth = 1.8;
+    ctx.stroke();
+  }
+
+  // ----------------------------------------
+  // Update numerical readouts
+  // ----------------------------------------
+
+  document.getElementById('realOut').textContent =
+    real.toFixed(3);
+
+  document.getElementById('imagOut').textContent =
+    imag.toFixed(3);
+
+  document.getElementById('complexMag').textContent =
+    mag.toFixed(3);
+
+  complexPhase.textContent = `${theta.toFixed(2)} rad`;
+
+  document.getElementById('complexPolar').textContent =
+    `z(t) = ${A.toFixed(2)} ∠ ${theta.toFixed(2)} rad`;
+
+  // Control readouts
+  document.getElementById('complexMagnitudeOut').textContent =
+    A.toFixed(1);
+
+  document.getElementById('complexFrequencyOut').textContent =
+    f.toFixed(1);
+
+  complexPhaseShiftOut.textContent =
+    (+complexPhaseShift.value).toFixed(2);
+}
+
+
+// ------------------------------------------
+// Animation
+// ------------------------------------------
+
+function animateComplex(timestamp) {
+
+if (!complexPlaying) {
+  complexRaf = null;
+  return;
+}
+
+if (complexLastTime === null) {
+  complexLastTime = timestamp;
+}
+
+const dt = (timestamp - complexLastTime) / 1000;
+complexLastTime = timestamp;
+
+complexTime += dt;
+
+drawComplex();
+
+complexRaf = requestAnimationFrame(animateComplex);
+}
+
+
+// ------------------------------------------
+// Pause / resume
+// ------------------------------------------
+
+function toggleComplexAnimation(){
+
+  complexPlaying=!complexPlaying;
+
+  if(complexPlaying){
+
+    complexLastTime=null;
+
+    complexPlay.textContent='Pause';
+
+    complexRaf=requestAnimationFrame(animateComplex);
+
+  }else{
+
+    if(complexRaf!==null){
+      cancelAnimationFrame(complexRaf);
+      complexRaf=null;
+    }
+
+    complexPlay.textContent='Resume animation';
+  }
+}
+
+
+// ------------------------------------------
+// Event listeners
+// ------------------------------------------
+
+[
+  complexMagnitude,
+  complexFrequency,
+  complexPhaseShift
+].forEach(control=>{
+
+  control.addEventListener('input',drawComplex);
+
+});
+
+complexPlay.addEventListener('click', () => {
+
+complexPlaying = !complexPlaying;
+
+if (complexPlaying) {
+  complexPlay.textContent = 'Pause';
+  complexLastTime = null;
+  complexRaf = requestAnimationFrame(animateComplex);
+
+} else {
+  complexPlay.textContent = 'Run';
+
+  if (complexRaf !== null) {
+    cancelAnimationFrame(complexRaf);
+    complexRaf = null;
+  }
+
+  complexLastTime = null;
+  drawComplex();
+}
+});
+
+// ------------------------------------------
+// Initialize
+// ------------------------------------------
+
+drawComplex();
+
+  
+  document.querySelectorAll('[data-quiz]').forEach(card=>{
+   card.querySelector('.check-quiz').addEventListener('click',()=>{
+    let score=0,total=0;
+    card.querySelectorAll('.quiz-question').forEach(q=>{
+     total++;const chosen=q.querySelector('input:checked'),fb=q.querySelector('.quiz-feedback'),correct=chosen&&chosen.value===q.dataset.answer;
+     if(correct)score++;
+     fb.textContent=chosen?(correct?'Correct. ': 'Not quite. ')+q.dataset.feedback:'Please select an answer.';
+     fb.className='quiz-feedback '+(correct?'correct':chosen?'incorrect':'');
+    });
+    card.querySelector('.quiz-score').textContent=`Score: ${score}/${total}`;
+   });
+   card.querySelector('.reset-quiz').addEventListener('click',()=>{
+    card.querySelectorAll('input').forEach(i=>i.checked=false);
+    card.querySelectorAll('.quiz-feedback').forEach(f=>{f.textContent='';f.className='quiz-feedback';});
+    card.querySelector('.quiz-score').textContent='';
+   });
+  });
+  window.addEventListener('resize',()=>{
+   document.querySelectorAll('.mini-plot').forEach(c=>plotMini(c,c.dataset.kind));
+   drawExplorer();drawTransform();drawComplex();
+  });
+  })();
+
+
+
+  const classificationType =
   document.getElementById('classificationType');
 
 const classificationData = {
@@ -855,6 +1283,16 @@ const classificationData = {
 };
 
 
+// Classification plots are outside the main plotting IIFE, so give them
+// their own reference to the same dark-theme palette.
+const classificationColors = {
+  background: '#0b1b2b',
+  grid: 'rgba(160,190,210,0.14)',
+  axis: 'rgba(210,225,240,0.75)',
+  muted: '#9fb5c7',
+  blue: '#55c8f2'
+};
+
 // Draw one example plot using the existing plotting helpers.
 function drawClassificationPlot(canvas, spec) {
   if (!canvas) return;
@@ -873,6 +1311,8 @@ function drawClassificationPlot(canvas, spec) {
 
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = classificationColors.background;
+  ctx.fillRect(0, 0, w, h);
 
   const left = 48, right = 15, top = 15, bottom = 32;
   const pw = w - left - right;
@@ -884,14 +1324,9 @@ function drawClassificationPlot(canvas, spec) {
   const Y = y => top + (spec.ymax - y) /
     (spec.ymax - spec.ymin) * ph;
 
-  const grid = getComputedStyle(document.documentElement)
-    .getPropertyValue('--ln').trim() || '#555';
-
-  const textColor = getComputedStyle(document.documentElement)
-    .getPropertyValue('--mut').trim() || '#999';
-
-  const axisColor = getComputedStyle(document.documentElement)
-    .getPropertyValue('--fg').trim() || '#222';
+  const grid = classificationColors.grid;
+  const textColor = classificationColors.muted;
+  const axisColor = classificationColors.axis;
 
   // Grid
   ctx.strokeStyle = grid;
@@ -935,15 +1370,22 @@ function drawClassificationPlot(canvas, spec) {
   ctx.fillStyle = textColor;
   ctx.font = '11px system-ui';
   ctx.textAlign = 'center';
-  ctx.fillText('Time', left + pw / 2, h - 5);
+  ctx.fillText('Time  t', left + pw / 2, h - 5);
 
   ctx.textAlign = 'right';
-  ctx.fillText(spec.xmin, left, h - 17);
-  ctx.fillText(spec.xmax, left + pw, h - 17);
+  for (let i = 0; i <= 4; i++) {
+    const value = spec.ymax - i * (spec.ymax - spec.ymin) / 4;
+    const y = top + i * ph / 4;
+    ctx.fillText(value.toFixed(1), left - 7, y + 4);
+  }
+
+  ctx.textAlign = 'center';
+  ctx.fillText(spec.xmin.toFixed(1), left, h - 17);
+  ctx.fillText(spec.xmax.toFixed(1), left + pw, h - 17);
 
   // Signal
-  ctx.strokeStyle = '#38bdf8';
-  ctx.fillStyle = '#38bdf8';
+  ctx.strokeStyle = classificationColors.blue;
+  ctx.fillStyle = classificationColors.blue;
   ctx.lineWidth = 2.5;
 
   if (spec.samples) {
@@ -1034,364 +1476,955 @@ drawClassification();
 
 window.addEventListener('resize',drawClassification);
 
-
-// even/odd demo
+// Animated even/odd decomposition demo
 (() => {
-  const root = document.getElementById('symDecompDemo');
-  if (!root) return;
 
-  const canvas = root.querySelector('#symDecompCanvas');
-  const ctx = canvas.getContext('2d');
-  const selector = root.querySelector('#symDecompType');
-  const replay = root.querySelector('#symDecompPlay');
-  const status = root.querySelector('#symDecompStatus');
+const root = document.getElementById('symDecompDemo');
+if (!root) return;
 
-  const signals = {
-    mix: {
-      name: 'Causal exponential',
-      fn: t => t >= 0 ? Math.exp(-t) : 0,
-      xmin: -4, xmax: 4, ymin: -0.7, ymax: 1.3
-    },
-    ramp: {
-      name: 'Causal ramp',
-      fn: t => t >= 0 ? t : 0,
-      xmin: -4, xmax: 4, ymin: -1, ymax: 5
-    },
-    sine: {
-      name: 'Offset sinusoid',
-      fn: t => Math.sin(t) + 0.35,
-      xmin: -Math.PI * 2, xmax: Math.PI * 2,
-      ymin: -1.5, ymax: 1.5
-    }
-  };
+const canvas = root.querySelector('#symDecompCanvas');
+if (!canvas) return;
 
-  const colors = {
-    original: '#55c8f2',
-    even: '#62d99a',
-    odd: '#f3b45f',
-    reconstructed: '#55c8f2',
-    grid: 'rgba(160,190,210,0.16)',
-    axis: 'rgba(210,225,240,0.75)',
-    text: '#eaf3fa',
-    muted: '#9fb5c7',
-    arrow: '#55c8f2'
-  };
+const ctx = canvas.getContext('2d');
+const selector = root.querySelector('#symDecompType');
+const replay = root.querySelector('#symDecompPlay');
+const status = root.querySelector('#symDecompStatus');
 
-  let progress = 0;
-  let playing = false;
-  let lastTime = 0;
-  let animationFrame = null;
+if (!selector || !replay || !status) return;
 
-  const duration = 8500;
+// Positioning for HTML/MathJax legends
+root.style.position = 'relative';
+canvas.style.display = 'block';
 
-  function resizeCanvas() {
-    const rect = canvas.getBoundingClientRect();
-    if (!rect.width) return;
+// Signals
+const signals = {
+  mix: {
+    name: 'Causal exponential',
+    fn: t => t === 0 ? 0.5 : (t > 0 ? Math.exp(-t) : 0),
+    xmin: -4, xmax: 4, ymin: -0.7, ymax: 1.3
+  },
 
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = Math.round(rect.width * dpr);
-    canvas.height = Math.round(480 * dpr);
-    canvas.style.height = '480px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ramp: {
+    name: 'Causal ramp',
+    fn: t => t >= 0 ? t : 0,
+    xmin: -4, xmax: 4, ymin: -1, ymax: 5
+  },
 
-    draw();
+  sine: {
+    name: 'Offset sinusoid',
+    fn: t => Math.sin(t) + 0.35,
+    xmin: -Math.PI * 2, xmax: Math.PI * 2,
+    ymin: -1.5, ymax: 1.5
+  }
+};
+
+// Consistent plotting colors
+const colors = {
+  background: '#0b1b2b',
+  panel: 'rgba(15,35,55,0.85)',
+  panelBorder: 'rgba(100,160,195,0.4)',
+
+  original: '#55c8f2',
+  even: '#62d99a',
+  odd: '#f3b45f',
+  reconstructed: '#55c8f2',
+
+  grid: 'rgba(160,190,210,0.14)',
+  axis: 'rgba(210,225,240,0.75)',
+  text: '#eaf3fa',
+  muted: '#9fb5c7',
+  arrow: '#55c8f2'
+};
+
+let progress = 0;
+let playing = false;
+let lastTime = 0;
+let animationFrame = null;
+
+const duration = 8500;
+const canvasHeight = 350;
+
+// --------------------------------------------------
+// Canvas setup
+// --------------------------------------------------
+
+function resizeCanvas() {
+
+  const rect = canvas.getBoundingClientRect();
+  if (!rect.width) return;
+
+  const dpr = window.devicePixelRatio || 1;
+
+  canvas.width = Math.round(rect.width * dpr);
+  canvas.height = Math.round(canvasHeight * dpr);
+  canvas.style.height = canvasHeight + 'px';
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  draw();
+}
+
+// --------------------------------------------------
+// Panel backgrounds
+// --------------------------------------------------
+
+function roundedRect(x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.roundRect(x, y, w, h, r);
+}
+
+function panel(x, y, w, h) {
+
+  ctx.fillStyle = colors.panel;
+  ctx.strokeStyle = colors.panelBorder;
+  ctx.lineWidth = 1;
+
+  roundedRect(x, y, w, h, 10);
+  ctx.fill();
+  ctx.stroke();
+}
+
+// --------------------------------------------------
+// LaTeX headings
+// --------------------------------------------------
+
+function addLatexLegend(id, x, y, w, title, latex, color) {
+
+  let legend = root.querySelector(`[data-legend="${id}"]`);
+
+  if (!legend) {
+
+    legend = document.createElement('div');
+    legend.dataset.legend = id;
+
+    legend.style.position = 'absolute';
+    legend.style.display = 'flex';
+    legend.style.alignItems = 'center';
+    legend.style.justifyContent = 'center';
+    legend.style.gap = '7px';
+    legend.style.whiteSpace = 'nowrap';
+    legend.style.pointerEvents = 'none';
+    legend.style.zIndex = '2';
+    legend.style.fontSize = '12px';
+
+    legend.innerHTML = `
+      <span style="color:${color};font-weight:bold;">
+        ${title}
+      </span>
+      <span style="color:${color};">
+        \\(${latex}\\)
+      </span>
+    `;
+
+    root.appendChild(legend);
   }
 
-  function panel(x, y, w, h, title, equation, color) {
-    ctx.fillStyle = 'rgba(15,35,55,0.75)';
-    ctx.strokeStyle = 'rgba(100,160,195,0.4)';
-    ctx.lineWidth = 1;
-    roundedRect(x, y, w, h, 10);
-    ctx.fill();
+  // Position relative to the canvas inside its parent
+  legend.style.left = `${canvas.offsetLeft + x}px`;
+  legend.style.top = `${canvas.offsetTop + y + 7}px`;
+  legend.style.width = `${w}px`;
+
+  // Typeset only once
+  if (
+    window.MathJax &&
+    MathJax.typesetPromise &&
+    !legend.dataset.typeset
+  ) {
+    legend.dataset.typeset = 'true';
+    MathJax.typesetPromise([legend]).catch(() => {
+      legend.dataset.typeset = '';
+    });
+  }
+}
+
+// --------------------------------------------------
+// Arrows
+// --------------------------------------------------
+
+function arrow(x1, y1, x2, y2, alpha = 1) {
+
+  ctx.save();
+
+  ctx.globalAlpha = alpha;
+  ctx.strokeStyle = colors.arrow;
+  ctx.fillStyle = colors.arrow;
+  ctx.lineWidth = 2.2;
+
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+
+  const angle = Math.atan2(y2 - y1, x2 - x1);
+  const size = 8;
+
+  ctx.beginPath();
+
+  ctx.moveTo(x2, y2);
+
+  ctx.lineTo(
+    x2 - size * Math.cos(angle - Math.PI / 6),
+    y2 - size * Math.sin(angle - Math.PI / 6)
+  );
+
+  ctx.lineTo(
+    x2 - size * Math.cos(angle + Math.PI / 6),
+    y2 - size * Math.sin(angle + Math.PI / 6)
+  );
+
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.restore();
+}
+
+// --------------------------------------------------
+// Plotting function
+// --------------------------------------------------
+
+function plot(x, y, w, h, fn, signal, color, reveal = 1) {
+
+  const { xmin, xmax, ymin, ymax } = signal;
+
+  const left = x + 30;
+  const right = x + w - 10;
+  const top = y + 38;
+  const bottom = y + h - 35;
+
+  const X = t =>
+    left + (t - xmin) / (xmax - xmin) * (right - left);
+
+  const Y = v =>
+    bottom - (v - ymin) / (ymax - ymin) * (bottom - top);
+
+  ctx.save();
+
+  // Grid
+  ctx.strokeStyle = colors.grid;
+  ctx.lineWidth = 1;
+
+  for (let i = 0; i <= 4; i++) {
+
+    const xx = left + i * (right - left) / 4;
+
+    ctx.beginPath();
+    ctx.moveTo(xx, top);
+    ctx.lineTo(xx, bottom);
     ctx.stroke();
-
-    ctx.fillStyle = color;
-    ctx.font = 'bold 14px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText(title, x + w / 2, y + 23);
-
-    ctx.fillStyle = colors.text;
-    ctx.font = '13px Arial';
-    ctx.fillText(equation, x + w / 2, y + h - 12);
   }
 
-  function roundedRect(x, y, w, h, r) {
-    ctx.beginPath();
-    ctx.roundRect(x, y, w, h, r);
-  }
+  for (let i = 0; i <= 4; i++) {
 
-  function arrow(x1, y1, x2, y2, alpha = 1) {
-    ctx.save();
-    ctx.globalAlpha = alpha;
-    ctx.strokeStyle = colors.arrow;
-    ctx.fillStyle = colors.arrow;
-    ctx.lineWidth = 2.2;
+    const yy = top + i * (bottom - top) / 4;
 
     ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
+    ctx.moveTo(left, yy);
+    ctx.lineTo(right, yy);
     ctx.stroke();
+  }
 
-    const angle = Math.atan2(y2 - y1, x2 - x1);
-    const size = 8;
+  // Axes
+  ctx.strokeStyle = colors.axis;
+  ctx.lineWidth = 1.2;
+
+  if (ymin <= 0 && ymax >= 0) {
 
     ctx.beginPath();
-    ctx.moveTo(x2, y2);
-    ctx.lineTo(
-      x2 - size * Math.cos(angle - Math.PI / 6),
-      y2 - size * Math.sin(angle - Math.PI / 6)
+    ctx.moveTo(left, Y(0));
+    ctx.lineTo(right, Y(0));
+    ctx.stroke();
+  }
+
+  if (xmin <= 0 && xmax >= 0) {
+
+    ctx.beginPath();
+    ctx.moveTo(X(0), top);
+    ctx.lineTo(X(0), bottom);
+    ctx.stroke();
+  }
+
+  // Y-axis tick labels
+  ctx.fillStyle = colors.muted;
+  ctx.font = '10px Arial';
+  ctx.textAlign = 'right';
+
+  for (let i = 0; i <= 4; i++) {
+
+    const v = ymax - i * (ymax - ymin) / 4;
+    const yy = top + i * (bottom - top) / 4;
+
+    ctx.fillText(v.toFixed(1), left - 5, yy + 3);
+  }
+
+  // X-axis tick labels
+  ctx.textAlign = 'center';
+
+  for (let i = 0; i <= 4; i++) {
+
+    const t = xmin + i * (xmax - xmin) / 4;
+
+    ctx.fillText(
+      t.toFixed(1),
+      X(t),
+      bottom + 13
     );
-    ctx.lineTo(
-      x2 - size * Math.cos(angle + Math.PI / 6),
-      y2 - size * Math.sin(angle + Math.PI / 6)
+  }
+
+  // Axis labels
+  ctx.fillStyle = colors.text;
+  ctx.font = '10px Arial';
+
+  ctx.textAlign = 'right';
+  ctx.fillText('t', right, bottom + 27);
+
+  // Signal curve
+  const N = 500;
+  const end = Math.max(1, Math.floor(N * reveal));
+
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2.5;
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+
+  ctx.beginPath();
+
+  for (let i = 0; i <= end; i++) {
+
+    const t = xmin + (xmax - xmin) * i / N;
+    const v = fn(t);
+
+    const xx = X(t);
+    const yy = Y(v);
+
+    if (i === 0) ctx.moveTo(xx, yy);
+    else ctx.lineTo(xx, yy);
+  }
+
+  ctx.stroke();
+  ctx.restore();
+}
+
+// --------------------------------------------------
+// Main drawing function
+// --------------------------------------------------
+
+function draw() {
+
+  const rect = canvas.getBoundingClientRect();
+  const W = rect.width;
+  const H = canvasHeight;
+
+  if (!W) return;
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Background
+  ctx.fillStyle = colors.background;
+  ctx.fillRect(0, 0, W, H);
+
+  const signal = signals[selector.value];
+  if (!signal) return;
+
+  const x = signal.fn;
+
+  const xe = t => (x(t) + x(-t)) / 2;
+  const xo = t => (x(t) - x(-t)) / 2;
+  const xr = t => xe(t) + xo(t);
+
+  // Layout
+  const margin = 10;
+  const gap = 12;
+
+  const leftW = W * 0.23;
+  const middleW = W * 0.25;
+  const rightW = W * 0.23;
+
+  const arrowW =
+    W - 2 * margin - leftW - middleW - rightW - 3 * gap;
+
+  const x1 = margin;
+  const x2 = x1 + leftW + gap + arrowW * 0.25;
+  const x3 = x2 + middleW + gap + arrowW * 0.5;
+
+  const top = 25;
+  const boxH = 310;
+  const componentGap = 14;
+  const componentH = (boxH - componentGap) / 2;
+
+  // ================================================
+  // Stage 1: Original signal
+  // ================================================
+
+  panel(x1, top, leftW, boxH);
+
+  addLatexLegend(
+    'original',
+    x1, top, leftW,
+    'Original signal',
+    'x(t)',
+    colors.original
+  );
+
+  if (progress > 0) {
+
+    const reveal = Math.min(1, progress / 0.18);
+
+    plot(
+      x1, top, leftW, boxH,
+      x, signal, colors.original, reveal
     );
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
   }
 
-  function plot(x, y, w, h, fn, signal, color, reveal = 1) {
-    const { xmin, xmax, ymin, ymax } = signal;
+  // ================================================
+  // Stage 2: Arrows to components
+  // ================================================
 
-    const left = x + 27;
-    const right = x + w - 10;
-    const top = y + 38;
-    const bottom = y + h - 35;
+  const branchX = x2 - 13;
+  const centerY = top + boxH / 2;
 
-    const X = t => left + (t - xmin) / (xmax - xmin) * (right - left);
-    const Y = v => bottom - (v - ymin) / (ymax - ymin) * (bottom - top);
+  if (progress > 0.2) {
 
-    ctx.save();
+    const a = Math.min(1, (progress - 0.2) / 0.12);
 
-    // Grid
-    ctx.strokeStyle = colors.grid;
-    ctx.lineWidth = 1;
+    arrow(
+      x1 + leftW + 2,
+      centerY,
+      branchX,
+      top + componentH / 2,
+      a
+    );
 
-    for (let i = 0; i <= 4; i++) {
-      const xx = left + i * (right - left) / 4;
-      ctx.beginPath();
-      ctx.moveTo(xx, top);
-      ctx.lineTo(xx, bottom);
-      ctx.stroke();
-    }
-
-    for (let i = 0; i <= 4; i++) {
-      const yy = top + i * (bottom - top) / 4;
-      ctx.beginPath();
-      ctx.moveTo(left, yy);
-      ctx.lineTo(right, yy);
-      ctx.stroke();
-    }
-
-    // Axes
-    ctx.strokeStyle = colors.axis;
-    ctx.lineWidth = 1.2;
-
-    if (ymin <= 0 && ymax >= 0) {
-      ctx.beginPath();
-      ctx.moveTo(left, Y(0));
-      ctx.lineTo(right, Y(0));
-      ctx.stroke();
-    }
-
-    if (xmin <= 0 && xmax >= 0) {
-      ctx.beginPath();
-      ctx.moveTo(X(0), top);
-      ctx.lineTo(X(0), bottom);
-      ctx.stroke();
-    }
-
-    // Time labels
-    ctx.fillStyle = colors.muted;
-    ctx.font = '10px Arial';
-    ctx.textAlign = 'center';
-
-    for (let i = 0; i <= 4; i++) {
-      const t = xmin + i * (xmax - xmin) / 4;
-      ctx.fillText(t.toFixed(1), X(t), bottom + 13);
-    }
-
-    ctx.textAlign = 'right';
-    ctx.fillText('t', right, bottom + 27);
-
-    // Signal curve
-    const N = 500;
-    const end = Math.max(1, Math.floor(N * reveal));
-
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 2.4;
-    ctx.lineJoin = 'round';
-    ctx.lineCap = 'round';
-    ctx.beginPath();
-
-    for (let i = 0; i <= end; i++) {
-      const t = xmin + (xmax - xmin) * i / N;
-      const v = fn(t);
-      const xx = X(t);
-      const yy = Y(v);
-
-      if (i === 0) ctx.moveTo(xx, yy);
-      else ctx.lineTo(xx, yy);
-    }
-
-    ctx.stroke();
-    ctx.restore();
+    arrow(
+      x1 + leftW + 2,
+      centerY,
+      branchX,
+      top + componentH + componentGap + componentH / 2,
+      a
+    );
   }
 
-  function draw() {
-    const rect = canvas.getBoundingClientRect();
-    const W = rect.width;
-    const H = 480;
+  // ================================================
+  // Stage 3: Even and odd components
+  // ================================================
 
-    if (!W) return;
+  const componentX = x2;
+  const componentW = middleW;
 
-    ctx.clearRect(0, 0, W, H);
+  // Even component
+  panel(componentX, top, componentW, componentH);
 
-    const signal = signals[selector.value];
-    const x = signal.fn;
-    const xe = t => (x(t) + x(-t)) / 2;
-    const xo = t => (x(t) - x(-t)) / 2;
-    const xr = t => xe(t) + xo(t);
+  addLatexLegend(
+    'even',
+    componentX, top, componentW,
+    'Even component',
+    'x_e(t)',
+    colors.even
+  );
 
-    // Layout proportions
-    const margin = 10;
-    const gap = 12;
-    const leftW = W * 0.23;
-    const middleW = W * 0.25;
-    const rightW = W * 0.23;
-    const arrowW = (W - 2 * margin - leftW - middleW - rightW - 3 * gap);
+  // Odd component
+  const oddY = top + componentH + componentGap;
 
-    const x1 = margin;
-    const x2 = x1 + leftW + gap + arrowW * 0.25;
-    const x3 = x2 + middleW + gap + arrowW * 0.5;
+  panel(componentX, oddY, componentW, componentH);
 
-    const top = 40;
-    const boxH = 390;
-    const componentGap = 14;
-    const componentH = (boxH - componentGap) / 2;
+  addLatexLegend(
+    'odd',
+    componentX, oddY, componentW,
+    'Odd component',
+    'x_o(t)',
+    colors.odd
+  );
 
-    // Stage 1: original signal
-    panel(x1, top, leftW, boxH,
-      'Original signal', 'x(t)', colors.original);
+  if (progress > 0.32) {
 
-    if (progress > 0) {
-      const reveal = Math.min(1, progress / 0.18);
-      plot(x1, top, leftW, boxH, x, signal,
-        colors.original, reveal);
-    }
+    const reveal = Math.min(1, (progress - 0.32) / 0.28);
 
-    // Stage 2: arrows from original to components
-    const branchX = x2 - 13;
-    const centerY = top + boxH / 2;
+    plot(
+      componentX, top, componentW, componentH,
+      xe, signal, colors.even, reveal
+    );
 
-    if (progress > 0.2) {
-      const a = Math.min(1, (progress - 0.2) / 0.12);
-      arrow(x1 + leftW + 2, centerY, branchX, top + componentH / 2, a);
-      arrow(x1 + leftW + 2, centerY, branchX,
-        top + componentH + componentGap + componentH / 2, a);
-    }
-
-    // Stage 3: even and odd components
-    const componentX = x2;
-    const componentW = middleW;
-
-    panel(componentX, top, componentW, componentH,
-      'Even component', 'xe(t)', colors.even);
-
-    panel(componentX, top + componentH + componentGap,
-      componentW, componentH,
-      'Odd component', 'xo(t)', colors.odd);
-
-    if (progress > 0.32) {
-      const reveal = Math.min(1, (progress - 0.32) / 0.28);
-
-      plot(componentX, top, componentW, componentH,
-        xe, signal, colors.even, reveal);
-
-      plot(componentX, top + componentH + componentGap,
-        componentW, componentH, xo, signal, colors.odd, reveal);
-    }
-
-    // Stage 4: add the components
-    if (progress > 0.62) {
-      const a = Math.min(1, (progress - 0.62) / 0.12);
-      const startX = componentX + componentW + 2;
-      const endX = x3 - 5;
-
-      arrow(startX, top + componentH / 2,
-        endX, centerY, a);
-
-      arrow(startX,
-        top + componentH + componentGap + componentH / 2,
-        endX, centerY, a);
-    }
-
-    // Reconstructed signal
-    panel(x3, top, rightW, boxH,
-      'Reconstructed signal', 'xe(t) + xo(t)', colors.reconstructed);
-
-    if (progress > 0.75) {
-      const reveal = Math.min(1, (progress - 0.75) / 0.25);
-      plot(x3, top, rightW, boxH, xr, signal,
-        colors.reconstructed, reveal);
-    }
-
-    // Stage captions
-    ctx.fillStyle = colors.muted;
-    ctx.font = '12px Arial';
-    ctx.textAlign = 'center';
-
-    let caption = 'Select a signal to begin.';
-    if (progress > 0.02) caption = '1. The original signal';
-    if (progress > 0.2) caption = '2. Separate into even and odd parts';
-    if (progress > 0.62) caption = '3. Add the two components';
-    if (progress >= 1) caption = '4. The original signal is reconstructed';
-
-    ctx.fillText(caption, W / 2, 20);
+    plot(
+      componentX, oddY, componentW, componentH,
+      xo, signal, colors.odd, reveal
+    );
   }
 
-  function animate(timestamp) {
-    if (!playing) return;
+  // ================================================
+  // Stage 4: Add the components
+  // ================================================
 
-    if (!lastTime) lastTime = timestamp;
-    const elapsed = timestamp - lastTime;
-    lastTime = timestamp;
+  if (progress > 0.62) {
 
-    progress = Math.min(1, progress + elapsed / duration);
-    draw();
+    const a = Math.min(1, (progress - 0.62) / 0.12);
 
-    if (progress >= 1) {
-      playing = false;
-      status.textContent =
-        'Decomposition complete: the even and odd components add up to the original signal.';
-      return;
-    }
+    const startX = componentX + componentW + 2;
+    const endX = x3 - 5;
 
-    animationFrame = requestAnimationFrame(animate);
+    arrow(
+      startX,
+      top + componentH / 2,
+      endX,
+      centerY,
+      a
+    );
+
+    arrow(
+      startX,
+      oddY + componentH / 2,
+      endX,
+      centerY,
+      a
+    );
   }
 
-  function startAnimation() {
-    if (animationFrame) cancelAnimationFrame(animationFrame);
+  // ================================================
+  // Reconstructed signal
+  // ================================================
 
-    progress = 0;
-    lastTime = 0;
-    playing = true;
+  panel(x3, top, rightW, boxH);
 
-    status.textContent = 'Decomposing the selected signal...';
-    draw();
+  addLatexLegend(
+    'reconstructed',
+    x3, top, rightW,
+    'Reconstructed',
+    'x_e(t)+x_o(t)',
+    colors.reconstructed
+  );
 
-    animationFrame = requestAnimationFrame(animate);
+  if (progress > 0.75) {
+
+    const reveal = Math.min(1, (progress - 0.75) / 0.25);
+
+    plot(
+      x3, top, rightW, boxH,
+      xr, signal, colors.reconstructed, reveal
+    );
   }
 
-  selector.addEventListener('change', startAnimation);
-  replay.addEventListener('click', startAnimation);
+  // ================================================
+  // Stage caption
+  // ================================================
 
-  window.addEventListener('resize', resizeCanvas);
+  ctx.fillStyle = colors.muted;
+  ctx.font = '12px Arial';
+  ctx.textAlign = 'center';
 
-  resizeCanvas();
-  startAnimation();
+  let caption = 'Select a signal to begin.';
+
+  if (progress > 0.02)
+    caption = '1. The original signal';
+
+  if (progress > 0.2)
+    caption = '2. Separate into even and odd parts';
+
+  if (progress > 0.62)
+    caption = '3. Add the two components';
+
+  if (progress >= 1)
+    caption = '4. The original signal is reconstructed';
+
+  ctx.fillText(caption, W / 2, 17);
+}
+
+// --------------------------------------------------
+// Animation
+// --------------------------------------------------
+
+function animate(timestamp) {
+
+  if (!playing) return;
+
+  if (!lastTime) lastTime = timestamp;
+
+  const elapsed = timestamp - lastTime;
+  lastTime = timestamp;
+
+  progress = Math.min(1, progress + elapsed / duration);
+
+  draw();
+
+  if (progress >= 1) {
+
+    playing = false;
+
+    status.textContent =
+      'Decomposition complete: the even and odd components add up to the original signal.';
+
+    return;
+  }
+
+  animationFrame = requestAnimationFrame(animate);
+}
+
+// --------------------------------------------------
+// Start / replay
+// --------------------------------------------------
+
+function startAnimation() {
+
+  if (animationFrame) {
+    cancelAnimationFrame(animationFrame);
+  }
+
+  progress = 0;
+  lastTime = 0;
+  playing = true;
+
+  status.textContent = 'Decomposing the selected signal...';
+
+  draw();
+
+  animationFrame = requestAnimationFrame(animate);
+}
+
+// Event listeners
+selector.addEventListener('change', startAnimation);
+replay.addEventListener('click', startAnimation);
+
+window.addEventListener('resize', resizeCanvas);
+
+// Initialize
+resizeCanvas();
+startAnimation();
+
 })();
 
+// Energy and power demo
+/* =====================================================
+   ENERGY / POWER DEMO
+===================================================== */
+(function () {
+
+const energyType = document.getElementById('energyType');
+const energyT = document.getElementById('energyT');
+const energyTOut = document.getElementById('energyTOut');
+const energyReadout = document.getElementById('energyReadout');
+const energyCanvas = document.getElementById('energyPlot');
+
+if (!energyCanvas || !energyType || !energyT ||
+    !energyTOut || !energyReadout) return;
+
+const ctx = energyCanvas.getContext('2d');
+
+// Reuse the shared dark-theme plotting colors
+const energyColors = C;
+
+
+// Canvas setup
+function setupCanvas() {
+  const w = energyCanvas.clientWidth || 720;
+  const h = energyCanvas.clientHeight || 300;
+  const dpr = window.devicePixelRatio || 1;
+
+  energyCanvas.width = Math.round(w * dpr);
+  energyCanvas.height = Math.round(h * dpr);
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  return { w, h };
+}
+
+// Plot axes, grid, and labels
+function axes(w, h, xmin, xmax, ymin, ymax) {
+
+  const L = 55;
+  const R = 18;
+  const T = 48;
+  const B = 43;
+
+  const pw = w - L - R;
+  const ph = h - T - B;
+
+  const X = x => L + (x - xmin) / (xmax - xmin) * pw;
+  const Y = y => T + (ymax - y) / (ymax - ymin) * ph;
+
+  ctx.clearRect(0, 0, w, h);
+
+  // Plot background
+  ctx.fillStyle = energyColors.background;
+  ctx.fillRect(0, 0, w, h);
+
+  // Grid
+  ctx.strokeStyle = energyColors.grid;
+  ctx.lineWidth = 1;
+
+  for (let i = 0; i <= 8; i++) {
+    const x = L + pw * i / 8;
+    ctx.beginPath();
+    ctx.moveTo(x, T);
+    ctx.lineTo(x, T + ph);
+    ctx.stroke();
+  }
+
+  for (let i = 0; i <= 4; i++) {
+    const y = T + ph * i / 4;
+    ctx.beginPath();
+    ctx.moveTo(L, y);
+    ctx.lineTo(L + pw, y);
+    ctx.stroke();
+  }
+
+  // Axes
+  ctx.strokeStyle = energyColors.axis;
+  ctx.lineWidth = 1.3;
+
+  if (ymin <= 0 && ymax >= 0) {
+    ctx.beginPath();
+    ctx.moveTo(L, Y(0));
+    ctx.lineTo(L + pw, Y(0));
+    ctx.stroke();
+  }
+
+  if (xmin <= 0 && xmax >= 0) {
+    ctx.beginPath();
+    ctx.moveTo(X(0), T);
+    ctx.lineTo(X(0), T + ph);
+    ctx.stroke();
+  }
+
+  // Tick labels
+  ctx.fillStyle = energyColors.muted;
+  ctx.font = '11px Arial';
+
+  ctx.textAlign = 'right';
+
+  for (let i = 0; i <= 4; i++) {
+    const value = ymax - i * (ymax - ymin) / 4;
+    const y = T + ph * i / 4;
+
+    ctx.fillText(value.toFixed(1), L - 9, y + 4);
+  }
+
+  ctx.textAlign = 'center';
+
+  for (let i = 0; i <= 8; i++) {
+    const value = xmin + i * (xmax - xmin) / 8;
+    const x = L + pw * i / 8;
+
+    ctx.fillText(value.toFixed(1), x, T + ph + 18);
+  }
+
+  // Axis labels
+  ctx.fillStyle = energyColors.text;
+  ctx.font = '12px Arial';
+
+  ctx.textAlign = 'center';
+  ctx.fillText('Time  t', L + pw / 2, h - 8);
+
+  ctx.save();
+  ctx.translate(15, T + ph / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText('Amplitude / Energy density', 0, 0);
+  ctx.restore();
+
+  return { X, Y, L, R, T, B, pw, ph };
+}
+
+// Plot legend
+function drawLegend(w) {
+
+  const items = [
+    { color: energyColors.blue, text: 'Signal  x(t)', type: 'line' },
+    { color: energyColors.green, text: 'Energy density  |x(t)|²', type: 'area' },
+    { color: energyColors.orange, text: 'Observation window', type: 'line' }
+  ];
+
+  ctx.font = '11px Arial';
+  ctx.textAlign = 'left';
+
+  const gap = 18;
+  const widths = items.map(item =>
+    ctx.measureText(item.text).width + 27
+  );
+
+  const totalWidth = widths.reduce((a, b) => a + b, 0)
+    + gap * (items.length - 1);
+
+  let x = Math.max(8, (w - totalWidth) / 2);
+  const y = 21;
+
+  items.forEach((item, i) => {
+
+    ctx.strokeStyle = item.color;
+    ctx.fillStyle = item.color;
+    ctx.lineWidth = 2.5;
+
+    if (item.type === 'area') {
+      ctx.globalAlpha = 0.55;
+      ctx.fillRect(x, y - 5, 13, 10);
+      ctx.globalAlpha = 1;
+    } else {
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + 14, y);
+      ctx.stroke();
+    }
+
+    ctx.fillStyle = energyColors.text;
+    ctx.fillText(item.text, x + 20, y + 4);
+
+    x += widths[i] + gap;
+  });
+}
+
+// Signal definitions
+function signalValue(t) {
+
+  switch (energyType.value) {
+
+    case 'pulse':
+      return Math.abs(t) <= 1 ? 1 : 0;
+
+    case 'decay':
+      return Math.exp(-Math.abs(t));
+
+    case 'sine':
+      return Math.cos(Math.PI * t);
+
+    default:
+      return 0;
+  }
+}
+
+function energyDensity(t) {
+  const x = signalValue(t);
+  return x * x;
+}
+
+// Numerical integration using the trapezoidal rule
+function integrateEnergy(T) {
+
+  const N = 4000;
+  const dt = T / N;
+
+  let energy = 0;
+
+  for (let i = 0; i <= N; i++) {
+
+    const t = -T / 2 + i * dt;
+    const weight = (i === 0 || i === N) ? 0.5 : 1;
+
+    energy += weight * energyDensity(t) * dt;
+  }
+
+  return energy;
+}
+
+// Main drawing function
+function drawEnergyDemo() {
+
+  const T = Number(energyT.value);
+
+  energyTOut.textContent = energyT.value;
+
+  const { w, h } = setupCanvas();
+
+  const xmin = -10;
+  const xmax = 10;
+  const ymin = -1.3;
+  const ymax = 1.3;
+
+  const r = axes(w, h, xmin, xmax, ymin, ymax);
+
+  drawLegend(w);
+
+  const leftBound = -T / 2;
+  const rightBound = T / 2;
+
+  const xLeft = r.X(leftBound);
+  const xRight = r.X(rightBound);
+
+  // Observation window shading
+  ctx.fillStyle = 'rgba(85,200,242,0.12)';
+  ctx.fillRect(
+    xLeft, r.T,
+    xRight - xLeft, r.ph
+  );
+
+  // Energy density area
+  ctx.beginPath();
+  ctx.moveTo(xLeft, r.Y(0));
+
+  const N = 1200;
+
+  for (let i = 0; i <= N; i++) {
+
+    const t = leftBound + T * i / N;
+    const px = r.X(t);
+    const py = r.Y(energyDensity(t));
+
+    ctx.lineTo(px, py);
+  }
+
+  ctx.lineTo(xRight, r.Y(0));
+  ctx.closePath();
+
+  ctx.fillStyle = 'rgba(98,217,154,0.32)';
+  ctx.fill();
+
+  // Observation window boundaries
+  ctx.strokeStyle = energyColors.orange;
+  ctx.lineWidth = 2;
+  ctx.setLineDash([5, 4]);
+
+  [xLeft, xRight].forEach(x => {
+    ctx.beginPath();
+    ctx.moveTo(x, r.T);
+    ctx.lineTo(x, r.T + r.ph);
+    ctx.stroke();
+  });
+
+  ctx.setLineDash([]);
+
+  // Signal waveform
+  ctx.beginPath();
+
+  for (let i = 0; i <= 1200; i++) {
+
+    const t = xmin + (xmax - xmin) * i / 1200;
+    const px = r.X(t);
+    const py = r.Y(signalValue(t));
+
+    if (i === 0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
+  }
+
+  ctx.strokeStyle = energyColors.blue;
+  ctx.lineWidth = 2.8;
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.stroke();
+
+  // Numerical results
+  const E = integrateEnergy(T);
+  const P = E / T;
+
+  const typeText = energyType.value === 'sine'
+    ? 'Power signal (energy grows without bound)'
+    : 'Energy signal';
+
+  energyReadout.innerHTML = `
+    <strong>Window energy:</strong>
+    ${E.toFixed(3)}
+    &nbsp;&nbsp;|&nbsp;&nbsp;
+    <strong>Average power:</strong>
+    ${P.toFixed(3)}
+    &nbsp;&nbsp;|&nbsp;&nbsp;
+    ${typeText}
+  `;
+}
+
+// Event listeners
+energyType.addEventListener('change', drawEnergyDemo);
+energyT.addEventListener('input', drawEnergyDemo);
+window.addEventListener('resize', drawEnergyDemo);
+
+// Initial plot
+drawEnergyDemo();
+
+})();
 </script>
+
+
 </body>
 </html>
