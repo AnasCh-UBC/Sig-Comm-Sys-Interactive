@@ -29,6 +29,15 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 .demo-canvas{display:block;width:100%;height:280px;min-height:190px;border:1px solid var(--ln);border-radius:9px;background:var(--bg)}
 .demo-note{color:var(--mut);font-size:.88rem;margin:10px 0 0}
 .readout{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.readout-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+.readout small {
+  font-size: 0.72rem;
+}
 .readout span{border:1px solid var(--ln);background:var(--card);border-radius:7px;padding:6px 10px;font-size:.88rem}
 .eq-box{border:1px solid var(--ln);border-left:3px solid var(--acc);border-radius:8px;background:var(--card);padding:10px 10px;margin:10px 0;overflow-x:auto}
 .eq-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
@@ -420,24 +429,24 @@ x(t)=Ae^{j(2\pi f_0t+\theta)}
 <canvas id="complexPlot" class="demo-canvas" width="900" height="340" aria-label="Complex plane vector plot"></canvas>
 
 <div class="readout-grid">
-  <div class="readout">
+  <div class="readout small">
     <strong>Real part</strong>
     <div id="realOut">1.000</div>
     <small>\(A\cos(2\pi ft+\phi)\)</small>
   </div>
 
-  <div class="readout">
+  <div class="readout small">
     <strong>Imaginary part</strong>
     <div id="imagOut">0.000</div>
     <small>\(A\sin(2\pi ft+\phi)\)</small>
   </div>
 
-  <div class="readout">
+  <div class="readout small">
     <strong>Magnitude</strong>
     <div id="complexMag">1.000</div>
   </div>
 
-  <div class="readout">
+  <div class="readout small">
     <strong>Instantaneous phase</strong>
     <div id="complexPhase">0.0°</div>
   </div>
@@ -580,7 +589,8 @@ x(t)=Ae^{j(2\pi f_0t+\theta)}
   function plotMini(canvas,kind){
    const {ctx,w,h}=setupCanvas(canvas),r=axes(ctx,w,h,-4,4,-1.3,1.5);
    if(kind==='impulse'){
-     const x=r.X(0),y=r.Y(0);ctx.strokeStyle=C.orange;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,r.Y(1.25));ctx.stroke();ctx.fillStyle=C.orange;ctx.beginPath();ctx.arc(x,r.Y(1.25),4,0,Math.PI*2);ctx.fill();ctx.fillStyle=C.text;ctx.fillText('area = 1',x+8,r.Y(1.15));
+     const x=r.X(0),y=r.Y(0);ctx.strokeStyle=C.orange;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,r.Y(1.25));ctx.stroke();ctx.fillStyle=C.orange;ctx.beginPath();
+     ctx.arc(x,r.Y(1.25),4,0,Math.PI*2);ctx.fill();ctx.fillStyle=C.text;ctx.fillText('area = 1',x+8,r.Y(1.15));
    } else if(kind==='step'||kind==='rect'){
      ctx.strokeStyle=C.blue;ctx.lineWidth=2.5;ctx.beginPath();
      if(kind==='step'){ctx.moveTo(r.X(-4),r.Y(0));ctx.lineTo(r.X(0),r.Y(0));ctx.lineTo(r.X(0),r.Y(1));ctx.lineTo(r.X(4),r.Y(1));}
@@ -934,7 +944,7 @@ const imag = A * Math.sin(theta);
   if(A>0){
 
     ctx.beginPath();
-    ctx.arc(cx,cy,Math.min(35,A*scalePx*0.3),0,-theta,theta<0);
+    ctx.arc(cx, cy, Math.min(35, A * scalePx * 0.3), 0, -theta, theta > 0);
 
     ctx.strokeStyle = C.orange;
     ctx.lineWidth = 1.8;
@@ -968,7 +978,7 @@ const imag = A * Math.sin(theta);
     f.toFixed(1);
 
   document.getElementById('complexPhaseShiftOut').textContent =
-    (+complexPhaseShift.value).toFixed(0) + '°';
+    (+complexPhaseShift.value).toFixed(0);
 }
 
 
