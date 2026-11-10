@@ -110,6 +110,41 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
     max-width: 140px;
   }
 }
+
+/* Side-by-side complex-plane and time-domain plots */
+.complex-two-plots {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 14px;
+}
+
+.complex-plot-panel {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid rgba(85, 200, 242, 0.25);
+  border-radius: 10px;
+  background: rgba(11, 27, 43, 0.55);
+}
+
+.complex-plot-panel h4 {
+  margin: 2px 0 10px;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #eaf3fa;
+}
+
+.complex-plot-panel .demo-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 800px) {
+  .complex-two-plots {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
 <script>
 window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},svg:{fontCache:'global'}};
@@ -468,61 +503,98 @@ x(t)=Ae^{j(2\pi f_0t+\theta)}
 </div>
 
 <div class="demo-card">
-<div class="demo-head"><h3>Interactive: complex number and rotating phasor</h3><span class="pill">Complex plane</span></div>
-<div class="demo-controls">
-  <label>
-    Magnitude \(A\):
-    <input type="range" id="complexMagnitude"
-           min="0" max="3" step="0.1" value="2">
-    <span id="complexMagnitudeOut">2.0</span>
-  </label>
 
-  <label>
-    Freq. \(f\) (Hz):
-    <input type="range" id="complexFrequency"
-           min="0.1" max="2" step="0.1" value="0.5">
-    <span id="complexFrequencyOut">0.5</span>
-  </label>
-
-  <label>
-    Phase shift \(\phi\) (rad.):
-    <input type="range" id="complexPhaseShift"
-           min="-3.14" max="3.14" step="0.1" value="0">
-    <span id="complexPhaseShiftOut">0.00</span>
-  </label>
-
-  <button id="complexPlay">Run</button>
-</div>
-<div id="complexPolar" class="demo-note"></div>
-
-<canvas id="complexPlot" class="demo-canvas" width="900" height="340" aria-label="Complex plane vector plot"></canvas>
-
-<div class="readout-grid">
-  <div class="readout small">
-    <strong>Real:</strong>
-    <small class="equation">\(A\cos(2\pi ft+\phi)\)</small><br>
-    <div id="realOut">1.0</div>
+  <div class="demo-head">
+    <h3>Interactive: complex number and rotating phasor</h3>
+    <span class="pill">Complex sinusoid</span>
   </div>
 
-  <div class="readout small">
-    <strong>Imaginary:</strong><small class="equation">\(A\sin(2\pi ft+\phi)\)</small><br>
-    <div id="imagOut">0.0</div>
-    
+  <div class="demo-controls">
+    <label>
+      Magnitude \(A\):
+      <input type="range" id="complexMagnitude"
+             min="0" max="3" step="0.1" value="2">
+      <span id="complexMagnitudeOut">2.0</span>
+    </label>
+
+    <label>
+      Freq. \(f\) (Hz):
+      <input type="range" id="complexFrequency"
+             min="0.1" max="2" step="0.1" value="0.5">
+      <span id="complexFrequencyOut">0.5</span>
+    </label>
+
+    <label>
+      Phase shift \(\phi\) (rad.):
+      <input type="range" id="complexPhaseShift"
+             min="-3.14" max="3.14" step="0.1" value="0">
+      <span id="complexPhaseShiftOut">0.00</span>
+    </label>
+
+    <button id="complexPlay">Run</button>
   </div>
 
-  <div class="readout small">
-    <strong>Magnitude:</strong><br>
-    <div id="complexMag">1.0</div>
+  <div id="complexPolar" class="demo-note"></div>
+
+  <!-- Two synchronized plots -->
+  <div class="complex-two-plots">
+
+    <!-- Left: complex plane -->
+    <div class="complex-plot-panel">
+      <h4>Complex plane</h4>
+      <canvas id="complexPlot"
+              class="demo-canvas"
+              width="700"
+              height="340"
+              aria-label="Complex plane rotating phasor">
+      </canvas>
+    </div>
+
+    <!-- Right: real and imaginary parts versus time -->
+    <div class="complex-plot-panel">
+      <h4>Real and imaginary parts versus time</h4>
+      <canvas id="complexTimePlot"
+              class="demo-canvas"
+              width="700"
+              height="340"
+              aria-label="Real and imaginary sinusoidal signals">
+      </canvas>
+    </div>
+
   </div>
 
-  <div class="readout small">
-    <strong>Inst. phase (rad):</strong><br>
-    <div id="complexPhase">0.0</div>
-  </div>
-</div>
+  <div class="readout-grid">
 
-<p class="demo-note">Move the sliders to change \(z=a+jb\). 
-  When animation is enabled, the phasor rotates while keeping its magnitude fixed to illustrate \(e^{j\phi}\).</p>
+    <div class="readout small">
+      <strong>Real:</strong>
+      <small class="equation">\(A\cos(2\pi ft+\phi)\)</small>
+      <div id="realOut">1.0</div>
+    </div>
+
+    <div class="readout small">
+      <strong>Imaginary:</strong>
+      <small class="equation">\(A\sin(2\pi ft+\phi)\)</small>
+      <div id="imagOut">0.0</div>
+    </div>
+
+    <div class="readout small">
+      <strong>Magnitude:</strong>
+      <div id="complexMag">2.0</div>
+    </div>
+
+    <div class="readout small">
+      <strong>Inst. phase (rad):</strong>
+      <div id="complexPhase">0.0</div>
+    </div>
+
+  </div>
+
+  <p class="demo-note">
+    The complex-plane plot shows the rotating phasor.
+    The time-domain plot shows its real and imaginary projections:
+    cosine and sine, respectively.
+  </p>
+
 </div>
 
 <div style="
@@ -2500,6 +2572,283 @@ window.addEventListener('resize', drawEnergyDemo);
 drawEnergyDemo();
 
 })();
+
+
+/* =====================================================
+   COMPLEX SINUSOID: TIME-DOMAIN PLOT
+   Separate from the existing complex-plane script
+===================================================== */
+
+(function () {
+
+const canvas = document.getElementById('complexTimePlot');
+const magnitudeSlider = document.getElementById('complexMagnitude');
+const frequencySlider = document.getElementById('complexFrequency');
+const phaseSlider = document.getElementById('complexPhaseShift');
+const playButton = document.getElementById('complexPlay');
+
+if (!canvas || !magnitudeSlider || !frequencySlider ||
+    !phaseSlider || !playButton) return;
+
+const ctx = canvas.getContext('2d');
+
+// Dark plotting palette
+const colors = {
+  background: '#0b1b2b',
+  grid: 'rgba(160,190,210,0.14)',
+  axis: 'rgba(210,225,240,0.75)',
+  text: '#eaf3fa',
+  muted: '#9fb5c7',
+  real: '#55c8f2',
+  imag: '#f3b45f'
+};
+
+// Independent animation clock.
+// The existing complex-plane script remains untouched.
+let playing = false;
+let time = 0;
+let lastTimestamp = null;
+let animationFrame = null;
+
+function setupCanvas() {
+  const w = canvas.clientWidth || 700;
+  const h = canvas.clientHeight || 340;
+  const dpr = window.devicePixelRatio || 1;
+
+  canvas.width = Math.round(w * dpr);
+  canvas.height = Math.round(h * dpr);
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  return { w, h };
+}
+
+function drawTimePlot() {
+
+  const A = Number(magnitudeSlider.value);
+  const f = Number(frequencySlider.value);
+  const phi = Number(phaseSlider.value);
+
+  const { w, h } = setupCanvas();
+
+  const L = 55;
+  const R = 18;
+  const T = 42;
+  const B = 43;
+
+  const pw = w - L - R;
+  const ph = h - T - B;
+
+  // Show the previous two periods, ending at current time.
+  const period = 1 / f;
+  const xmin = time - 2 * period;
+  const xmax = time;
+
+  const ymin = -3.5;
+  const ymax = 3.5;
+
+  const X = t => L + (t - xmin) / (xmax - xmin) * pw;
+  const Y = y => T + (ymax - y) / (ymax - ymin) * ph;
+
+  const realValue = t => A * Math.cos(2 * Math.PI * f * t + phi);
+  const imagValue = t => A * Math.sin(2 * Math.PI * f * t + phi);
+
+  // Background
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = colors.background;
+  ctx.fillRect(0, 0, w, h);
+
+  // Grid
+  ctx.strokeStyle = colors.grid;
+  ctx.lineWidth = 1;
+
+  for (let i = 0; i <= 8; i++) {
+    const x = L + pw * i / 8;
+    ctx.beginPath();
+    ctx.moveTo(x, T);
+    ctx.lineTo(x, T + ph);
+    ctx.stroke();
+  }
+
+  for (let i = 0; i <= 6; i++) {
+    const y = T + ph * i / 6;
+    ctx.beginPath();
+    ctx.moveTo(L, y);
+    ctx.lineTo(L + pw, y);
+    ctx.stroke();
+  }
+
+  // Zero-amplitude axis
+  ctx.strokeStyle = colors.axis;
+  ctx.lineWidth = 1.3;
+  ctx.beginPath();
+  ctx.moveTo(L, Y(0));
+  ctx.lineTo(L + pw, Y(0));
+  ctx.stroke();
+
+  // Vertical axis at left edge
+  ctx.beginPath();
+  ctx.moveTo(L, T);
+  ctx.lineTo(L, T + ph);
+  ctx.stroke();
+
+  // Y-axis tick labels
+  ctx.fillStyle = colors.muted;
+  ctx.font = '11px Arial';
+  ctx.textAlign = 'right';
+
+  for (let i = 0; i <= 6; i++) {
+    const value = ymax - i * (ymax - ymin) / 6;
+    const y = T + ph * i / 6;
+    ctx.fillText(value.toFixed(1), L - 8, y + 4);
+  }
+
+  // X-axis tick labels
+  ctx.textAlign = 'center';
+
+  for (let i = 0; i <= 4; i++) {
+    const t = xmin + (xmax - xmin) * i / 4;
+    const x = L + pw * i / 4;
+    ctx.fillText(t.toFixed(2), x, T + ph + 18);
+  }
+
+  // Axis labels
+  ctx.fillStyle = colors.text;
+  ctx.font = '12px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('Time  t (s)', L + pw / 2, h - 7);
+
+  ctx.save();
+  ctx.translate(15, T + ph / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText('Amplitude', 0, 0);
+  ctx.restore();
+
+  // Draw real and imaginary signals
+  function drawCurve(fn, color) {
+
+    ctx.beginPath();
+
+    const N = 1000;
+
+    for (let i = 0; i <= N; i++) {
+      const t = xmin + (xmax - xmin) * i / N;
+      const x = X(t);
+      const y = Y(fn(t));
+
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2.5;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.stroke();
+  }
+
+  drawCurve(realValue, colors.real);
+  drawCurve(imagValue, colors.imag);
+
+  // Current-time marker
+  const currentX = X(time);
+
+  ctx.strokeStyle = 'rgba(234,243,250,0.65)';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([5, 4]);
+
+  ctx.beginPath();
+  ctx.moveTo(currentX, T);
+  ctx.lineTo(currentX, T + ph);
+  ctx.stroke();
+
+  ctx.setLineDash([]);
+
+  // Instantaneous points
+  function drawPoint(value, color) {
+    ctx.beginPath();
+    ctx.arc(currentX, Y(value), 5, 0, 2 * Math.PI);
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.strokeStyle = colors.background;
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+
+  drawPoint(realValue(time), colors.real);
+  drawPoint(imagValue(time), colors.imag);
+
+  // Legend
+  ctx.font = '11px Arial';
+  ctx.textAlign = 'left';
+
+  ctx.fillStyle = colors.real;
+  ctx.fillRect(L + 8, 12, 15, 3);
+  ctx.fillStyle = colors.text;
+  ctx.fillText('Real  A cos(2πft + φ)', L + 29, 17);
+
+  ctx.fillStyle = colors.imag;
+  ctx.fillRect(L + 205, 12, 15, 3);
+  ctx.fillStyle = colors.text;
+  ctx.fillText('Imaginary  A sin(2πft + φ)', L + 226, 17);
+}
+
+// Animation loop
+function animateTimePlot(timestamp) {
+
+  if (!playing) {
+    animationFrame = null;
+    return;
+  }
+
+  if (lastTimestamp === null) {
+    lastTimestamp = timestamp;
+  }
+
+  const dt = (timestamp - lastTimestamp) / 1000;
+  lastTimestamp = timestamp;
+
+  time += dt;
+
+  drawTimePlot();
+
+  animationFrame = requestAnimationFrame(animateTimePlot);
+}
+
+// Synchronize with the existing Run button.
+// The original complex-plane script keeps its own animation logic.
+playButton.addEventListener('click', function () {
+
+  playing = !playing;
+
+  if (playing) {
+    lastTimestamp = null;
+    animationFrame = requestAnimationFrame(animateTimePlot);
+  } else {
+    if (animationFrame !== null) {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = null;
+    }
+
+    lastTimestamp = null;
+    drawTimePlot();
+  }
+
+});
+
+// Redraw when sliders change
+magnitudeSlider.addEventListener('input', drawTimePlot);
+frequencySlider.addEventListener('input', drawTimePlot);
+phaseSlider.addEventListener('input', drawTimePlot);
+
+// Redraw on resize
+window.addEventListener('resize', drawTimePlot);
+
+// Initial plot: paused at t = 0
+drawTimePlot();
+
+})();
+
 </script>
 
 
