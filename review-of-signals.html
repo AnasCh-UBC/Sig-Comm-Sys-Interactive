@@ -30,7 +30,7 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 .demo-note{color:var(--mut);font-size:.88rem;margin:10px 0 0}
 .readout{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
 .readout span{border:1px solid var(--ln);background:var(--card);border-radius:7px;padding:6px 10px;font-size:.88rem}
-.eq-box{border:1px solid var(--ln);border-left:3px solid var(--acc);border-radius:8px;background:var(--card);padding:12px 15px;margin:12px 0;overflow-x:auto}
+.eq-box{border:1px solid var(--ln);border-left:3px solid var(--acc);border-radius:8px;background:var(--card);padding:10px 10px;margin:10px 0;overflow-x:auto}
 .eq-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .signal-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .signal-card{border:1px solid var(--ln);border-radius:10px;padding:13px;background:var(--card)}
@@ -71,7 +71,7 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
 <div class="meta">
   <div><b>Instructor</b>Dr. Anas Chaaban<br>UBC School of Engineering</div>
   <div><b>Course</b>APSC 270 · Signals and Communication Systems</div>
-  <div><b>Focus</b>Signal models, operations, properties, and complex representation</div>
+  <div><b>Focus</b>Signals, operations, properties, and complex representation</div>
 </div>
 
 <div class="card">
@@ -147,7 +147,7 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
   <div class="signal-card" id="signalDefinition" aria-live="polite">
     <h3 id="signalTitle">Sinusoidal signal</h3>
 
-    <div id="signalFormula">
+    <div class="eq-box" id="signalFormula">
       \[x(t)=A\cos(2\pi f_0t+\theta)\]
     </div>
 
@@ -181,6 +181,24 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
 <p class="demo-note">The impulse is an ideal mathematical model. Its unit-area property is more important than assigning it an ordinary finite amplitude.</p>
 </div>
 
+
+<!-- energy and power definitions-->
+<div class="card">
+  <h3>Important property of signals: Energy and Power</h3>
+  <p>For a signal \(x(t)\), itsenergy and power are defined as follows:</p>
+  <div class="eq-grid">
+  <div class="eq-box"><b>Signal energy</b>\[E_x=\int_{-\infty}^{\infty}|x(t)|^2dt=\lim_{T\to\infty}\int_{-T/2}^{T/2}|x(t)|^2dt\]</div>
+  <div class="eq-box"><b>Average power</b>\[P_x=\lim_{T\to\infty}\frac{1}{T}\int_{-T/2}^{T/2}|x(t)|^2dt\]</div>
+  </div>
+  <p>For a periodic signal \(x(t)\) with period \(T_0\), its average power can be calculated over one period:</p>
+  <div class="eq-box">\[P_x=\frac{1}{T_0}\int_{-T_0/2}^{T_0/2}|x(t)|^2dt\]</div>
+  <ul>
+  <li>Nonzero average power implies infinite energy.</li>
+  <li>Zero average power implies finite energy for the signal classes considered in this course.</li>
+  </ul>
+  </div>
+  
+
 <h2 id="operations"><small>3</small>Basic operations on signals</h2>
 <p class="sub">Shifting, reversing, and scaling modify the signal along the time axis.</p>
 
@@ -193,7 +211,7 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
     <ul>
       <li>to the right (delayed) if \(t_0>0\).</li>
       <li>to the left (advanced) if \(t_0<0\).</li>
-      <li>\(x(t+t_0)=x(t-(-t_0))\) shifts in the opposite directions.</li>
+      <li>\(x(t+t_0)\) shifts in the opposite directions.</li>
     </ul>
   </div>
   <div class="eq-box">
@@ -228,6 +246,9 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
 <p class="demo-note">The reference signal is \(x(t)=t\) for \(0 \lt t \lt 1\), and zero otherwise. The transformed signal is \(y(t)=A\,x(a(t-t_0))\). Negative \(a\) produces time reversal as well as scaling.</p>
 </div>
 
+
+
+
 <h2 id="classification"><small>4</small>Classification of signals</h2>
 <p class="sub">Signals can be classified according to their independent variable, predictability, periodicity, time support, symmetry, and energy or power.</p>
 
@@ -255,17 +276,94 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
 </div>
 
 
-<div class="demo-card">
-<h3>Interactive: continuous-time signal and its samples</h3>
-<div class="demo-controls">
-<label>Sampling interval \(T\) <input id="sampleT" type="range" min="0.08" max="0.8" step="0.02" value="0.25"><output id="sampleTOut">0.25</output></label>
-<label>Frequency \(f_0\) <input id="sampleF" type="range" min="0.2" max="1.5" step="0.05" value="0.5"><output id="sampleFOut">0.50</output></label>
-</div>
-<canvas id="samplingPlot" class="demo-canvas" width="900" height="300" aria-label="Continuous sinusoid and discrete samples"></canvas>
-<p class="demo-note">The smooth curve is \(x(t)=\sin(2\pi f_0t)\). The stems and markers show \(y[n]=x(nT)\). Reduce \(T\) to increase the sampling density.</p>
+<!--Even/odd decomposition demo-->
+<div class="demo-card" id="evenOddDemo">
+  <h3>Even–odd decomposition of signals</h3>
+
+  <div class="demo-controls">
+    <label>
+      Select a signal
+      <select id="evenOddType">
+        <option value="exp">Causal exponential</option>
+        <option value="pulse">Shifted rectangular pulse</option>
+        <option value="ramp">Causal ramp</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="decomp-layout">
+
+    <!-- Original signal -->
+    <div class="decomp-box original-box">
+      <h4>Original signal</h4>
+      <canvas id="originalSignalPlot" class="demo-canvas"></canvas>
+      <div class="decomp-equation">\(x(t)\)</div>
+    </div>
+
+    <!-- Arrow from original to components -->
+    <div class="decomp-arrow">
+      <span>→</span>
+    </div>
+
+    <!-- Even and odd components -->
+    <div class="decomp-middle">
+      <div class="decomp-box">
+        <h4>Even component</h4>
+        <canvas id="evenSignalPlot" class="demo-canvas"></canvas>
+        <div class="decomp-equation">\(x_e(t)\)</div>
+      </div>
+
+      <div class="decomp-box">
+        <h4>Odd component</h4>
+        <canvas id="oddSignalPlot" class="demo-canvas"></canvas>
+        <div class="decomp-equation">\(x_o(t)\)</div>
+      </div>
+    </div>
+
+    <!-- Arrows showing addition -->
+    <div class="decomp-arrow decomp-add-arrows">
+      <svg viewBox="0 0 60 220" preserveAspectRatio="none"
+           aria-label="Even and odd components combine">
+        <defs>
+          <marker id="decompArrowHead" markerWidth="7" markerHeight="7"
+                  refX="5" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6" fill="none"
+                  stroke="currentColor" stroke-width="1.3"/>
+          </marker>
+        </defs>
+        <path d="M0,55 L25,110 L55,110"
+              fill="none" stroke="currentColor" stroke-width="2"
+              marker-end="url(#decompArrowHead)"/>
+        <path d="M0,165 L25,110"
+              fill="none" stroke="currentColor" stroke-width="2"/>
+      </svg>
+      <span class="decomp-plus">+</span>
+    </div>
+
+    <!-- Reconstructed signal -->
+    <div class="decomp-box reconstructed-box">
+      <h4>Reconstructed signal</h4>
+      <canvas id="reconstructedSignalPlot" class="demo-canvas"></canvas>
+      <div class="decomp-equation">\(x_e(t)+x_o(t)=x(t)\)</div>
+    </div>
+
+  </div>
+
+  <div class="readout">
+    <span id="evenOddReadout"></span>
+  </div>
+
+  <p class="demo-note">
+    Every signal can be expressed as the sum of an even component and an
+    odd component. The two components are obtained using
+    \[
+      x_e(t)=\frac{x(t)+x(-t)}{2},
+      \qquad
+      x_o(t)=\frac{x(t)-x(-t)}{2}.
+    \]
+  </p>
 </div>
 
-<div class="two-col">
 <div class="demo-card">
 <h3>Interactive: even and odd decomposition</h3>
 <div class="demo-controls">
@@ -276,34 +374,7 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
 <canvas id="symPlot" class="demo-canvas" width="900" height="280" aria-label="Even and odd signal decomposition"></canvas>
 <p class="demo-note">The even and odd components are calculated from \(x_e(t)=\frac{x(t)+x(-t)}2\) and \(x_o(t)=\frac{x(t)-x(-t)}2\).</p>
 </div>
-<div class="demo-card">
-<h3>Energy and average power</h3>
-<div class="demo-controls">
-<label>Signal
-<select id="energyType"><option value="pulse">Finite rectangular pulse</option><option value="decay">Decaying exponential</option><option value="sine">Periodic sinusoid</option></select>
-</label>
-<label>Window \(T\) <input id="energyT" type="range" min="2" max="20" step="1" value="8"><output id="energyTOut">8</output></label>
-</div>
-<canvas id="energyPlot" class="demo-canvas" width="900" height="280" aria-label="Signal for energy and average power illustration"></canvas>
-<div class="readout"><span id="energyReadout">Energy and power estimates appear here.</span></div>
-<p class="demo-note">The displayed values are finite-window estimates. The classification is based on the limiting values as the observation window grows.</p>
-</div>
-</div>
 
-<div class="card">
-<h3>Energy and average power: definitions and properties</h3>
-<div class="eq-grid">
-<div class="eq-box"><b>Signal energy</b>\[E_x=\int_{-\infty}^{\infty}|x(t)|^2dt=\lim_{T\to\infty}\int_{-T/2}^{T/2}|x(t)|^2dt\]</div>
-<div class="eq-box"><b>Average power</b>\[P_x=\lim_{T\to\infty}\frac{1}{T}\int_{-T/2}^{T/2}|x(t)|^2dt\]</div>
-</div>
-<p>An energy-type signal has \(E_x<\infty\). A power-type signal has \(0<P_x<\infty\).</p>
-<ul>
-<li>Nonzero average power implies infinite energy.</li>
-<li>Zero average power implies finite energy for the signal classes considered in this course.</li>
-<li>For a periodic signal with period \(T_0\), its average power can be calculated over one period:</li>
-</ul>
-<div class="eq-box">\[P_x=\frac{1}{T_0}\int_{-T_0/2}^{T_0/2}|x(t)|^2dt\]</div>
-</div>
 
 <h2 id="complex"><small>5</small>Complex-valued signals</h2>
 <p class="sub">Complex numbers provide a compact representation of rotating sinusoids and are central to many signal-processing tools.</p>
@@ -807,7 +878,7 @@ const classificationData = {
       An <b>even signal</b> satisfies \(x(t)=x(-t)\), while an <b>odd signal</b> satisfies \(x(t)=-x(-t)\). 
       A signal \(x(t)\) has an even part \(x_e(t)=\frac{x(t)+x(-t)}{2}\) and an odd part \(x_o(t)=\frac{x(t)-x(-t)}{2}\).
     `,
-    note: 'Any signal \(x(t)\) can be decomposed into its even and odd parts as \(x(t)=x_e(t)+x_o(t)\).',
+    note: String.raw`Any signal \(x(t)\) can be decomposed into its even and odd parts as \(x(t)=x_e(t)+x_o(t)\).`,
     plots: [
       {
         title: 'Even signal',
@@ -832,7 +903,7 @@ const classificationData = {
           \frac{1}{T}
           \int_{-T/2}^{T/2}|x(t)|^2\,dt\).
     `,
-    note: 'A finite-duration pulse is an energy-type signal. A nonzero periodic sinusoid is a power-type signal.',
+    note: 'For example, a finite-duration pulse is an energy-type signal while a nonzero periodic sinusoid is a power-type signal.',
     plots: [
       {
         title: 'Energy-type signal',
