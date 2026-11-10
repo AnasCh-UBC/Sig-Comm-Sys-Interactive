@@ -1469,270 +1469,342 @@ addLatexLegend(x3, top, rightW,
 /* =====================================================
    ENERGY / POWER DEMO
 ===================================================== */
+(function () {
 
-(function(){
+const energyType = document.getElementById('energyType');
+const energyT = document.getElementById('energyT');
+const energyTOut = document.getElementById('energyTOut');
+const energyReadout = document.getElementById('energyReadout');
+const energyCanvas = document.getElementById('energyPlot');
 
-  const C = {
-    blue:'#38bdf8',
-    orange:'#f59e0b'
+if (!energyCanvas || !energyType || !energyT ||
+    !energyTOut || !energyReadout) return;
+
+const ctx = energyCanvas.getContext('2d');
+
+// Consistent dark-theme plotting colors
+const C = {
+  background: '#0b1b2b',
+  panel: '#10263a',
+  blue: '#55c8f2',
+  green: '#62d99a',
+  orange: '#f3b45f',
+  grid: 'rgba(160,190,210,0.14)',
+  axis: 'rgba(210,225,240,0.75)',
+  text: '#eaf3fa',
+  muted: '#9fb5c7'
 };
 
-  const energyType =
-    document.getElementById('energyType');
+// Canvas setup
+function setupCanvas() {
+  const w = energyCanvas.clientWidth || 720;
+  const h = energyCanvas.clientHeight || 300;
+  const dpr = window.devicePixelRatio || 1;
 
-const energyT =
-    document.getElementById('energyT');
+  energyCanvas.width = Math.round(w * dpr);
+  energyCanvas.height = Math.round(h * dpr);
 
-const energyTOut =
-    document.getElementById('energyTOut');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-const energyReadout =
-    document.getElementById('energyReadout');
-
-const energyCanvas =
-    document.getElementById('energyPlot');
-
-if(!energyCanvas) return;
-
-function setupCanvas(canvas){
-  const dpr=window.devicePixelRatio||1, w=canvas.clientWidth||canvas.width, h=canvas.clientHeight||canvas.height;
-  canvas.width=Math.round(w*dpr); canvas.height=Math.round(h*dpr);
-  const ctx=canvas.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
-  return {ctx,w,h};
-}
-function axes(ctx,w,h,xmin,xmax,ymin,ymax){
-  const L=48,R=14,T=14,B=30, pw=w-L-R,ph=h-T-B;
-  const X=x=>L+(x-xmin)/(xmax-xmin)*pw, Y=y=>T+(ymax-y)/(ymax-ymin)*ph;
-  ctx.clearRect(0,0,w,h); ctx.font='12px system-ui'; ctx.lineWidth=1;
-  ctx.strokeStyle=C.grid;
-  for(let i=0;i<=8;i++){let x=L+pw*i/8;ctx.beginPath();ctx.moveTo(x,T);ctx.lineTo(x,T+ph);ctx.stroke();}
-  for(let i=0;i<=4;i++){let y=T+ph*i/4;ctx.beginPath();ctx.moveTo(L,y);ctx.lineTo(L+pw,y);ctx.stroke();}
-  ctx.strokeStyle=C.axis;ctx.lineWidth=1.2;
-  if(ymin<0&&ymax>0){ctx.beginPath();ctx.moveTo(L,Y(0));ctx.lineTo(L+pw,Y(0));ctx.stroke();}
-  if(xmin<0&&xmax>0){ctx.beginPath();ctx.moveTo(X(0),T);ctx.lineTo(X(0),T+ph);ctx.stroke();}
-  ctx.fillStyle=C.text;ctx.textAlign='center';ctx.fillText('Time',L+pw/2,h-7);
-  ctx.textAlign='right';ctx.fillText(ymax.toFixed(1),L-7,T+4);ctx.fillText(ymin.toFixed(1),L-7,T+ph);
-  ctx.textAlign='left';ctx.fillText(xmin.toFixed(1),L,T+ph+17);ctx.textAlign='right';ctx.fillText(xmax.toFixed(1),L+pw,T+ph+17);
-  return {X,Y,L,R,T,B,pw,ph};
+  return { w, h };
 }
 
-function signalValue(t){
+// Plot axes, grid, and labels
+function axes(w, h, xmin, xmax, ymin, ymax) {
 
-    switch(energyType.value){
+  const L = 55;
+  const R = 18;
+  const T = 48;
+  const B = 43;
 
-        case "pulse":
-            return Math.abs(t) <= 1 ? 1 : 0;
+  const pw = w - L - R;
+  const ph = h - T - B;
 
-        case "decay":
-            return Math.exp(-Math.abs(t));
+  const X = x => L + (x - xmin) / (xmax - xmin) * pw;
+  const Y = y => T + (ymax - y) / (ymax - ymin) * ph;
 
-        case "sine":
-            return Math.cos(Math.PI*t);
+  ctx.clearRect(0, 0, w, h);
 
-        default:
-            return 0;
-    }
-}
+  // Plot background
+  ctx.fillStyle = C.background;
+  ctx.fillRect(0, 0, w, h);
 
-function energyDensity(t){
-    const x = signalValue(t);
-    return x*x;
-}
+  // Grid
+  ctx.strokeStyle = C.grid;
+  ctx.lineWidth = 1;
 
-function integrateEnergy(T){
-
-    const dt = 0.01;
-
-    let energy = 0;
-
-    for(let t=-T/2;t<=T/2;t+=dt){
-        energy += energyDensity(t)*dt;
-    }
-
-    return energy;
-}
-
-function drawEnergyDemo(){
-
-    energyTOut.textContent = energyT.value;
-
-    const T = Number(energyT.value);
-
-    const {ctx,w,h} =
-        setupCanvas(energyCanvas);
-
-    const xmin = -10;
-    const xmax = 10;
-
-    const ymin = -1.3;
-    const ymax = 1.3;
-
-    const r =
-        axes(ctx,w,h,xmin,xmax,ymin,ymax);
-
-    const leftBound = -T/2;
-    const rightBound = T/2;
-
-    const xLeft = r.X(leftBound);
-    const xRight = r.X(rightBound);
-
-    /* ----------------------------------
-       Observation window shading
-    ----------------------------------- */
-
-    ctx.fillStyle = "rgba(56,189,248,0.15)";
-    ctx.fillRect(
-        xLeft,
-        r.T,
-        xRight-xLeft,
-        r.ph
-    );
-
-    /* ----------------------------------
-       Energy area |x(t)|²
-    ----------------------------------- */
-
+  for (let i = 0; i <= 8; i++) {
+    const x = L + pw * i / 8;
     ctx.beginPath();
-
-    let started = false;
-
-    for(let i=0;i<=1200;i++){
-
-        const t =
-            xmin +
-            (xmax-xmin)*i/1200;
-
-        if(t < leftBound ||
-           t > rightBound){
-            continue;
-        }
-
-        const e =
-            energyDensity(t);
-
-        const px = r.X(t);
-        const py = r.Y(e);
-
-        if(!started){
-
-            ctx.moveTo(px,r.Y(0));
-            ctx.lineTo(px,py);
-
-            started = true;
-
-        }else{
-
-            ctx.lineTo(px,py);
-        }
-    }
-
-    ctx.lineTo(
-        r.X(rightBound),
-        r.Y(0)
-    );
-
-    ctx.closePath();
-
-    ctx.fillStyle =
-        "rgba(74,222,128,0.35)";
-
-    ctx.fill();
-
-    /* ----------------------------------
-       Window boundaries
-    ----------------------------------- */
-
-    ctx.strokeStyle = C.orange;
-    ctx.lineWidth = 2;
-
-    ctx.beginPath();
-
-    ctx.moveTo(xLeft,r.T);
-    ctx.lineTo(xLeft,r.T+r.ph);
-
-    ctx.moveTo(xRight,r.T);
-    ctx.lineTo(xRight,r.T+r.ph);
-
+    ctx.moveTo(x, T);
+    ctx.lineTo(x, T + ph);
     ctx.stroke();
+  }
 
-    /* ----------------------------------
-       Signal waveform
-    ----------------------------------- */
-
+  for (let i = 0; i <= 4; i++) {
+    const y = T + ph * i / 4;
     ctx.beginPath();
-
-    let first = true;
-
-    for(let i=0;i<=1200;i++){
-
-        const t =
-            xmin +
-            (xmax-xmin)*i/1200;
-
-        const y = signalValue(t);
-
-        const px = r.X(t);
-        const py = r.Y(y);
-
-        if(first){
-
-            ctx.moveTo(px,py);
-            first = false;
-
-        }else{
-
-            ctx.lineTo(px,py);
-        }
-    }
-
-    ctx.strokeStyle = C.blue;
-    ctx.lineWidth = 3;
+    ctx.moveTo(L, y);
+    ctx.lineTo(L + pw, y);
     ctx.stroke();
+  }
 
-    /* ----------------------------------
-       Numerical results
-    ----------------------------------- */
+  // Axes
+  ctx.strokeStyle = C.axis;
+  ctx.lineWidth = 1.3;
 
-    const E = integrateEnergy(T);
+  if (ymin <= 0 && ymax >= 0) {
+    ctx.beginPath();
+    ctx.moveTo(L, Y(0));
+    ctx.lineTo(L + pw, Y(0));
+    ctx.stroke();
+  }
 
-    const P = E/T;
+  if (xmin <= 0 && xmax >= 0) {
+    ctx.beginPath();
+    ctx.moveTo(X(0), T);
+    ctx.lineTo(X(0), T + ph);
+    ctx.stroke();
+  }
 
-    let typeText = "";
+  // Tick labels
+  ctx.fillStyle = C.muted;
+  ctx.font = '11px Arial';
 
-    if(energyType.value === "sine"){
-        typeText =
-            "Power signal (energy grows without bound)";
-    }else{
-        typeText =
-            "Energy signal";
-    }
+  ctx.textAlign = 'right';
 
-    energyReadout.innerHTML = `
-        <strong>Window energy:</strong>
-        ${E.toFixed(3)}
-        &nbsp;&nbsp;|&nbsp;&nbsp;
-        <strong>Average power:</strong>
-        ${P.toFixed(3)}
-        &nbsp;&nbsp;|&nbsp;&nbsp;
-        ${typeText}
-    `;
+  for (let i = 0; i <= 4; i++) {
+    const value = ymax - i * (ymax - ymin) / 4;
+    const y = T + ph * i / 4;
+
+    ctx.fillText(value.toFixed(1), L - 9, y + 4);
+  }
+
+  ctx.textAlign = 'center';
+
+  for (let i = 0; i <= 8; i++) {
+    const value = xmin + i * (xmax - xmin) / 8;
+    const x = L + pw * i / 8;
+
+    ctx.fillText(value.toFixed(1), x, T + ph + 18);
+  }
+
+  // Axis labels
+  ctx.fillStyle = C.text;
+  ctx.font = '12px Arial';
+
+  ctx.textAlign = 'center';
+  ctx.fillText('Time  t', L + pw / 2, h - 8);
+
+  ctx.save();
+  ctx.translate(15, T + ph / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText('Amplitude / Energy density', 0, 0);
+  ctx.restore();
+
+  return { X, Y, L, R, T, B, pw, ph };
 }
 
-energyType.addEventListener(
-    'change',
-    drawEnergyDemo
-);
+// Plot legend
+function drawLegend(w) {
 
-energyT.addEventListener(
-    'input',
-    drawEnergyDemo
-);
+  const items = [
+    { color: C.blue, text: 'Signal  x(t)', type: 'line' },
+    { color: C.green, text: 'Energy density  |x(t)|²', type: 'area' },
+    { color: C.orange, text: 'Observation window', type: 'line' }
+  ];
 
-window.addEventListener(
-    'resize',
-    drawEnergyDemo
-);
+  ctx.font = '11px Arial';
+  ctx.textAlign = 'left';
 
+  const gap = 18;
+  const widths = items.map(item =>
+    ctx.measureText(item.text).width + 27
+  );
+
+  const totalWidth = widths.reduce((a, b) => a + b, 0)
+    + gap * (items.length - 1);
+
+  let x = Math.max(8, (w - totalWidth) / 2);
+  const y = 21;
+
+  items.forEach((item, i) => {
+
+    ctx.strokeStyle = item.color;
+    ctx.fillStyle = item.color;
+    ctx.lineWidth = 2.5;
+
+    if (item.type === 'area') {
+      ctx.globalAlpha = 0.55;
+      ctx.fillRect(x, y - 5, 13, 10);
+      ctx.globalAlpha = 1;
+    } else {
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + 14, y);
+      ctx.stroke();
+    }
+
+    ctx.fillStyle = C.text;
+    ctx.fillText(item.text, x + 20, y + 4);
+
+    x += widths[i] + gap;
+  });
+}
+
+// Signal definitions
+function signalValue(t) {
+
+  switch (energyType.value) {
+
+    case 'pulse':
+      return Math.abs(t) <= 1 ? 1 : 0;
+
+    case 'decay':
+      return Math.exp(-Math.abs(t));
+
+    case 'sine':
+      return Math.cos(Math.PI * t);
+
+    default:
+      return 0;
+  }
+}
+
+function energyDensity(t) {
+  const x = signalValue(t);
+  return x * x;
+}
+
+// Numerical integration using the trapezoidal rule
+function integrateEnergy(T) {
+
+  const N = 4000;
+  const dt = T / N;
+
+  let energy = 0;
+
+  for (let i = 0; i <= N; i++) {
+
+    const t = -T / 2 + i * dt;
+    const weight = (i === 0 || i === N) ? 0.5 : 1;
+
+    energy += weight * energyDensity(t) * dt;
+  }
+
+  return energy;
+}
+
+// Main drawing function
+function drawEnergyDemo() {
+
+  const T = Number(energyT.value);
+
+  energyTOut.textContent = energyT.value;
+
+  const { w, h } = setupCanvas();
+
+  const xmin = -10;
+  const xmax = 10;
+  const ymin = -1.3;
+  const ymax = 1.3;
+
+  const r = axes(w, h, xmin, xmax, ymin, ymax);
+
+  drawLegend(w);
+
+  const leftBound = -T / 2;
+  const rightBound = T / 2;
+
+  const xLeft = r.X(leftBound);
+  const xRight = r.X(rightBound);
+
+  // Observation window shading
+  ctx.fillStyle = 'rgba(85,200,242,0.12)';
+  ctx.fillRect(
+    xLeft, r.T,
+    xRight - xLeft, r.ph
+  );
+
+  // Energy density area
+  ctx.beginPath();
+  ctx.moveTo(xLeft, r.Y(0));
+
+  const N = 1200;
+
+  for (let i = 0; i <= N; i++) {
+
+    const t = leftBound + T * i / N;
+    const px = r.X(t);
+    const py = r.Y(energyDensity(t));
+
+    ctx.lineTo(px, py);
+  }
+
+  ctx.lineTo(xRight, r.Y(0));
+  ctx.closePath();
+
+  ctx.fillStyle = 'rgba(98,217,154,0.32)';
+  ctx.fill();
+
+  // Observation window boundaries
+  ctx.strokeStyle = C.orange;
+  ctx.lineWidth = 2;
+  ctx.setLineDash([5, 4]);
+
+  [xLeft, xRight].forEach(x => {
+    ctx.beginPath();
+    ctx.moveTo(x, r.T);
+    ctx.lineTo(x, r.T + r.ph);
+    ctx.stroke();
+  });
+
+  ctx.setLineDash([]);
+
+  // Signal waveform
+  ctx.beginPath();
+
+  for (let i = 0; i <= 1200; i++) {
+
+    const t = xmin + (xmax - xmin) * i / 1200;
+    const px = r.X(t);
+    const py = r.Y(signalValue(t));
+
+    if (i === 0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
+  }
+
+  ctx.strokeStyle = C.blue;
+  ctx.lineWidth = 2.8;
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.stroke();
+
+  // Numerical results
+  const E = integrateEnergy(T);
+  const P = E / T;
+
+  const typeText = energyType.value === 'sine'
+    ? 'Power signal (energy grows without bound)'
+    : 'Energy signal';
+
+  energyReadout.innerHTML = `
+    <strong>Window energy:</strong>
+    ${E.toFixed(3)}
+    &nbsp;&nbsp;|&nbsp;&nbsp;
+    <strong>Average power:</strong>
+    ${P.toFixed(3)}
+    &nbsp;&nbsp;|&nbsp;&nbsp;
+    ${typeText}
+  `;
+}
+
+// Event listeners
+energyType.addEventListener('change', drawEnergyDemo);
+energyT.addEventListener('input', drawEnergyDemo);
+window.addEventListener('resize', drawEnergyDemo);
+
+// Initial plot
 drawEnergyDemo();
 
 })();
