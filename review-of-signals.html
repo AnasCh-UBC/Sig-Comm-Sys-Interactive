@@ -65,6 +65,33 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 .two-col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 
 @media(max-width:700px){.signal-grid,.eq-grid,.quiz-grid,.two-col{grid-template-columns:1fr}.demo-controls label{width:100%;justify-content:space-between}.demo-controls input[type=range]{width:48%}}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  width: 100%;
+}
+
+.controls label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  font-size: 0.85rem;
+}
+
+.controls input[type="range"] {
+  width: 75px;
+  min-width: 60px;
+}
+
+.controls button {
+  white-space: nowrap;
+  padding: 7px 12px;
+  font-size: 0.85rem;
+}
 </style>
 <script>
 window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},svg:{fontCache:'global'}};
@@ -426,34 +453,35 @@ x(t)=Ae^{j(2\pi f_0t+\theta)}
 
   <button id="complexPlay">Run animation</button>
 </div>
+<div id="complexPolar" class="demo-note"></div>
+
 <canvas id="complexPlot" class="demo-canvas" width="900" height="340" aria-label="Complex plane vector plot"></canvas>
 
 <div class="readout-grid">
   <div class="readout small">
-    <strong>Real:</strong><small>\(A\cos(2\pi ft+\phi)\)</small>
+    <strong>Real:</strong><small>\(A\cos(2\pi ft+\phi)\)</small><br>
     <div id="realOut">1.000</div>
   </div>
 
   <div class="readout small">
-    <strong>Imaginary:</strong><small>\(A\sin(2\pi ft+\phi)\)</small>
+    <strong>Imaginary:</strong><small>\(A\sin(2\pi ft+\phi)\)</small><br>
     <div id="imagOut">0.000</div>
     
   </div>
 
   <div class="readout small">
-    <strong>Magnitude:</strong>
+    <strong>Magnitude:</strong><br>
     <div id="complexMag">1.000</div>
   </div>
 
   <div class="readout small">
-    <strong>Instantaneous phase:</strong>
+    <strong>Inst. phase (rad):</strong><br>
     <div id="complexPhase">0.0</div>
   </div>
 </div>
 
-<div id="complexPolar" class="demo-note"></div>
-
-<p class="demo-note">Move the sliders to change \(z=a+jb\). When animation is enabled, the phasor rotates while keeping its magnitude fixed to illustrate \(e^{j\phi}\).</p>
+<p class="demo-note">Move the sliders to change \(z=a+jb\). 
+  When animation is enabled, the phasor rotates while keeping its magnitude fixed to illustrate \(e^{j\phi}\).</p>
 </div>
 
 <div style="
