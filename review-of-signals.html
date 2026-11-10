@@ -804,13 +804,11 @@ const classificationData = {
   evenodd: {
     title: 'Even vs. odd',
     definition: String.raw`
-      An <b>even signal</b> satisfies \(x(t)=x(-t)\), i.e., it is symmetric about the vertical axis. 
-      An <b>odd signal</b> satisfies \(x(t)=-x(-t)\), i.e., it is antisymmetric about the origin.
-
-      Any signal can be decomposed into even and odd parts: \(x(t)=x_e(t)+x_o(t)\) where \(x_e(t)=\frac{x(t)+x(-t)}{2}\) 
-      and \(x_o(t)=\frac{x(t)-x(-t)}{2}\)
+      An <b>even signal</b> satisfies \(x(t)=x(-t)\) (symmetric about the vertical axis). 
+      An <b>odd signal</b> satisfies \(x(t)=-x(-t)\) (antisymmetric about the origin). 
+      Any sinal \(x(t)\) has an even part \(x_e(t)=\frac{x(t)+x(-t)}{2}\), and an odd part \(x_o(t)=\frac{x(t)-x(-t)}{2}\).
     `,
-    note: 'The first example is symmetric about the vertical axis. The second is antisymmetric about the origin.',
+    note: 'Any signal \(x(t)\) can be decomposed into its even and odd parts as \(x(t)=x_e(t)+x_o(t)\).',
     plots: [
       {
         title: 'Even signal',
