@@ -112,8 +112,7 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 .euler-portrait img {
   display: block;
   width: 100%;
-  max-width: 105px;
-  height: 125px;
+  height: 165px;
   margin: 0 auto;
   object-fit: contain;
   border-radius: 6px;
@@ -2812,9 +2811,9 @@ function drawTimePlot() {
   ctx.fillText('Real  A cos(2πft + φ)', L + 29, 17);
 
   ctx.fillStyle = colors.imag;
-  ctx.fillRect(L + 185, 12, 15, 3);
+  ctx.fillRect(L + 165, 12, 15, 3);
   ctx.fillStyle = colors.text;
-  ctx.fillText('Imaginary  A sin(2πft + φ)', L + 206, 17);
+  ctx.fillText('Imaginary  A sin(2πft + φ)', L + 186, 17);
 }
 
 // Animation loop
