@@ -1096,11 +1096,6 @@ canvas.style.display = 'block';
     roundedRect(x, y, w, h, 10);
     ctx.fill();
     ctx.stroke();
-
-    ctx.fillStyle = color;
-    ctx.font = 'bold 14px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText(title, x + w / 2, y + 23);
   }
 
   function roundedRect(x, y, w, h, r) {
@@ -1114,24 +1109,33 @@ canvas.style.display = 'block';
   if (!legend) {
     legend = document.createElement('div');
     legend.dataset.legend = latex;
-    legend.style.position = 'absolute';
-    legend.style.pointerEvents = 'none';
-    legend.style.whiteSpace = 'nowrap';
-    legend.style.fontSize = '13px';
-    legend.style.color = color;
-    legend.style.zIndex = '2';
-    root.appendChild(legend);
 
-    legend.innerHTML = `\\(${latex}\\)`;
+    legend.style.position = 'absolute';
+    legend.style.display = 'flex';
+    legend.style.alignItems = 'center';
+    legend.style.justifyContent = 'center';
+    legend.style.gap = '7px';
+    legend.style.whiteSpace = 'nowrap';
+    legend.style.pointerEvents = 'none';
+    legend.style.zIndex = '2';
+    legend.style.fontSize = '13px';
+
+    legend.innerHTML = `
+      <span style="color:${color}; font-weight:bold;">${title}</span>
+      <span style="color:${color};">\\(${latex}\\)</span>
+    `;
+
+    root.appendChild(legend);
 
     if (window.MathJax && MathJax.typesetPromise) {
       MathJax.typesetPromise([legend]);
     }
   }
 
-  legend.style.left = `${x + w / 2}px`;
-  legend.style.top = `${y + 8}px`;
-  legend.style.transform = 'translateX(-50%)';
+  // Account for the canvas position inside its parent
+  legend.style.left = `${canvas.offsetLeft + x}px`;
+  legend.style.top = `${canvas.offsetTop + y + 7}px`;
+  legend.style.width = `${w}px`;
 }
 
   function arrow(x1, y1, x2, y2, alpha = 1) {
