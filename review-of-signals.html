@@ -472,234 +472,247 @@ x(t)=Ae^{j(2\pi f_0t+\theta)}
 </footer>
 </main>
 
+
 <script>
-(function(){
-'use strict';
-const darkTheme=window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-const C=darkTheme
- ? {grid:'#34445c',axis:'#9aaec4',text:'#d7e6f5',blue:'#38bdf8',cyan:'#7dd3fc',orange:'#f59e0b',green:'#4ade80',red:'#fb7185'}
- : {grid:'#dce4ef',axis:'#53657b',text:'#35465c',blue:'#1268c4',cyan:'#0785a3',orange:'#c56a08',green:'#168653',red:'#c43e52'};
-function setupCanvas(canvas){
-  const dpr=window.devicePixelRatio||1, w=canvas.clientWidth||canvas.width, h=canvas.clientHeight||canvas.height;
-  canvas.width=Math.round(w*dpr); canvas.height=Math.round(h*dpr);
-  const ctx=canvas.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
-  return {ctx,w,h};
-}
-function axes(ctx,w,h,xmin,xmax,ymin,ymax){
-  const L=48,R=14,T=14,B=30, pw=w-L-R,ph=h-T-B;
-  const X=x=>L+(x-xmin)/(xmax-xmin)*pw, Y=y=>T+(ymax-y)/(ymax-ymin)*ph;
-  ctx.clearRect(0,0,w,h); ctx.font='12px system-ui'; ctx.lineWidth=1;
-  ctx.strokeStyle=C.grid;
-  for(let i=0;i<=8;i++){let x=L+pw*i/8;ctx.beginPath();ctx.moveTo(x,T);ctx.lineTo(x,T+ph);ctx.stroke();}
-  for(let i=0;i<=4;i++){let y=T+ph*i/4;ctx.beginPath();ctx.moveTo(L,y);ctx.lineTo(L+pw,y);ctx.stroke();}
-  ctx.strokeStyle=C.axis;ctx.lineWidth=1.2;
-  if(ymin<0&&ymax>0){ctx.beginPath();ctx.moveTo(L,Y(0));ctx.lineTo(L+pw,Y(0));ctx.stroke();}
-  if(xmin<0&&xmax>0){ctx.beginPath();ctx.moveTo(X(0),T);ctx.lineTo(X(0),T+ph);ctx.stroke();}
-  ctx.fillStyle=C.text;ctx.textAlign='center';ctx.fillText('Time',L+pw/2,h-7);
-  ctx.textAlign='right';ctx.fillText(ymax.toFixed(1),L-7,T+4);ctx.fillText(ymin.toFixed(1),L-7,T+ph);
-  ctx.textAlign='left';ctx.fillText(xmin.toFixed(1),L,T+ph+17);ctx.textAlign='right';ctx.fillText(xmax.toFixed(1),L+pw,T+ph+17);
-  return {X,Y,L,R,T,B,pw,ph};
-}
-function path(ctx,fn,range,style,width=2.5){
- const {X,Y}=range;ctx.beginPath();let started=false;
- for(let i=0;i<=700;i++){let x=-4+8*i/700,y=fn(x);if(!Number.isFinite(y))continue;let px=X(x),py=Y(y);if(!started){ctx.moveTo(px,py);started=true}else ctx.lineTo(px,py);}
- ctx.strokeStyle=style;ctx.lineWidth=width;ctx.lineJoin='round';ctx.stroke();
-}
-function value(kind,t,A=1,f=1){
- if(kind==='sine')return A*Math.cos(2*Math.PI*f*t);
- if(kind==='step')return t>=0?A:0;
- if(kind==='rect')return Math.abs(t)<=.5?A:0;
- if(kind==='tri')return Math.abs(t)<=1?A*(1-Math.abs(t)):0;
- if(kind==='sinc')return Math.abs(t)<1e-7?A:A*Math.sin(Math.PI*t)/(Math.PI*t);
- if(kind==='impulse')return 0;
- return 0;
-}
-function plotMini(canvas,kind){
- const {ctx,w,h}=setupCanvas(canvas),r=axes(ctx,w,h,-4,4,-1.3,1.5);
- if(kind==='impulse'){
-   const x=r.X(0),y=r.Y(0);ctx.strokeStyle=C.orange;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,r.Y(1.25));ctx.stroke();ctx.fillStyle=C.orange;ctx.beginPath();ctx.arc(x,r.Y(1.25),4,0,Math.PI*2);ctx.fill();ctx.fillStyle=C.text;ctx.fillText('area = 1',x+8,r.Y(1.15));
- } else if(kind==='step'||kind==='rect'){
-   ctx.strokeStyle=C.blue;ctx.lineWidth=2.5;ctx.beginPath();
-   if(kind==='step'){ctx.moveTo(r.X(-4),r.Y(0));ctx.lineTo(r.X(0),r.Y(0));ctx.lineTo(r.X(0),r.Y(1));ctx.lineTo(r.X(4),r.Y(1));}
-   else{ctx.moveTo(r.X(-4),r.Y(0));ctx.lineTo(r.X(-.5),r.Y(0));ctx.lineTo(r.X(-.5),r.Y(1));ctx.lineTo(r.X(.5),r.Y(1));ctx.lineTo(r.X(.5),r.Y(0));ctx.lineTo(r.X(4),r.Y(0));}
-   ctx.stroke();
- } else path(ctx,t=>value(kind,t),r,C.blue);
-}
-document.querySelectorAll('.mini-plot').forEach(c=>plotMini(c,c.dataset.kind));
-
-const signalType=document.getElementById('sigType');
-
-const signalInfo={
- sine:{
-  title:'Sinusoidal signal',
-  formula:String.raw`\[x(t)=A\cos(2\pi f_0t+\theta)\]`,
-  description:String.raw`A periodic signal that oscillates between \(-A\) and \(A\). Here, \(A\) is the amplitude, \(f_0\) is the frequency, and \(\theta\) is the phase.`
- },
- step:{
-  title:'Unit step signal',
-  formula:String.raw`\[u(t)=\begin{cases}1,&t\geq 0\\0,&t<0\end{cases}\]`,
-  description:String.raw`The unit step is zero for negative time and one for nonnegative time. It represents a signal that is switched on at \(t=0\).`
- },
- rect:{
-  title:'Rectangular pulse',
-  formula:String.raw`\[\Pi(t)=\begin{cases}1,&|t|\leq \frac{1}{2}\\0,&|t|>\frac{1}{2}\end{cases}\]`,
-  description:String.raw`A rectangular pulse with unit amplitude and unit duration, centered at the origin.`
- },
- tri:{
-  title:'Triangular signal',
-  formula:String.raw`\[\Lambda(t)=\begin{cases}1-|t|,&|t|\leq 1\\0,&|t|>1\end{cases}\]`,
-  description:String.raw`A triangular pulse that reaches its maximum value at \(t=0\) and decreases linearly to zero at \(t=-1\) and \(t=1\).`
- },
- sinc:{
-  title:'Sinc signal',
-  formula:String.raw`\[\operatorname{sinc}(t)=\begin{cases}\dfrac{\sin(\pi t)}{\pi t},&t\neq 0\\1,&t=0\end{cases}\]`,
-  description:String.raw`The sinc signal has a maximum value of one at the origin, with oscillating side lobes that decay away from the origin.`
- },
- impulse:{
-  title:'Impulse (delta) signal',
-  formula:String.raw`\[\delta(t),\qquad \int_{-\infty}^{\infty}\delta(t)\,dt=1\]`,
-  description:String.raw`The ideal impulse is zero everywhere except at \(t=0\), and has unit area. Its arrow in the plot represents the ideal impulse, not an ordinary finite-height pulse.`
- }
-};
-
-function updateSignalDefinition(){
- const info=signalInfo[signalType.value];
- if(!info)return;
- const title=document.getElementById('signalTitle');
- const formula=document.getElementById('signalFormula');
- const description=document.getElementById('signalDescription');
- title.textContent=info.title;
- formula.innerHTML=info.formula;
- description.innerHTML=info.description;
- if(window.MathJax&&MathJax.typesetPromise){
-  if(MathJax.typesetClear)MathJax.typesetClear([formula,description]);
-  MathJax.typesetPromise([formula,description]);
- }
-}
-
-function drawExplorer(){
- const canvas=document.getElementById('signalExplorer');
- if(!canvas||!signalType)return;
- const {ctx,w,h}=setupCanvas(canvas);
- const kind=signalType.value;
- const r=axes(ctx,w,h,-4,4,-1.5,1.5);
-
- if(kind==='impulse'){
-  const x=r.X(0),y0=r.Y(0),yt=r.Y(1.2);
-  ctx.strokeStyle=C.orange;
-  ctx.fillStyle=C.orange;
-  ctx.lineWidth=3;
-  ctx.beginPath();
-  ctx.moveTo(x,y0);
-  ctx.lineTo(x,yt);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(x,yt);
-  ctx.lineTo(x-6,yt+10);
-  ctx.lineTo(x+6,yt+10);
-  ctx.closePath();
-  ctx.fill();
-  ctx.fillStyle=C.text;
-  ctx.textAlign='left';
-  ctx.fillText('area = 1',x+12,yt+4);
- }else if(kind==='step'||kind==='rect'){
-  ctx.strokeStyle=C.blue;
-  ctx.lineWidth=3;
-  ctx.beginPath();
-  if(kind==='step'){
-   ctx.moveTo(r.X(-4),r.Y(0));
-   ctx.lineTo(r.X(0),r.Y(0));
-   ctx.lineTo(r.X(0),r.Y(1));
-   ctx.lineTo(r.X(4),r.Y(1));
-  }else{
-   ctx.moveTo(r.X(-4),r.Y(0));
-   ctx.lineTo(r.X(-.5),r.Y(0));
-   ctx.lineTo(r.X(-.5),r.Y(1));
-   ctx.lineTo(r.X(.5),r.Y(1));
-   ctx.lineTo(r.X(.5),r.Y(0));
-   ctx.lineTo(r.X(4),r.Y(0));
+  (function(){
+  'use strict';
+  // Shared dark plotting palette used by every canvas in this script.
+  const C = {
+    background: '#0b1b2b',
+    panel: '#10263a',
+    grid: 'rgba(160,190,210,0.14)',
+    axis: 'rgba(210,225,240,0.75)',
+    text: '#eaf3fa',
+    muted: '#9fb5c7',
+    blue: '#55c8f2',
+    cyan: '#7dd3fc',
+    orange: '#f3b45f',
+    green: '#62d99a',
+    red: '#fb7185'
+  };
+  function setupCanvas(canvas){
+    const dpr=window.devicePixelRatio||1, w=canvas.clientWidth||canvas.width, h=canvas.clientHeight||canvas.height;
+    canvas.width=Math.round(w*dpr); canvas.height=Math.round(h*dpr);
+    const ctx=canvas.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
+    return {ctx,w,h};
   }
-  ctx.stroke();
- }else{
-  path(ctx,t=>value(kind,t,1,1),r,C.blue,3);
- }
-}
-
-signalType.addEventListener('change',()=>{
- updateSignalDefinition();
- drawExplorer();
-});
-updateSignalDefinition();
-drawExplorer();
-
-const shift=document.getElementById('shift'),scale=document.getElementById('scale'),amp=document.getElementById('amp');
-function baseRamp(t){return t>0&&t<1?t:0;}
-function drawTransform(){
- const c=document.getElementById('transformPlot'),{ctx,w,h}=setupCanvas(c),t0=+shift.value,a=+scale.value,A=+amp.value,r=axes(ctx,w,h,-3,4,-2.2,2.2);
- path(ctx,baseRamp,r,C.cyan,2.2);
- path(ctx,t=>Math.abs(a)<.001?0:A*baseRamp(a*(t-t0)),r,C.orange,3);
- document.getElementById('shiftOut').textContent=t0.toFixed(1);document.getElementById('scaleOut').textContent=a.toFixed(1);document.getElementById('ampOut').textContent=A.toFixed(1);
- document.getElementById('transformDescription').textContent=Math.abs(a)<.001?'a = 0: the transformed signal is zero.':a<0?'Negative a: time reversal and scaling.':a>1?'a > 1: time contraction.':a<1?'0 < a < 1: time expansion.':(t0>0?'Positive shift: delayed to the right.':t0<0?'Negative shift: advanced to the left.':'No time shift.');
-}
-[shift,scale,amp].forEach(x=>x.addEventListener('input',drawTransform));document.getElementById('resetTransform').addEventListener('click',()=>{shift.value=.8;scale.value=1;amp.value=1;drawTransform();});drawTransform();
-
-// Sampling demo is not present in this HTML version, so its old handlers
-// are omitted to keep the remaining demos independent.
-
-// The previous static even/odd and energy demos were removed from the HTML.
-// Their old handlers are intentionally not initialized here; the animated
-// even/odd demo has its own isolated script below.
-
-const realPart=document.getElementById('realPart'),imagPart=document.getElementById('imagPart'),phaseAnimate=document.getElementById('phaseAnimate');
-let phase=0,raf=null;
-function drawComplex(){
- const c=document.getElementById('complexPlot'),{ctx,w,h}=setupCanvas(c),a=+realPart.value,b=+imagPart.value,mag=Math.hypot(a,b),ang=Math.atan2(b,a);
- const cx=w/2,cy=h/2,scalePx=Math.min((w-100)/7,(h-65)/7),X=x=>cx+x*scalePx,Y=y=>cy-y*scalePx;
- ctx.clearRect(0,0,w,h);ctx.strokeStyle=C.grid;ctx.lineWidth=1;
- for(let k=-3;k<=3;k++){ctx.beginPath();ctx.moveTo(X(k),15);ctx.lineTo(X(k),h-30);ctx.stroke();ctx.beginPath();ctx.moveTo(40,Y(k));ctx.lineTo(w-20,Y(k));ctx.stroke();}
- ctx.strokeStyle=C.axis;ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(35,cy);ctx.lineTo(w-20,cy);ctx.moveTo(cx,15);ctx.lineTo(cx,h-25);ctx.stroke();
- ctx.fillStyle=C.text;ctx.font='13px system-ui';ctx.fillText('Real',w-52,cy-9);ctx.fillText('Imaginary',cx+9,23);
- const drawVec=(vx,vy,color,width)=>{ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=width;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(X(vx),Y(vy));ctx.stroke();ctx.beginPath();ctx.arc(X(vx),Y(vy),4,0,Math.PI*2);ctx.fill();};
- drawVec(a,b,C.cyan,3);
- if(phaseAnimate.checked&&mag>0){let px=mag*Math.cos(phase),py=mag*Math.sin(phase);drawVec(px,py,C.orange,2.5);ctx.setLineDash([5,5]);ctx.strokeStyle=C.orange;ctx.beginPath();ctx.arc(cx,cy,mag*scalePx,0,-phase,false);ctx.stroke();ctx.setLineDash([]);}
- ctx.fillStyle=C.text;ctx.fillText(`z = ${a.toFixed(1)} ${b<0?'−':'+ j'} ${Math.abs(b).toFixed(1)}j`,48,25);
- document.getElementById('realOut').textContent=a.toFixed(1);document.getElementById('imagOut').textContent=b.toFixed(1);
- document.getElementById('complexMag').textContent=`Magnitude: ${mag.toFixed(3)}`;
- document.getElementById('complexPhase').textContent=`Phase: ${(ang*180/Math.PI).toFixed(1)}°`;
- document.getElementById('complexPolar').textContent=`Polar form: ${mag.toFixed(3)} ∠ ${(ang*180/Math.PI).toFixed(1)}°`;
-}
-function animate(){
- if(!phaseAnimate.checked){drawComplex();return;}
- phase+=.018;drawComplex();raf=requestAnimationFrame(animate);
-}
-[realPart,imagPart].forEach(x=>x.addEventListener('input',drawComplex));
-phaseAnimate.addEventListener('change',()=>{if(phaseAnimate.checked){if(raf)cancelAnimationFrame(raf);animate();}else{if(raf)cancelAnimationFrame(raf);drawComplex();}});
-drawComplex();if(phaseAnimate.checked)animate();
-
-document.querySelectorAll('[data-quiz]').forEach(card=>{
- card.querySelector('.check-quiz').addEventListener('click',()=>{
-  let score=0,total=0;
-  card.querySelectorAll('.quiz-question').forEach(q=>{
-   total++;const chosen=q.querySelector('input:checked'),fb=q.querySelector('.quiz-feedback'),correct=chosen&&chosen.value===q.dataset.answer;
-   if(correct)score++;
-   fb.textContent=chosen?(correct?'Correct. ': 'Not quite. ')+q.dataset.feedback:'Please select an answer.';
-   fb.className='quiz-feedback '+(correct?'correct':chosen?'incorrect':'');
+  function axes(ctx,w,h,xmin,xmax,ymin,ymax){
+    const L=48,R=14,T=14,B=30, pw=w-L-R,ph=h-T-B;
+    const X=x=>L+(x-xmin)/(xmax-xmin)*pw, Y=y=>T+(ymax-y)/(ymax-ymin)*ph;
+    ctx.clearRect(0,0,w,h); ctx.fillStyle=C.background; ctx.fillRect(0,0,w,h); ctx.font='12px system-ui'; ctx.lineWidth=1;
+    ctx.strokeStyle=C.grid;
+    for(let i=0;i<=8;i++){let x=L+pw*i/8;ctx.beginPath();ctx.moveTo(x,T);ctx.lineTo(x,T+ph);ctx.stroke();}
+    for(let i=0;i<=4;i++){let y=T+ph*i/4;ctx.beginPath();ctx.moveTo(L,y);ctx.lineTo(L+pw,y);ctx.stroke();}
+    ctx.strokeStyle=C.axis;ctx.lineWidth=1.2;
+    if(ymin<0&&ymax>0){ctx.beginPath();ctx.moveTo(L,Y(0));ctx.lineTo(L+pw,Y(0));ctx.stroke();}
+    if(xmin<0&&xmax>0){ctx.beginPath();ctx.moveTo(X(0),T);ctx.lineTo(X(0),T+ph);ctx.stroke();}
+    ctx.fillStyle=C.text;ctx.textAlign='center';ctx.fillText('Time',L+pw/2,h-7);
+    ctx.textAlign='right';ctx.fillText(ymax.toFixed(1),L-7,T+4);ctx.fillText(ymin.toFixed(1),L-7,T+ph);
+    ctx.textAlign='left';ctx.fillText(xmin.toFixed(1),L,T+ph+17);ctx.textAlign='right';ctx.fillText(xmax.toFixed(1),L+pw,T+ph+17);
+    return {X,Y,L,R,T,B,pw,ph};
+  }
+  function path(ctx,fn,range,style,width=2.5){
+   const {X,Y}=range;ctx.beginPath();let started=false;
+   for(let i=0;i<=700;i++){let x=-4+8*i/700,y=fn(x);if(!Number.isFinite(y))continue;let px=X(x),py=Y(y);if(!started){ctx.moveTo(px,py);started=true}else ctx.lineTo(px,py);}
+   ctx.strokeStyle=style;ctx.lineWidth=width;ctx.lineJoin='round';ctx.stroke();
+  }
+  function value(kind,t,A=1,f=1){
+   if(kind==='sine')return A*Math.cos(2*Math.PI*f*t);
+   if(kind==='step')return t>=0?A:0;
+   if(kind==='rect')return Math.abs(t)<=.5?A:0;
+   if(kind==='tri')return Math.abs(t)<=1?A*(1-Math.abs(t)):0;
+   if(kind==='sinc')return Math.abs(t)<1e-7?A:A*Math.sin(Math.PI*t)/(Math.PI*t);
+   if(kind==='impulse')return 0;
+   return 0;
+  }
+  function plotMini(canvas,kind){
+   const {ctx,w,h}=setupCanvas(canvas),r=axes(ctx,w,h,-4,4,-1.3,1.5);
+   if(kind==='impulse'){
+     const x=r.X(0),y=r.Y(0);ctx.strokeStyle=C.orange;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,r.Y(1.25));ctx.stroke();ctx.fillStyle=C.orange;ctx.beginPath();ctx.arc(x,r.Y(1.25),4,0,Math.PI*2);ctx.fill();ctx.fillStyle=C.text;ctx.fillText('area = 1',x+8,r.Y(1.15));
+   } else if(kind==='step'||kind==='rect'){
+     ctx.strokeStyle=C.blue;ctx.lineWidth=2.5;ctx.beginPath();
+     if(kind==='step'){ctx.moveTo(r.X(-4),r.Y(0));ctx.lineTo(r.X(0),r.Y(0));ctx.lineTo(r.X(0),r.Y(1));ctx.lineTo(r.X(4),r.Y(1));}
+     else{ctx.moveTo(r.X(-4),r.Y(0));ctx.lineTo(r.X(-.5),r.Y(0));ctx.lineTo(r.X(-.5),r.Y(1));ctx.lineTo(r.X(.5),r.Y(1));ctx.lineTo(r.X(.5),r.Y(0));ctx.lineTo(r.X(4),r.Y(0));}
+     ctx.stroke();
+   } else path(ctx,t=>value(kind,t),r,C.blue);
+  }
+  document.querySelectorAll('.mini-plot').forEach(c=>plotMini(c,c.dataset.kind));
+  
+  const signalType=document.getElementById('sigType');
+  
+  const signalInfo={
+   sine:{
+    title:'Sinusoidal signal',
+    formula:String.raw`\[x(t)=A\cos(2\pi f_0t+\theta)\]`,
+    description:String.raw`A periodic signal that oscillates between \(-A\) and \(A\). Here, \(A\) is the amplitude, \(f_0\) is the frequency, and \(\theta\) is the phase.`
+   },
+   step:{
+    title:'Unit step signal',
+    formula:String.raw`\[u(t)=\begin{cases}1,&t\geq 0\\0,&t<0\end{cases}\]`,
+    description:String.raw`The unit step is zero for negative time and one for nonnegative time. It represents a signal that is switched on at \(t=0\).`
+   },
+   rect:{
+    title:'Rectangular pulse',
+    formula:String.raw`\[\Pi(t)=\begin{cases}1,&|t|\leq \frac{1}{2}\\0,&|t|>\frac{1}{2}\end{cases}\]`,
+    description:String.raw`A rectangular pulse with unit amplitude and unit duration, centered at the origin.`
+   },
+   tri:{
+    title:'Triangular signal',
+    formula:String.raw`\[\Lambda(t)=\begin{cases}1-|t|,&|t|\leq 1\\0,&|t|>1\end{cases}\]`,
+    description:String.raw`A triangular pulse that reaches its maximum value at \(t=0\) and decreases linearly to zero at \(t=-1\) and \(t=1\).`
+   },
+   sinc:{
+    title:'Sinc signal',
+    formula:String.raw`\[\operatorname{sinc}(t)=\begin{cases}\dfrac{\sin(\pi t)}{\pi t},&t\neq 0\\1,&t=0\end{cases}\]`,
+    description:String.raw`The sinc signal has a maximum value of one at the origin, with oscillating side lobes that decay away from the origin.`
+   },
+   impulse:{
+    title:'Impulse (delta) signal',
+    formula:String.raw`\[\delta(t),\qquad \int_{-\infty}^{\infty}\delta(t)\,dt=1\]`,
+    description:String.raw`The ideal impulse is zero everywhere except at \(t=0\), and has unit area. Its arrow in the plot represents the ideal impulse, not an ordinary finite-height pulse.`
+   }
+  };
+  
+  function updateSignalDefinition(){
+   const info=signalInfo[signalType.value];
+   if(!info)return;
+   const title=document.getElementById('signalTitle');
+   const formula=document.getElementById('signalFormula');
+   const description=document.getElementById('signalDescription');
+   title.textContent=info.title;
+   formula.innerHTML=info.formula;
+   description.innerHTML=info.description;
+   if(window.MathJax&&MathJax.typesetPromise){
+    if(MathJax.typesetClear)MathJax.typesetClear([formula,description]);
+    MathJax.typesetPromise([formula,description]);
+   }
+  }
+  
+  function drawExplorer(){
+   const canvas=document.getElementById('signalExplorer');
+   if(!canvas||!signalType)return;
+   const {ctx,w,h}=setupCanvas(canvas);
+   const kind=signalType.value;
+   const r=axes(ctx,w,h,-4,4,-1.5,1.5);
+  
+   if(kind==='impulse'){
+    const x=r.X(0),y0=r.Y(0),yt=r.Y(1.2);
+    ctx.strokeStyle=C.orange;
+    ctx.fillStyle=C.orange;
+    ctx.lineWidth=3;
+    ctx.beginPath();
+    ctx.moveTo(x,y0);
+    ctx.lineTo(x,yt);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x,yt);
+    ctx.lineTo(x-6,yt+10);
+    ctx.lineTo(x+6,yt+10);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle=C.text;
+    ctx.textAlign='left';
+    ctx.fillText('area = 1',x+12,yt+4);
+   }else if(kind==='step'||kind==='rect'){
+    ctx.strokeStyle=C.blue;
+    ctx.lineWidth=3;
+    ctx.beginPath();
+    if(kind==='step'){
+     ctx.moveTo(r.X(-4),r.Y(0));
+     ctx.lineTo(r.X(0),r.Y(0));
+     ctx.lineTo(r.X(0),r.Y(1));
+     ctx.lineTo(r.X(4),r.Y(1));
+    }else{
+     ctx.moveTo(r.X(-4),r.Y(0));
+     ctx.lineTo(r.X(-.5),r.Y(0));
+     ctx.lineTo(r.X(-.5),r.Y(1));
+     ctx.lineTo(r.X(.5),r.Y(1));
+     ctx.lineTo(r.X(.5),r.Y(0));
+     ctx.lineTo(r.X(4),r.Y(0));
+    }
+    ctx.stroke();
+   }else{
+    path(ctx,t=>value(kind,t,1,1),r,C.blue,3);
+   }
+  }
+  
+  signalType.addEventListener('change',()=>{
+   updateSignalDefinition();
+   drawExplorer();
   });
-  card.querySelector('.quiz-score').textContent=`Score: ${score}/${total}`;
- });
- card.querySelector('.reset-quiz').addEventListener('click',()=>{
-  card.querySelectorAll('input').forEach(i=>i.checked=false);
-  card.querySelectorAll('.quiz-feedback').forEach(f=>{f.textContent='';f.className='quiz-feedback';});
-  card.querySelector('.quiz-score').textContent='';
- });
-});
-window.addEventListener('resize',()=>{
- document.querySelectorAll('.mini-plot').forEach(c=>plotMini(c,c.dataset.kind));
- drawExplorer();drawTransform();drawComplex();
-});
-})();
+  updateSignalDefinition();
+  drawExplorer();
+  
+  const shift=document.getElementById('shift'),scale=document.getElementById('scale'),amp=document.getElementById('amp');
+  function baseRamp(t){return t>0&&t<1?t:0;}
+  function drawTransform(){
+   const c=document.getElementById('transformPlot'),{ctx,w,h}=setupCanvas(c),t0=+shift.value,a=+scale.value,A=+amp.value,r=axes(ctx,w,h,-3,4,-2.2,2.2);
+   path(ctx,baseRamp,r,C.cyan,2.2);
+   path(ctx,t=>Math.abs(a)<.001?0:A*baseRamp(a*(t-t0)),r,C.orange,3);
+   document.getElementById('shiftOut').textContent=t0.toFixed(1);document.getElementById('scaleOut').textContent=a.toFixed(1);document.getElementById('ampOut').textContent=A.toFixed(1);
+   document.getElementById('transformDescription').textContent=Math.abs(a)<.001?'a = 0: the transformed signal is zero.':a<0?'Negative a: time reversal and scaling.':a>1?'a > 1: time contraction.':a<1?'0 < a < 1: time expansion.':(t0>0?'Positive shift: delayed to the right.':t0<0?'Negative shift: advanced to the left.':'No time shift.');
+  }
+  [shift,scale,amp].forEach(x=>x.addEventListener('input',drawTransform));document.getElementById('resetTransform').addEventListener('click',()=>{shift.value=.8;scale.value=1;amp.value=1;drawTransform();});drawTransform();
+  
+  // Sampling demo is not present in this HTML version, so its old handlers
+  // are omitted to keep the remaining demos independent.
+  
+  // The previous static even/odd and energy demos were removed from the HTML.
+  // Their old handlers are intentionally not initialized here; the animated
+  // even/odd demo has its own isolated script below.
+  
+  const realPart=document.getElementById('realPart'),imagPart=document.getElementById('imagPart'),phaseAnimate=document.getElementById('phaseAnimate');
+  let phase=0,raf=null;
+  function drawComplex(){
+   const c=document.getElementById('complexPlot'),{ctx,w,h}=setupCanvas(c),a=+realPart.value,b=+imagPart.value,mag=Math.hypot(a,b),ang=Math.atan2(b,a);
+   const cx=w/2,cy=h/2,scalePx=Math.min((w-100)/7,(h-65)/7),X=x=>cx+x*scalePx,Y=y=>cy-y*scalePx;
+   ctx.clearRect(0,0,w,h);ctx.fillStyle=C.background;ctx.fillRect(0,0,w,h);ctx.strokeStyle=C.grid;ctx.lineWidth=1;
+   for(let k=-3;k<=3;k++){ctx.beginPath();ctx.moveTo(X(k),15);ctx.lineTo(X(k),h-30);ctx.stroke();ctx.beginPath();ctx.moveTo(40,Y(k));ctx.lineTo(w-20,Y(k));ctx.stroke();}
+   ctx.strokeStyle=C.axis;ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(35,cy);ctx.lineTo(w-20,cy);ctx.moveTo(cx,15);ctx.lineTo(cx,h-25);ctx.stroke();
+   ctx.fillStyle=C.text;ctx.font='13px system-ui';ctx.fillText('Real',w-52,cy-9);ctx.fillText('Imaginary',cx+9,23);
+   const drawVec=(vx,vy,color,width)=>{ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=width;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(X(vx),Y(vy));ctx.stroke();ctx.beginPath();ctx.arc(X(vx),Y(vy),4,0,Math.PI*2);ctx.fill();};
+   drawVec(a,b,C.cyan,3);
+   if(phaseAnimate.checked&&mag>0){let px=mag*Math.cos(phase),py=mag*Math.sin(phase);drawVec(px,py,C.orange,2.5);ctx.setLineDash([5,5]);ctx.strokeStyle=C.orange;ctx.beginPath();ctx.arc(cx,cy,mag*scalePx,0,-phase,false);ctx.stroke();ctx.setLineDash([]);}
+   ctx.fillStyle=C.text;ctx.fillText(`z = ${a.toFixed(1)} ${b<0?'−':'+ j'} ${Math.abs(b).toFixed(1)}j`,48,25);
+   document.getElementById('realOut').textContent=a.toFixed(1);document.getElementById('imagOut').textContent=b.toFixed(1);
+   document.getElementById('complexMag').textContent=`Magnitude: ${mag.toFixed(3)}`;
+   document.getElementById('complexPhase').textContent=`Phase: ${(ang*180/Math.PI).toFixed(1)}°`;
+   document.getElementById('complexPolar').textContent=`Polar form: ${mag.toFixed(3)} ∠ ${(ang*180/Math.PI).toFixed(1)}°`;
+  }
+  function animate(){
+   if(!phaseAnimate.checked){drawComplex();return;}
+   phase+=.018;drawComplex();raf=requestAnimationFrame(animate);
+  }
+  [realPart,imagPart].forEach(x=>x.addEventListener('input',drawComplex));
+  phaseAnimate.addEventListener('change',()=>{if(phaseAnimate.checked){if(raf)cancelAnimationFrame(raf);animate();}else{if(raf)cancelAnimationFrame(raf);drawComplex();}});
+  drawComplex();if(phaseAnimate.checked)animate();
+  
+  document.querySelectorAll('[data-quiz]').forEach(card=>{
+   card.querySelector('.check-quiz').addEventListener('click',()=>{
+    let score=0,total=0;
+    card.querySelectorAll('.quiz-question').forEach(q=>{
+     total++;const chosen=q.querySelector('input:checked'),fb=q.querySelector('.quiz-feedback'),correct=chosen&&chosen.value===q.dataset.answer;
+     if(correct)score++;
+     fb.textContent=chosen?(correct?'Correct. ': 'Not quite. ')+q.dataset.feedback:'Please select an answer.';
+     fb.className='quiz-feedback '+(correct?'correct':chosen?'incorrect':'');
+    });
+    card.querySelector('.quiz-score').textContent=`Score: ${score}/${total}`;
+   });
+   card.querySelector('.reset-quiz').addEventListener('click',()=>{
+    card.querySelectorAll('input').forEach(i=>i.checked=false);
+    card.querySelectorAll('.quiz-feedback').forEach(f=>{f.textContent='';f.className='quiz-feedback';});
+    card.querySelector('.quiz-score').textContent='';
+   });
+  });
+  window.addEventListener('resize',()=>{
+   document.querySelectorAll('.mini-plot').forEach(c=>plotMini(c,c.dataset.kind));
+   drawExplorer();drawTransform();drawComplex();
+  });
+  })();
 
-const classificationType =
+
+
+  const classificationType =
   document.getElementById('classificationType');
 
 const classificationData = {
@@ -895,6 +908,8 @@ function drawClassificationPlot(canvas, spec) {
 
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = C.background;
+  ctx.fillRect(0, 0, w, h);
 
   const left = 48, right = 15, top = 15, bottom = 32;
   const pw = w - left - right;
@@ -906,14 +921,9 @@ function drawClassificationPlot(canvas, spec) {
   const Y = y => top + (spec.ymax - y) /
     (spec.ymax - spec.ymin) * ph;
 
-  const grid = getComputedStyle(document.documentElement)
-    .getPropertyValue('--ln').trim() || '#555';
-
-  const textColor = getComputedStyle(document.documentElement)
-    .getPropertyValue('--mut').trim() || '#999';
-
-  const axisColor = getComputedStyle(document.documentElement)
-    .getPropertyValue('--fg').trim() || '#222';
+  const grid = C.grid;
+  const textColor = C.muted;
+  const axisColor = C.axis;
 
   // Grid
   ctx.strokeStyle = grid;
@@ -957,15 +967,22 @@ function drawClassificationPlot(canvas, spec) {
   ctx.fillStyle = textColor;
   ctx.font = '11px system-ui';
   ctx.textAlign = 'center';
-  ctx.fillText('Time', left + pw / 2, h - 5);
+  ctx.fillText('Time  t', left + pw / 2, h - 5);
 
   ctx.textAlign = 'right';
-  ctx.fillText(spec.xmin, left, h - 17);
-  ctx.fillText(spec.xmax, left + pw, h - 17);
+  for (let i = 0; i <= 4; i++) {
+    const value = spec.ymax - i * (spec.ymax - spec.ymin) / 4;
+    const y = top + i * ph / 4;
+    ctx.fillText(value.toFixed(1), left - 7, y + 4);
+  }
+
+  ctx.textAlign = 'center';
+  ctx.fillText(spec.xmin.toFixed(1), left, h - 17);
+  ctx.fillText(spec.xmax.toFixed(1), left + pw, h - 17);
 
   // Signal
-  ctx.strokeStyle = '#38bdf8';
-  ctx.fillStyle = '#38bdf8';
+  ctx.strokeStyle = C.blue;
+  ctx.fillStyle = C.blue;
   ctx.lineWidth = 2.5;
 
   if (spec.samples) {
@@ -1055,7 +1072,6 @@ classificationType.addEventListener('change',drawClassification);
 drawClassification();
 
 window.addEventListener('resize',drawClassification);
-
 
 // Animated even/odd decomposition demo
 (() => {
@@ -1670,7 +1686,6 @@ startAnimation();
 
 })();
 
-
 // Energy and power demo
 /* =====================================================
    ENERGY / POWER DEMO
@@ -1688,18 +1703,9 @@ if (!energyCanvas || !energyType || !energyT ||
 
 const ctx = energyCanvas.getContext('2d');
 
-// Consistent dark-theme plotting colors
-const C = {
-  background: '#0b1b2b',
-  panel: '#10263a',
-  blue: '#55c8f2',
-  green: '#62d99a',
-  orange: '#f3b45f',
-  grid: 'rgba(160,190,210,0.14)',
-  axis: 'rgba(210,225,240,0.75)',
-  text: '#eaf3fa',
-  muted: '#9fb5c7'
-};
+// Reuse the shared dark-theme plotting colors
+const energyColors = C;
+
 
 // Canvas setup
 function setupCanvas() {
@@ -1732,11 +1738,11 @@ function axes(w, h, xmin, xmax, ymin, ymax) {
   ctx.clearRect(0, 0, w, h);
 
   // Plot background
-  ctx.fillStyle = C.background;
+  ctx.fillStyle = energyColors.background;
   ctx.fillRect(0, 0, w, h);
 
   // Grid
-  ctx.strokeStyle = C.grid;
+  ctx.strokeStyle = energyColors.grid;
   ctx.lineWidth = 1;
 
   for (let i = 0; i <= 8; i++) {
@@ -1756,7 +1762,7 @@ function axes(w, h, xmin, xmax, ymin, ymax) {
   }
 
   // Axes
-  ctx.strokeStyle = C.axis;
+  ctx.strokeStyle = energyColors.axis;
   ctx.lineWidth = 1.3;
 
   if (ymin <= 0 && ymax >= 0) {
@@ -1774,7 +1780,7 @@ function axes(w, h, xmin, xmax, ymin, ymax) {
   }
 
   // Tick labels
-  ctx.fillStyle = C.muted;
+  ctx.fillStyle = energyColors.muted;
   ctx.font = '11px Arial';
 
   ctx.textAlign = 'right';
@@ -1796,7 +1802,7 @@ function axes(w, h, xmin, xmax, ymin, ymax) {
   }
 
   // Axis labels
-  ctx.fillStyle = C.text;
+  ctx.fillStyle = energyColors.text;
   ctx.font = '12px Arial';
 
   ctx.textAlign = 'center';
@@ -1815,9 +1821,9 @@ function axes(w, h, xmin, xmax, ymin, ymax) {
 function drawLegend(w) {
 
   const items = [
-    { color: C.blue, text: 'Signal  x(t)', type: 'line' },
-    { color: C.green, text: 'Energy density  |x(t)|²', type: 'area' },
-    { color: C.orange, text: 'Observation window', type: 'line' }
+    { color: energyColors.blue, text: 'Signal  x(t)', type: 'line' },
+    { color: energyColors.green, text: 'Energy density  |x(t)|²', type: 'area' },
+    { color: energyColors.orange, text: 'Observation window', type: 'line' }
   ];
 
   ctx.font = '11px Arial';
@@ -1851,7 +1857,7 @@ function drawLegend(w) {
       ctx.stroke();
     }
 
-    ctx.fillStyle = C.text;
+    ctx.fillStyle = energyColors.text;
     ctx.fillText(item.text, x + 20, y + 4);
 
     x += widths[i] + gap;
@@ -1954,7 +1960,7 @@ function drawEnergyDemo() {
   ctx.fill();
 
   // Observation window boundaries
-  ctx.strokeStyle = C.orange;
+  ctx.strokeStyle = energyColors.orange;
   ctx.lineWidth = 2;
   ctx.setLineDash([5, 4]);
 
@@ -1980,7 +1986,7 @@ function drawEnergyDemo() {
     else ctx.lineTo(px, py);
   }
 
-  ctx.strokeStyle = C.blue;
+  ctx.strokeStyle = energyColors.blue;
   ctx.lineWidth = 2.8;
   ctx.lineJoin = 'round';
   ctx.lineCap = 'round';
@@ -2014,8 +2020,8 @@ window.addEventListener('resize', drawEnergyDemo);
 drawEnergyDemo();
 
 })();
-
-
 </script>
+
+
 </body>
 </html>
