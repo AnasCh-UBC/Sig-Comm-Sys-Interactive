@@ -1472,7 +1472,12 @@ addLatexLegend(x3, top, rightW,
 
 (function(){
 
-const energyType =
+  const C = {
+    blue:'#38bdf8',
+    orange:'#f59e0b'
+};
+
+  const energyType =
     document.getElementById('energyType');
 
 const energyT =
@@ -1488,6 +1493,28 @@ const energyCanvas =
     document.getElementById('energyPlot');
 
 if(!energyCanvas) return;
+
+function setupCanvas(canvas){
+  const dpr=window.devicePixelRatio||1, w=canvas.clientWidth||canvas.width, h=canvas.clientHeight||canvas.height;
+  canvas.width=Math.round(w*dpr); canvas.height=Math.round(h*dpr);
+  const ctx=canvas.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx,w,h};
+}
+function axes(ctx,w,h,xmin,xmax,ymin,ymax){
+  const L=48,R=14,T=14,B=30, pw=w-L-R,ph=h-T-B;
+  const X=x=>L+(x-xmin)/(xmax-xmin)*pw, Y=y=>T+(ymax-y)/(ymax-ymin)*ph;
+  ctx.clearRect(0,0,w,h); ctx.font='12px system-ui'; ctx.lineWidth=1;
+  ctx.strokeStyle=C.grid;
+  for(let i=0;i<=8;i++){let x=L+pw*i/8;ctx.beginPath();ctx.moveTo(x,T);ctx.lineTo(x,T+ph);ctx.stroke();}
+  for(let i=0;i<=4;i++){let y=T+ph*i/4;ctx.beginPath();ctx.moveTo(L,y);ctx.lineTo(L+pw,y);ctx.stroke();}
+  ctx.strokeStyle=C.axis;ctx.lineWidth=1.2;
+  if(ymin<0&&ymax>0){ctx.beginPath();ctx.moveTo(L,Y(0));ctx.lineTo(L+pw,Y(0));ctx.stroke();}
+  if(xmin<0&&xmax>0){ctx.beginPath();ctx.moveTo(X(0),T);ctx.lineTo(X(0),T+ph);ctx.stroke();}
+  ctx.fillStyle=C.text;ctx.textAlign='center';ctx.fillText('Time',L+pw/2,h-7);
+  ctx.textAlign='right';ctx.fillText(ymax.toFixed(1),L-7,T+4);ctx.fillText(ymin.toFixed(1),L-7,T+ph);
+  ctx.textAlign='left';ctx.fillText(xmin.toFixed(1),L,T+ph+17);ctx.textAlign='right';ctx.fillText(xmax.toFixed(1),L+pw,T+ph+17);
+  return {X,Y,L,R,T,B,pw,ph};
+}
 
 function signalValue(t){
 
