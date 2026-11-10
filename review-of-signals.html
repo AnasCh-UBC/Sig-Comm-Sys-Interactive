@@ -241,12 +241,8 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
   </div>
   
   <p class="demo-note">
-  Blue shading indicates the observation interval
-  \( -T/2 \le t \le T/2 \).
-  The green region is the quantity being integrated:
-  \[
-  \int_{-T/2}^{T/2}|x(t)|^2\,dt.
-  \]
+  Blue shading: observation interval
+  \( -T/2 \le t \le T/2 \). Green region: quantity being integrated, i.e., \(|x(t)|^2\).
   </p>
   
   </div>
@@ -1061,93 +1057,126 @@ drawClassification();
 window.addEventListener('resize',drawClassification);
 
 
-// even/odd demo
+// Animated even/odd decomposition demo
 (() => {
-  const root = document.getElementById('symDecompDemo');
-  if (!root) return;
 
-  const canvas = root.querySelector('#symDecompCanvas');
+const root = document.getElementById('symDecompDemo');
+if (!root) return;
+
+const canvas = root.querySelector('#symDecompCanvas');
+if (!canvas) return;
+
 const ctx = canvas.getContext('2d');
 const selector = root.querySelector('#symDecompType');
+const replay = root.querySelector('#symDecompPlay');
+const status = root.querySelector('#symDecompStatus');
 
-// Set positioning for the LaTeX legends
+if (!selector || !replay || !status) return;
+
+// Positioning for HTML/MathJax legends
 root.style.position = 'relative';
 canvas.style.display = 'block';
 
-  const replay = root.querySelector('#symDecompPlay');
-  const status = root.querySelector('#symDecompStatus');
+// Signals
+const signals = {
+  mix: {
+    name: 'Causal exponential',
+    fn: t => t === 0 ? 0.5 : (t > 0 ? Math.exp(-t) : 0),
+    xmin: -4, xmax: 4, ymin: -0.7, ymax: 1.3
+  },
 
-  const signals = {
-    mix: {
-      name: 'Causal exponential',
-      fn: t => t === 0 ? 0.5 : (t > 0 ? Math.exp(-t) : 0),
-      xmin: -4, xmax: 4, ymin: -0.7, ymax: 1.3
-    },
-    ramp: {
-      name: 'Causal ramp',
-      fn: t => t >= 0 ? t : 0,
-      xmin: -4, xmax: 4, ymin: -1, ymax: 5
-    },
-    sine: {
-      name: 'Offset sinusoid',
-      fn: t => Math.sin(t) + 0.35,
-      xmin: -Math.PI * 2, xmax: Math.PI * 2,
-      ymin: -1.5, ymax: 1.5
-    }
-  };
+  ramp: {
+    name: 'Causal ramp',
+    fn: t => t >= 0 ? t : 0,
+    xmin: -4, xmax: 4, ymin: -1, ymax: 5
+  },
 
-  const colors = {
-    original: '#55c8f2',
-    even: '#62d99a',
-    odd: '#f3b45f',
-    reconstructed: '#55c8f2',
-    grid: 'rgba(160,190,210,0.16)',
-    axis: 'rgba(210,225,240,0.75)',
-    text: '#eaf3fa',
-    muted: '#9fb5c7',
-    arrow: '#55c8f2'
-  };
+  sine: {
+    name: 'Offset sinusoid',
+    fn: t => Math.sin(t) + 0.35,
+    xmin: -Math.PI * 2, xmax: Math.PI * 2,
+    ymin: -1.5, ymax: 1.5
+  }
+};
 
-  let progress = 0;
-  let playing = false;
-  let lastTime = 0;
-  let animationFrame = null;
+// Consistent plotting colors
+const colors = {
+  background: '#0b1b2b',
+  panel: 'rgba(15,35,55,0.85)',
+  panelBorder: 'rgba(100,160,195,0.4)',
 
-  const duration = 8500;
+  original: '#55c8f2',
+  even: '#62d99a',
+  odd: '#f3b45f',
+  reconstructed: '#55c8f2',
 
-  function resizeCanvas() {
+  grid: 'rgba(160,190,210,0.14)',
+  axis: 'rgba(210,225,240,0.75)',
+  text: '#eaf3fa',
+  muted: '#9fb5c7',
+  arrow: '#55c8f2'
+};
+
+let progress = 0;
+let playing = false;
+let lastTime = 0;
+let animationFrame = null;
+
+const duration = 8500;
+const canvasHeight = 350;
+
+// --------------------------------------------------
+// Canvas setup
+// --------------------------------------------------
+
+function resizeCanvas() {
+
   const rect = canvas.getBoundingClientRect();
   if (!rect.width) return;
 
   const dpr = window.devicePixelRatio || 1;
+
   canvas.width = Math.round(rect.width * dpr);
-  canvas.height = Math.round(350 * dpr);
-  canvas.style.height = '350px';
+  canvas.height = Math.round(canvasHeight * dpr);
+  canvas.style.height = canvasHeight + 'px';
 
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
   draw();
 }
 
-  function panel(x, y, w, h, title, equation, color) {
-    ctx.fillStyle = 'rgba(15,35,55,0.75)';
-    ctx.strokeStyle = 'rgba(100,160,195,0.4)';
-    ctx.lineWidth = 1;
-    roundedRect(x, y, w, h, 10);
-    ctx.fill();
-    ctx.stroke();
-  }
+// --------------------------------------------------
+// Panel backgrounds
+// --------------------------------------------------
 
-  function roundedRect(x, y, w, h, r) {
-    ctx.beginPath();
-    ctx.roundRect(x, y, w, h, r);
-  }
+function roundedRect(x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.roundRect(x, y, w, h, r);
+}
 
-  function addLatexLegend(x, y, w, title, latex, color) {
-  let legend = root.querySelector(`[data-legend="${latex}"]`);
+function panel(x, y, w, h) {
+
+  ctx.fillStyle = colors.panel;
+  ctx.strokeStyle = colors.panelBorder;
+  ctx.lineWidth = 1;
+
+  roundedRect(x, y, w, h, 10);
+  ctx.fill();
+  ctx.stroke();
+}
+
+// --------------------------------------------------
+// LaTeX headings
+// --------------------------------------------------
+
+function addLatexLegend(id, x, y, w, title, latex, color) {
+
+  let legend = root.querySelector(`[data-legend="${id}"]`);
 
   if (!legend) {
+
     legend = document.createElement('div');
-    legend.dataset.legend = latex;
+    legend.dataset.legend = id;
 
     legend.style.position = 'absolute';
     legend.style.display = 'flex';
@@ -1157,313 +1186,490 @@ canvas.style.display = 'block';
     legend.style.whiteSpace = 'nowrap';
     legend.style.pointerEvents = 'none';
     legend.style.zIndex = '2';
-    legend.style.fontSize = '13px';
+    legend.style.fontSize = '12px';
 
     legend.innerHTML = `
-      <span style="color:${color}; font-weight:bold;">${title}</span>
-      <span style="color:${color};">\\(${latex}\\)</span>
+      <span style="color:${color};font-weight:bold;">
+        ${title}
+      </span>
+      <span style="color:${color};">
+        \\(${latex}\\)
+      </span>
     `;
 
     root.appendChild(legend);
-
-    if (window.MathJax && MathJax.typesetPromise) {
-      MathJax.typesetPromise([legend]);
-    }
   }
 
-  // Account for the canvas position inside its parent
+  // Position relative to the canvas inside its parent
   legend.style.left = `${canvas.offsetLeft + x}px`;
   legend.style.top = `${canvas.offsetTop + y + 7}px`;
   legend.style.width = `${w}px`;
+
+  // Typeset only once
+  if (
+    window.MathJax &&
+    MathJax.typesetPromise &&
+    !legend.dataset.typeset
+  ) {
+    legend.dataset.typeset = 'true';
+    MathJax.typesetPromise([legend]).catch(() => {
+      legend.dataset.typeset = '';
+    });
+  }
 }
 
-  function arrow(x1, y1, x2, y2, alpha = 1) {
-    ctx.save();
-    ctx.globalAlpha = alpha;
-    ctx.strokeStyle = colors.arrow;
-    ctx.fillStyle = colors.arrow;
-    ctx.lineWidth = 2.2;
+// --------------------------------------------------
+// Arrows
+// --------------------------------------------------
+
+function arrow(x1, y1, x2, y2, alpha = 1) {
+
+  ctx.save();
+
+  ctx.globalAlpha = alpha;
+  ctx.strokeStyle = colors.arrow;
+  ctx.fillStyle = colors.arrow;
+  ctx.lineWidth = 2.2;
+
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+
+  const angle = Math.atan2(y2 - y1, x2 - x1);
+  const size = 8;
+
+  ctx.beginPath();
+
+  ctx.moveTo(x2, y2);
+
+  ctx.lineTo(
+    x2 - size * Math.cos(angle - Math.PI / 6),
+    y2 - size * Math.sin(angle - Math.PI / 6)
+  );
+
+  ctx.lineTo(
+    x2 - size * Math.cos(angle + Math.PI / 6),
+    y2 - size * Math.sin(angle + Math.PI / 6)
+  );
+
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.restore();
+}
+
+// --------------------------------------------------
+// Plotting function
+// --------------------------------------------------
+
+function plot(x, y, w, h, fn, signal, color, reveal = 1) {
+
+  const { xmin, xmax, ymin, ymax } = signal;
+
+  const left = x + 30;
+  const right = x + w - 10;
+  const top = y + 38;
+  const bottom = y + h - 35;
+
+  const X = t =>
+    left + (t - xmin) / (xmax - xmin) * (right - left);
+
+  const Y = v =>
+    bottom - (v - ymin) / (ymax - ymin) * (bottom - top);
+
+  ctx.save();
+
+  // Grid
+  ctx.strokeStyle = colors.grid;
+  ctx.lineWidth = 1;
+
+  for (let i = 0; i <= 4; i++) {
+
+    const xx = left + i * (right - left) / 4;
 
     ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
+    ctx.moveTo(xx, top);
+    ctx.lineTo(xx, bottom);
     ctx.stroke();
-
-    const angle = Math.atan2(y2 - y1, x2 - x1);
-    const size = 8;
-
-    ctx.beginPath();
-    ctx.moveTo(x2, y2);
-    ctx.lineTo(
-      x2 - size * Math.cos(angle - Math.PI / 6),
-      y2 - size * Math.sin(angle - Math.PI / 6)
-    );
-    ctx.lineTo(
-      x2 - size * Math.cos(angle + Math.PI / 6),
-      y2 - size * Math.sin(angle + Math.PI / 6)
-    );
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
   }
 
-  function plot(x, y, w, h, fn, signal, color, reveal = 1) {
-    const { xmin, xmax, ymin, ymax } = signal;
+  for (let i = 0; i <= 4; i++) {
 
-    const left = x + 27;
-    const right = x + w - 10;
-    const top = y + 38;
-    const bottom = y + h - 35;
+    const yy = top + i * (bottom - top) / 4;
 
-    const X = t => left + (t - xmin) / (xmax - xmin) * (right - left);
-    const Y = v => bottom - (v - ymin) / (ymax - ymin) * (bottom - top);
-
-    ctx.save();
-
-    // Grid
-    ctx.strokeStyle = colors.grid;
-    ctx.lineWidth = 1;
-
-    for (let i = 0; i <= 4; i++) {
-      const xx = left + i * (right - left) / 4;
-      ctx.beginPath();
-      ctx.moveTo(xx, top);
-      ctx.lineTo(xx, bottom);
-      ctx.stroke();
-    }
-
-    for (let i = 0; i <= 4; i++) {
-      const yy = top + i * (bottom - top) / 4;
-      ctx.beginPath();
-      ctx.moveTo(left, yy);
-      ctx.lineTo(right, yy);
-      ctx.stroke();
-    }
-
-    // Axes
-    ctx.strokeStyle = colors.axis;
-    ctx.lineWidth = 1.2;
-
-    if (ymin <= 0 && ymax >= 0) {
-      ctx.beginPath();
-      ctx.moveTo(left, Y(0));
-      ctx.lineTo(right, Y(0));
-      ctx.stroke();
-    }
-
-    if (xmin <= 0 && xmax >= 0) {
-      ctx.beginPath();
-      ctx.moveTo(X(0), top);
-      ctx.lineTo(X(0), bottom);
-      ctx.stroke();
-    }
-
-    // Time labels
-    ctx.fillStyle = colors.muted;
-    ctx.font = '10px Arial';
-    ctx.textAlign = 'center';
-
-    for (let i = 0; i <= 4; i++) {
-      const t = xmin + i * (xmax - xmin) / 4;
-      ctx.fillText(t.toFixed(1), X(t), bottom + 13);
-    }
-
-    ctx.textAlign = 'right';
-    ctx.fillText('t', right, bottom + 27);
-
-    // Signal curve
-    const N = 500;
-    const end = Math.max(1, Math.floor(N * reveal));
-
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 2.4;
-    ctx.lineJoin = 'round';
-    ctx.lineCap = 'round';
     ctx.beginPath();
-
-    for (let i = 0; i <= end; i++) {
-      const t = xmin + (xmax - xmin) * i / N;
-      const v = fn(t);
-      const xx = X(t);
-      const yy = Y(v);
-
-      if (i === 0) ctx.moveTo(xx, yy);
-      else ctx.lineTo(xx, yy);
-    }
-
+    ctx.moveTo(left, yy);
+    ctx.lineTo(right, yy);
     ctx.stroke();
-    ctx.restore();
   }
 
-  function draw() {
-    const rect = canvas.getBoundingClientRect();
-    const W = rect.width;
-    const H = 350;
+  // Axes
+  ctx.strokeStyle = colors.axis;
+  ctx.lineWidth = 1.2;
 
-    if (!W) return;
+  if (ymin <= 0 && ymax >= 0) {
 
-    ctx.clearRect(0, 0, W, H);
-
-    const signal = signals[selector.value];
-    const x = signal.fn;
-    const xe = t => (x(t) + x(-t)) / 2;
-    const xo = t => (x(t) - x(-t)) / 2;
-    const xr = t => xe(t) + xo(t);
-
-    // Layout proportions
-    const margin = 10;
-    const gap = 12;
-    const leftW = W * 0.23;
-    const middleW = W * 0.25;
-    const rightW = W * 0.23;
-    const arrowW = (W - 2 * margin - leftW - middleW - rightW - 3 * gap);
-
-    const x1 = margin;
-    const x2 = x1 + leftW + gap + arrowW * 0.25;
-    const x3 = x2 + middleW + gap + arrowW * 0.5;
-
-    const top = 25;
-    const boxH = 310;
-    const componentGap = 14;
-    const componentH = (boxH - componentGap) / 2;
-
-    // Stage 1: original signal
-    // Original signal
-panel(x1, top, leftW, boxH,
-  'Original signal', '', colors.original);
-
-addLatexLegend(x1, top, leftW, 'Original signal', 'x(t)', colors.original);
-
-
-    if (progress > 0) {
-      const reveal = Math.min(1, progress / 0.18);
-      plot(x1, top, leftW, boxH, x, signal,
-        colors.original, reveal);
-    }
-
-    // Stage 2: arrows from original to components
-    const branchX = x2 - 13;
-    const centerY = top + boxH / 2;
-
-    if (progress > 0.2) {
-      const a = Math.min(1, (progress - 0.2) / 0.12);
-      arrow(x1 + leftW + 2, centerY, branchX, top + componentH / 2, a);
-      arrow(x1 + leftW + 2, centerY, branchX,
-        top + componentH + componentGap + componentH / 2, a);
-    }
-
-    // Stage 3: even and odd components
-    const componentX = x2;
-    const componentW = middleW;
-
-    // Even component
-panel(componentX, top, componentW, componentH,
-  'Even component', '', colors.even);
-
-addLatexLegend(componentX, top, componentW,
-  'Even component', 'x_e(t)', colors.even);
-
-    // Odd component
-panel(componentX, top + componentH + componentGap,
-  componentW, componentH,
-  'Odd component', '', colors.odd);
-
-addLatexLegend(componentX, top + componentH + componentGap,
-  componentW, 'Odd component', 'x_o(t)', colors.odd);
-
-    if (progress > 0.32) {
-      const reveal = Math.min(1, (progress - 0.32) / 0.28);
-
-      plot(componentX, top, componentW, componentH,
-        xe, signal, colors.even, reveal);
-
-      plot(componentX, top + componentH + componentGap,
-        componentW, componentH, xo, signal, colors.odd, reveal);
-    }
-
-    // Stage 4: add the components
-    if (progress > 0.62) {
-      const a = Math.min(1, (progress - 0.62) / 0.12);
-      const startX = componentX + componentW + 2;
-      const endX = x3 - 5;
-
-      arrow(startX, top + componentH / 2,
-        endX, centerY, a);
-
-      arrow(startX,
-        top + componentH + componentGap + componentH / 2,
-        endX, centerY, a);
-    }
-
-    // Reconstructed signal
-    // Reconstructed signal
-panel(x3, top, rightW, boxH,
-  'Reconstructed signal', '', colors.reconstructed);
-
-addLatexLegend(x3, top, rightW,
-  'Reconstructed', 'x_e(t)+x_o(t)', colors.reconstructed);
-
-    if (progress > 0.75) {
-      const reveal = Math.min(1, (progress - 0.75) / 0.25);
-      plot(x3, top, rightW, boxH, xr, signal,
-        colors.reconstructed, reveal);
-    }
-
-    // Stage captions
-    ctx.fillStyle = colors.muted;
-    ctx.font = '12px Arial';
-    ctx.textAlign = 'center';
-
-    let caption = 'Select a signal to begin.';
-    if (progress > 0.02) caption = '1. The original signal';
-    if (progress > 0.2) caption = '2. Separate into even and odd parts';
-    if (progress > 0.62) caption = '3. Add the two components';
-    if (progress >= 1) caption = '4. The original signal is reconstructed';
-
-    ctx.fillText(caption, W / 2, 20);
+    ctx.beginPath();
+    ctx.moveTo(left, Y(0));
+    ctx.lineTo(right, Y(0));
+    ctx.stroke();
   }
 
-  function animate(timestamp) {
-    if (!playing) return;
+  if (xmin <= 0 && xmax >= 0) {
 
-    if (!lastTime) lastTime = timestamp;
-    const elapsed = timestamp - lastTime;
-    lastTime = timestamp;
-
-    progress = Math.min(1, progress + elapsed / duration);
-    draw();
-
-    if (progress >= 1) {
-      playing = false;
-      status.textContent =
-        'Decomposition complete: the even and odd components add up to the original signal.';
-      return;
-    }
-
-    animationFrame = requestAnimationFrame(animate);
+    ctx.beginPath();
+    ctx.moveTo(X(0), top);
+    ctx.lineTo(X(0), bottom);
+    ctx.stroke();
   }
 
-  function startAnimation() {
-    if (animationFrame) cancelAnimationFrame(animationFrame);
+  // Y-axis tick labels
+  ctx.fillStyle = colors.muted;
+  ctx.font = '10px Arial';
+  ctx.textAlign = 'right';
 
-    progress = 0;
-    lastTime = 0;
-    playing = true;
+  for (let i = 0; i <= 4; i++) {
 
-    status.textContent = 'Decomposing the selected signal...';
-    draw();
+    const v = ymax - i * (ymax - ymin) / 4;
+    const yy = top + i * (bottom - top) / 4;
 
-    animationFrame = requestAnimationFrame(animate);
+    ctx.fillText(v.toFixed(1), left - 5, yy + 3);
   }
 
-  selector.addEventListener('change', startAnimation);
-  replay.addEventListener('click', startAnimation);
+  // X-axis tick labels
+  ctx.textAlign = 'center';
 
-  window.addEventListener('resize', resizeCanvas);
+  for (let i = 0; i <= 4; i++) {
 
-  resizeCanvas();
-  startAnimation();
+    const t = xmin + i * (xmax - xmin) / 4;
+
+    ctx.fillText(
+      t.toFixed(1),
+      X(t),
+      bottom + 13
+    );
+  }
+
+  // Axis labels
+  ctx.fillStyle = colors.text;
+  ctx.font = '10px Arial';
+
+  ctx.textAlign = 'right';
+  ctx.fillText('t', right, bottom + 27);
+
+  // Signal curve
+  const N = 500;
+  const end = Math.max(1, Math.floor(N * reveal));
+
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2.5;
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+
+  ctx.beginPath();
+
+  for (let i = 0; i <= end; i++) {
+
+    const t = xmin + (xmax - xmin) * i / N;
+    const v = fn(t);
+
+    const xx = X(t);
+    const yy = Y(v);
+
+    if (i === 0) ctx.moveTo(xx, yy);
+    else ctx.lineTo(xx, yy);
+  }
+
+  ctx.stroke();
+  ctx.restore();
+}
+
+// --------------------------------------------------
+// Main drawing function
+// --------------------------------------------------
+
+function draw() {
+
+  const rect = canvas.getBoundingClientRect();
+  const W = rect.width;
+  const H = canvasHeight;
+
+  if (!W) return;
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Background
+  ctx.fillStyle = colors.background;
+  ctx.fillRect(0, 0, W, H);
+
+  const signal = signals[selector.value];
+  if (!signal) return;
+
+  const x = signal.fn;
+
+  const xe = t => (x(t) + x(-t)) / 2;
+  const xo = t => (x(t) - x(-t)) / 2;
+  const xr = t => xe(t) + xo(t);
+
+  // Layout
+  const margin = 10;
+  const gap = 12;
+
+  const leftW = W * 0.23;
+  const middleW = W * 0.25;
+  const rightW = W * 0.23;
+
+  const arrowW =
+    W - 2 * margin - leftW - middleW - rightW - 3 * gap;
+
+  const x1 = margin;
+  const x2 = x1 + leftW + gap + arrowW * 0.25;
+  const x3 = x2 + middleW + gap + arrowW * 0.5;
+
+  const top = 25;
+  const boxH = 310;
+  const componentGap = 14;
+  const componentH = (boxH - componentGap) / 2;
+
+  // ================================================
+  // Stage 1: Original signal
+  // ================================================
+
+  panel(x1, top, leftW, boxH);
+
+  addLatexLegend(
+    'original',
+    x1, top, leftW,
+    'Original signal',
+    'x(t)',
+    colors.original
+  );
+
+  if (progress > 0) {
+
+    const reveal = Math.min(1, progress / 0.18);
+
+    plot(
+      x1, top, leftW, boxH,
+      x, signal, colors.original, reveal
+    );
+  }
+
+  // ================================================
+  // Stage 2: Arrows to components
+  // ================================================
+
+  const branchX = x2 - 13;
+  const centerY = top + boxH / 2;
+
+  if (progress > 0.2) {
+
+    const a = Math.min(1, (progress - 0.2) / 0.12);
+
+    arrow(
+      x1 + leftW + 2,
+      centerY,
+      branchX,
+      top + componentH / 2,
+      a
+    );
+
+    arrow(
+      x1 + leftW + 2,
+      centerY,
+      branchX,
+      top + componentH + componentGap + componentH / 2,
+      a
+    );
+  }
+
+  // ================================================
+  // Stage 3: Even and odd components
+  // ================================================
+
+  const componentX = x2;
+  const componentW = middleW;
+
+  // Even component
+  panel(componentX, top, componentW, componentH);
+
+  addLatexLegend(
+    'even',
+    componentX, top, componentW,
+    'Even component',
+    'x_e(t)',
+    colors.even
+  );
+
+  // Odd component
+  const oddY = top + componentH + componentGap;
+
+  panel(componentX, oddY, componentW, componentH);
+
+  addLatexLegend(
+    'odd',
+    componentX, oddY, componentW,
+    'Odd component',
+    'x_o(t)',
+    colors.odd
+  );
+
+  if (progress > 0.32) {
+
+    const reveal = Math.min(1, (progress - 0.32) / 0.28);
+
+    plot(
+      componentX, top, componentW, componentH,
+      xe, signal, colors.even, reveal
+    );
+
+    plot(
+      componentX, oddY, componentW, componentH,
+      xo, signal, colors.odd, reveal
+    );
+  }
+
+  // ================================================
+  // Stage 4: Add the components
+  // ================================================
+
+  if (progress > 0.62) {
+
+    const a = Math.min(1, (progress - 0.62) / 0.12);
+
+    const startX = componentX + componentW + 2;
+    const endX = x3 - 5;
+
+    arrow(
+      startX,
+      top + componentH / 2,
+      endX,
+      centerY,
+      a
+    );
+
+    arrow(
+      startX,
+      oddY + componentH / 2,
+      endX,
+      centerY,
+      a
+    );
+  }
+
+  // ================================================
+  // Reconstructed signal
+  // ================================================
+
+  panel(x3, top, rightW, boxH);
+
+  addLatexLegend(
+    'reconstructed',
+    x3, top, rightW,
+    'Reconstructed',
+    'x_e(t)+x_o(t)',
+    colors.reconstructed
+  );
+
+  if (progress > 0.75) {
+
+    const reveal = Math.min(1, (progress - 0.75) / 0.25);
+
+    plot(
+      x3, top, rightW, boxH,
+      xr, signal, colors.reconstructed, reveal
+    );
+  }
+
+  // ================================================
+  // Stage caption
+  // ================================================
+
+  ctx.fillStyle = colors.muted;
+  ctx.font = '12px Arial';
+  ctx.textAlign = 'center';
+
+  let caption = 'Select a signal to begin.';
+
+  if (progress > 0.02)
+    caption = '1. The original signal';
+
+  if (progress > 0.2)
+    caption = '2. Separate into even and odd parts';
+
+  if (progress > 0.62)
+    caption = '3. Add the two components';
+
+  if (progress >= 1)
+    caption = '4. The original signal is reconstructed';
+
+  ctx.fillText(caption, W / 2, 17);
+}
+
+// --------------------------------------------------
+// Animation
+// --------------------------------------------------
+
+function animate(timestamp) {
+
+  if (!playing) return;
+
+  if (!lastTime) lastTime = timestamp;
+
+  const elapsed = timestamp - lastTime;
+  lastTime = timestamp;
+
+  progress = Math.min(1, progress + elapsed / duration);
+
+  draw();
+
+  if (progress >= 1) {
+
+    playing = false;
+
+    status.textContent =
+      'Decomposition complete: the even and odd components add up to the original signal.';
+
+    return;
+  }
+
+  animationFrame = requestAnimationFrame(animate);
+}
+
+// --------------------------------------------------
+// Start / replay
+// --------------------------------------------------
+
+function startAnimation() {
+
+  if (animationFrame) {
+    cancelAnimationFrame(animationFrame);
+  }
+
+  progress = 0;
+  lastTime = 0;
+  playing = true;
+
+  status.textContent = 'Decomposing the selected signal...';
+
+  draw();
+
+  animationFrame = requestAnimationFrame(animate);
+}
+
+// Event listeners
+selector.addEventListener('change', startAnimation);
+replay.addEventListener('click', startAnimation);
+
+window.addEventListener('resize', resizeCanvas);
+
+// Initialize
+resizeCanvas();
+startAnimation();
+
 })();
+
 
 // Energy and power demo
 /* =====================================================
