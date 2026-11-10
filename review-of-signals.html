@@ -198,6 +198,58 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
   <li>Zero average power implies finite energy for the signal classes considered in this course.</li>
   </ul>
   </div>
+
+<!--energy demo card-->
+<div class="demo-card">
+  <h3>Energy and Average Power</h3>
+  
+  <div class="demo-controls">
+  
+  <label>
+  Signal
+  <select id="energyType">
+      <option value="pulse">Finite rectangular pulse</option>
+      <option value="decay">Decaying exponential</option>
+      <option value="sine">Periodic sinusoid</option>
+  </select>
+  </label>
+  
+  <label>
+  Observation window T
+  <input id="energyT"
+         type="range"
+         min="2"
+         max="20"
+         step="1"
+         value="8">
+  <output id="energyTOut">8</output>
+  </label>
+  
+  </div>
+  
+  <canvas id="energyPlot"
+          class="demo-canvas"
+          width="900"
+          height="320"
+          aria-label="Energy and power demonstration">
+  </canvas>
+  
+  <div class="readout">
+  <span id="energyReadout">
+  Move the slider to estimate energy and average power.
+  </span>
+  </div>
+  
+  <p class="demo-note">
+  Blue shading indicates the observation interval
+  \( -T/2 \le t \le T/2 \).
+  The green region is the quantity being integrated:
+  \[
+  \int_{-T/2}^{T/2}|x(t)|^2\,dt.
+  \]
+  </p>
+  
+  </div>
   
 
 <h2 id="operations"><small>3</small>Basic operations on signals</h2>
@@ -1412,6 +1464,252 @@ addLatexLegend(x3, top, rightW,
   resizeCanvas();
   startAnimation();
 })();
+
+// Energy and power demo
+/* =====================================================
+   ENERGY / POWER DEMO
+===================================================== */
+
+(function(){
+
+const energyType =
+    document.getElementById('energyType');
+
+const energyT =
+    document.getElementById('energyT');
+
+const energyTOut =
+    document.getElementById('energyTOut');
+
+const energyReadout =
+    document.getElementById('energyReadout');
+
+const energyCanvas =
+    document.getElementById('energyPlot');
+
+if(!energyCanvas) return;
+
+function signalValue(t){
+
+    switch(energyType.value){
+
+        case "pulse":
+            return Math.abs(t) <= 1 ? 1 : 0;
+
+        case "decay":
+            return Math.exp(-Math.abs(t));
+
+        case "sine":
+            return Math.cos(Math.PI*t);
+
+        default:
+            return 0;
+    }
+}
+
+function energyDensity(t){
+    const x = signalValue(t);
+    return x*x;
+}
+
+function integrateEnergy(T){
+
+    const dt = 0.01;
+
+    let energy = 0;
+
+    for(let t=-T/2;t<=T/2;t+=dt){
+        energy += energyDensity(t)*dt;
+    }
+
+    return energy;
+}
+
+function drawEnergyDemo(){
+
+    energyTOut.textContent = energyT.value;
+
+    const T = Number(energyT.value);
+
+    const {ctx,w,h} =
+        setupCanvas(energyCanvas);
+
+    const xmin = -10;
+    const xmax = 10;
+
+    const ymin = -1.3;
+    const ymax = 1.3;
+
+    const r =
+        axes(ctx,w,h,xmin,xmax,ymin,ymax);
+
+    const leftBound = -T/2;
+    const rightBound = T/2;
+
+    const xLeft = r.X(leftBound);
+    const xRight = r.X(rightBound);
+
+    /* ----------------------------------
+       Observation window shading
+    ----------------------------------- */
+
+    ctx.fillStyle = "rgba(56,189,248,0.15)";
+    ctx.fillRect(
+        xLeft,
+        r.T,
+        xRight-xLeft,
+        r.ph
+    );
+
+    /* ----------------------------------
+       Energy area |x(t)|²
+    ----------------------------------- */
+
+    ctx.beginPath();
+
+    let started = false;
+
+    for(let i=0;i<=1200;i++){
+
+        const t =
+            xmin +
+            (xmax-xmin)*i/1200;
+
+        if(t < leftBound ||
+           t > rightBound){
+            continue;
+        }
+
+        const e =
+            energyDensity(t);
+
+        const px = r.X(t);
+        const py = r.Y(e);
+
+        if(!started){
+
+            ctx.moveTo(px,r.Y(0));
+            ctx.lineTo(px,py);
+
+            started = true;
+
+        }else{
+
+            ctx.lineTo(px,py);
+        }
+    }
+
+    ctx.lineTo(
+        r.X(rightBound),
+        r.Y(0)
+    );
+
+    ctx.closePath();
+
+    ctx.fillStyle =
+        "rgba(74,222,128,0.35)";
+
+    ctx.fill();
+
+    /* ----------------------------------
+       Window boundaries
+    ----------------------------------- */
+
+    ctx.strokeStyle = C.orange;
+    ctx.lineWidth = 2;
+
+    ctx.beginPath();
+
+    ctx.moveTo(xLeft,r.T);
+    ctx.lineTo(xLeft,r.T+r.ph);
+
+    ctx.moveTo(xRight,r.T);
+    ctx.lineTo(xRight,r.T+r.ph);
+
+    ctx.stroke();
+
+    /* ----------------------------------
+       Signal waveform
+    ----------------------------------- */
+
+    ctx.beginPath();
+
+    let first = true;
+
+    for(let i=0;i<=1200;i++){
+
+        const t =
+            xmin +
+            (xmax-xmin)*i/1200;
+
+        const y = signalValue(t);
+
+        const px = r.X(t);
+        const py = r.Y(y);
+
+        if(first){
+
+            ctx.moveTo(px,py);
+            first = false;
+
+        }else{
+
+            ctx.lineTo(px,py);
+        }
+    }
+
+    ctx.strokeStyle = C.blue;
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    /* ----------------------------------
+       Numerical results
+    ----------------------------------- */
+
+    const E = integrateEnergy(T);
+
+    const P = E/T;
+
+    let typeText = "";
+
+    if(energyType.value === "sine"){
+        typeText =
+            "Power signal (energy grows without bound)";
+    }else{
+        typeText =
+            "Energy signal";
+    }
+
+    energyReadout.innerHTML = `
+        <strong>Window energy:</strong>
+        ${E.toFixed(3)}
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <strong>Average power:</strong>
+        ${P.toFixed(3)}
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        ${typeText}
+    `;
+}
+
+energyType.addEventListener(
+    'change',
+    drawEnergyDemo
+);
+
+energyT.addEventListener(
+    'input',
+    drawEnergyDemo
+);
+
+window.addEventListener(
+    'resize',
+    drawEnergyDemo
+);
+
+drawEnergyDemo();
+
+})();
+
 
 </script>
 </body>
