@@ -370,8 +370,7 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
   <h3>Euler's formula</h3>
   <div class="eq-box">\[e^{j\phi}=\cos(\phi)+j\sin(\phi)\]</div>
   <p>It follows that:</p>
-  <div class="eq-box">\[\cos(\phi)=\frac{e^{j\phi}+e^{-j\phi}}{2}\]</div>
-  <div class="eq-box">\[\sin(\phi)=\frac{e^{j\phi}-e^{-j\phi}}{2j}\]</div>
+  <div class="eq-box">\(\cos(\phi)=\frac{e^{j\phi}+e^{-j\phi}}{2},\quad \sin(\phi)=\frac{e^{j\phi}-e^{-j\phi}}{2j}\)</div>
 </div>
 </div>
 
@@ -395,12 +394,57 @@ x(t)=Ae^{j(2\pi f_0t+\theta)}
 <div class="demo-card">
 <div class="demo-head"><h3>Interactive: complex number and rotating phasor</h3><span class="pill">Complex plane</span></div>
 <div class="demo-controls">
-<label>Real part \(a\) <input id="realPart" type="range" min="-3" max="3" step="0.1" value="1.5"><output id="realOut">1.5</output></label>
-<label>Imaginary part \(b\) <input id="imagPart" type="range" min="-3" max="3" step="0.1" value="1.5"><output id="imagOut">1.5</output></label>
-<label>Animate phase <input id="phaseAnimate" type="checkbox" checked></label>
+  <label>
+    Magnitude \(A\):
+    <input type="range" id="complexMagnitude"
+           min="0" max="3" step="0.1" value="1">
+    <span id="complexMagnitudeOut">1.0</span>
+  </label>
+
+  <label>
+    Frequency \(f\) (Hz):
+    <input type="range" id="complexFrequency"
+           min="0.1" max="2" step="0.1" value="0.5">
+    <span id="complexFrequencyOut">0.5</span>
+  </label>
+
+  <label>
+    Phase shift \(\phi\) (degrees):
+    <input type="range" id="complexPhaseShift"
+           min="-180" max="180" step="5" value="0">
+    <span id="complexPhaseShiftOut">0°</span>
+  </label>
+
+  <button id="complexPlay">Pause animation</button>
 </div>
 <canvas id="complexPlot" class="demo-canvas" width="900" height="340" aria-label="Complex plane vector plot"></canvas>
-<div class="readout"><span id="complexMag">Magnitude: —</span><span id="complexPhase">Phase: —</span><span id="complexPolar">Polar form: —</span></div>
+
+<div class="readout-grid">
+  <div class="readout">
+    <strong>Real part</strong>
+    <div id="realOut">1.000</div>
+    <small>\(A\cos(2\pi ft+\phi)\)</small>
+  </div>
+
+  <div class="readout">
+    <strong>Imaginary part</strong>
+    <div id="imagOut">0.000</div>
+    <small>\(A\sin(2\pi ft+\phi)\)</small>
+  </div>
+
+  <div class="readout">
+    <strong>Magnitude</strong>
+    <div id="complexMag">1.000</div>
+  </div>
+
+  <div class="readout">
+    <strong>Instantaneous phase</strong>
+    <div id="complexPhase">0.0°</div>
+  </div>
+</div>
+
+<div id="complexPolar" class="demo-note"></div>
+
 <p class="demo-note">Move the sliders to change \(z=a+jb\). When animation is enabled, the phasor rotates while keeping its magnitude fixed to illustrate \(e^{j\phi}\).</p>
 </div>
 
@@ -658,31 +702,339 @@ x(t)=Ae^{j(2\pi f_0t+\theta)}
   // Their old handlers are intentionally not initialized here; the animated
   // even/odd demo has its own isolated script below.
   
-  const realPart=document.getElementById('realPart'),imagPart=document.getElementById('imagPart'),phaseAnimate=document.getElementById('phaseAnimate');
-  let phase=0,raf=null;
-  function drawComplex(){
-   const c=document.getElementById('complexPlot'),{ctx,w,h}=setupCanvas(c),a=+realPart.value,b=+imagPart.value,mag=Math.hypot(a,b),ang=Math.atan2(b,a);
-   const cx=w/2,cy=h/2,scalePx=Math.min((w-100)/7,(h-65)/7),X=x=>cx+x*scalePx,Y=y=>cy-y*scalePx;
-   ctx.clearRect(0,0,w,h);ctx.fillStyle=C.background;ctx.fillRect(0,0,w,h);ctx.strokeStyle=C.grid;ctx.lineWidth=1;
-   for(let k=-3;k<=3;k++){ctx.beginPath();ctx.moveTo(X(k),15);ctx.lineTo(X(k),h-30);ctx.stroke();ctx.beginPath();ctx.moveTo(40,Y(k));ctx.lineTo(w-20,Y(k));ctx.stroke();}
-   ctx.strokeStyle=C.axis;ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(35,cy);ctx.lineTo(w-20,cy);ctx.moveTo(cx,15);ctx.lineTo(cx,h-25);ctx.stroke();
-   ctx.fillStyle=C.text;ctx.font='13px system-ui';ctx.fillText('Real',w-52,cy-9);ctx.fillText('Imaginary',cx+9,23);
-   const drawVec=(vx,vy,color,width)=>{ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=width;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(X(vx),Y(vy));ctx.stroke();ctx.beginPath();ctx.arc(X(vx),Y(vy),4,0,Math.PI*2);ctx.fill();};
-   drawVec(a,b,C.cyan,3);
-   if(phaseAnimate.checked&&mag>0){let px=mag*Math.cos(phase),py=mag*Math.sin(phase);drawVec(px,py,C.orange,2.5);ctx.setLineDash([5,5]);ctx.strokeStyle=C.orange;ctx.beginPath();ctx.arc(cx,cy,mag*scalePx,0,-phase,false);ctx.stroke();ctx.setLineDash([]);}
-   ctx.fillStyle=C.text;ctx.fillText(`z = ${a.toFixed(1)} ${b<0?'−':'+ j'} ${Math.abs(b).toFixed(1)}j`,48,25);
-   document.getElementById('realOut').textContent=a.toFixed(1);document.getElementById('imagOut').textContent=b.toFixed(1);
-   document.getElementById('complexMag').textContent=`Magnitude: ${mag.toFixed(3)}`;
-   document.getElementById('complexPhase').textContent=`Phase: ${(ang*180/Math.PI).toFixed(1)}°`;
-   document.getElementById('complexPolar').textContent=`Polar form: ${mag.toFixed(3)} ∠ ${(ang*180/Math.PI).toFixed(1)}°`;
+  const complexMagnitude = document.getElementById('complexMagnitude');
+const complexFrequency = document.getElementById('complexFrequency');
+const complexPhaseShift = document.getElementById('complexPhaseShift');
+const complexPlay = document.getElementById('complexPlay');
+
+let complexTime = 0;
+let complexPlaying = true;
+let complexRaf = null;
+let complexLastTime = null;
+
+
+// ------------------------------------------
+// Draw the complex plane and rotating phasor
+// ------------------------------------------
+
+function drawComplex() {
+
+  const c = document.getElementById('complexPlot');
+  const {ctx,w,h} = setupCanvas(c);
+
+  const A = +complexMagnitude.value;
+  const f = +complexFrequency.value;
+  const phi = +complexPhaseShift.value * Math.PI / 180;
+
+  // Instantaneous phase
+  const theta = 2 * Math.PI * f * complexTime + phi;
+
+  // Real and imaginary components
+  const real = A * Math.cos(theta);
+  const imag = A * Math.sin(theta);
+
+  // Magnitude and phase
+  const mag = Math.hypot(real,imag);
+  const phaseDeg = ((theta * 180 / Math.PI) % 360 + 360) % 360;
+
+  // Canvas coordinates
+  const cx = w / 2;
+  const cy = h / 2;
+
+  const scalePx = Math.min((w-110)/7,(h-90)/7);
+
+  const X = x => cx + x * scalePx;
+  const Y = y => cy - y * scalePx;
+
+  // ----------------------------------------
+  // Background
+  // ----------------------------------------
+
+  ctx.clearRect(0,0,w,h);
+
+  ctx.fillStyle = C.background;
+  ctx.fillRect(0,0,w,h);
+
+  // ----------------------------------------
+  // Grid
+  // ----------------------------------------
+
+  ctx.strokeStyle = C.grid;
+  ctx.lineWidth = 1;
+
+  for(let k=-3;k<=3;k++){
+
+    ctx.beginPath();
+    ctx.moveTo(X(k),15);
+    ctx.lineTo(X(k),h-35);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(35,Y(k));
+    ctx.lineTo(w-20,Y(k));
+    ctx.stroke();
   }
-  function animate(){
-   if(!phaseAnimate.checked){drawComplex();return;}
-   phase+=.018;drawComplex();raf=requestAnimationFrame(animate);
+
+  // ----------------------------------------
+  // Real and imaginary axes
+  // ----------------------------------------
+
+  ctx.strokeStyle = C.axis;
+  ctx.lineWidth = 1.5;
+
+  ctx.beginPath();
+
+  ctx.moveTo(30,cy);
+  ctx.lineTo(w-20,cy);
+
+  ctx.moveTo(cx,15);
+  ctx.lineTo(cx,h-25);
+
+  ctx.stroke();
+
+  // Axis labels
+  ctx.fillStyle = C.text;
+  ctx.font = '13px system-ui';
+
+  ctx.textAlign = 'right';
+  ctx.fillText('Real',w-25,cy-10);
+
+  ctx.textAlign = 'left';
+  ctx.fillText('Imaginary',cx+10,22);
+
+  // ----------------------------------------
+  // Tick labels
+  // ----------------------------------------
+
+  ctx.fillStyle = C.muted;
+  ctx.font = '11px system-ui';
+
+  ctx.textAlign = 'center';
+
+  for(let k=-3;k<=3;k++){
+    ctx.fillText(k.toString(),X(k),cy+16);
+    ctx.fillText(k.toString(),cx-10,Y(k)+4);
   }
-  [realPart,imagPart].forEach(x=>x.addEventListener('input',drawComplex));
-  phaseAnimate.addEventListener('change',()=>{if(phaseAnimate.checked){if(raf)cancelAnimationFrame(raf);animate();}else{if(raf)cancelAnimationFrame(raf);drawComplex();}});
-  drawComplex();if(phaseAnimate.checked)animate();
+
+  // ----------------------------------------
+  // Draw the rotating circle
+  // ----------------------------------------
+
+  if(A>0){
+
+    ctx.beginPath();
+    ctx.arc(cx,cy,A*scalePx,0,2*Math.PI);
+
+    ctx.strokeStyle = 'rgba(243,180,95,0.35)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([5,5]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // ----------------------------------------
+  // Draw the rotating phasor
+  // ----------------------------------------
+
+  const px = X(real);
+  const py = Y(imag);
+
+  // Phasor vector
+  ctx.beginPath();
+  ctx.moveTo(cx,cy);
+  ctx.lineTo(px,py);
+
+  ctx.strokeStyle = C.orange;
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  // Arrowhead
+  const angle = Math.atan2(py-cy,px-cx);
+  const arrowSize = 10;
+
+  ctx.beginPath();
+
+  ctx.moveTo(px,py);
+
+  ctx.lineTo(
+    px-arrowSize*Math.cos(angle-Math.PI/6),
+    py-arrowSize*Math.sin(angle-Math.PI/6)
+  );
+
+  ctx.lineTo(
+    px-arrowSize*Math.cos(angle+Math.PI/6),
+    py-arrowSize*Math.sin(angle+Math.PI/6)
+  );
+
+  ctx.closePath();
+
+  ctx.fillStyle = C.orange;
+  ctx.fill();
+
+  // Rotating point
+  ctx.beginPath();
+  ctx.arc(px,py,5,0,2*Math.PI);
+  ctx.fillStyle = C.orange;
+  ctx.fill();
+
+  // ----------------------------------------
+  // Projection lines
+  // ----------------------------------------
+
+  ctx.setLineDash([4,4]);
+  ctx.lineWidth = 1.5;
+
+  // Real projection
+  ctx.strokeStyle = C.cyan;
+  ctx.beginPath();
+  ctx.moveTo(px,py);
+  ctx.lineTo(px,cy);
+  ctx.stroke();
+
+  // Imaginary projection
+  ctx.strokeStyle = C.green;
+  ctx.beginPath();
+  ctx.moveTo(px,py);
+  ctx.lineTo(cx,py);
+  ctx.stroke();
+
+  ctx.setLineDash([]);
+
+  // ----------------------------------------
+  // Labels for projections
+  // ----------------------------------------
+
+  ctx.font = '12px system-ui';
+
+  ctx.fillStyle = C.cyan;
+  ctx.textAlign = 'center';
+  ctx.fillText(`Re = ${real.toFixed(2)}`,px,cy+30);
+
+  ctx.fillStyle = C.green;
+  ctx.textAlign = 'left';
+  ctx.fillText(`Im = ${imag.toFixed(2)}`,cx+12,py-8);
+
+  // ----------------------------------------
+  // Angle arc
+  // ----------------------------------------
+
+  if(A>0){
+
+    ctx.beginPath();
+    ctx.arc(cx,cy,Math.min(35,A*scalePx*0.3),0,-theta,theta<0);
+
+    ctx.strokeStyle = C.orange;
+    ctx.lineWidth = 1.8;
+    ctx.stroke();
+  }
+
+  // ----------------------------------------
+  // Update numerical readouts
+  // ----------------------------------------
+
+  document.getElementById('realOut').textContent =
+    real.toFixed(3);
+
+  document.getElementById('imagOut').textContent =
+    imag.toFixed(3);
+
+  document.getElementById('complexMag').textContent =
+    mag.toFixed(3);
+
+  document.getElementById('complexPhase').textContent =
+    phaseDeg.toFixed(1) + '°';
+
+  document.getElementById('complexPolar').textContent =
+    `z(t) = ${A.toFixed(2)} ∠ ${phaseDeg.toFixed(1)}°`;
+
+  // Control readouts
+  document.getElementById('complexMagnitudeOut').textContent =
+    A.toFixed(1);
+
+  document.getElementById('complexFrequencyOut').textContent =
+    f.toFixed(1);
+
+  document.getElementById('complexPhaseShiftOut').textContent =
+    (+complexPhaseShift.value).toFixed(0) + '°';
+}
+
+
+// ------------------------------------------
+// Animation
+// ------------------------------------------
+
+function animateComplex(timestamp){
+
+  if(!complexPlaying) return;
+
+  if(complexLastTime===null){
+    complexLastTime=timestamp;
+  }
+
+  const dt=(timestamp-complexLastTime)/1000;
+  complexLastTime=timestamp;
+
+  complexTime+=dt;
+
+  drawComplex();
+
+  complexRaf=requestAnimationFrame(animateComplex);
+}
+
+
+// ------------------------------------------
+// Pause / resume
+// ------------------------------------------
+
+function toggleComplexAnimation(){
+
+  complexPlaying=!complexPlaying;
+
+  if(complexPlaying){
+
+    complexLastTime=null;
+
+    complexPlay.textContent='Pause animation';
+
+    complexRaf=requestAnimationFrame(animateComplex);
+
+  }else{
+
+    if(complexRaf!==null){
+      cancelAnimationFrame(complexRaf);
+      complexRaf=null;
+    }
+
+    complexPlay.textContent='Resume animation';
+  }
+}
+
+
+// ------------------------------------------
+// Event listeners
+// ------------------------------------------
+
+[
+  complexMagnitude,
+  complexFrequency,
+  complexPhaseShift
+].forEach(control=>{
+
+  control.addEventListener('input',drawComplex);
+
+});
+
+complexPlay.addEventListener('click',toggleComplexAnimation);
+
+
+// ------------------------------------------
+// Initialize
+// ------------------------------------------
+
+drawComplex();
+
+complexRaf=requestAnimationFrame(animateComplex);
+
   
   document.querySelectorAll('[data-quiz]').forEach(card=>{
    card.querySelector('.check-quiz').addEventListener('click',()=>{
