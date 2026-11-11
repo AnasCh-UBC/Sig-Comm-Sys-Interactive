@@ -71,40 +71,6 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 
 @media(max-width:700px){.signal-grid,.eq-grid,.quiz-grid,.two-col{grid-template-columns:1fr}.demo-controls label{width:100%;justify-content:space-between}.demo-controls input[type=range]{width:48%}}
 
-.euler-card {
-  padding: 14px 18px;
-}
-
-.euler-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 115px;
-  gap: 12px;
-  align-items: center;
-}
-
-.euler-equations {
-  min-width: 0;
-}
-
-.euler-equations p {
-  margin: 5px 0;
-  font-size: 0.88rem;
-}
-
-.euler-main-eq,
-.euler-derived-eq {
-  padding: 7px 10px;
-  margin: 5px 0;
-}
-
-.euler-main-eq {
-  font-size: 1.05rem;
-}
-
-.euler-derived-eq {
-  font-size: 0.88rem;
-}
-
 .euler-portrait {
   text-align: center;
   min-width: 0;
@@ -129,18 +95,9 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 }
 
 @media (max-width: 550px) {
-  .euler-layout {
-    grid-template-columns: minmax(0, 1fr) 85px;
-    gap: 7px;
-  }
-
   .euler-portrait img {
     max-width: 80px;
     height: 100px;
-  }
-
-  .euler-derived-eq {
-    font-size: 0.76rem;
   }
 }
 
@@ -496,11 +453,8 @@ window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$
     </div>
     <div class="two-col">
       <div class="eq-box">
-        \cos(\phi)=\frac{e^{j\phi}+e^{-j\phi}}{2}
-      </div>
-      <div class="eq-box">
-          \(\sin(\phi)=\frac{e^{j\phi}-e^{-j\phi}}{2j}\)
-      </div>
+        \[\cos(\phi)=\frac{e^{j\phi}+e^{-j\phi}}{2}\]
+          \[\sin(\phi)=\frac{e^{j\phi}-e^{-j\phi}}{2j}\]
       </div>
       <div class="euler-portrait">
         <img src="images/euler_portrait.png"
