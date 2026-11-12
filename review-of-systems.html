@@ -186,21 +186,21 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
   align-items: center;
   gap: 8px;
   max-width: 850px;
-  margin: 24px auto;
-  padding: 20px;
-  border: 1px solid rgba(85,200,242,.28);
+  margin: 12px auto;
+  padding: 10px;
+  border: 1px solid rgba(127, 208, 238, 0.432);
   border-radius: 14px;
   background: rgba(11,27,43,.65);
 }
 
 .flow-stage {
-  min-height: 135px;
+  min-height: 80px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 9px;
-  padding: 16px 10px;
+  gap: 8px;
+  padding: 10px 8px;
   text-align: center;
   border: 1px solid rgba(85,200,242,.5);
   border-radius: 11px;
@@ -210,18 +210,18 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
 
 .flow-stage b {
   color: #eaf3fa;
-  font-size: 1.05rem;
+  font-size: .85rem;
 }
 
 .flow-stage .symbol {
   color: #55c8f2;
-  font-size: 1.65rem;
+  font-size: .95rem;
   font-weight: 600;
 }
 
 .flow-stage small {
   color: #9fb5c7;
-  font-size: .82rem;
+  font-size: .70rem;
 }
 
 .system-stage {
@@ -261,7 +261,7 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
   }
 
   .flow-stage {
-    min-height: 105px;
+    min-height: 70px;
   }
 
   .flow-arrow {
@@ -294,6 +294,12 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
 
 <h2 id="system"><small>1</small>What is a system?</h2>
 <div class="card"><h3>Definition</h3><p>A system is an interconnection of elements or devices that, when excited by an input signal, responds by producing an output signal.</p>
+</div>
+<div class="card"><h2>Examples:</h2>
+  <div class="grid">
+  <div class="tile"><b class="tag">Electric circuit</b><p>Input: Voltage source; Output: Current through a wire (e.g., an amplifier or an RC circuit).</p></div>
+  <div class="tile"><b class="tag">Drum</b><p>Input: Drumstick stroke; Output: Beat sound.</p></div>
+  <div class="tile"><b class="tag">Whistle</b><p>Input: Steady flow of air; Output: Pure musical tone.</p></div></div>
 </div>
 <p>To characterize a system we model the relation between its input and output, called the <b>input–output relation</b>: $$y(t)=\mathcal{T}[x(t)].$$</p>
 
@@ -333,12 +339,7 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
     <small>Response</small>
   </div>
 </div>
-<div class="card"><h2>Examples:</h2>
-  <div class="grid">
-  <div class="tile"><b class="tag">Electric circuit</b><p>Voltage source = input, voltage across a branch = output (for example an amplifier or an RC circuit).</p></div>
-  <div class="tile"><b class="tag">Drum</b><p>Drumstick stroke = input, drum sound (the beat) = output.</p></div>
-  <div class="tile"><b class="tag">A coffee cup</b><p>Sound from a speaker = input, what a microphone records through the cup = output.</p></div></div>
-</div>
+
 
 <div class="callout"><b>Motivating question:</b> How does the cup (the system) affect the signal from the speaker? Place a speaker inside a mug and the recording changes: short clicks become a sustained, ringing oscillation. The cup is acting as a system.</div>
 <div data-w="cup"></div>
