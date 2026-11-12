@@ -341,14 +341,16 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
   </div>
 </div>
 
-
+<!--
 <div class="callout"><b>Motivating question:</b> How does the cup (the system) affect the signal from the speaker? Place a speaker inside a mug and the recording changes: short clicks become a sustained, ringing oscillation. The cup is acting as a system.</div>
 <div data-w="cup"></div>
+-->
 
 <h3>Three simple systems</h3>
-<ul><li><b>Differentiator:</b> $y(t)=\dfrac{d}{dt}x(t)$, that is $\mathcal{T}=\dfrac{d}{dt}$.</li>
-<li><b>Amplifier:</b> $y(t)=a\,x(t)$.</li>
-<li><b>Filter:</b> for a sinusoidal input $x(t)=\cos(2\pi f_0 t)$, the system $y(t)=\begin{cases}x(t),& f_0<f_c\\ 0,&\text{otherwise}\end{cases}$ (for some $f_c>0$) passes low frequencies and blocks high ones.</li></ul>
+<small>Use the interactive example below to experiment with the following systems:</small>
+<ul><li><b>Differentiator:</b> $\mathcal{T}[x(t)]=\dfrac{d}{dt}x(t)$.</li>
+<li><b>Amplifier:</b> $\mathcal{T}[x(t)]=a\,x(t)$.</li>
+<li><b>Lowpass filter with cutoff frequency $f_c$:</b> For a sinusoidal input $x(t)=\cos(2\pi f_0 t)$, $\mathcal{T}[x(t)]=x(t)$ if $f_0\lt f_c$, and $\mathcal{T}[x(t)]=0$ otherwise.</li></ul>
 <div data-w="play"></div>
 
 <h2 id="classification"><small>2</small>Classifying systems</h2>
