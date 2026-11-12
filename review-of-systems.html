@@ -180,6 +180,95 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
 .section-kicker{color:var(--acc);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;margin-bottom:5px}
 @media(max-width:700px){.ctl{grid-template-columns:1fr}.quiz-grid{grid-template-columns:1fr}.wd{padding:12px}}
 
+.flow-diagram {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 55px minmax(0,1fr) 55px minmax(0,1fr);
+  align-items: center;
+  gap: 8px;
+  max-width: 850px;
+  margin: 24px auto;
+  padding: 20px;
+  border: 1px solid rgba(85,200,242,.28);
+  border-radius: 14px;
+  background: rgba(11,27,43,.65);
+}
+
+.flow-stage {
+  min-height: 135px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+  padding: 16px 10px;
+  text-align: center;
+  border: 1px solid rgba(85,200,242,.5);
+  border-radius: 11px;
+  background: linear-gradient(145deg, #142f47, #10263a);
+  box-shadow: 0 4px 14px rgba(0,0,0,.2);
+}
+
+.flow-stage b {
+  color: #eaf3fa;
+  font-size: 1.05rem;
+}
+
+.flow-stage .symbol {
+  color: #55c8f2;
+  font-size: 1.65rem;
+  font-weight: 600;
+}
+
+.flow-stage small {
+  color: #9fb5c7;
+  font-size: .82rem;
+}
+
+.system-stage {
+  border-color: rgba(98,217,154,.65);
+  background: linear-gradient(145deg, #173b3d, #102f39);
+}
+
+.system-stage .symbol {
+  color: #62d99a;
+}
+
+.output-stage {
+  border-color: rgba(243,180,95,.6);
+}
+
+.output-stage .symbol {
+  color: #f3b45f;
+}
+
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #55c8f2;
+  font-size: 1.8rem;
+}
+
+.flow-arrow span {
+  display: none;
+}
+
+@media(max-width:600px) {
+  .flow-diagram {
+    grid-template-columns: 1fr;
+    max-width: 340px;
+    gap: 5px;
+  }
+
+  .flow-stage {
+    min-height: 105px;
+  }
+
+  .flow-arrow {
+    transform: rotate(90deg);
+    height: 28px;
+  }
+}
 </style>
 
 <script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},svg:{fontCache:'global'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
@@ -206,6 +295,8 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
 <h2 id="system"><small>1</small>What is a system?</h2>
 <div class="card"><h3>Definition</h3><p>A system is an interconnection of elements or devices that, when excited by an input signal, responds by producing an output signal.</p>
 </div>
+<p>To characterize a system we model the relation between its input and output, called the <b>input–output relation</b>: $$y(t)=\mathcal{T}[x(t)].$$</p>
+
 <!--
 <div class="flow" style="grid-template-columns:repeat(3,1fr)">
 <div class="stage"><b>Input</b><span class="symbol">$x(t)$</span><br><small>excitation</small></div>
@@ -213,41 +304,41 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
 <div class="stage"><b>Output</b><span class="symbol">$y(t)$</span><br><small>response</small></div>
 </div>
 -->
-<svg class="sf" viewBox="0 0 900 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="sfT sfD" style="width:100%;height:auto;max-width:900px">
-  <title id="sfT">System block diagram</title>
-  <desc id="sfD">An input signal x(t), the excitation, enters a system T, which performs an operation and produces the output signal y(t), the response.</desc>
-  <style>
-  .sf{--sfBg:var(--card,#f3f5fa);--sfFg:var(--fg,#1b1f2a);--sfAcc:var(--acc,#0b3d91);--sfLn:var(--ln,#c5cbd9);--sfMut:var(--mut,#5b6475)}
-  @media (prefers-color-scheme:dark){.sf{--sfBg:var(--card,#1b2030);--sfFg:var(--fg,#e8eaf0);--sfAcc:var(--acc,#7fa8ff);--sfLn:var(--ln,#3a4460);--sfMut:var(--mut,#9aa3b5)}}
-  .sf text{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;text-anchor:middle}
-  .sf .box{fill:var(--sfBg);stroke:var(--sfLn);stroke-width:1.5}
-  .sf .bar{fill:var(--sfAcc)}
-  .sf .ttl{fill:var(--sfAcc);font-size:19px;font-weight:700}
-  .sf .sym{fill:var(--sfFg);font:italic 40px Georgia,'Times New Roman',serif;text-anchor:middle}
-  .sf .cap{fill:var(--sfMut);font-size:15px}
-  .sf .arr{stroke:var(--sfAcc);stroke-width:3;fill:none;stroke-linecap:round}
-  .sf .head{fill:var(--sfAcc)}
-  </style>
-  <g>
-  <rect class="box" x="40" y="50" width="220" height="140" rx="16"/><path class="bar" d="M40 66a16 16 0 0 1 16-16h188a16 16 0 0 1 16 16v4H40z"/>
-  <text class="ttl" x="150" y="98">Input</text><text class="sym" x="150" y="142">x(t)</text><text class="cap" x="150" y="172">excitation</text>
-  </g>
-  <g>
-  <rect class="box" x="340" y="50" width="220" height="140" rx="16"/><path class="bar" d="M340 66a16 16 0 0 1 16-16h188a16 16 0 0 1 16 16v4H340z"/>
-  <text class="ttl" x="450" y="98">System</text><text class="sym" x="450" y="142">T[ · ]</text><text class="cap" x="450" y="172">the operation performed</text>
-  </g>
-  <g>
-  <rect class="box" x="640" y="50" width="220" height="140" rx="16"/><path class="bar" d="M640 66a16 16 0 0 1 16-16h188a16 16 0 0 1 16 16v4H640z"/>
-  <text class="ttl" x="750" y="98">Output</text><text class="sym" x="750" y="142">y(t)</text><text class="cap" x="750" y="172">response</text>
-  </g>
-  <path class="arr" d="M268 120H322"/><path class="head" d="M336 120l-17-9v18z"/>
-  <path class="arr" d="M568 120H622"/><path class="head" d="M636 120l-17-9v18z"/>
-</svg>
-<p>To characterize a system we model the relation between its input and output, called the <b>input–output relation</b>: $$y(t)=\mathcal{T}[x(t)].$$</p>
-<div class="grid">
-<div class="tile"><b class="tag">Electric circuit</b><p>Voltage source = input, voltage across a branch = output (for example an amplifier or an RC circuit).</p></div>
-<div class="tile"><b class="tag">Drum</b><p>Drumstick stroke = input, drum sound (the beat) = output.</p></div>
-<div class="tile"><b class="tag">A coffee cup</b><p>Sound from a speaker = input, what a microphone records through the cup = output.</p></div></div>
+<div class="flow-diagram">
+  <div class="flow-stage">
+    <b>Input</b>
+    <span class="symbol">\(x(t)\)</span>
+    <small>Excitation</small>
+  </div>
+
+  <div class="flow-arrow">
+    <span></span>
+    <i>→</i>
+  </div>
+
+  <div class="flow-stage system-stage">
+    <b>System</b>
+    <span class="symbol">\(\mathcal{T}[\cdot]\)</span>
+    <small>The operation performed</small>
+  </div>
+
+  <div class="flow-arrow">
+    <span></span>
+    <i>→</i>
+  </div>
+
+  <div class="flow-stage output-stage">
+    <b>Output</b>
+    <span class="symbol">\(y(t)\)</span>
+    <small>Response</small>
+  </div>
+</div>
+<div class="card"><h2>Examples:</h2>
+  <div class="grid">
+  <div class="tile"><b class="tag">Electric circuit</b><p>Voltage source = input, voltage across a branch = output (for example an amplifier or an RC circuit).</p></div>
+  <div class="tile"><b class="tag">Drum</b><p>Drumstick stroke = input, drum sound (the beat) = output.</p></div>
+  <div class="tile"><b class="tag">A coffee cup</b><p>Sound from a speaker = input, what a microphone records through the cup = output.</p></div></div>
+</div>
 
 <div class="callout"><b>Motivating question:</b> How does the cup (the system) affect the signal from the speaker? Place a speaker inside a mug and the recording changes: short clicks become a sustained, ringing oscillation. The cup is acting as a system.</div>
 <div data-w="cup"></div>
