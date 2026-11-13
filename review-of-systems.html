@@ -363,17 +363,18 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
 }
 
 .test-plot-titles > div {
-  min-width: 0;
-  padding: 7px 5px;
-  border-bottom: 1px solid rgba(85,160,195,.25);
-  color: #b8c9d6;
-  font-size: .82rem;
+  min-width:0;
+  padding:7px 5px;
+  border-bottom:1px solid #526577;
+  color:#eaf3fa;
+  font-size:.82rem;
 }
 
 .test-plot-titles span {
-  margin-top: 4px;
-  color: #91a7b8;
-  font-size: .76rem;
+  display:block;
+  margin-top:4px;
+  color:#b9cbd9;
+  font-size:.76rem;
 }
 
 @media(max-width:600px) {
@@ -705,8 +706,22 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
 
 <h2 id="lti"><small>3</small>LTI systems and convolution</h2>
 <p class="sub">Many systems in communications are modeled as linear time-invariant systems</p>
+<div class="callout">A <b>linear time-invariant (LTI) system</b> is a system that is <b>both</b> linear and time-invariant.</div> 
+<div class="card"><b>Impulse response</b>
+  <div class="grid">
+    <div class="card">
+      An LTI system is fully characterized by
+      its <b>impulse response</b> $h(t)$, i.e., the output of the system 
+      when the input is an impulse $\delta(t)$.
+    </div>
+    <div class="card">
+      An LTI system is causal if and only if its impulse response $h(t)$ is a causal signal, i.e., $h(t)=0$ for $t\lt 0$.
+    </div>
+  </div>
+</div>
+
 <div class="callout"><b>Causal LTI systems:</b> a linear time-invariant (LTI) system is causal if and only if its response to an impulse $\delta(t)$, the <i>impulse response</i> $h(t)$, is a causal signal ($h(t)=0$ for $t<0$).</div>
-<p>An <b>LTI system</b> is both linear and time-invariant. It is fully characterized by its <b>impulse response</b> $h(t)$: the output when the input is an impulse $\delta(t)$.</p>
+<p>An <b>LTI system</b> is both linear and time-invariant. </p>
 <div class="callout"><b>Question:</b> if the output for $\delta(t)$ is $h(t)$, what is the output for a general input $x(t)$?</div>
 <div class="card"><h3>Why the answer is a convolution</h3><ol>
 <li>Any input is a sum of weighted, shifted impulses (sampling property): $x(t)=\displaystyle\int_{-\infty}^{\infty}x(\tau)\delta(t-\tau)\,d\tau$.</li>
@@ -911,7 +926,7 @@ const LA=t=>Math.max(0,1-Math.abs(t));
 W('test',{
   cap:'Interactive 2.1',
   title:'Test a system: time invariance and linearity; \\(x_1(t)=\\Lambda(t)\\), \\(x_2(t)=\\Lambda(t-1)\\)',
-  h:300,
+  h:250,
 
   ctl:[
     {t:'s',k:'s',l:'System',o:SY.map(s=>s[0]),v:2},
@@ -960,14 +975,17 @@ W('test',{
   const W=720,H=300;
   c.height=H;
   ctx.clearRect(0,0,W,H);
+  // Light plotting background
+  ctx.fillStyle = '#f7f9fc';
+  ctx.fillRect(0,0,W,H);
 
-  // Refined dark-theme palette
-  const blue  = '#4da6c8';  // muted cyan
-  const red   = '#d87970';  // muted coral
-  const grid  = 'rgba(145,170,190,.12)';
-  const axis  = '#8299aa';  // soft blue-grey
-  const text  = '#b9c9d5';  // muted axis labels
-  const muted = '#8499aa';
+  // High-contrast light plotting palette
+  const blue  = '#075a9c';  // dark blue
+  const red   = '#c0392b';  // dark red
+  const grid  = '#d6dee7';  // light grey grid
+  const axis  = '#263746';  // dark navy axes
+  const text  = '#263746';  // dark labels
+  const muted = '#526577';  // secondary text
 
   // Create HTML titles above the canvas, once
   const parent=c.parentElement;
@@ -977,11 +995,11 @@ W('test',{
     titles.className='test-plot-titles';
     titles.innerHTML=`
       <div>
-        <b>Time invariance</b>
+        <b>Time invariance: </b>
         <span>\\(\\mathcal{T}[x_1(t-t_0)]\\) vs. \\(y(t-t_0)\\)</span>
       </div>
       <div>
-        <b>Linearity</b>
+        <b>Linearity: </b>
         <span>\\(\\mathcal{T}[a_1x_1+a_2x_2]\\) vs.
         \\(a_1\\mathcal{T}[x_1]+a_2\\mathcal{T}[x_2]\\)</span>
       </div>
@@ -1026,8 +1044,8 @@ W('test',{
     }
 
     // Stronger axes
-    ctx.strokeStyle = '#8da2b2';
-    ctx.lineWidth = 1.25;
+    ctx.strokeStyle = axis;
+    tx.lineWidth = 1.5;
 
     ctx.beginPath();
     ctx.moveTo(x1,mid);
@@ -1040,8 +1058,8 @@ W('test',{
     ctx.stroke();
 
     // Tick labels
-    ctx.fillStyle = '#9aafbf';
-    ctx.font = '10px Arial';
+    ctx.fillStyle = text;
+    ctx.font = '11px Arial';
     ctx.textAlign = 'center';
 
     for(let t=-4;t<=4;t+=2){
@@ -1096,7 +1114,7 @@ W('test',{
   panel(360,lin1,lin2,maxLin*1.15);
 
   // Divider
-  ctx.strokeStyle='rgba(85,200,242,.4)';
+  ctx.strokeStyle='#aab8c7';
   ctx.lineWidth=1.2;
   ctx.beginPath();
   ctx.moveTo(360,5);
