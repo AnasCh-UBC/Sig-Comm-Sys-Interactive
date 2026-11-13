@@ -857,6 +857,20 @@ function plot(c,S,x0,x1,y0,y1,r,tk){const x=c.getContext('2d'),w=c.width,oy=r?r[
   else{x.beginPath();let n=0,lx=0;for(let i=0;i<=w;i++){const t=x0+i/w*(x1-x0);if(s.to!==undefined&&t>s.to)break;const v=s.f(t);n++?x.lineTo(i,Y(v)):x.moveTo(i,Y(v));lx=i}
    if(s.fill){x.lineTo(lx,Y(0));x.lineTo(0,Y(0));x.closePath();x.globalAlpha=.3;x.fill();x.globalAlpha=1}else x.stroke()}});x.restore();x.setLineDash([])}
 const lab=(c,t,x,y)=>{const g=c.getContext('2d');g.fillStyle=css('--fg');g.font='bold 13px system-ui';g.fillText(t,x,y)};
+function typesetMath(el){
+ if(!el || !window.MathJax || typeof window.MathJax.typesetPromise!=='function') return;
+ try{
+  window.MathJax.typesetClear?.([el]);
+  window.MathJax.typesetPromise([el]).catch(err=>console.warn('MathJax typesetting:',err));
+ }catch(err){console.warn('MathJax typesetting:',err)}
+}
+// W() creates its first notes before the deferred MathJax script has necessarily loaded.
+window.addEventListener('load',()=>{
+ if(window.MathJax?.typesetPromise){
+  const nodes=[...document.querySelectorAll('.wd .note, .wd .test-plot-titles')];
+  if(nodes.length) window.MathJax.typesetPromise(nodes).catch(err=>console.warn('MathJax typesetting:',err));
+ }
+},{once:true});
 function W(id,o){const host=document.querySelector('[data-w="'+id+'"]'),d=document.createElement('div'),inp={},bs={};d.className='card wd';
  d.innerHTML='<div class="cap">'+o.cap+'</div><h4>'+o.title+'</h4><canvas width="720" height="'+(o.h||260)+'"></canvas><div class="ctl"></div><p class="note"></p>';
  const ctl=d.querySelector('.ctl');
@@ -885,9 +899,22 @@ if(id==='test'){
   ctl.appendChild(sliderRow);
 }
 
-const up=()=>{const v={};
-  for(const k in inp){v[k]=+inp[k].value;if(bs[k])bs[k].textContent=inp[k].value}d.querySelector('.note').innerHTML=o.draw(d.querySelector('canvas'),v)};
- d.addEventListener('input',up);host.appendChild(d);up();UPS.push(up)}
+const up=()=>{
+  const v={};
+  for(const k in inp){
+    v[k]=+inp[k].value;
+    if(bs[k]) bs[k].textContent=inp[k].value;
+  }
+  const note=d.querySelector('.note');
+  if(window.MathJax?.typesetClear) window.MathJax.typesetClear([note]);
+  note.innerHTML=o.draw(d.querySelector('canvas'),v);
+  typesetMath(note);
+ };
+ d.addEventListener('input',up);
+ host.appendChild(d);
+ up();
+ UPS.push(up);
+}
 // ---- 1. recording in a cup
 /*W('cup',{cap:'Interactive 1.1',title:'Recording in a cup: clicks through a ringing system',h:340,
  ctl:[{t:'s',k:'c',l:'Setup',o:['Speaker → microphone (no cup)','Speaker in the cup → microphone'],v:1},{k:'f',l:'Cup resonance f (kHz)',min:.2,max:1.5,step:.05,v:.6},{k:'tau',l:'Ringing time constant τ (ms)',min:1,max:15,step:.5,v:6}],
@@ -926,7 +953,7 @@ const LA=t=>Math.max(0,1-Math.abs(t));
 W('test',{
   cap:'Interactive 2.1',
   title:'Test a system: time invariance and linearity; \\(x_1(t)=\\Lambda(t)\\), \\(x_2(t)=\\Lambda(t-1)\\)',
-  h:250,
+  h:300,
 
   ctl:[
     {t:'s',k:'s',l:'System',o:SY.map(s=>s[0]),v:2},
@@ -1006,9 +1033,7 @@ W('test',{
     `;
     parent.insertBefore(titles,c);
 
-    if(window.MathJax?.typesetPromise){
-      window.MathJax.typesetPromise([titles]);
-    }
+    typesetMath(titles);
   }
 
   function panel(x0,fn1,fn2,maxY){
@@ -1045,7 +1070,7 @@ W('test',{
 
     // Stronger axes
     ctx.strokeStyle = axis;
-    tx.lineWidth = 1.5;
+    ctx.lineWidth = 1.5;
 
     ctx.beginPath();
     ctx.moveTo(x1,mid);
