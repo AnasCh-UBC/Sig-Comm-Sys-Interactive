@@ -415,6 +415,54 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
   }
 }
 
+.classification-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.classification-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid rgba(70, 170, 220, 0.35);
+  border-radius: 12px;
+  background: rgba(20, 65, 95, 0.22);
+}
+
+.classification-number {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #48c8e8;
+  opacity: 0.9;
+}
+
+.classification-item strong {
+  display: block;
+  color: #75d5f2;
+  font-size: 0.95rem;
+  margin-bottom: 5px;
+}
+
+.classification-item p {
+  margin: 0;
+  color: #e1edf5;
+  font-size: 0.95rem;
+}
+
+.classification-item .or {
+  color: #48c8e8;
+  font-weight: 600;
+  padding: 0 5px;
+}
+
+@media (max-width: 650px) {
+  .classification-grid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
 
 <script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},svg:{fontCache:'global'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
@@ -525,13 +573,41 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
 -->
 
 <h2 id="classification"><small>2</small>Classifying systems</h2>
-<div class="card">
-  A system can be 
-  <div class="grid">
-    <div class="eq-box">discrete-time or continuous-time</div>
-    <div class="eq-box">linear or nonlinear</div>
-    <div class="eq-box">time invariant or time variant</div>
-    <div class="eq-box">causal or noncausal</div>
+<div class="card system-classification">
+  <h3>A system can be classified according to four properties:</h3>
+
+  <div class="classification-grid">
+    <div class="classification-item">
+      <span class="classification-number">01</span>
+      <div>
+        <strong>Time representation</strong>
+        <p>Discrete-time <span class="or">or</span> continuous-time</p>
+      </div>
+    </div>
+
+    <div class="classification-item">
+      <span class="classification-number">02</span>
+      <div>
+        <strong>Linearity</strong>
+        <p>Linear <span class="or">or</span> nonlinear</p>
+      </div>
+    </div>
+
+    <div class="classification-item">
+      <span class="classification-number">03</span>
+      <div>
+        <strong>Time dependence</strong>
+        <p>Time invariant <span class="or">or</span> time variant</p>
+      </div>
+    </div>
+
+    <div class="classification-item">
+      <span class="classification-number">04</span>
+      <div>
+        <strong>Causality</strong>
+        <p>Causal <span class="or">or</span> noncausal</p>
+      </div>
+    </div>
   </div>
 </div>
 <p class="sub">Select a property to explore its definition and examples.</p>
@@ -955,7 +1031,7 @@ const LA=t=>Math.max(0,1-Math.abs(t));
 W('test',{
   cap:'Interactive 2.1',
   title:'Test a system: time invariance and linearity; \\(x_1(t)=\\Lambda(t)\\), \\(x_2(t)=\\Lambda(t-1)\\)',
-  h:300,
+  h:200,
 
   ctl:[
     {t:'s',k:'s',l:'System',o:SY.map(s=>s[0]),v:2},
