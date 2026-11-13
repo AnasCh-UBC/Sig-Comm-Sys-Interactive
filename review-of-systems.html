@@ -269,6 +269,91 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
     height: 28px;
   }
 }
+
+/* Interactive system classification */
+.system-classifier {
+  padding: 18px;
+  margin: 18px 0;
+}
+
+.system-selector {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(85,200,242,.22);
+}
+
+.system-selector label {
+  color: #9fb5c7;
+  font-size: .9rem;
+  font-weight: 600;
+}
+
+.system-selector select {
+  flex: 1;
+  min-width: 230px;
+  max-width: 440px;
+  padding: 10px 13px;
+  color: #eaf3fa;
+  background: #10263a;
+  border: 1px solid rgba(85,200,242,.5);
+  border-radius: 8px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.system-selector select:focus {
+  outline: 2px solid rgba(85,200,242,.35);
+  outline-offset: 2px;
+}
+
+.system-property-content h3 {
+  margin: 8px 0 12px;
+  color: #55c8f2;
+}
+
+.system-property-content > p {
+  line-height: 1.65;
+}
+
+.system-property-content .grid {
+  margin-top: 16px;
+  align-items: stretch;
+}
+
+.system-property-content .tile {
+  min-width: 0;
+}
+
+.system-property-content .eq-box {
+  overflow-x: auto;
+  margin: 12px 0;
+}
+
+.system-property-content[hidden] {
+  display: none;
+}
+
+@media(max-width:650px) {
+  .system-classifier {
+    padding: 13px;
+  }
+
+  .system-selector {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .system-selector select {
+    width: 100%;
+    max-width: none;
+  }
+}
+
 </style>
 
 <script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},svg:{fontCache:'global'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
@@ -355,6 +440,7 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
 </div>
 <div data-w="play"></div>
 
+<!--
 <h2 id="classification"><small>2</small>Classifying systems</h2>
 <p class="sub">Like signals, systems are classified according to their properties</p>
 <div class="grid">
@@ -373,6 +459,200 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
 <p>A system is time-invariant if for all $x(t)$ and $t_0$: $\mathcal{T}[x(t)]=y(t)\Rightarrow\mathcal{T}[x(t-t_0)]=y(t-t_0)$, i.e. a delayed input produces a delayed output. If $\mathcal{T}[x(t-t_0)]\neq y(t-t_0)$ the system is time-variant. The amplifier $y(t)=a\,x(t)$ is time-invariant, but the <b>modulator</b> $y(t)=x(t)\cos(2\pi f_0t)$ is time-variant.</p>
 <h3>Causal vs. noncausal</h3>
 <p>A system is causal if $y(t_0)=\mathcal{T}[x(t):t\le t_0]$; otherwise it is noncausal. The modulator is causal, but $y(t)=x(t-2)+x(t+2)$ is noncausal because it needs the input two seconds into the future.</p>
+-->
+
+<h2 id="classification"><small>2</small>Classifying systems</h2>
+<p class="sub">Like signals, systems are classified according to their properties. Select a property to explore its definition and examples.</p>
+
+<div class="card system-classifier">
+  <div class="system-selector">
+    <label for="systemProperty">Select a system property</label>
+    <select id="systemProperty">
+      <option value="time">Discrete-time vs. continuous-time</option>
+      <option value="linear">Linear vs. nonlinear</option>
+      <option value="invariant">Time-invariant vs. time-variant</option>
+      <option value="causal">Causal vs. noncausal</option>
+    </select>
+  </div>
+
+  <div class="system-property-panel" id="systemPropertyPanel">
+
+    <!-- Discrete-time vs. continuous-time -->
+    <div class="system-property-content" data-property="time">
+      <h3>Discrete-time vs. continuous-time</h3>
+      <p>A <b>discrete-time</b> system processes discrete-time signals, while a <b>continuous-time</b> system processes continuous-time signals.</p>
+
+      <div class="grid">
+        <div class="tile">
+          <b class="tag">Discrete-time system</b>
+          <p>Input and output are defined at discrete time instants, indexed by integers.</p>
+          <div class="eq-box">
+            \[
+            y[n]=x[n]-x[n-1]
+            \]
+          </div>
+          <p>This is a <b>discrete-time differentiator</b>: it computes the difference between consecutive input samples.</p>
+        </div>
+
+        <div class="tile">
+          <b class="tag">Continuous-time system</b>
+          <p>Input and output are continuous-time signals.</p>
+          <div class="eq-box">
+            \[
+            y(t)=\frac{d}{dt}x(t)
+            \]
+          </div>
+          <p>This is the continuous-time differentiator.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Linear vs. nonlinear -->
+    <div class="system-property-content" data-property="linear" hidden>
+      <h3>Linear vs. nonlinear</h3>
+      <p>A system is <b>linear</b> if it satisfies the properties of <b>superposition</b> and <b>homogeneity</b>. Together, these require that, for any signals \(x_1(t)\), \(x_2(t)\) and scalars \(a_1\), \(a_2\):</p>
+
+      <div class="eq-box">
+        \[
+        \mathcal{T}[a_1x_1(t)+a_2x_2(t)]
+        =
+        a_1\mathcal{T}[x_1(t)]
+        +
+        a_2\mathcal{T}[x_2(t)]
+        \]
+      </div>
+
+      <p>Equivalently, if the responses to \(x_1(t)\) and \(x_2(t)\) are \(y_1(t)\) and \(y_2(t)\), respectively, the response to \(a_1x_1(t)+a_2x_2(t)\) must be \(a_1y_1(t)+a_2y_2(t)\).</p>
+
+      <div class="grid">
+        <div class="tile">
+          <b class="tag">Linear system</b>
+          <p><b>Differentiator:</b></p>
+          <div class="eq-box">
+            \[
+            y(t)=\frac{d}{dt}x(t)
+            \]
+          </div>
+          <p>It satisfies superposition and homogeneity:</p>
+          <div class="eq-box">
+            \[
+            \mathcal{T}[a_1x_1+a_2x_2]
+            =a_1y_1+a_2y_2
+            \]
+          </div>
+        </div>
+
+        <div class="tile">
+          <b class="tag">Nonlinear system</b>
+          <p><b>Squaring system:</b></p>
+          <div class="eq-box">
+            \[
+            y(t)=x^2(t)
+            \]
+          </div>
+          <p>In general, squaring a sum does not give the sum of the squared signals. Therefore, this system is nonlinear.</p>
+          <div class="eq-box">
+            \[
+            (x_1+x_2)^2
+            \neq x_1^2+x_2^2
+            \]
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Time-invariant vs. time-variant -->
+    <div class="system-property-content" data-property="invariant" hidden>
+      <h3>Time-invariant vs. time-variant</h3>
+      <p>A system is <b>time-invariant</b> if delaying the input by \(t_0\) produces an output delayed by exactly the same amount.</p>
+
+      <div class="eq-box">
+        \[
+        \mathcal{T}[x(t)]=y(t)
+        \quad\Longrightarrow\quad
+        \mathcal{T}[x(t-t_0)]=y(t-t_0)
+        \]
+      </div>
+
+      <p>If this condition does not hold, the system is <b>time-variant</b>.</p>
+
+      <div class="grid">
+        <div class="tile">
+          <b class="tag">Time-invariant system</b>
+          <p><b>Amplifier:</b></p>
+          <div class="eq-box">
+            \[
+            y(t)=a\,x(t)
+            \]
+          </div>
+          <p>Delaying the input gives:</p>
+          <div class="eq-box">
+            \[
+            y_d(t)=a\,x(t-t_0)
+            =y(t-t_0)
+            \]
+          </div>
+          <p>The system is time-invariant.</p>
+        </div>
+
+        <div class="tile">
+          <b class="tag">Time-variant system</b>
+          <p><b>Modulator:</b></p>
+          <div class="eq-box">
+            \[
+            y(t)=x(t)\cos(2\pi f_0t)
+            \]
+          </div>
+          <p>Delaying the input gives:</p>
+          <div class="eq-box">
+            \[
+            y_d(t)=x(t-t_0)\cos(2\pi f_0t)
+            \]
+          </div>
+          <p>This is generally not equal to \(y(t-t_0)\). The system is time-variant.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Causal vs. noncausal -->
+    <div class="system-property-content" data-property="causal" hidden>
+      <h3>Causal vs. noncausal</h3>
+      <p>A system is <b>causal</b> if its output at any time \(t_0\) depends only on the input at the present time and in the past, \(t\leq t_0\). Otherwise, it is <b>noncausal</b>.</p>
+
+      <div class="eq-box">
+        \[
+        y(t_0)=\mathcal{T}[x(t):t\leq t_0]
+        \]
+      </div>
+
+      <div class="grid">
+        <div class="tile">
+          <b class="tag">Causal system</b>
+          <p><b>Modulator:</b></p>
+          <div class="eq-box">
+            \[
+            y(t)=x(t)\cos(2\pi f_0t)
+            \]
+          </div>
+          <p>The output at time \(t_0\) depends only on the input at \(t_0\). It does not require future input values.</p>
+        </div>
+
+        <div class="tile">
+          <b class="tag">Noncausal system</b>
+          <p><b>Future-dependent system:</b></p>
+          <div class="eq-box">
+            \[
+            y(t)=x(t-2)+x(t+2)
+            \]
+          </div>
+          <p>The output at time \(t_0\) requires the input at \(t_0+2\), which is two seconds into the future. The system is noncausal.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 
 <div class="callout"><b>Causal LTI systems:</b> a linear time-invariant (LTI) system is causal if and only if its response to an impulse $\delta(t)$, the <i>impulse response</i> $h(t)$, is a causal signal ($h(t)=0$ for $t<0$).</div>
 <p>Test the systems below yourself. The top plot checks time invariance (do the two curves coincide?) and the bottom plot checks superposition.</p>
@@ -535,9 +815,10 @@ function W(id,o){const host=document.querySelector('[data-w="'+id+'"]'),d=docume
 */
   // ---- 1. simple systems
   W('play',{cap:'Interactive 1.2',title:'The three simple systems acting on x(t) = cos(2πf₀t)',
-h:250,ctl:[{t:'s',k:'s',l:'System',o:['Amplifier y = a·x(t)','Differentiator y = dx/dt','Filter (passes f₀ &lt; f_c = 2 Hz)']},
+h:240,ctl:[{t:'s',k:'s',l:'System',o:['Amplifier y = a·x(t)','Differentiator y = dx/dt','Filter (passes f₀ &lt; f_c = 2 Hz)']},
 {k:'f',l:'Input frequency f₀ (Hz)',min:.25,max:4,step:.25,v:1},{k:'a',l:'Amplifier gain a',min:.5,max:2,step:.1,v:2}],
- draw(c,v){const w=TP*v.f,x=t=>Math.cos(w*t),y=[t=>v.a*x(t),t=>-w*Math.sin(w*t),t=>v.f<2?x(t):0][v.s],m=1.15*Math.max(1.2,v.s==0?v.a:v.s==1?w:1);
+ draw(c,v){const w=TP*v.f,x=t=>Math.cos(w*t),y=[t=>v.a*x(t),t=>-w*Math.sin(w*t),t=>v.f<2?x(t):0][v.s],
+  m=1.15*2;
   plot(c,[{f:x,c:'b',d:[5,4]},{f:y,c:'a'}],0,4,-m,m);
   return [
    'The amplifier scales the input by \\(a\\): \\(y(t)=a\\cos(2\\pi f_0t)\\). The output amplitude is \\(a='+v.a.toFixed(1)+'\\).',
@@ -581,6 +862,37 @@ W('eig',{cap:'Interactive 5.1',title:'A cosine through the LTI system h(t) = e^(
   plot(c,[{f:x,c:'b',d:[5,4]},{f:y,c:'a'}],0,4,-m,m);
   return 'Red dashed: input cos(2πf₀t). Blue: output computed by numerical convolution. The output is a cosine at the <b>same frequency</b>, with amplitude |H(f₀)| = <b>'+mag.toFixed(3)+'</b> and phase ∠H(f₀) = <b>'+(ph*180/Math.PI).toFixed(1)+'°</b>, where H(f) = 1/(a + j2πf). Largest difference between the numerical output and |H|cos(2πf₀t+∠H): '+e.toExponential(1)+'.'}});
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>UPS.forEach(f=>f()));
+})();
+
+(() => {
+  const selector = document.getElementById('systemProperty');
+  const panels = document.querySelectorAll(
+    '#systemPropertyPanel .system-property-content'
+  );
+
+  if (!selector || !panels.length) return;
+
+  function showProperty(property) {
+    panels.forEach(panel => {
+      panel.hidden = panel.dataset.property !== property;
+    });
+
+    // Typeset equations in the newly displayed panel.
+    const activePanel = document.querySelector(
+      '#systemPropertyPanel .system-property-content[data-property="' +
+      property + '"]'
+    );
+
+    if (activePanel && window.MathJax?.typesetPromise) {
+      window.MathJax.typesetPromise([activePanel]);
+    }
+  }
+
+  selector.addEventListener('change', () => {
+    showProperty(selector.value);
+  });
+
+  showProperty(selector.value);
 })();
 </script>
 </body></html>
