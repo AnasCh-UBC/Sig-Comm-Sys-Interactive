@@ -350,7 +350,8 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
 <small>Use the interactive example below to experiment with the following systems:</small>
 <ul><li><b>Differentiator:</b> $\mathcal{T}[x(t)]=\dfrac{d}{dt}x(t)$.</li>
 <li><b>Amplifier:</b> $\mathcal{T}[x(t)]=a\,x(t)$.</li>
-<li><b>Lowpass filter with cutoff frequency $f_c$:</b> For a sinusoidal input $x(t)=\cos(2\pi f_0 t)$, $\mathcal{T}[x(t)]=x(t)$ if $f_0\lt f_c$, and $\mathcal{T}[x(t)]=0$ otherwise.</li></ul>
+<li><b>Lowpass filter with cutoff frequency $f_c$:</b> For a sinusoidal input $x(t)=\cos(2\pi f_0 t)$, $\mathcal{T}[x(t)]=x(t)$ if $f_0\lt f_c$, and $\mathcal{T}[x(t)]=0$ otherwise.</li>
+</ul>
 <div data-w="play"></div>
 
 <h2 id="classification"><small>2</small>Classifying systems</h2>
@@ -521,14 +522,16 @@ function W(id,o){const host=document.querySelector('[data-w="'+id+'"]'),d=docume
  const up=()=>{const v={};for(const k in inp){v[k]=+inp[k].value;if(bs[k])bs[k].textContent=inp[k].value}d.querySelector('.note').innerHTML=o.draw(d.querySelector('canvas'),v)};
  d.addEventListener('input',up);host.appendChild(d);up();UPS.push(up)}
 // ---- 1. recording in a cup
-W('cup',{cap:'Interactive 1.1',title:'Recording in a cup: clicks through a ringing system',h:340,
+/*W('cup',{cap:'Interactive 1.1',title:'Recording in a cup: clicks through a ringing system',h:340,
  ctl:[{t:'s',k:'c',l:'Setup',o:['Speaker → microphone (no cup)','Speaker in the cup → microphone'],v:1},{k:'f',l:'Cup resonance f (kHz)',min:.2,max:1.5,step:.05,v:.6},{k:'tau',l:'Ringing time constant τ (ms)',min:1,max:15,step:.5,v:6}],
  draw(c,v){const sp=[5,15,25,35,45],h=t=>t<0?0:Math.exp(-t/v.tau)*Math.cos(TP*v.f*t),y=t=>sp.reduce((s,k)=>s+h(t-k),0);let m=1;if(v.c)for(let t=0;t<=50;t+=.1)m=Math.max(m,Math.abs(y(t)));
   c.getContext('2d').clearRect(0,0,720,340);plot(c,[{pts:sp.map(k=>[k,1]),c:'b'}],0,50,-.4,1.5,[0,150],10);
   plot(c,v.c?[{f:y,c:'a'}]:[{pts:sp.map(k=>[k,1]),c:'a'}],0,50,-1.2*m,1.2*m,[170,170],10);lab(c,'Input x(t): clicks from the speaker (time in ms)',8,16);lab(c,'Output y(t): what the microphone records',8,186);
   return v.c?'The cup acts like an LTI system with impulse response h(t) = e^(−t/τ)·cos(2πf t)·u(t). Every click makes it ring; the ringing from successive clicks overlaps and adds (superposition), so the recording looks like a sustained oscillation, not isolated clicks. Raise τ for a longer ring.':'Without the cup the microphone simply records the clicks: the system does nothing but pass the signal along.'}});
-// ---- 1. simple systems
-W('play',{cap:'Interactive 1.2',title:'The three simple systems acting on x(t) = cos(2πf₀t)',h:280,ctl:[{t:'s',k:'s',l:'System',o:['Amplifier y = a·x(t)','Differentiator y = dx/dt','Filter (passes f₀ &lt; f_c = 2 Hz)']},
+*/
+  // ---- 1. simple systems
+W('play',{cap:'Interactive 1.2',title:'The three simple systems acting on x(t) = cos(2πf₀t)',
+h:280,ctl:[{t:'s',k:'s',l:'System',o:['Amplifier y = a·x(t)','Differentiator y = dx/dt','Filter (passes f₀ &lt; f_c = 2 Hz)']},
 {k:'f',l:'Input frequency f₀ (Hz)',min:.25,max:4,step:.25,v:1},{k:'a',l:'Amplifier gain a',min:.5,max:2,step:.1,v:2}],
  draw(c,v){const w=TP*v.f,x=t=>Math.cos(w*t),y=[t=>v.a*x(t),t=>-w*Math.sin(w*t),t=>v.f<2?x(t):0][v.s],m=1.15*Math.max(1.2,v.s==0?v.a:v.s==1?w:1);
   plot(c,[{f:x,c:'b',d:[5,4]},{f:y,c:'a'}],0,4,-m,m);
