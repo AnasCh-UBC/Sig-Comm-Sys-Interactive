@@ -935,7 +935,7 @@ h:240,ctl:[{t:'s',k:'s',l:'System',o:['Amplifier y = a·x(t)','Differentiator y 
   return [
    'The amplifier scales the input by \\(a\\): \\(y(t)=a\\cos(2\\pi f_0t)\\). The output amplitude is \\(a='+v.a.toFixed(1)+'\\).',
    'The differentiator produces \\(y(t)=-2\\pi f_0\\sin(2\\pi f_0t)\\). Its output amplitude is \\(2\\pi f_0='+w.toFixed(2)+'\\), so higher input frequencies produce larger output amplitudes.',
-   'The filter passes the input unchanged when \\(f_0\lt f_c=2\\,\\text{Hz}\\), and blocks it otherwise. Here \\(f_0='+v.f.toFixed(2)+'\\,\\text{Hz}\\): the signal is '+(v.f<2?'passed':'blocked')+'.'
+   'The filter passes the input unchanged when \\(f_0\\lt f_c=2\\,\\text{Hz}\\), and blocks it otherwise. Here \\(f_0='+v.f.toFixed(2)+'\\,\\text{Hz}\\): the signal is '+(v.f<2?'passed':'blocked')+'.'
   ][v.s]+'<br><span>Blue: output \\(y(t)\\); red dashed: input \\(x(t)\\).</span>'}});
   // ---- 2. system tester
 const SY=[['y = 2x(t)',(x,t)=>2*x(t),[1,1,1],'Scaling by a constant.'],['y = x²(t)',(x,t)=>x(t)**2,[0,1,1],'Squaring breaks superposition: (x₁ + x₂)² ≠ x₁² + x₂².'],
