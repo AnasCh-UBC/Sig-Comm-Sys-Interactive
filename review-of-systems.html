@@ -572,7 +572,7 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
             \[
             y(t)=a\,x(t)
             \]
-            <small>If the input is \(x(t-t_0)\), the output is \(a\,x(t-t_0)=y(t-t_0)\).</small>
+            <small>Input \(x(t-t_0)\) produces output \(a\,x(t-t_0)=y(t-t_0)\).</small>
           </div>
         </div>
         <div class="tile">
@@ -580,13 +580,13 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
           <p>Does not satisfy time-invatiance</p>
           <div class="eq-box">
             \[
-            \mathcal{T}[x(t)]=y(t), \mathcal{T}[x(t-t_0)]\neq y(t-t_0) \text(in general)\]
+            \mathcal{T}[x(t)]=y(t) \nRightarrow \mathcal{T}[x(t-t_0)]=y(t-t_0)\]
           </div>
           <div class="eq-box"><b>Example:</b> Modulator
             \[
             y(t)=x(t)\cos(2\pi f_0t)
             \]
-            <small>If the input is \(x(t-t_0)\), the output is \(x(t-t_0)\cos(2\pi f_0t)\) which is not equal \(y(t-t_0)\).</small>
+            <small>Input \(x(t-t_0)\) produces output \(x(t-t_0)\cos(2\pi f_0t)\neq y(t-t_0)\).</small>
           </div>
         </div>
       </div>
@@ -598,7 +598,7 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
       <div class="grid">
         <div class="tile">
           <b class="tag">Causal system</b>
-          <p>Output at time \(t_0\) depends only on the input at times \(t\leq t_0\).</p>
+          <p>Output at \(t=t_0\) depends only on input at \(t\leq t_0\).</p>
           <div class="eq-box">
             \[
             y(t_0)=\mathcal{T}[x(t):t\leq t_0]
@@ -608,12 +608,12 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
             \[
             y(t)=x(t)\cos(2\pi f_0t)
             \]
-            <small>The output at time \(t_0\) depends only on the input at \(t_0\).</small>
+            <small>Output at \(t_0\) depends only on input at \(t_0\).</small>
           </div>
         </div>
         <div class="tile">
           <b class="tag">Noncausal system</b>
-          <p>Output at time \(t_0\) can depend on input at time \(t>t_0\)</p>
+          <p>Output at \(t=t_0\) can depend on input at \(t>t_0\)</p>
           <div class="eq-box">
             \[
             y(t_0)\neq \mathcal{T}[x(t):t\leq t_0]\text{ in general}
@@ -623,7 +623,7 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
             \[
             y(t)=x(t-2)+x(t+2)
             \]
-            <small>The output at time \(t_0\) depends on the input at \(t_0+2\) which is two seconds into the future.</small>
+            <small>Output at time \(t_0\) depends on input at \(t_0+2\) (future input).</small>
           </div>
         </div>
       </div>
