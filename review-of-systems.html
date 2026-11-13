@@ -518,7 +518,7 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
           <b class="tag">Linear system</b>
           <p>Satisfies <b>superposition</b> and <b>homogeneity</b></p>
           <!--: For any signals \(x_1(t)\), \(x_2(t)\) and scalars \(a_1\), \(a_2\):-->
-          <div class="eq-box">
+          <div class="eq-box" style="font-size: 0.75em;">
             \(
             \mathcal{T}[a_1x_1(t)+a_2x_2(t)]
             =
@@ -538,6 +538,15 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
         <div class="tile">
           <b class="tag">Nonlinear system</b>
           <p>Does not satisfy <b>superposition</b> and <b>homogeneity</b>.</p>
+          <div class="eq-box" style="font-size: 0.75em;">
+            \(
+            \mathcal{T}[a_1x_1(t)+a_2x_2(t)]
+            \neq
+            a_1\mathcal{T}[x_1(t)]
+            +
+            a_2\mathcal{T}[x_2(t)]
+            \)
+          </div>
           <div class="eq-box"><b>Exmaple:</b> Squaring
             \[
             y(t)=x^2(t)
