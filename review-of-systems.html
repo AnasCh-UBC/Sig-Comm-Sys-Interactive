@@ -484,6 +484,9 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
         <div class="tile">
           <b class="tag">Discrete-time system</b>
           <p>Processes discrete-time signals.</p>
+          <div class="eq-box">
+            \[x[n] \text{ processed into } y[n]\]
+          </div>
           <div class="eq-box"><b>Example:</b> Discrete-time differentiator
             \[
             y[n]=x[n]-x[n-1]
@@ -495,7 +498,9 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
         <div class="tile">
           <b class="tag">Continuous-time system</b>
           <p>Processes continuous-time signals.</p>
-          <div class="eq-box"><b>Example:</b> Continuous-time differentiator
+          <div class="eq-box">
+            \[x(t) \text{ processed into } y(t)\]
+          </div><div class="eq-box"><b>Example:</b> Continuous-time differentiator
             \[
             y(t)=\frac{d}{dt}x(t)
             \]
@@ -511,15 +516,16 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
       <div class="grid">
         <div class="tile">
           <b class="tag">Linear system</b>
-          <p>Satisfies both the <b>superposition</b> and <b>homogeneity</b> properties: For any signals \(x_1(t)\), \(x_2(t)\) and scalars \(a_1\), \(a_2\):</p>
+          <p>Satisfies <b>superposition</b> and <b>homogeneity</b></p>
+          <!--: For any signals \(x_1(t)\), \(x_2(t)\) and scalars \(a_1\), \(a_2\):-->
           <div class="eq-box">
-            \[
+            \(
             \mathcal{T}[a_1x_1(t)+a_2x_2(t)]
             =
             a_1\mathcal{T}[x_1(t)]
             +
             a_2\mathcal{T}[x_2(t)]
-            \]
+            \)
           </div>
           <div class="eq-box"><b>Example:</b> Continuous-time differentiator
             \[
