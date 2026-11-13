@@ -496,9 +496,10 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
   <p class="sub">Use the interactive example below to experiment with the following systems:</small>
     <div class="card">
       <div class="grid">
-        <div><b>Differentiator:</b> $\mathcal{T}[x(t)]=\dfrac{d}{dt}x(t)$.</div>
-        <div><b>Amplifier:</b> $\mathcal{T}[x(t)]=a\,x(t)$.</div>
-        <div><b>Lowpass filter, cutoff frequency $f_c$:</b> For input $x(t)=\cos(2\pi f_0 t)$, $\mathcal{T}[x(t)]=x(t)$ if $f_0\lt f_c$, and $\mathcal{T}[x(t)]=0$ otherwise.</div>
+        <div class="card"><b>Differentiator:</b> \[\mathcal{T}[x(t)]=\dfrac{d}{dt}x(t)\].</div>
+        <div class="card"><b>Amplifier:</b> \[\mathcal{T}[x(t)]=a\,x(t)\].</div>
+        <div class="card"><b>Lowpass filter, cutoff freq. $f_c$:</b> For input $x(t)=\cos(2\pi f_0 t)$, \[\mathcal{T}[x(t)]=\begin{cases}
+          x(t),& f_0\lt f_c\\ 0, &\text{otherwise.}\end{cases}\]</div>
       </div>
     </div>
 </div>
