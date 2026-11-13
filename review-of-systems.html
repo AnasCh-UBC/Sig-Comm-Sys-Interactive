@@ -365,20 +365,15 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
 .test-plot-titles > div {
   min-width: 0;
   padding: 7px 5px;
-  border-bottom: 1px solid rgba(85,200,242,.4);
-  color: #eaf3fa;
+  border-bottom: 1px solid rgba(85,160,195,.25);
+  color: #b8c9d6;
   font-size: .82rem;
-}
-
-.test-plot-titles b,
-.test-plot-titles span {
-  display: block;
 }
 
 .test-plot-titles span {
   margin-top: 4px;
-  color: #b9cbd9;
-  font-size: .78rem;
+  color: #91a7b8;
+  font-size: .76rem;
 }
 
 @media(max-width:600px) {
@@ -386,6 +381,39 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
     grid-template-columns: 1fr;
   }
 }
+
+/* System-testing widget controls */
+[data-w="test"] .ctl {
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+[data-w="test"] .test-system-control {
+  width:100%;
+}
+
+[data-w="test"] .test-slider-row {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+  width:100%;
+}
+
+[data-w="test"] .test-slider-control {
+  min-width:0;
+}
+
+[data-w="test"] .test-slider-control input {
+  width:100%;
+}
+
+@media(max-width:600px) {
+  [data-w="test"] .test-slider-row {
+    grid-template-columns:1fr;
+  }
+}
+
 </style>
 
 <script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},svg:{fontCache:'global'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
@@ -672,7 +700,7 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
   </div>
 </div>
 
-<p>Test the systems below yourself. The top plot checks time invariance, while the bottom plot checks superposition. Do the two curves coincide?.</p>
+<p class="sub">Test the systems below yourself. The top plot checks time invariance, while the bottom plot checks superposition. Do the two curves coincide?.</p>
 <div data-w="test"></div>
 
 <h2 id="lti"><small>3</small>LTI systems and convolution</h2>
@@ -821,7 +849,29 @@ function W(id,o){const host=document.querySelector('[data-w="'+id+'"]'),d=docume
   if(c.t=='s'){l.innerHTML=c.l+'<select>'+c.o.map((x,i)=>'<option value="'+i+'">'+x+'</option>').join('')+'</select>';inp[c.k]=l.querySelector('select');inp[c.k].value=c.v||0}
   else{l.innerHTML=c.l+': <b></b><input type="range" min="'+c.min+'" max="'+c.max+'" step="'+c.step+'" value="'+c.v+'">';inp[c.k]=l.querySelector('input');bs[c.k]=l.querySelector('b')}
   ctl.appendChild(l)});
- const up=()=>{const v={};for(const k in inp){v[k]=+inp[k].value;if(bs[k])bs[k].textContent=inp[k].value}d.querySelector('.note').innerHTML=o.draw(d.querySelector('canvas'),v)};
+
+// Special layout for the system-testing widget
+if(id==='test'){
+  const labels=[...ctl.querySelectorAll('label')];
+
+  // Put the system selector above the plots
+  const systemLabel=labels[0];
+  systemLabel.classList.add('test-system-control');
+
+  // Group the three sliders in one row
+  const sliderRow=document.createElement('div');
+  sliderRow.className='test-slider-row';
+
+  labels.slice(1).forEach(label=>{
+    label.classList.add('test-slider-control');
+    sliderRow.appendChild(label);
+  });
+
+  ctl.appendChild(sliderRow);
+}
+
+const up=()=>{const v={};
+  for(const k in inp){v[k]=+inp[k].value;if(bs[k])bs[k].textContent=inp[k].value}d.querySelector('.note').innerHTML=o.draw(d.querySelector('canvas'),v)};
  d.addEventListener('input',up);host.appendChild(d);up();UPS.push(up)}
 // ---- 1. recording in a cup
 /*W('cup',{cap:'Interactive 1.1',title:'Recording in a cup: clicks through a ringing system',h:340,
@@ -860,7 +910,7 @@ const LA=t=>Math.max(0,1-Math.abs(t));
 
 W('test',{
   cap:'Interactive 2.1',
-  title:'Test a system: time invariance and linearity — \\(x_1(t)=\\triangle(t)\\), \\(x_2(t)=\\triangle(t-1)\\)',
+  title:'Test a system: time invariance and linearity; \\(x_1(t)=\\Lambda(t)\\), \\(x_2(t)=\\Lambda(t-1)\\)',
   h:300,
 
   ctl:[
@@ -911,13 +961,13 @@ W('test',{
   c.height=H;
   ctx.clearRect(0,0,W,H);
 
-  // Sharper, higher-contrast colors
-  const blue='#00c8ff';
-  const red='#ff654f';
-  const grid='rgba(165,195,220,.22)';
-  const axis='#dceaf5';
-  const text='#f3f8fc';
-  const muted='#b9cbd9';
+  // Refined dark-theme palette
+  const blue  = '#4da6c8';  // muted cyan
+  const red   = '#d87970';  // muted coral
+  const grid  = 'rgba(145,170,190,.12)';
+  const axis  = '#8299aa';  // soft blue-grey
+  const text  = '#b9c9d5';  // muted axis labels
+  const muted = '#8499aa';
 
   // Create HTML titles above the canvas, once
   const parent=c.parentElement;
@@ -976,8 +1026,8 @@ W('test',{
     }
 
     // Stronger axes
-    ctx.strokeStyle=axis;
-    ctx.lineWidth=1.7;
+    ctx.strokeStyle = '#8da2b2';
+    ctx.lineWidth = 1.25;
 
     ctx.beginPath();
     ctx.moveTo(x1,mid);
@@ -990,9 +1040,9 @@ W('test',{
     ctx.stroke();
 
     // Tick labels
-    ctx.fillStyle=text;
-    ctx.font='12px Arial';
-    ctx.textAlign='center';
+    ctx.fillStyle = '#9aafbf';
+    ctx.font = '10px Arial';
+    ctx.textAlign = 'center';
 
     for(let t=-4;t<=4;t+=2){
       ctx.fillText(t,X(t),mid+17);
@@ -1006,7 +1056,7 @@ W('test',{
     function curve(fn,color,dashed=false){
       ctx.beginPath();
       ctx.strokeStyle=color;
-      ctx.lineWidth=2.8;
+      ctx.lineWidth=2.2;
       ctx.lineJoin='round';
       ctx.lineCap='round';
       ctx.setLineDash(dashed?[7,4]:[]);
