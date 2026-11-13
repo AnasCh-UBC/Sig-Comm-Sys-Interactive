@@ -491,8 +491,8 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
             \[
             y[n]=x[n]-x[n-1]
             \]
+            <small>Both x and y are indexed by an integer \(n\).</small>
           </div>
-          <small>Both x and y are indexed by an integer \(n\).</small>
         </div>
 
         <div class="tile">
@@ -504,8 +504,8 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
             \[
             y(t)=\frac{d}{dt}x(t)
             \]
+            <small>Both x and y are indexed by a real number \(t\).</small>
           </div>
-          <small>Both x and y are indexed by a real number \(t\).</small>
         </div>
       </div>
     </div>
@@ -519,33 +519,33 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
           <p>Satisfies <b>superposition</b> and <b>homogeneity</b></p>
           <!--: For any signals \(x_1(t)\), \(x_2(t)\) and scalars \(a_1\), \(a_2\):-->
           <div class="eq-box" style="font-size: 0.75em;">
-            \(
+            \[
             \mathcal{T}[a_1x_1(t)+a_2x_2(t)]
             =
             a_1\mathcal{T}[x_1(t)]
             +
             a_2\mathcal{T}[x_2(t)]
-            \)
+            \]
           </div>
           <div class="eq-box"><b>Example:</b> Continuous-time differentiator
             \[
             y(t)=\frac{d}{dt}x(t)
             \]
+            <small>\(\frac{d}{dt}(a_1x_1(t)+a_2x_2(t))=a_1\frac{d}{dt}x_1(t)+a_2\frac{d}{dt}x_2(t)\).</small>
           </div>
-          <small>\(\frac{d}{dt}(a_1x_1(t)+a_2x_2(t))=a_1\frac{d}{dt}x_1(t)+a_2\frac{d}{dt}x_2(t)\).</small>
         </div>
 
         <div class="tile">
           <b class="tag">Nonlinear system</b>
           <p>Does not satisfy <b>superposition</b> and <b>homogeneity</b>.</p>
           <div class="eq-box" style="font-size: 0.75em;">
-            \(
+            \[
             \mathcal{T}[a_1x_1(t)+a_2x_2(t)]
             \neq
             a_1\mathcal{T}[x_1(t)]
             +
             a_2\mathcal{T}[x_2(t)]
-            \)
+            \]
           </div>
           <div class="eq-box"><b>Exmaple:</b> Squaring
             \[
@@ -572,8 +572,8 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
             \[
             y(t)=a\,x(t)
             \]
+            <small>If the input is \(x(t-t_0)\), the output is \(a\,x(t-t_0)=y(t-t_0)\).</small>
           </div>
-          <small>If the input is \(x(t-t_0)\), the output is \(a\,x(t-t_0)=y(t-t_0)\).</small>
         </div>
         <div class="tile">
           <b class="tag">Time-variant system</b>
@@ -586,8 +586,8 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
             \[
             y(t)=x(t)\cos(2\pi f_0t)
             \]
+            <small>If the input is \(x(t-t_0)\), the output is \(x(t-t_0)\cos(2\pi f_0t)\) which is not equal \(y(t-t_0)\).</small>
           </div>
-          <small>If the input is \(x(t-t_0)\), the output is \(x(t-t_0)\cos(2\pi f_0t)\) which is not equal \(y(t-t_0)\).</small>
         </div>
       </div>
     </div>
@@ -608,8 +608,8 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
             \[
             y(t)=x(t)\cos(2\pi f_0t)
             \]
+            <small>The output at time \(t_0\) depends only on the input at \(t_0\).</small>
           </div>
-          <small>The output at time \(t_0\) depends only on the input at \(t_0\).</small>
         </div>
         <div class="tile">
           <b class="tag">Noncausal system</b>
@@ -623,8 +623,8 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
             \[
             y(t)=x(t-2)+x(t+2)
             \]
+            <small>The output at time \(t_0\) depends on the input at \(t_0+2\) which is two seconds into the future.</small>
           </div>
-          <small>The output at time \(t_0\) depends on the input at \(t_0+2\) which is two seconds into the future.</small>
         </div>
       </div>
     </div>
