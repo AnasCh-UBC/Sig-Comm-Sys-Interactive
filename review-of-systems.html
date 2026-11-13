@@ -563,7 +563,7 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
       <div class="grid">
         <div class="tile">
           <b class="tag">Time-invariant system</b>
-          <p>Delaying the input by \(t_0\) produces an output delayed by \(t_0\)</p>
+          <p>Delaying input by \(t_0\) delays output by \(t_0\)</p>
           <div class="eq-box">
             \[
             \mathcal{T}[x(t)]=y(t)\Rightarrow\mathcal{T}[x(t-t_0)]=y(t-t_0)\]
@@ -578,6 +578,10 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
         <div class="tile">
           <b class="tag">Time-variant system</b>
           <p>Does not satisfy time-invatiance</p>
+          <div class="eq-box">
+            \[
+            \mathcal{T}[x(t)]=y(t), \mathcal{T}[x(t-t_0)]\neq y(t-t_0) \text(in general)\]
+          </div>
           <div class="eq-box"><b>Example:</b> Modulator
             \[
             y(t)=x(t)\cos(2\pi f_0t)
@@ -605,11 +609,16 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
             y(t)=x(t)\cos(2\pi f_0t)
             \]
           </div>
-          <small>The output at time \(t_0\) depends only on the input at \(t_0\).</p>
+          <small>The output at time \(t_0\) depends only on the input at \(t_0\).</small>
         </div>
         <div class="tile">
           <b class="tag">Noncausal system</b>
           <p>Output at time \(t_0\) can depend on input at time \(t>t_0\)</p>
+          <div class="eq-box">
+            \[
+            y(t_0)\neq \mathcal{T}[x(t):t\leq t_0]\text{ in general}
+            \]
+          </div>
           <div class="eq-box"><b>Example:</b>
             \[
             y(t)=x(t-2)+x(t+2)
