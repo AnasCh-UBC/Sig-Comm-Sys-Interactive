@@ -1001,7 +1001,7 @@ h:240,ctl:[{t:'s',k:'s',l:'System',o:['Amplifier y = a·x(t)','Differentiator y 
 const SY=[['y = 2x(t)',(x,t)=>2*x(t),[1,1,1],'Scaling by a constant.'],['y = x²(t)',(x,t)=>x(t)**2,[0,1,1],'Squaring breaks superposition: (x₁ + x₂)² ≠ x₁² + x₂².'],
 ['y = x(t)cos(2πt) (modulator)',(x,t)=>x(t)*Math.cos(TP*t),[1,0,1],'The carrier depends explicitly on t, so a delayed input does not give a delayed output.'],['y = x(t − 1)',(x,t)=>x(t-1),[1,1,1],'A pure delay.'],
 ['y = x(t + 1)',(x,t)=>x(t+1),[1,1,0],'It needs the input one second in the future.'],['y = dx/dt',(x,t)=>(x(t+1e-3)-x(t-1e-3))/2e-3,[1,1,1],'The differentiator.'],
-['y = x(−t)',(x,t)=>x(-t),[1,0,0],'Time reversal: not time-invariant, and noncausal for t &lt; 0.'],['y = x(t) + 1',(x,t)=>x(t)+1,[0,1,1],'An offset violates superposition (affine, not linear).']];
+['y = x(−t)',(x,t)=>x(-t),[1,0,0],'Time reversal: not time-invariant, and noncausal for t &lt; 0.'],['y = x(t) + 1',(x,t)=>x(t)+1,[0,1,1],'An offset violates superposition.']];
 const LA=t=>Math.max(0,1-Math.abs(t));
 /*W('test',{cap:'Interactive 2.1',title:'Test a system: time invariance and linearity',h:380,ctl:[{t:'s',k:'s',l:'System',o:SY.map(s=>s[0]),v:2},{k:'d',l:'Input delay t₀ (s)',min:-2,max:2,step:.25,v:.5}],
  draw(c,v){const[,S,P,why]=SY[v.s],x1=LA,x2=t=>LA(t-1),sh=t=>LA(t-v.d),a=t=>S(sh,t),b=t=>S(x1,t-v.d),l=t=>S(q=>x1(q)+x2(q),t),r=t=>S(x1,t)+S(x2,t);
@@ -1221,12 +1221,10 @@ W('test',{
       return `
       <div class="test-results">
         <div>
-          <b>Time invariance:</b> ${Z(errTI)}
-          <span class="muted">Δ = ${errTI.toFixed(4)}</span>
+          <b>Time invariance:</b> ${Z(errTI)}, Δ = ${errTI.toFixed(4)}</span>
         </div>
         <div>
-          <b>Linearity:</b> ${Z(errLin)}
-          <span class="muted">Δ = ${errLin.toFixed(4)}</span>
+          <b>Linearity:</b> ${Z(errLin)}, Δ = ${errLin.toFixed(4)}</span>
         </div>
         <div class="test-properties">
           ${B('Linear',P[0])}
