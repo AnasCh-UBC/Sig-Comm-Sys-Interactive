@@ -763,7 +763,7 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
   </div>
 </div>
 
-<p class="sub">Test the systems below yourself. The top plot checks time invariance, while the bottom plot checks superposition. Do the two curves coincide?.</p>
+<p class="sub">Test the systems below yourself. The left plot checks time invariance. The right plot checks superposition. Do the two curves coincide?.</p>
 <div data-w="test"></div>
 
 <h2 id="lti"><small>3</small>LTI systems and convolution</h2>
@@ -1015,7 +1015,7 @@ const LA=t=>Math.max(0,1-Math.abs(t));
 W('test',{
   cap:'Interactive 2.1',
   title:'Test a system: time invariance and linearity; \\(x_1(t)=\\Lambda(t)\\), \\(x_2(t)=\\Lambda(t-1)\\)',
-  h:200,
+  h:190,
 
   ctl:[
     {t:'s',k:'s',l:'System',o:SY.map(s=>s[0]),v:2},
@@ -1061,7 +1061,7 @@ W('test',{
   }
 
   const ctx=c.getContext('2d');
-  const W=720,H=300;
+  const W=720,H=190;
   c.height=H;
   ctx.clearRect(0,0,W,H);
   // Light plotting background
@@ -1101,8 +1101,8 @@ W('test',{
   function panel(x0,fn1,fn2,maxY){
     const x1=x0+43;
     const x2=x0+337;
-    const y1=12;
-    const y2=238;
+    const y1=8;
+    const y2=145;
     const mid=(y1+y2)/2;
 
     const X=t=>x1+(t+4)/8*(x2-x1);
@@ -1205,7 +1205,7 @@ W('test',{
   ctx.lineWidth=1.2;
   ctx.beginPath();
   ctx.moveTo(360,5);
-  ctx.lineTo(360,270);
+  ctx.lineTo(360,165);
   ctx.stroke();
 
   // Results
@@ -1218,28 +1218,31 @@ W('test',{
       ?'<b class="ok">identical</b>'
       :'<b class="bad">different</b>';
 
-  return `
-    <div>
-      <b>Time-invariance test:</b> ${Z(errTI)}
-      <span class="muted">Maximum difference: ${errTI.toFixed(4)}</span>
-    </div>
-    <div>
-      <b>Linearity test:</b> ${Z(errLin)}
-      <span class="muted">Maximum difference: ${errLin.toFixed(4)}</span>
-    </div>
-    <div style="margin-top:8px">
-      ${B('Linear',P[0])}
-      ${B('Time-invariant',P[1])}
-      ${B('Causal',P[2])}
-    </div>
-    <p style="margin-top:8px">${why}</p>
-    ${v.d==0
-      ?'<i>Set a nonzero delay to test time invariance.</i>'
-      :v.s==2 && Number.isInteger(v.d)
+      return `
+      <div class="test-results">
+        <div>
+          <b>Time invariance:</b> ${Z(errTI)}
+          <span class="muted">Δ = ${errTI.toFixed(4)}</span>
+        </div>
+        <div>
+          <b>Linearity:</b> ${Z(errLin)}
+          <span class="muted">Δ = ${errLin.toFixed(4)}</span>
+        </div>
+        <div class="test-properties">
+          ${B('Linear',P[0])}
+          ${B('Time-invariant',P[1])}
+          ${B('Causal',P[2])}
+        </div>
+        <div class="test-explanation">${why}
+        </div>
+        ${v.d==0
+        ?'<i>Set a nonzero delay to test time invariance.</i>'
+        :v.s==2 && Number.isInteger(v.d)
         ?'<i>A whole-number delay equals whole carrier periods, which can hide the effect. Try \\(t_0=0.5\\).</i>'
         :''}
-  `;
-}
+      </div>
+      `;
+  }
 });
 
 // ---- 3. output built from impulses
