@@ -1265,101 +1265,126 @@ W('imp',{
   ],
 
   draw(c,v){
-  const D=v.D;
-  const x=t=>Math.max(0,1-Math.abs(t-1));
-  const h=t=>t>=0?Math.exp(-t):0;
+    const D=v.D;
 
-  // Rectangular pulse locations
-  const ks=[];
-  for(let k=0;k*D<2-1e-9;k++) ks.push(k*D);
+    // Input signal and impulse response
+    const x=t=>Math.max(0,1-Math.abs(t-1));
+    const h=t=>t>=0?Math.exp(-t):0;
 
-  const rect=(t,u)=>t>=u && t<u+D ? x(u):0;
-  const xA=t=>ks.reduce((s,u)=>s+rect(t,u),0);
-
-  // Exact convolution
-  const yE=t=>{
-    let s=0;
-    for(let u=0;u<=2;u+=.01)
-      s+=x(u)*h(t-u)*.01;
-    return s;
-  };
-
-  // Response to one rectangular pulse
-  const pulseResponse=(t,u)=>{
-    let s=0;
-    const du=D/100;
-    for(let j=0;j<100;j++){
-      const tau=u+j*du;
-      s+=x(u)*h(t-tau)*du;
+    // Rectangular pulse locations
+    const ks=[];
+    for(let k=0;k*D<2-1e-9;k++){
+      ks.push(k*D);
     }
-    return s;
-  };
 
-  // Sum of individual responses
-  const yA=t=>ks.reduce(
-    (s,u)=>s+pulseResponse(t,u),0
-  );
+    // Rectangular-pulse approximation of the input
+    const rect=(t,u)=>t>=u && t<u+D ? x(u):0;
+    const xA=t=>ks.reduce((s,u)=>s+rect(t,u),0);
 
-  // Compact side-by-side canvas
-  const ctx=c.getContext('2d');
-  const W=720,H=220;
-  c.width=W;
-  c.height=H;
-  ctx.clearRect(0,0,W,H);
+    // Exact convolution
+    const yE=t=>{
+      let s=0;
+      for(let u=0;u<=2;u+=.01){
+        s+=x(u)*h(t-u)*.01;
+      }
+      return s;
+    };
 
-  // Left: input approximation
-  plot(c,[
-    {f:x,c:'a',lw:2},
-    {f:xA,c:'b',d:[5,4],lw:2}
-  ],-1,4,-.3,1.3,[0,220]);
+    // Response to one rectangular pulse
+    const pulseResponse=(t,u)=>{
+      let s=0;
+      const du=D/100;
 
-  // Right: output approximation
-  plot(c,[
-    ...ks.map(u=>({
-      f:t=>pulseResponse(t,u),
-      c:'g',
-      lw:1
-    })),
-    {f:yE,c:'a',lw:2},
-    {f:yA,c:'b',d:[5,4],lw:2}
-  ],-1,6,-.08,.85,[365,355]);
+      for(let j=0;j<100;j++){
+        const tau=u+j*du;
+        s+=x(u)*h(t-tau)*du;
+      }
+      return s;
+    };
 
-  // Panel headings
-  lab(c,'Input signal',12,16);
-  lab(c,'Output signal',377,16);
+    // Sum of individual pulse responses
+    const yA=t=>ks.reduce(
+      (s,u)=>s+pulseResponse(t,u),0
+    );
 
-  // Panel descriptions
-  ctx.save();
-  ctx.fillStyle='#526577';
-  ctx.font='11px Arial';
-  ctx.fillText('Red: exact   Blue dashed: approximation',12,211);
-  ctx.fillText('Green: individual responses   Blue dashed: sum',377,211);
-  ctx.restore();
+    // Main canvas
+    const W=720,H=220;
+    c.width=W;
+    c.height=H;
 
-  // Vertical divider
-  ctx.save();
-  ctx.strokeStyle='#aab8c7';
-  ctx.lineWidth=1;
-  ctx.beginPath();
-  ctx.moveTo(360,5);
-  ctx.lineTo(360,215);
-  ctx.stroke();
-  ctx.restore();
+    const ctx=c.getContext('2d');
+    ctx.clearRect(0,0,W,H);
 
-  return `
-    <div>
-      Input approximated by <b>${ks.length} rectangular pulses</b>
-      of width Δ = ${D.toFixed(2)} s.
-    </div>
-    <div>
-      Each pulse produces a shifted response. By linearity,
-      the responses add to form the total output.
-    </div>
-    <div>
-      Decreasing Δ improves the input and output approximations.
-    </div>
-  `;
-}
+    // Separate canvases prevent plot() from clearing the other panel
+    const left=document.createElement('canvas');
+    left.width=720;
+    left.height=220;
+
+    const right=document.createElement('canvas');
+    right.width=720;
+    right.height=220;
+
+    // Left plot: input signal
+    plot(left,[
+      {f:x,c:'a',lw:2},
+      {f:xA,c:'b',d:[5,4],lw:2}
+    ],-1,4,-.3,1.3);
+
+    // Right plot: output signal
+    plot(right,[
+      ...ks.map(u=>({
+        f:t=>pulseResponse(t,u),
+        c:'g',
+        lw:1
+      })),
+      {f:yE,c:'a',lw:2},
+      {f:yA,c:'b',d:[5,4],lw:2}
+    ],-1,6,-.08,.85);
+
+    // Draw both plots side by side
+    ctx.drawImage(left,0,0,350,220);
+    ctx.drawImage(right,370,0,350,220);
+
+    // Panel headings
+    lab(c,'Input signal',12,16);
+    lab(c,'Output signal',377,16);
+
+    // Vertical divider
+    ctx.save();
+    ctx.strokeStyle='#aab8c7';
+    ctx.lineWidth=1;
+    ctx.beginPath();
+    ctx.moveTo(360,5);
+    ctx.lineTo(360,215);
+    ctx.stroke();
+
+    // Panel descriptions
+    ctx.fillStyle='#526577';
+    ctx.font='10px Arial';
+    ctx.fillText(
+      'Red: exact | Blue dashed: approximation',
+      10,211
+    );
+    ctx.fillText(
+      'Green: individual responses | Blue dashed: sum',
+      375,211
+    );
+    ctx.restore();
+
+    return `
+      <div>
+        Input approximated by <b>${ks.length} rectangular pulses</b>
+        of width Δ = ${D.toFixed(2)} s.
+      </div>
+      <div>
+        Each pulse produces a shifted response. By linearity,
+        the individual responses add to form the total output.
+      </div>
+      <div>
+        Decreasing Δ improves the input and output approximations.
+      </div>
+    `;
+  }
 });
 // ---- 4. convolution
 const SG=[['Rectangle Π(t)',t=>Math.abs(t)<=.5?1:0],['Triangle Λ(t)',LA],['Ramp t on (0,1)',t=>t>0&&t<1?t:0],['Decaying e^(−t)·u(t)',t=>t>=0?Math.exp(-t):0],['Step u(t)',U]],SN=SG.map(s=>s[0]);
