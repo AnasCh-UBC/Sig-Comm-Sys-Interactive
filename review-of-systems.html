@@ -744,14 +744,17 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
   </div>
 </div>
 
-<p>Test the systems below yourself. \(x_1(t)=\Lambda(t), y_1(t)=\mathcal{T}[x_1(t)], x_2(t)=\Lambda(t-1), y_2(t)=\mathcal{T}[x_2(t)]\).</p>
+<p>Test the systems below yourself, where 
+  \[x_1(t)=\Lambda(t), y_1(t)=\mathcal{T}[x_1(t)], \quad x_2(t)=\Lambda(t-1), y_2(t)=\mathcal{T}[x_2(t)]\].
+</p>
 <p class="sub"> Do the two curves coincide?.</p>
 
 <div data-w="test"></div>
 
 <h2 id="lti"><small>3</small>LTI systems and convolution</h2>
 <p class="sub">Many systems in communications are modeled as linear time-invariant systems</p>
-<div class="callout">A <b>linear time-invariant (LTI) system</b> is a system that is <b>both</b> linear and time-invariant.</div> 
+
+<div class="eq-box">A <b>linear time-invariant (LTI) system</b> is a system that is <b>both</b> linear and time-invariant.</div> 
 <div class="card"><b>Impulse response</b>
   <div class="grid">
     <div class="tile">
@@ -764,9 +767,8 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
   </div>
 </div>
 
-<div class="callout"><b>Causal LTI systems:</b> a linear time-invariant (LTI) system is causal if and only if its response to an impulse $\delta(t)$, the <i>impulse response</i> $h(t)$, is a causal signal ($h(t)=0$ for $t<0$).</div>
-<p>An <b>LTI system</b> is both linear and time-invariant. </p>
 <div class="callout"><b>Question:</b> if the output for $\delta(t)$ is $h(t)$, what is the output for a general input $x(t)$?</div>
+
 <div class="card"><h3>Why the answer is a convolution</h3><ol>
 <li>Any input is a sum of weighted, shifted impulses (sampling property): $x(t)=\displaystyle\int_{-\infty}^{\infty}x(\tau)\delta(t-\tau)\,d\tau$.</li>
 <li><b>Time invariance:</b> the impulse $\delta(t-\tau)$ produces the shifted response $h(t-\tau)$.</li>
