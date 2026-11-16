@@ -775,9 +775,7 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
     <div class="tile">
       <ol>
         <li> Any signal can be approximated as a sum of narrow, weighted, rectangular pulses</li>
-        <li><b>Time invariance:</b> Shifting a rectangular input pulse shifts its corresponding output by the same amount.</li>
-        <li><b>Linearity:</b> A sum of scaled pulses at the input produces a sum of their scaled responses at the output.</li>
-        <li> Therefore, the output is approximately the sum of the shifted and scaled responses to the rectangular pulses.</li>
+        <li><b>LTI system:</b> A sum of scaled, shifted signals at the input results in a sum of similarly scaled, shifted responses at the output.</li>
       </ol>
     </div>
     <div class="tile">
@@ -1256,13 +1254,105 @@ W('test',{
 });
 
 // ---- 3. output built from impulses
-W('imp',{cap:'Interactive 3.1',title:'Building the output from shifted impulses (h(t) = e^(−t)u(t))',h:360,ctl:[{k:'D',l:'Impulse spacing Δ (s)',min:.1,max:1,step:.05,v:.5}],
- draw(c,v){const D=v.D,x=t=>Math.max(0,1-Math.abs(t-1)),h=t=>t>=0?Math.exp(-t):0,ks=[];for(let k=0;k*D<=2+1e-9;k++)ks.push(k*D);
-  const yE=t=>{let s=0;for(let u=0;u<=2;u+=.01)s+=x(u)*h(t-u)*.01;return s},yA=t=>ks.reduce((s,u)=>s+x(u)*D*h(t-u),0);
-  c.getContext('2d').clearRect(0,0,720,360);plot(c,[{f:x,c:'b',d:[5,4],lw:1.5},{pts:ks.map(u=>[u,x(u)]),c:'b'}],-1,6,-.3,1.3,[0,150]);
-  plot(c,[...ks.map(u=>({f:t=>x(u)*D*h(t-u),c:'g',lw:1})),{f:yE,c:'a'},{f:yA,c:'b',d:[5,4]}],-1,6,-.08,Math.max(.75,D*1.1),[160,190]);
-  lab(c,'Input x(t) approximated by weighted impulses x(kΔ) at t = kΔ',8,16);lab(c,'Output: green = each scaled h(t−kΔ); red dashed = their sum; blue = exact x ⊛ h',8,186);
-  return 'With Δ = '+D+' there are '+ks.length+' impulses. Each one produces a scaled, delayed copy of h(t) (green). Their sum (red dashed) approaches the exact convolution (blue) as Δ → 0, which is the convolution integral.'}});
+W('imp',{
+  cap:'Interactive 3.1',
+  title:'Building the output from rectangular pulses',
+  h:360,
+
+  ctl:[
+    {k:'D',l:'Pulse width Δ (s)',min:.1,max:1,step:.05,v:.5}
+  ],
+
+  draw(c,v){
+    const D=v.D;
+
+    // Input signal and impulse response
+    const x=t=>Math.max(0,1-Math.abs(t-1));
+    const h=t=>t>=0?Math.exp(-t):0;
+
+    // Rectangular pulse approximation of x(t)
+    const ks=[];
+    for(let k=0;k*D<2-1e-9;k++) ks.push(k*D);
+
+    const rect=(t,u)=>
+      t>=u && t<u+D ? x(u) : 0;
+
+    const xA=t=>ks.reduce((s,u)=>s+rect(t,u),0);
+
+    // Exact convolution, using numerical integration
+    const yE=t=>{
+      let s=0;
+      for(let u=0;u<=2;u+=.01)
+        s+=x(u)*h(t-u)*.01;
+      return s;
+    };
+
+    // Response to one rectangular pulse
+    // Integral of x(u) h(t-u) over the pulse interval
+    const pulseResponse=(t,u)=>{
+      let s=0;
+      const du=D/100;
+
+      for(let j=0;j<100;j++){
+        const tau=u+j*du;
+        s+=x(u)*h(t-tau)*du;
+      }
+      return s;
+    };
+
+    // Sum of responses to all rectangular pulses
+    const yA=t=>ks.reduce(
+      (s,u)=>s+pulseResponse(t,u),0
+    );
+
+    // Clear canvas
+    c.getContext('2d').clearRect(0,0,720,360);
+
+    // Upper plot: input approximation
+    plot(c,[
+      {f:x,c:'a',lw:2},
+      {f:xA,c:'b',d:[5,4],lw:2}
+    ],-1,6,-.3,1.3,[0,150]);
+
+    // Lower plot: individual pulse responses and total output
+    plot(c,[
+      ...ks.map(u=>({
+        f:t=>pulseResponse(t,u),
+        c:'g',
+        lw:1
+      })),
+      {f:yE,c:'a',lw:2},
+      {f:yA,c:'b',d:[5,4],lw:2}
+    ],-1,6,-.08,.85,[160,190]);
+
+    lab(c,
+      'Input: exact signal (red) and rectangular-pulse approximation (blue dashed)',
+      8,16
+    );
+
+    lab(c,
+      'Output: green = individual pulse responses; blue dashed = sum; red = exact convolution',
+      8,186
+    );
+
+    return `
+      <div>
+        The input is approximated by
+        <b>${ks.length} rectangular pulses</b>,
+        each of width Δ = ${D.toFixed(2)} s.
+      </div>
+      <div>
+        By time invariance, each pulse produces a shifted
+        response. By linearity, the individual responses
+        add to form the total output.
+      </div>
+      <div>
+        As Δ decreases, the rectangular-pulse approximation
+        and its output approach the exact signal and convolution.
+      </div>
+    `;
+  }
+});
 // ---- 4. convolution
 const SG=[['Rectangle Π(t)',t=>Math.abs(t)<=.5?1:0],['Triangle Λ(t)',LA],['Ramp t on (0,1)',t=>t>0&&t<1?t:0],['Decaying e^(−t)·u(t)',t=>t>=0?Math.exp(-t):0],['Step u(t)',U]],SN=SG.map(s=>s[0]);
 W('conv',{cap:'Interactive 4.1',title:'Convolution y(t) = x(t) ⊛ h(t): flip, shift, multiply, integrate',h:400,ctl:[{t:'s',k:'x',l:'Input x(τ)',o:SN,v:4},{t:'s',k:'h',l:'Impulse response h(τ)',o:SN,v:3},{k:'t',l:'Time t',min:-3,max:6,step:.1,v:1}],
