@@ -1215,18 +1215,18 @@ const up=()=>{
           ][v.s],
           m=1.15*3;
 
-    // Find the containing interactive demo
-    const host=c.closest('[data-w="play"]');
+    // Add the plot title inside this widget, immediately before its canvas.
+    // The canvas is a child of the widget card, not of the outer [data-w] host.
+    const plotContainer=c.parentElement;
 
-    // Add the title only once
-    if(host && !host.querySelector('.test-plot-titles')){
+    if(plotContainer && !plotContainer.querySelector('.test-plot-titles')){
       const titles=document.createElement('div');
       titles.className='test-plot-titles';
       titles.innerHTML=
-        '<div>Red dashed: Input \\(x(t)=\\cos(2\\pi f_0t)\\); '+
-        'Blue: Output \\(y(t)\\)</div>';
+        '<div><span>Red dashed: Input \\(x(t)=\\cos(2\\pi f_0t)\\); '+
+        'Blue: Output \\(y(t)\\)</span></div>';
 
-      host.insertBefore(titles,c);
+      plotContainer.insertBefore(titles,c);
 
       if(typeof typesetMath==='function') typesetMath(titles);
     }
