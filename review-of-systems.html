@@ -1529,7 +1529,7 @@ W('conv',{
       titles.className='test-plot-titles';
       titles.innerHTML=`
         <div>
-          <span>Blue: x(τ); Red: h(t−τ); Shaded: Area under x(τ)h(t−τ) which equals y(t)</span>
+          <span>Blue: x(τ); Red: h(t−τ); Shaded: y(t), the area under x(τ)h(t−τ)</span>
         </div>
         <div>
           <span>Blue: x(t) ⊛ h(t); Red: Calculated value of y at time t</span>
@@ -1652,25 +1652,126 @@ addAxisDetails(right, 't', -0.2, 1.4);
         y(t) = <b>${cur.toFixed(3)}</b>.
       </div>
       <div>
-        The green area represents the product being integrated
+        The shaded area represents the product being integrated
         to calculate the convolution at the selected time.
-      </div>
-      <div>
-        The two output curves overlap, demonstrating that
-        convolution is commutative.
       </div>
     `;
   }
 });
 
 // ---- 5. eigenfunction
-W('eig',{cap:'Interactive 5.1',title:'A cosine through the LTI system h(t) = e^(−at)u(t)',h:300,ctl:[{k:'f',l:'Input frequency f₀ (Hz)',min:.1,max:3,step:.1,v:.5},{k:'a',l:'Decay rate a',min:.5,max:4,step:.5,v:1}],
- draw(c,v){const w=TP*v.f,a=v.a,x=t=>Math.cos(w*t),n=Math.round(10/a/.01),y=t=>{let s=0;for(let i=0;i<n;i++){const u=(i+.5)*.01;s+=Math.exp(-a*u)*x(t-u)*.01}return s},mag=1/Math.hypot(a,w),ph=-Math.atan2(w,a);
-  let e=0;for(let t=0;t<=4;t+=.1)e=Math.max(e,Math.abs(y(t)-mag*Math.cos(w*t+ph)));const m=Math.max(1.2,mag*1.15);
-  plot(c,[{f:x,c:'b',d:[5,4]},{f:y,c:'a'}],0,4,-m,m);
-  return 'Red dashed: input cos(2πf₀t). Blue: output computed by numerical convolution. The output is a cosine at the <b>same frequency</b>, with amplitude |H(f₀)| = <b>'+mag.toFixed(3)+'</b> and phase ∠H(f₀) = <b>'+(ph*180/Math.PI).toFixed(1)+'°</b>, where H(f) = 1/(a + j2πf). Largest difference between the numerical output and |H|cos(2πf₀t+∠H): '+e.toExponential(1)+'.'}});
-matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>UPS.forEach(f=>f()));
-})();
+W('eig',{
+  cap:'Interactive 5.1',
+  title:'A cosine through the LTI system h(t) = e^(−at)u(t)',
+  h:200,
+
+  ctl:[
+    {k:'f',l:'Input frequency f₀ (Hz)',min:.1,max:3,step:.1,v:.5},
+    {k:'a',l:'Decay rate a',min:.5,max:4,step:.5,v:1}
+  ],
+
+  draw(c,v){
+    const w=TP*v.f,
+          a=v.a,
+          x=t=>Math.cos(w*t),
+          n=Math.round(10/a/.01),
+          y=t=>{
+            let s=0;
+            for(let i=0;i<n;i++){
+              const u=(i+.5)*.01;
+              s+=Math.exp(-a*u)*x(t-u)*.01;
+            }
+            return s;
+          },
+          mag=1/Math.hypot(a,w),
+          ph=-Math.atan2(w,a);
+
+    let e=0;
+    for(let t=-2;t<=2;t+=.1)
+      e=Math.max(e,Math.abs(y(t)-mag*Math.cos(w*t+ph)));
+
+    const m=Math.max(1.2,mag*1.15);
+
+    // Plot title and legend, created once
+    const parent=c.parentElement;
+
+    if(parent && !parent.querySelector('.test-plot-titles')){
+      const titles=document.createElement('div');
+      titles.className='test-plot-titles';
+      titles.innerHTML=`
+        <div>
+          <span>Blue dashed: Input cos(2πf₀t)</span>
+          <span>Red: Output y(t)</span>
+        </div>
+      `;
+      parent.insertBefore(titles,c);
+    }
+
+    // Plot
+    plot(c,[
+      {f:x,c:'b',d:[5,4]},
+      {f:y,c:'a'}
+    ],-2,2,-m,m);
+
+    // Axis details using the exact coordinate mapping of plot()
+    const ctx=c.getContext('2d');
+    const W=c.width,H=c.height;
+
+    const X=t=>(t+2)/4*W;
+    const Y=value=>H-(value+m)/(2*m)*H;
+    const zeroX=X(0);
+
+    ctx.save();
+
+    // Horizontal grid lines and vertical-axis tick labels
+    ctx.font='11px Arial';
+    ctx.textAlign='right';
+    ctx.textBaseline='middle';
+    ctx.fillStyle='#a9bdce';
+
+    const ticks=4;
+
+    for(let i=0;i<=ticks;i++){
+      const value=-m+2*m*i/ticks;
+      const py=Y(value);
+
+      ctx.strokeStyle='rgba(160,185,205,0.25)';
+      ctx.lineWidth=.7;
+      ctx.beginPath();
+      ctx.moveTo(0,py);
+      ctx.lineTo(W,py);
+      ctx.stroke();
+
+      ctx.fillText(value.toFixed(1),zeroX-7,py);
+
+      // Tick marks on vertical axis
+      ctx.strokeStyle='#dceaf5';
+      ctx.beginPath();
+      ctx.moveTo(zeroX-3,py);
+      ctx.lineTo(zeroX+3,py);
+      ctx.stroke();
+    }
+
+    // Vertical axis at t = 0
+    ctx.strokeStyle='#dceaf5';
+    ctx.lineWidth=1.4;
+    ctx.beginPath();
+    ctx.moveTo(zeroX,0);
+    ctx.lineTo(zeroX,H);
+    ctx.stroke();
+
+    // Time-axis label
+    ctx.font='italic 13px Georgia';
+    ctx.textAlign='right';
+    ctx.textBaseline='bottom';
+    ctx.fillStyle='#dceaf5';
+    ctx.fillText('t',W-5,H-2);
+
+    ctx.restore();
+
+    return 'Red: output computed by numerical convolution. Blue dashed: input cos(2πf₀t). The output is a cosine at the <b>same frequency</b>, with amplitude |H(f₀)| = <b>'+mag.toFixed(3)+'</b> and phase ∠H(f₀) = <b>'+(ph*180/Math.PI).toFixed(1)+'°</b>, where H(f) = 1/(a + j2πf). Largest difference between the numerical output and |H|cos(2πf₀t+∠H): '+e.toExponential(1)+'.';
+  }
+});
 
 (() => {
   const selector = document.getElementById('systemProperty');
