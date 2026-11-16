@@ -1257,11 +1257,11 @@ W('test',{
 // ---- 3. output built from impulses
 W('imp',{
   cap:'Interactive 3.1',
-  title:'Building the output from rectangular pulses',
+  title:'Building the output from rectangular pulses. Input (left) and output (right)',
   h:220,
 
   ctl:[
-    {k:'D',l:'Pulse width Δ (s)',min:.1,max:1,step:.05,v:.5}
+    {k:'D',l:'Pulse width Δ (s)',min:.01,max:0.5,step:.01,v:.5}
   ],
 
   draw(c,v){
@@ -1324,6 +1324,25 @@ W('imp',{
     right.width=720;
     right.height=220;
 
+     // Create HTML titles above the canvas, once
+  const parent=c.parentElement;
+
+if(parent && !parent.querySelector('.test-plot-titles')){
+  const titles=document.createElement('div');
+  titles.className='test-plot-titles';
+  titles.innerHTML=`
+    <div>
+      <span>Blue: \\(\\mathcal{T}[x_1(t-t_0)]\\) vs. Red: \\(y_1(t-t_0)\\)</span>
+    </div>
+    <div>
+      <span>Blue: \\(\\mathcal{T}[a_1x_1(t)+a_2x_2(t)]\\) vs. Red: 
+      \\(a_1y_1(t)+a_2y_2(t)\\)</span>
+    </div>
+  `;
+  parent.insertBefore(titles,c);
+
+  typesetMath(titles);
+}
     // Left plot: input signal
     plot(left,[
       {f:x,c:'a',lw:2},
@@ -1344,10 +1363,6 @@ W('imp',{
     // Draw both plots side by side
     ctx.drawImage(left,0,0,350,220);
     ctx.drawImage(right,370,0,350,220);
-
-    // Panel headings
-    lab(c,'Input signal',12,16);
-    lab(c,'Output signal',377,16);
 
     // Vertical divider
     ctx.save();
