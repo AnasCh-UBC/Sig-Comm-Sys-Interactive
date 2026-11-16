@@ -1242,7 +1242,7 @@ const up=()=>{
     ctx.fillStyle = '#e2f0f8';
     ctx.font = '13px system-ui';
     ctx.textAlign = 'right';
-    ctx.fillText('t', c.width - 8, c.height - 6);
+    ctx.fillText('t', c.width - 8, c.height - 4);
     ctx.restore();
 
     return [
@@ -1250,7 +1250,7 @@ const up=()=>{
 
       'The differentiator produces \\(y(t)=-2\\pi f_0\\sin(2\\pi f_0t)\\). Its output amplitude is \\(2\\pi f_0='+w.toFixed(2)+'\\), so higher input frequencies produce larger output amplitudes.',
 
-      'The filter passes the input unchanged when \\(f_0\\lt f_c=0.25\\,\\text{Hz}\\), and blocks it otherwise. Here \\(f_0='+v.f.toFixed(2)+'\\,\\text{Hz}\\): the signal is '+(v.f<2?'passed':'blocked')+'.'
+      'The filter passes the input unchanged when \\(f_0\\lt f_c=0.25\\,\\text{Hz}\\), and blocks it otherwise. Here \\(f_0='+v.f.toFixed(2)+'\\,\\text{Hz}\\): the signal is '+(v.f<.25?'passed':'blocked')+'.'
     ][v.s]+'<br>';
   }
 });
@@ -1401,7 +1401,7 @@ W('test',{
 
     // Tick labels
     ctx.fillStyle = text;
-    ctx.font = 'bold 12px Arial';
+    ctx.font = '10px Arial';
     ctx.textAlign = 'center';
 
     for(let t=-4;t<=4;t+=2){
@@ -1409,7 +1409,7 @@ W('test',{
     }
 
     ctx.fillStyle=muted;
-    ctx.font='bold 12px Arial';
+    ctx.font='12px Arial';
     ctx.fillText('Time (s)',(x1+x2)/2,y2+25);
 
     // Curves
@@ -1603,6 +1603,41 @@ plot(right,[
   {f:yA,c:'b',d:[5,4],lw:2}
 ],-1,6,-.3,1.3);
 
+// Add vertical-axis ticks and labels to both plots
+[left, right].forEach(canvas => {
+  const g = canvas.getContext('2d');
+
+  const yMin = -0.3;
+  const yMax = 1.3;
+  const yAxis = canvas.height - (0 - yMin) / (yMax - yMin) * canvas.height;
+
+  // Position of the vertical axis at t = 0
+  const xAxis = (0 - (-1)) / (6 - (-1)) * canvas.width;
+
+  g.save();
+  g.strokeStyle = '#e2f0f8';
+  g.fillStyle = '#e2f0f8';
+  g.lineWidth = 1;
+  g.font = '11px system-ui';
+  g.textAlign = 'right';
+  g.textBaseline = 'middle';
+
+  [0.2, 0.4, 0.6, 0.8, 1.0, 1.2].forEach(value => {
+    const y = canvas.height - (value - yMin) / (yMax - yMin) * canvas.height;
+
+    // Tick mark on the vertical axis
+    g.beginPath();
+    g.moveTo(xAxis - 4, y);
+    g.lineTo(xAxis + 4, y);
+    g.stroke();
+
+    // Tick label
+    g.fillText(value.toFixed(1), xAxis - 7, y);
+  });
+
+  g.restore();
+});
+
     // Draw both plots side by side
     ctx.drawImage(left,0,0);
     ctx.drawImage(right,370,0);
@@ -1747,7 +1782,7 @@ W('conv',{
   ctx.save();
 
   // Horizontal grid lines and vertical-axis tick labels
-  ctx.font = '11px Arial';
+  ctx.font = '10px Arial';
   ctx.textAlign = 'right';
   ctx.textBaseline = 'middle';
   ctx.fillStyle = '#a9bdce';
@@ -1908,7 +1943,7 @@ W('eig',{
     ctx.save();
 
     // Horizontal grid lines and vertical-axis tick labels
-    ctx.font='bold 12px Arial';
+    ctx.font='12px Arial';
     ctx.textAlign='right';
     ctx.textBaseline='middle';
     ctx.fillStyle='#a9bdce';
