@@ -1692,7 +1692,7 @@ W('eig',{
 
     const m=Math.max(1.2,mag*1.15);
 
-    // Plot title and legend, created once
+    // Plot title and legend, using the existing class
     const parent=c.parentElement;
 
     if(parent && !parent.querySelector('.test-plot-titles')){
@@ -1772,6 +1772,7 @@ W('eig',{
     return 'Red: output computed by numerical convolution. Blue dashed: input cos(2πf₀t). The output is a cosine at the <b>same frequency</b>, with amplitude |H(f₀)| = <b>'+mag.toFixed(3)+'</b> and phase ∠H(f₀) = <b>'+(ph*180/Math.PI).toFixed(1)+'°</b>, where H(f) = 1/(a + j2πf). Largest difference between the numerical output and |H|cos(2πf₀t+∠H): '+e.toExponential(1)+'.';
   }
 });
+
 
 (() => {
   const selector = document.getElementById('systemProperty');
