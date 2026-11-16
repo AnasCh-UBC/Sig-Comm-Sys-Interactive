@@ -875,7 +875,10 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
 
 <h2 id="eigen"><small>5</small>Eigenfunctions of LTI systems</h2>
 <p class="sub">Complex sinusoids pass through LTI systems unchanged in shape</p>
-<p>For an LTI system with impulse response $h(t)$ and a complex sinusoidal input $x(t)=e^{j(2\pi f_0t+\theta)}$, the output is $$y(t)=x(t)\circledast h(t)=e^{j(2\pi f_0t+\theta)}H(f_0),\qquad H(f_0)=\int_{-\infty}^{\infty}h(\tau)e^{-j2\pi f_0\tau}d\tau.$$ (Proof in exercises.) The response to a complex sinusoid is a complex sinusoid with the <b>same frequency</b>, scaled by $|H(f_0)|$ and phase-shifted by $\angle H(f_0)$. For this reason complex sinusoids are called <b>eigenfunctions</b> of LTI systems.</p>
+<p>For an LTI system with impulse response $h(t)$ and a complex sinusoidal input $x(t)=e^{j(2\pi f_0t+\theta)}$, the output is:</p>
+<div class="eq-box">$$y(t)=x(t)\circledast h(t)=e^{j(2\pi f_0t+\theta)}H(f_0),\qquad H(f_0)=\int_{-\infty}^{\infty}h(\tau)e^{-j2\pi f_0\tau}d\tau.$$</div> 
+<p>The response to a complex sinusoid is a complex sinusoid with the <b>same frequency</b>, scaled by $|H(f_0)|$ and phase-shifted by $\angle H(f_0)$.</p> 
+<p class="sub">For this reason complex sinusoids are called <b>eigenfunctions</b> of LTI systems.</p>
 <p>The widget feeds a cosine (the real part of a complex sinusoid) through $h(t)=e^{-at}u(t)$, for which $H(f)=1/(a+j2\pi f)$.</p>
 <div data-w="eig"></div>
 <div class="card"><h3>Key results</h3><ul>
