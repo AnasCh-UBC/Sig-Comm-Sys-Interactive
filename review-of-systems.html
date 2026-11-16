@@ -503,7 +503,6 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
 header{align-items:center}
 .site-title{flex:1;min-width:0}
 .header-right{display:flex;align-items:center;justify-content:flex-end;gap:9px;min-width:0}
-.current-lecture{white-space:nowrap}
 .lecture-nav-label{font-size:.72rem;font-weight:600;color:#c8e5f2;white-space:nowrap}
 .lecture-nav{max-width:190px;min-width:145px;padding:6px 28px 6px 9px;border:1px solid rgba(255,255,255,.35);border-radius:7px;background:#102b46;color:#f4fbff;font:600 .78rem system-ui,sans-serif;cursor:pointer}
 .lecture-nav option{background:#102b46;color:#f4fbff}
@@ -516,7 +515,6 @@ header{align-items:center}
   header{align-items:flex-start;flex-wrap:wrap}
   .site-title{flex-basis:100%}
   .header-right{width:100%;justify-content:flex-start;flex-wrap:wrap}
-  .current-lecture{white-space:normal}
 }
 @media(max-width:430px){
   .header-right{gap:7px}
@@ -531,14 +529,13 @@ header{align-items:center}
 <header>
   <span class="site-title">APSC 270 – Signals and Communication Systems</span>
   <div class="header-right">
-    <span class="current-lecture">Lecture 3 · Review of Systems</span>
     <label class="lecture-nav-label" for="lectureNav">Go to</label>
     <select id="lectureNav" class="lecture-nav" aria-label="Navigate to another course page" onchange="if(this.value) window.location.href=this.value">
       <option value="index.html">Course home</option>
       <option value="preliminaries.html">Preliminaries</option>
-      <option value="introduction.html">Introduction</option>
-      <option value="review-of-signals.html">Review of Signals</option>
-      <option value="review-of-systems.html" selected>Review of Systems</option>
+      <option value="introduction.html">Lecture 1 · Introduction</option>
+      <option value="review-of-signals.html">Lecture 2 · Review of Signals</option>
+      <option value="review-of-systems.html" selected>Lecture 3 · Review of Systems</option>
     </select>
   </div>
 </header>
@@ -1022,8 +1019,8 @@ const css=k=>getComputedStyle(document.documentElement).getPropertyValue(k).trim
 function plot(c,S,x0,x1,y0,y1,r,tk){const x=c.getContext('2d'),w=c.width,oy=r?r[0]:0,hh=r?r[1]:c.height,X=t=>(t-x0)/(x1-x0)*w,Y=v=>oy+hh-(v-y0)/(y1-y0)*hh;
  if(!r)x.clearRect(0,0,w,c.height);x.save();x.beginPath();x.rect(0,oy,w,hh);x.clip();
  x.fillStyle='#05090f';x.fillRect(0,oy,w,hh);x.font='12px system-ui';x.lineWidth=1;x.setLineDash([]);
- const st=tk||1;for(let k=Math.ceil(x0/st)*st;k<=x1+1e-9;k+=st){x.strokeStyle='rgba(150,190,215,.20)';x.beginPath();x.moveTo(X(k),oy);x.lineTo(X(k),oy+hh);x.stroke();if(Math.abs(k)>1e-9){x.fillStyle='#c6d8e5';x.fillText(+k.toFixed(2),X(k)+3,Y(0)+13)}}
- x.strokeStyle='rgba(225,240,250,.82)';x.lineWidth=1.2;x.beginPath();x.moveTo(0,Y(0));x.lineTo(w,Y(0));x.stroke();
+ const st=tk||1;for(let k=Math.ceil(x0/st)*st;k<=x1+1e-9;k+=st){x.strokeStyle='rgba(145,195,225,.38)';x.beginPath();x.moveTo(X(k),oy);x.lineTo(X(k),oy+hh);x.stroke();if(Math.abs(k)>1e-9){x.fillStyle='#e2f0f8';x.fillText(+k.toFixed(2),X(k)+3,Y(0)+13)}}
+ x.strokeStyle='rgba(240,249,255,.98)';x.lineWidth=1.2;x.beginPath();x.moveTo(0,Y(0));x.lineTo(w,Y(0));x.stroke();
  S.forEach(s=>{x.strokeStyle=x.fillStyle=col(s.c);x.lineWidth=s.lw||2;x.setLineDash(s.d||[]);
   if(s.pts){s.pts.forEach(([t,v])=>{x.beginPath();x.moveTo(X(t),Y(0));x.lineTo(X(t),Y(v));x.stroke();x.beginPath();x.arc(X(t),Y(v),4,0,7);x.fill()})}
   else{x.beginPath();let n=0,lx=0;for(let i=0;i<=w;i++){const t=x0+i/w*(x1-x0);if(s.to!==undefined&&t>s.to)break;const v=s.f(t);n++?x.lineTo(i,Y(v)):x.moveTo(i,Y(v));lx=i}
@@ -1174,17 +1171,17 @@ W('test',{
   const W=720,H=190;
   c.height=H;
   ctx.clearRect(0,0,W,H);
-  // Light plotting background
-  ctx.fillStyle = '#f7f9fc';
+  // Dark plotting background, consistent with the other interactive plots
+  ctx.fillStyle = '#05090f';
   ctx.fillRect(0,0,W,H);
 
-  // High-contrast light plotting palette
-  const blue  = '#075a9c';  // dark blue
-  const red   = '#c0392b';  // dark red
-  const grid  = '#d6dee7';  // light grey grid
-  const axis  = '#263746';  // dark navy axes
-  const text  = '#263746';  // dark labels
-  const muted = '#526577';  // secondary text
+  // Bright, high-contrast plotting palette
+  const blue  = '#55c8f2';
+  const red   = '#ff6b78';
+  const grid  = 'rgba(145,195,225,.38)';
+  const axis  = '#f0f9ff';
+  const text  = '#f2f8fc';
+  const muted = '#c2d6e3';
 
   // Create HTML titles above the canvas, once
   const parent=c.parentElement;
@@ -1220,7 +1217,7 @@ W('test',{
 
     // Grid
     ctx.strokeStyle=grid;
-    ctx.lineWidth=1;
+    ctx.lineWidth=1.15;
 
     for(let t=-4;t<=4;t++){
       const xx=X(t);
@@ -1240,7 +1237,7 @@ W('test',{
 
     // Stronger axes
     ctx.strokeStyle = axis;
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth = 1.8;
 
     ctx.beginPath();
     ctx.moveTo(x1,mid);
@@ -1254,7 +1251,7 @@ W('test',{
 
     // Tick labels
     ctx.fillStyle = text;
-    ctx.font = '11px Arial';
+    ctx.font = 'bold 12px Arial';
     ctx.textAlign = 'center';
 
     for(let t=-4;t<=4;t+=2){
@@ -1262,7 +1259,7 @@ W('test',{
     }
 
     ctx.fillStyle=muted;
-    ctx.font='11px Arial';
+    ctx.font='bold 12px Arial';
     ctx.fillText('Time (s)',(x1+x2)/2,y2+25);
 
     // Curves
@@ -1762,7 +1759,7 @@ W('eig',{
     ctx.save();
 
     // Horizontal grid lines and vertical-axis tick labels
-    ctx.font='11px Arial';
+    ctx.font='bold 12px Arial';
     ctx.textAlign='right';
     ctx.textBaseline='middle';
     ctx.fillStyle='#a9bdce';
