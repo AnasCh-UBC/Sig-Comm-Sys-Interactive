@@ -875,16 +875,19 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
 
 <h2 id="eigen"><small>5</small>Eigenfunctions of LTI systems</h2>
 <p class="sub">Complex sinusoids pass through LTI systems unchanged in shape</p>
+<p>Let \(H(f_0)=\int_{-\infty}^{\infty}h(\tau)e^{-j2\pi f_0\tau}d\tau.\)</p>
 <div class="card">
   <p>For an LTI system with impulse response $h(t)$ and a complex sinusoidal input $x(t)=e^{j(2\pi f_0t+\theta)}$, the output is:</p>
-  <div class="eq-box">\[y(t)=x(t)\circledast h(t)=e^{j(2\pi f_0t+\theta)}H(f_0)=|H(f_0)|e^{j(2\pi f_0t+\theta+\angle H(f_0))}\] 
-    where 
-    \(H(f_0)=\int_{-\infty}^{\infty}h(\tau)e^{-j2\pi f_0\tau}d\tau.\)</div> 
+  <div class="eq-box">\[y(t)=x(t)\circledast h(t)=e^{j(2\pi f_0t+\theta)}H(f_0)=|H(f_0)|e^{j(2\pi f_0t+\theta+\angle H(f_0))}.\] 
+    </div> 
   <p class="sub">The response to a complex sinusoid is a complex sinusoid with the <b>same frequency</b>, scaled by $|H(f_0)|$ and 
     phase-shifted by $\angle H(f_0)$.</p> 
   <p>For this reason complex sinusoids are called <b>eigenfunctions</b> of LTI systems.</p>
-  <div><b>Note:</b> This property also applies to cosine and sine inputs. For example, if the input is $\cos(2\pi f_0t+\theta)$, 
-    the output is $|H(f_0)|\cos(2\pi f_0t+\theta+\angle H(f_0)).$</div>
+</div>
+<div class="card">
+  <b>Note:</b> This property also applies to cosine and sine inputs. 
+  <p>For example, if the input is $\cos(2\pi f_0t+\theta)$, 
+    the output is $|H(f_0)|\cos(2\pi f_0t+\theta+\angle H(f_0)).$</p>
 </div>
 <p class="sub">Test this with a cosine input through a system with $h(t)=e^{-at}u(t)$, for which $H(f)=1/(a+j2\pi f)$.</p>
 <div data-w="eig"></div>
@@ -1537,14 +1540,24 @@ W('conv',{
     }
 
     // Add axis labels, vertical-axis ticks, and horizontal grid lines
-const addAxisDetails = (canvas, xLabel, yMin, yMax) => {
+    const addAxisDetails = (canvas, xLabel, yMin, yMax) => {
   const ctx = canvas.getContext('2d');
   const W = canvas.width;
   const H = canvas.height;
 
-  // Match these plotting boundaries to the plot() helper
-  const L = 55, R = 12, T = 12, B = 35;
-  const plotH = H - T - B;
+  // These match the plotting area used by plot()
+  const oy = 0;
+  const hh = H;
+
+  const xMin = -3;
+  const xMax = 6;
+
+  // Exact coordinate mapping used by plot()
+  const X = t => (t - xMin) / (xMax - xMin) * W;
+  const Y = value => oy + hh - (value - yMin) / (yMax - yMin) * hh;
+
+  const zeroX = X(0);
+  const zeroY = Y(0);
 
   ctx.save();
 
@@ -1552,53 +1565,51 @@ const addAxisDetails = (canvas, xLabel, yMin, yMax) => {
   ctx.font = '11px Arial';
   ctx.textAlign = 'right';
   ctx.textBaseline = 'middle';
-  ctx.strokeStyle = 'rgba(160,185,205,0.25)';
-  ctx.lineWidth = 0.7;
   ctx.fillStyle = '#a9bdce';
 
-  // Map time = 0 to its pixel position
-const xMin = -3;
-const xMax = 6;
-const zeroX = L + (0 - xMin) / (xMax - xMin) * (W - L - R);
+  const ticks = 5;
 
-// Horizontal grid lines and vertical-axis tick labels
-ctx.font = '11px Arial';
-ctx.textAlign = 'right';
-ctx.textBaseline = 'middle';
-ctx.fillStyle = '#a9bdce';
+  for (let i = 0; i <= ticks; i++) {
+    const value = yMin + (yMax - yMin) * i / ticks;
+    const py = Y(value);
 
-const ticks = 5;
+    // Horizontal grid line
+    ctx.strokeStyle = 'rgba(160,185,205,0.25)';
+    ctx.lineWidth = 0.7;
+    ctx.beginPath();
+    ctx.moveTo(0, py);
+    ctx.lineTo(W, py);
+    ctx.stroke();
 
-for (let i = 0; i <= ticks; i++) {
-  const value = yMin + (yMax - yMin) * i / ticks;
-  const py = T + plotH - i * plotH / ticks;
+    // Numerical tick label
+    ctx.fillText(value.toFixed(1), zeroX - 7, py);
+  }
 
-  // Horizontal grid line
-  ctx.strokeStyle = 'rgba(160,185,205,0.25)';
-  ctx.lineWidth = 0.7;
+  // Vertical axis exactly at time = 0
+  ctx.strokeStyle = '#dceaf5';
+  ctx.lineWidth = 1.4;
   ctx.beginPath();
-  ctx.moveTo(L, py);
-  ctx.lineTo(W - R, py);
+  ctx.moveTo(zeroX, oy);
+  ctx.lineTo(zeroX, oy + hh);
   ctx.stroke();
 
-  // Tick label
-  ctx.fillText(value.toFixed(1), L - 7, py);
-}
+  // Small tick marks on the vertical axis
+  for (let i = 0; i <= ticks; i++) {
+    const value = yMin + (yMax - yMin) * i / ticks;
+    const py = Y(value);
 
-// Vertical axis at time = 0
-ctx.strokeStyle = '#a9bdce';
-ctx.lineWidth = 1.2;
-ctx.beginPath();
-ctx.moveTo(zeroX, T);
-ctx.lineTo(zeroX, H - B);
-ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(zeroX - 3, py);
+    ctx.lineTo(zeroX + 3, py);
+    ctx.stroke();
+  }
 
   // Horizontal-axis label
   ctx.font = 'italic 13px Georgia';
   ctx.textAlign = 'right';
   ctx.textBaseline = 'bottom';
   ctx.fillStyle = '#dceaf5';
-  ctx.fillText(xLabel, W - R, H - 2);
+  ctx.fillText(xLabel, W - 5, H - 2);
 
   ctx.restore();
 };
