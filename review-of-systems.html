@@ -885,9 +885,8 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
   <p>For this reason complex sinusoids are called <b>eigenfunctions</b> of LTI systems.</p>
 </div>
 <div class="card">
-  <b>Note:</b> This property also applies to cosine and sine inputs. 
-  <p>For example, if the input is $\cos(2\pi f_0t+\theta)$, 
-    the output is $|H(f_0)|\cos(2\pi f_0t+\theta+\angle H(f_0)).$</p>
+  <b> Note:</b> We can use Eulers identity to find the output corresponding to an input cosine or sine signals. 
+  <p class="sub"> For real-valued $h(t)$, if the input is $\cos(2\pi f_0t+\theta)$, the output is $|H(f_0)|\cos(2\pi f_0t+\theta+\angle H(f_0)).$</p>
 </div>
 <p class="sub">Test this with a cosine input through a system with $h(t)=e^{-at}u(t)$, for which $H(f)=1/(a+j2\pi f)$.</p>
 <div data-w="eig"></div>
