@@ -773,12 +773,7 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
   <h3>Why the answer is a convolution</h3>
   <div class="grid">
     <div class="tile">
-      <ol>
-        <li> Any signal can be approximated as a sum of narrow, weighted, rectangular pulses</li>
-        <li><b>LTI system:</b> A sum of scaled, shifted signals at the input results in a sum of similarly scaled, shifted responses at the output.</li>
-      </ol>
-    </div>
-    <div class="tile">
+      <p class="sub">Any signal can be approximated as a sum of narrow, weighted, rectangular pulses. </p>
       <div class="eq-box">
         \[
         x(t)\approx\sum_{k=-\infty}^{\infty}
@@ -786,11 +781,15 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
         \Pi\left(\frac{t-k\Delta_{\tau}}{\Delta_{\tau}}\right)
         \]
       </div>
+    </div>
+    <div class="tile">
+      <p class="sub"><b>LTI system:</b> A sum of scaled, shifted signals at the input results in a sum of
+         similarly scaled, shifted responses at the output.</p>
       <div class="eq-box">
         \[
         y(t)\approx\sum_{k=-\infty}^{\infty}
         x(k\Delta_{\tau})\,
-        \mathcal{T}[\Pi(\frac{t-k\Delta_{\tau}}{\Delta_{\tau}})]
+        \mathcal{T}\left[\Pi\left(\frac{t-k\Delta_{\tau}}{\Delta_{\tau}}\right)\right]
         \]
       </div>
     </div>
