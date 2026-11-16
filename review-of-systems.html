@@ -1567,7 +1567,7 @@ W('conv',{
   ctx.textBaseline = 'middle';
   ctx.fillStyle = '#a9bdce';
 
-  const ticks = 6;
+  const ticks = 8;
 
   for (let i = 1; i <= ticks-1; i++) {
     const value = yMin + (yMax - yMin) * i / ticks;
@@ -1619,18 +1619,18 @@ W('conv',{
       {f:t=>x(t)*hs(t),c:'g',fill:1,lw:1},
       {f:x,c:'a',lw:2},
       {f:hs,c:'b',lw:2}
-    ],-3,6,-.25,1.25);
+    ],-3,6,-.2,1.4);
 
     // Right plot: convolution output
     plot(right,[
       {f:y1,c:'a',lw:2},
       //{f:y2,c:'b',lw:1.5,d:[4,4]},
       {pts:[[v.t,cur]],c:'b'}
-    ],-3,6,-.25,1.25);
+    ],-3,6,-.2,1.4);
 
     // Axis details for both plots
-addAxisDetails(left, 'τ', -0.25, 1.25);
-addAxisDetails(right, 't', -0.25, 1.25);
+addAxisDetails(left, 'τ', -0.2, 1.4);
+addAxisDetails(right, 't', -0.2, 1.4);
 
     // Place plots side by side
     ctx.drawImage(left,0,0);
