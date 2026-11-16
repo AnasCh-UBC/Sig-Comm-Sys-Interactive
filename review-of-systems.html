@@ -808,18 +808,29 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
 <p class="sub">The sum of scaled, delayed copies of the response to each impulse converges to the convolution as the impulses get thinner.</p>
 <div data-w="imp"></div>
 
-<h2 id="convolution"><small>4</small>Properties of convolution</h2>
-<p class="sub">Flip, shift, multiply, integrate</p>
-<div class="card"><h3>How to evaluate and plot $y(t)=x(t)\circledast h(t)$</h3><ol>
-<li>Draw both $x(\tau)$ and $h(\tau)$ with respect to $\tau$.</li>
-<li>Flip $h(\tau)$ and shift by $t$ to obtain $h(t-\tau)$, and plot the result.</li>
-<li>Multiply and integrate with respect to $\tau$: the area under $x(\tau)h(t-\tau)$ is $y(t)$.</li>
-<li>Repeat for every $t$.</li></ol></div>
+<div class="card"><h3>How to evaluate and plot $y(t)=x(t)\circledast h(t)$</h3>
+  <p class="sub">Flip, shift, multiply, integrate</p>
+  <ol>
+    <li>Draw both $x(\tau)$ and $h(\tau)$ with respect to $\tau$.</li>
+    <li>Flip $h(\tau)$ and shift by $t$ to obtain $h(t-\tau)$, and plot the result.</li>
+    <li>Multiply and integrate with respect to $\tau$: the area under $x(\tau)h(t-\tau)$ is $y(t)$.</li>
+    <li>Repeat for every $t$.</li>
+  </ol>
+</div>
 <div data-w="conv"></div>
-<div class="ex"><b class="tag">Example · step input, decaying-exponential system</b>
-<p>Let $x(t)=u(t)$ and $h(t)=e^{-at}u(t)$ with $a>0$. Find $y(t)=x(t)\circledast h(t)$. (Pick $x=$ Step and $h=$ Decaying in the widget to see it.)</p>
-<details><summary>Show solution</summary>
-<p>For $t<0$, $h(t-\tau)$ lies entirely where $x(\tau)=0$, so the product is zero and $y(t)=0$. For $t\ge0$ the product is nonzero on $0\le\tau\le t$: $$y(t)=\int_0^t e^{-a(t-\tau)}d\tau=e^{-at}\int_0^t e^{a\tau}d\tau=\frac{1}{a}\left(1-e^{-at}\right).$$ So $y(t)=0$ for $t<0$ and $y(t)=\tfrac{1}{a}(1-e^{-at})$ for $t\ge0$.</p></details></div>
+
+<div class="ex">
+  <b class="tag">Example · step input, decaying-exponential system</b>
+  <p>Let $x(t)=u(t)$ and $h(t)=e^{-at}u(t)$ with $a>0$. Find $y(t)=x(t)\circledast h(t)$. (Pick $x=$ Step and $h=$ Decaying in the widget to see it.)</p>
+  <details><summary>Show solution</summary>
+  <p>For $t<0$, $h(t-\tau)$ lies entirely where $x(\tau)=0$, so the product is zero and $y(t)=0$. For $t\ge0$ the product is nonzero on $0\le\tau\le t$: $$y(t)=\int_0^t e^{-a(t-\tau)}d\tau=e^{-at}\int_0^t e^{a\tau}d\tau=\frac{1}{a}\left(1-e^{-at}\right).$$ So $y(t)=0$ for $t\lt 0$ and $y(t)=\tfrac{1}{a}(1-e^{-at})$ for $t\ge0$.</p>
+</details>
+</div>
+
+
+
+<h2 id="convolution"><small>4</small>Properties of convolution</h2>
+
 <h3>Properties of convolution</h3>
 <div class="grid">
 <div class="tile"><b class="tag">Commutativity</b><p>$x(t)\circledast y(t)=y(t)\circledast x(t)$</p></div>
