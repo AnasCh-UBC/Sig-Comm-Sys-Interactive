@@ -890,6 +890,7 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
 </div>
 <p class="sub">Test this with a cosine input through a system with $h(t)=e^{-at}u(t)$, for which $H(f)=1/(a+j2\pi f)$.</p>
 <div data-w="eig"></div>
+
 <div class="card"><h3>Key results</h3><ul>
 <li>A system maps $x(t)$ to $y(t)=\mathcal{T}[x(t)]$; classify it as linear, time-invariant and causal.</li>
 <li>An LTI system is determined by $h(t)$ and $y=x\circledast h$.</li>
@@ -1566,7 +1567,7 @@ W('conv',{
   ctx.textBaseline = 'middle';
   ctx.fillStyle = '#a9bdce';
 
-  const ticks = 5;
+  const ticks = 6;
 
   for (let i = 1; i <= ticks-1; i++) {
     const value = yMin + (yMax - yMin) * i / ticks;
