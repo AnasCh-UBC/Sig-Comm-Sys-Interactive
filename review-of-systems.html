@@ -769,10 +769,46 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
 
 <div class="callout"><b>Question:</b> if the output for $\delta(t)$ is $h(t)$, what is the output for a general input $x(t)$?</div>
 
-<div class="card"><h3>Why the answer is a convolution</h3><ol>
-<li>Any input is a sum of weighted, shifted impulses (sampling property): $x(t)=\displaystyle\int_{-\infty}^{\infty}x(\tau)\delta(t-\tau)\,d\tau$.</li>
-<li><b>Time invariance:</b> the impulse $\delta(t-\tau)$ produces the shifted response $h(t-\tau)$.</li>
-<li><b>Linearity:</b> weighting and summing the inputs weights and sums the outputs.</li></ol></div>
+<div class="card">
+  <h3>Why the answer is a convolution</h3>
+  <ol>
+    <li> Any signal can be approximated as a sum of narrow, weighted, rectangular pulses:
+      <div class="eq-box">
+        \[
+        x(t)\approx\sum_{k=-\infty}^{\infty}
+        x(k\Delta\tau)\,\Delta\tau\,
+        p_{\Delta\tau}(t-k\Delta\tau)
+        \]
+      </div>
+    </li>
+    <li>
+      <b>Time invariance:</b> Shifting a rectangular input pulse shifts its corresponding output by the same amount.
+    </li>
+    <li>
+      <b>Linearity:</b> Multiplying an input pulse by a constant multiplies its output by that constant, and the responses
+      to individual pulses can be added.
+    </li>
+    <li> Therefore, the total output is approximately the sum of the shifted and weighted responses to the rectangular pulses:
+      \[
+      y(t)\approx\sum_{k=-\infty}^{\infty}
+      x(k\Delta\tau)\,\Delta\tau\,
+      h_{\Delta\tau}(t-k\Delta\tau)
+      \]
+    </li>
+  </ol>
+  <p class="sub">
+    As the pulse width \(\Delta\tau\) approaches zero, the approximation becomes the convolution integral:
+  </p>
+  <div class="eq-box">
+    \[
+    \boxed{
+    y(t)=\int_{-\infty}^{\infty}
+    x(\tau)h(t-\tau)\,d\tau
+    }
+    \]
+  </div>
+</div>
+
 <div class="eq">$$y(t)=x(t)\circledast h(t)=\int_{-\infty}^{\infty}x(\tau)\,h(t-\tau)\,d\tau$$</div>
 <p>Slide the spacing $\Delta$ below to build the output from impulses: the sum of scaled, delayed copies of $h(t)$ converges to the convolution as the impulses get denser.</p>
 <div data-w="imp"></div>
