@@ -1568,7 +1568,7 @@ W('conv',{
 
   const ticks = 5;
 
-  for (let i = 0; i <= ticks; i++) {
+  for (let i = 1; i <= ticks-1; i++) {
     const value = yMin + (yMax - yMin) * i / ticks;
     const py = Y(value);
 
@@ -1618,14 +1618,14 @@ W('conv',{
       {f:t=>x(t)*hs(t),c:'g',fill:1,lw:1},
       {f:x,c:'a',lw:2},
       {f:hs,c:'b',lw:2}
-    ],-3,6,-.2,1.4);
+    ],-3,6,-.25,1.25);
 
     // Right plot: convolution output
     plot(right,[
       {f:y1,c:'a',lw:2},
       //{f:y2,c:'b',lw:1.5,d:[4,4]},
       {pts:[[v.t,cur]],c:'b'}
-    ],-3,6,-.15*ym,1.2*ym);
+    ],-3,6,-.25,1.25);
 
     // Axis details for both plots
 addAxisDetails(left, 'τ', -0.2, 1.4);
