@@ -573,28 +573,9 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
 -->
 
 <h2 id="classification"><small>2</small>Classifying systems</h2>
-<div class="card system-classification">
-  <h3>A system can be classified according to four properties:</h3>
 
-  <div class="classification-grid">
-    <div class="tile">
-      <p>Discrete-time or continuous-time</p>
-    </div>
-
-    <div class="tile">
-      <p>Linear or nonlinear</p>
-    </div>
-
-    <div class="tile">
-      <p>Time invariant or time variant</p>
-    </div>
-
-    <div class="tile">
-      <p>Causal or noncausal</p>
-    </div>
-  </div>
-</div>
-<p class="sub">Select a property to explore its definition and examples.</p>
+<p class="sub">A system can be discrete-time or continuous-time, linear or nonlinear, time invariant or time variant, causal or noncausal. 
+  Select a property to explore its definition and examples.</p>
 
 <div class="card system-classifier">
   <div class="system-selector">
@@ -763,7 +744,9 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
   </div>
 </div>
 
-<p class="sub">Test the systems below yourself. The left plot checks time invariance. The right plot checks superposition. Do the two curves coincide?.</p>
+<p>Test the systems below yourself. \(x_1(t)=\Lambda(t), y_1(t)=\mathcal{T}[x_1(t)], x_2(t)=\Lambda(t-1), y_2(t)=\mathcal{T}[x_2(t)]\).</p>
+<p class="sub"> Do the two curves coincide?.</p>
+
 <div data-w="test"></div>
 
 <h2 id="lti"><small>3</small>LTI systems and convolution</h2>
@@ -1014,7 +997,7 @@ const LA=t=>Math.max(0,1-Math.abs(t));
 
 W('test',{
   cap:'Interactive 2.1',
-  title:'Test a system: time invariance and linearity; \\(x_1(t)=\\Lambda(t)\\), \\(x_2(t)=\\Lambda(t-1)\\)',
+  title:'Test a system: time invariance (left) and linearity (right):',
   h:190,
 
   ctl:[
@@ -1084,13 +1067,11 @@ W('test',{
     titles.className='test-plot-titles';
     titles.innerHTML=`
       <div>
-        <b>Time invariance: </b>
-        <span>\\(\\mathcal{T}[x_1(t-t_0)]\\) vs. \\(y(t-t_0)\\)</span>
+        <span>Blue: \\(\\mathcal{T}[x_1(t-t_0)]\\) vs. Red: \\(y_1(t-t_0)\\)</span>
       </div>
       <div>
-        <b>Linearity: </b>
-        <span>\\(\\mathcal{T}[a_1x_1+a_2x_2]\\) vs.
-        \\(a_1\\mathcal{T}[x_1]+a_2\\mathcal{T}[x_2]\\)</span>
+        <span>Blue: \\(\\mathcal{T}[a_1x_1(t)+a_2x_2(t)]\\) vs. Red: 
+        \\(a_1y_1(t)+a_2y_2(t)\\)</span>
       </div>
     `;
     parent.insertBefore(titles,c);
@@ -1221,9 +1202,7 @@ W('test',{
       return `
       <div class="test-results">
         <div>
-          <b>Time invariance:</b> ${Z(errTI)}, Δ = ${errTI.toFixed(4)}
-        </div>
-        <div>
+          <b>Time invariance:</b> ${Z(errTI)}, Δ = ${errTI.toFixed(4)}; 
           <b>Linearity:</b> ${Z(errLin)}, Δ = ${errLin.toFixed(4)}
         </div>
         <div class="test-properties">
