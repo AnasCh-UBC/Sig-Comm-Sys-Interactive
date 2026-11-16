@@ -1549,21 +1549,42 @@ const addAxisDetails = (canvas, xLabel, yMin, yMax) => {
   ctx.lineWidth = 0.7;
   ctx.fillStyle = '#a9bdce';
 
-  const ticks = 5;
+  // Map time = 0 to its pixel position
+const xMin = -3;
+const xMax = 6;
+const zeroX = L + (0 - xMin) / (xMax - xMin) * (W - L - R);
 
-  for (let i = 0; i <= ticks; i++) {
-    const value = yMin + (yMax - yMin) * i / ticks;
-    const py = T + plotH - i * plotH / ticks;
+// Horizontal grid lines and vertical-axis tick labels
+ctx.font = '11px Arial';
+ctx.textAlign = 'right';
+ctx.textBaseline = 'middle';
+ctx.fillStyle = '#a9bdce';
 
-    // Horizontal grid line
-    ctx.beginPath();
-    ctx.moveTo(L, py);
-    ctx.lineTo(W - R, py);
-    ctx.stroke();
+const ticks = 5;
 
-    // Tick label
-    ctx.fillText(value.toFixed(1), L - 7, py);
-  }
+for (let i = 0; i <= ticks; i++) {
+  const value = yMin + (yMax - yMin) * i / ticks;
+  const py = T + plotH - i * plotH / ticks;
+
+  // Horizontal grid line
+  ctx.strokeStyle = 'rgba(160,185,205,0.25)';
+  ctx.lineWidth = 0.7;
+  ctx.beginPath();
+  ctx.moveTo(L, py);
+  ctx.lineTo(W - R, py);
+  ctx.stroke();
+
+  // Tick label
+  ctx.fillText(value.toFixed(1), L - 7, py);
+}
+
+// Vertical axis at time = 0
+ctx.strokeStyle = '#a9bdce';
+ctx.lineWidth = 1.2;
+ctx.beginPath();
+ctx.moveTo(zeroX, T);
+ctx.lineTo(zeroX, H - B);
+ctx.stroke();
 
   // Horizontal-axis label
   ctx.font = 'italic 13px Georgia';
