@@ -498,13 +498,50 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
     font-size: 0.68rem;
   }
 }
+
+/* Header navigation */
+header{align-items:center}
+.site-title{flex:1;min-width:0}
+.header-right{display:flex;align-items:center;justify-content:flex-end;gap:9px;min-width:0}
+.current-lecture{white-space:nowrap}
+.lecture-nav-label{font-size:.72rem;font-weight:600;color:#c8e5f2;white-space:nowrap}
+.lecture-nav{max-width:190px;min-width:145px;padding:6px 28px 6px 9px;border:1px solid rgba(255,255,255,.35);border-radius:7px;background:#102b46;color:#f4fbff;font:600 .78rem system-ui,sans-serif;cursor:pointer}
+.lecture-nav option{background:#102b46;color:#f4fbff}
+
+/* Bright, high-contrast plotting surfaces, matching the signal-lecture plots */
+.demo-canvas,.wd canvas,.complex-plot-panel canvas{background:#05090f;border-color:rgba(85,200,242,.38)}
+.test-plot-titles > div{color:#eaf3fa;border-bottom-color:rgba(85,200,242,.35)}
+.test-plot-titles span{color:#a9bdce}
+@media(max-width:700px){
+  header{align-items:flex-start;flex-wrap:wrap}
+  .site-title{flex-basis:100%}
+  .header-right{width:100%;justify-content:flex-start;flex-wrap:wrap}
+  .current-lecture{white-space:normal}
+}
+@media(max-width:430px){
+  .header-right{gap:7px}
+  .lecture-nav{flex:1;min-width:130px;max-width:none}
+}
 </style>
 
 <script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},svg:{fontCache:'global'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 
 
 </head><body>
-<header><span>APSC 270 – Signals and Communication Systems</span><span>Lecture 3 · Review of Systems</span></header>
+<header>
+  <span class="site-title">APSC 270 – Signals and Communication Systems</span>
+  <div class="header-right">
+    <span class="current-lecture">Lecture 3 · Review of Systems</span>
+    <label class="lecture-nav-label" for="lectureNav">Go to</label>
+    <select id="lectureNav" class="lecture-nav" aria-label="Navigate to another course page" onchange="if(this.value) window.location.href=this.value">
+      <option value="index.html">Course home</option>
+      <option value="preliminaries.html">Preliminaries</option>
+      <option value="introduction.html">Introduction</option>
+      <option value="review-of-signals.html">Review of Signals</option>
+      <option value="review-of-systems.html" selected>Review of Systems</option>
+    </select>
+  </div>
+</header>
 <main class="wrap">
 <p class="over">APSC 270 · Lecture 3</p><h1>Review of Systems</h1>
 <p class="lede">How do physical devices and systems transform signals? Learn to describe a system by its input–output relation, classify it, and predict its output using the impulse response and convolution.</p>
@@ -981,16 +1018,17 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
     </script>
 <script>
 (function(){
-const css=k=>getComputedStyle(document.documentElement).getPropertyValue(k).trim(),CM={a:'--blue',b:'--red',g:'--grn'},col=k=>css(CM[k]||'--'+k),UPS=[],TP=2*Math.PI,U=t=>t>=0?1:0;
+const css=k=>getComputedStyle(document.documentElement).getPropertyValue(k).trim(),CM={a:'#55c8f2',b:'#ff6b78',g:'#62d99a'},col=k=>CM[k]||css('--'+k),UPS=[],TP=2*Math.PI,U=t=>t>=0?1:0;
 function plot(c,S,x0,x1,y0,y1,r,tk){const x=c.getContext('2d'),w=c.width,oy=r?r[0]:0,hh=r?r[1]:c.height,X=t=>(t-x0)/(x1-x0)*w,Y=v=>oy+hh-(v-y0)/(y1-y0)*hh;
- if(!r)x.clearRect(0,0,w,c.height);x.save();x.beginPath();x.rect(0,oy,w,hh);x.clip();x.font='12px system-ui';x.lineWidth=1;x.setLineDash([]);
- const st=tk||1;for(let k=Math.ceil(x0/st)*st;k<=x1+1e-9;k+=st){x.strokeStyle=css('--ln');x.beginPath();x.moveTo(X(k),oy);x.lineTo(X(k),oy+hh);x.stroke();if(Math.abs(k)>1e-9){x.fillStyle=css('--mut');x.fillText(+k.toFixed(2),X(k)+3,Y(0)+13)}}
- x.strokeStyle=css('--mut');x.beginPath();x.moveTo(0,Y(0));x.lineTo(w,Y(0));x.stroke();
+ if(!r)x.clearRect(0,0,w,c.height);x.save();x.beginPath();x.rect(0,oy,w,hh);x.clip();
+ x.fillStyle='#05090f';x.fillRect(0,oy,w,hh);x.font='12px system-ui';x.lineWidth=1;x.setLineDash([]);
+ const st=tk||1;for(let k=Math.ceil(x0/st)*st;k<=x1+1e-9;k+=st){x.strokeStyle='rgba(150,190,215,.20)';x.beginPath();x.moveTo(X(k),oy);x.lineTo(X(k),oy+hh);x.stroke();if(Math.abs(k)>1e-9){x.fillStyle='#c6d8e5';x.fillText(+k.toFixed(2),X(k)+3,Y(0)+13)}}
+ x.strokeStyle='rgba(225,240,250,.82)';x.lineWidth=1.2;x.beginPath();x.moveTo(0,Y(0));x.lineTo(w,Y(0));x.stroke();
  S.forEach(s=>{x.strokeStyle=x.fillStyle=col(s.c);x.lineWidth=s.lw||2;x.setLineDash(s.d||[]);
   if(s.pts){s.pts.forEach(([t,v])=>{x.beginPath();x.moveTo(X(t),Y(0));x.lineTo(X(t),Y(v));x.stroke();x.beginPath();x.arc(X(t),Y(v),4,0,7);x.fill()})}
   else{x.beginPath();let n=0,lx=0;for(let i=0;i<=w;i++){const t=x0+i/w*(x1-x0);if(s.to!==undefined&&t>s.to)break;const v=s.f(t);n++?x.lineTo(i,Y(v)):x.moveTo(i,Y(v));lx=i}
    if(s.fill){x.lineTo(lx,Y(0));x.lineTo(0,Y(0));x.closePath();x.globalAlpha=.3;x.fill();x.globalAlpha=1}else x.stroke()}});x.restore();x.setLineDash([])}
-const lab=(c,t,x,y)=>{const g=c.getContext('2d');g.fillStyle=css('--fg');g.font='bold 13px system-ui';g.fillText(t,x,y)};
+const lab=(c,t,x,y)=>{const g=c.getContext('2d');g.fillStyle='#eaf3fa';g.font='bold 13px system-ui';g.fillText(t,x,y)};
 function typesetMath(el){
  if(!el || !window.MathJax || typeof window.MathJax.typesetPromise!=='function') return;
  try{
@@ -1804,5 +1842,7 @@ W('eig',{
 
   showProperty(selector.value);
 })();
+
+})(); // Close the main interactive-widgets IIFE
 </script>
 </body></html>
