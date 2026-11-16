@@ -1242,7 +1242,9 @@ const up=()=>{
     ctx.fillStyle = '#e2f0f8';
     ctx.font = '13px system-ui';
     ctx.textAlign = 'right';
-    ctx.fillText('t', c.width - 8, c.height - 4);
+    const axisY = c.height - (0 - yMin) / (yMax - yMin) * c.height;
+    ctx.textAlign = 'right';
+    ctx.fillText('t', c.width - 8, axisY - 8);
     ctx.restore();
 
     return [
@@ -1398,6 +1400,28 @@ W('test',{
     ctx.moveTo(X(0),y1);
     ctx.lineTo(X(0),y2);
     ctx.stroke();
+
+    // Vertical-axis ticks and labels
+ctx.strokeStyle = axis;
+ctx.fillStyle = text;
+ctx.lineWidth = 1.2;
+ctx.font = '10px Arial';
+ctx.textAlign = 'right';
+ctx.textBaseline = 'middle';
+
+for(let k=-2;k<=2;k++){
+  const value = k*maxY/2;
+  const yy = Y(value);
+
+  // Tick mark
+  ctx.beginPath();
+  ctx.moveTo(X(0)-4,yy);
+  ctx.lineTo(X(0)+4,yy);
+  ctx.stroke();
+
+  // Tick label
+  ctx.fillText(value.toFixed(1),X(0)-7,yy);
+}
 
     // Tick labels
     ctx.fillStyle = text;
