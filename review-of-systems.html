@@ -463,6 +463,41 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
     grid-template-columns: 1fr;
   }
 }
+
+.conv-plot-titles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 0 0 5px;
+  font-size: 0.82rem;
+  color: #dceaf5;
+}
+
+.conv-plot-titles > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.conv-plot-titles b {
+  color: #75d5f2;
+}
+
+.conv-plot-titles span {
+  color: #a9bdce;
+  font-size: 0.76rem;
+}
+
+@media(max-width:600px) {
+  .conv-plot-titles {
+    gap: 8px;
+    font-size: 0.72rem;
+  }
+
+  .conv-plot-titles span {
+    font-size: 0.68rem;
+  }
+}
 </style>
 
 <script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},svg:{fontCache:'global'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
@@ -1401,14 +1436,146 @@ plot(right,[
   }
 });
 // ---- 4. convolution
-const SG=[['Rectangle Π(t)',t=>Math.abs(t)<=.5?1:0],['Triangle Λ(t)',LA],['Ramp t on (0,1)',t=>t>0&&t<1?t:0],['Decaying e^(−t)·u(t)',t=>t>=0?Math.exp(-t):0],['Step u(t)',U]],SN=SG.map(s=>s[0]);
-W('conv',{cap:'Interactive 4.1',title:'Convolution y(t) = x(t) ⊛ h(t): flip, shift, multiply, integrate',h:400,ctl:[{t:'s',k:'x',l:'Input x(τ)',o:SN,v:4},{t:'s',k:'h',l:'Impulse response h(τ)',o:SN,v:3},{k:'t',l:'Time t',min:-3,max:6,step:.1,v:1}],
- draw(c,v){const x=SG[v.x][1],h=SG[v.h][1],N=181,Y1=[],Y2=[];for(let i=0;i<N;i++){const t=-3+i*.05;let a=0,b=0;for(let u=-5;u<7;u+=.02){a+=x(u)*h(t-u)*.02;b+=h(u)*x(t-u)*.02}Y1.push(a);Y2.push(b)}
-  const I=A=>t=>{const i=(t+3)/.05,j=Math.floor(i),f=i-j;return j<0||j>=N-1?0:A[j]*(1-f)+A[j+1]*f},y1=I(Y1),y2=I(Y2),hs=t=>h(v.t-t),ym=Math.max(.05,...Y1),cur=y1(v.t);
-  c.getContext('2d').clearRect(0,0,720,400);plot(c,[{f:t=>x(t)*hs(t),c:'g',fill:1,lw:1},{f:x,c:'a'},{f:hs,c:'b'}],-3,6,-.2,1.4,[0,195]);
-  plot(c,[{f:y1,c:'a',lw:1,d:[3,3]},{f:y1,c:'a',lw:3,to:v.t},{f:y2,c:'b',lw:1.5,d:[2,4]},{pts:[[v.t,cur]],c:'b'}],-3,6,-.15*ym,1.2*ym,[205,185]);
-  lab(c,'x(τ) blue · flipped and shifted h(t−τ) red · product green (area = y(t))',8,16);lab(c,'y(t) traced out as t moves; red dotted = h ⊛ x',8,224);
-  return 'At t = '+v.t.toFixed(1)+': y = <b>'+cur.toFixed(3)+'</b>. The red dotted curve (roles of x and h swapped) lies on top of x ⊛ h: convolution is commutative.'}});
+
+const SG=[
+  ['Rectangle Π(t)',t=>Math.abs(t)<=.5?1:0],
+  ['Triangle Λ(t)',LA],
+  ['Ramp t on (0,1)',t=>t>0&&t<1?t:0],
+  ['Decaying e^(−t)·u(t)',t=>t>=0?Math.exp(-t):0],
+  ['Step u(t)',U]
+],
+SN=SG.map(s=>s[0]);
+
+W('conv',{
+  cap:'Interactive 4.1',
+  title:'Convolution y(t) = x(t) ⊛ h(t): flip, shift, multiply, integrate',
+  h:220,
+
+  ctl:[
+    {t:'s',k:'x',l:'Input x(τ)',o:SN,v:4},
+    {t:'s',k:'h',l:'Impulse response h(τ)',o:SN,v:3},
+    {k:'t',l:'Time t',min:-3,max:6,step:.1,v:1}
+  ],
+
+  draw(c,v){
+    const x=SG[v.x][1],
+          h=SG[v.h][1],
+          N=181,
+          Y1=[],
+          Y2=[];
+
+    // Calculate convolution in both orders
+    for(let i=0;i<N;i++){
+      const t=-3+i*.05;
+      let a=0,b=0;
+
+      for(let u=-5;u<7;u+=.02){
+        a+=x(u)*h(t-u)*.02;
+        b+=h(u)*x(t-u)*.02;
+      }
+
+      Y1.push(a);
+      Y2.push(b);
+    }
+
+    // Interpolation of calculated convolution
+    const I=A=>t=>{
+      const i=(t+3)/.05,
+            j=Math.floor(i),
+            f=i-j;
+
+      return j<0||j>=N-1?0:A[j]*(1-f)+A[j+1]*f;
+    };
+
+    const y1=I(Y1),
+          y2=I(Y2),
+          hs=t=>h(v.t-t),
+          ym=Math.max(.05,...Y1),
+          cur=y1(v.t);
+
+    // Main canvas
+    const W=720,H=220;
+    c.width=W;
+    c.height=H;
+
+    const ctx=c.getContext('2d');
+    ctx.clearRect(0,0,W,H);
+
+    // Separate plot canvases
+    const left=document.createElement('canvas');
+    left.width=350;
+    left.height=220;
+
+    const right=document.createElement('canvas');
+    right.width=350;
+    right.height=220;
+
+    // HTML plot titles / legends
+    const parent=c.parentElement;
+
+    if(parent&&!parent.querySelector('.conv-plot-titles')){
+      const titles=document.createElement('div');
+      titles.className='conv-plot-titles';
+
+      titles.innerHTML=`
+        <div>
+          <b>Input and overlap</b>
+          <span>x(τ): blue · h(t−τ): red · Product: green</span>
+        </div>
+        <div>
+          <b>Convolution output</b>
+          <span>x ⊛ h: blue · h ⊛ x: red dashed</span>
+        </div>
+      `;
+
+      parent.insertBefore(titles,c);
+    }
+
+    // Left plot: flip, shift, multiply
+    plot(left,[
+      {f:t=>x(t)*hs(t),c:'g',fill:1,lw:1},
+      {f:x,c:'a',lw:2},
+      {f:hs,c:'b',lw:2}
+    ],-3,6,-.2,1.4);
+
+    // Right plot: convolution output
+    plot(right,[
+      {f:y1,c:'a',lw:2},
+      {f:y2,c:'b',lw:1.5,d:[4,4]},
+      {pts:[[v.t,cur]],c:'b'}
+    ],-3,6,-.15*ym,1.2*ym);
+
+    // Place plots side by side
+    ctx.drawImage(left,0,0);
+    ctx.drawImage(right,370,0);
+
+    // Vertical divider
+    ctx.save();
+    ctx.strokeStyle='#aab8c7';
+    ctx.lineWidth=1;
+    ctx.beginPath();
+    ctx.moveTo(360,5);
+    ctx.lineTo(360,215);
+    ctx.stroke();
+    ctx.restore();
+
+    return `
+      <div>
+        At t = <b>${v.t.toFixed(1)}</b>:
+        y(t) = <b>${cur.toFixed(3)}</b>.
+      </div>
+      <div>
+        The green area represents the product being integrated
+        to calculate the convolution at the selected time.
+      </div>
+      <div>
+        The two output curves overlap, demonstrating that
+        convolution is commutative.
+      </div>
+    `;
+  }
+});
+
 // ---- 5. eigenfunction
 W('eig',{cap:'Interactive 5.1',title:'A cosine through the LTI system h(t) = e^(−at)u(t)',h:300,ctl:[{k:'f',l:'Input frequency f₀ (Hz)',min:.1,max:3,step:.1,v:.5},{k:'a',l:'Decay rate a',min:.5,max:4,step:.5,v:1}],
  draw(c,v){const w=TP*v.f,a=v.a,x=t=>Math.cos(w*t),n=Math.round(10/a/.01),y=t=>{let s=0;for(let i=0;i<n;i++){const u=(i+.5)*.01;s+=Math.exp(-a*u)*x(t-u)*.01}return s},mag=1/Math.hypot(a,w),ph=-Math.atan2(w,a);
