@@ -1442,7 +1442,7 @@ const SG=[
   ['Rectangle Π(t)',t=>Math.abs(t)<=.5?1:0],
   ['Triangle Λ(t)',LA],
   ['Ramp t on (0,1)',t=>t>0&&t<1?t:0],
-  ['Decaying e^(−t)·u(t)',t=>t>=0?Math.exp(-t):0],
+  ['Decaying exp(−t)·u(t)',t=>t>=0?Math.exp(-t):0],
   ['Step u(t)',U]
 ],
 SN=SG.map(s=>s[0]);
@@ -1519,7 +1519,7 @@ W('conv',{
       titles.className='test-plot-titles';
       titles.innerHTML=`
         <div>
-          <span>Blue: x(τ); Red: h(t−τ); Shaded area: y(t)</span>
+          <span>Blue: x(τ); Red: h(t−τ); Shaded: Area under x(τ)h(t−τ) which equals y(t)</span>
         </div>
         <div>
           <span>Blue: x(t) ⊛ h(t); Red: Calculated value of y at time t</span>
@@ -1528,6 +1528,52 @@ W('conv',{
 
       parent.insertBefore(titles,c);
     }
+
+    // Add axis labels, vertical-axis ticks, and horizontal grid lines
+const addAxisDetails = (canvas, xLabel, yMin, yMax) => {
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width;
+  const H = canvas.height;
+
+  // Match these plotting boundaries to the plot() helper
+  const L = 55, R = 12, T = 12, B = 35;
+  const plotH = H - T - B;
+
+  ctx.save();
+
+  // Horizontal grid lines and vertical-axis tick labels
+  ctx.font = '11px Arial';
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'middle';
+  ctx.strokeStyle = 'rgba(160,185,205,0.25)';
+  ctx.lineWidth = 0.7;
+  ctx.fillStyle = '#a9bdce';
+
+  const ticks = 5;
+
+  for (let i = 0; i <= ticks; i++) {
+    const value = yMin + (yMax - yMin) * i / ticks;
+    const py = T + plotH - i * plotH / ticks;
+
+    // Horizontal grid line
+    ctx.beginPath();
+    ctx.moveTo(L, py);
+    ctx.lineTo(W - R, py);
+    ctx.stroke();
+
+    // Tick label
+    ctx.fillText(value.toFixed(1), L - 7, py);
+  }
+
+  // Horizontal-axis label
+  ctx.font = 'italic 13px Georgia';
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'bottom';
+  ctx.fillStyle = '#dceaf5';
+  ctx.fillText(xLabel, W - R, H - 2);
+
+  ctx.restore();
+};
 
     // Left plot: flip, shift, multiply
     plot(left,[
@@ -1542,6 +1588,10 @@ W('conv',{
       //{f:y2,c:'b',lw:1.5,d:[4,4]},
       {pts:[[v.t,cur]],c:'b'}
     ],-3,6,-.15*ym,1.2*ym);
+
+    // Axis details for both plots
+addAxisDetails(left, 'τ', -0.2, 1.4);
+addAxisDetails(right, 't', -0.15 * ym, 1.2 * ym);
 
     // Place plots side by side
     ctx.drawImage(left,0,0);
