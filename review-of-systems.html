@@ -356,6 +356,7 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
 
 .test-plot-titles {
   display: grid;
+  text-align: center;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
   margin: 8px 0 4px;
@@ -1199,7 +1200,7 @@ const up=()=>{
     {t:'s',k:'s',l:'System',o:[
       'Amplifier y = a·x(t)',
       'Differentiator y = dx/dt',
-      'Filter (passes f₀ < f_c = 2 Hz)'
+      'Filter (passes f₀ < f_c = 0.25 Hz)'
     ]},
     {k:'f',l:'Input frequency f₀ (Hz)',min:.1,max:0.5,step:.1,v:1},
     {k:'a',l:'Amplifier gain a',min:.5,max:2,step:.1,v:2}
@@ -1211,7 +1212,7 @@ const up=()=>{
           y=[
             t=>v.a*x(t),
             t=>-w*Math.sin(w*t),
-            t=>v.f<2?x(t):0
+            t=>v.f<0.25?x(t):0
           ][v.s],
           m=1.15*3;
 
@@ -1235,13 +1236,20 @@ const up=()=>{
       {f:x,c:'b',d:[5,4]},
       {f:y,c:'a'}
     ],-4,4,-m,m);
+    const ctx = c.getContext('2d');
+    ctx.save();
+    ctx.fillStyle = '#e2f0f8';
+    ctx.font = '13px system-ui';
+    ctx.textAlign = 'right';
+    ctx.fillText('t', c.width - 8, c.height - 8);
+    ctx.restore();
 
     return [
       'The amplifier scales the input by \\(a\\): \\(y(t)=a\\cos(2\\pi f_0t)\\). The output amplitude is \\(a='+v.a.toFixed(1)+'\\).',
 
       'The differentiator produces \\(y(t)=-2\\pi f_0\\sin(2\\pi f_0t)\\). Its output amplitude is \\(2\\pi f_0='+w.toFixed(2)+'\\), so higher input frequencies produce larger output amplitudes.',
 
-      'The filter passes the input unchanged when \\(f_0\\lt f_c=2\\,\\text{Hz}\\), and blocks it otherwise. Here \\(f_0='+v.f.toFixed(2)+'\\,\\text{Hz}\\): the signal is '+(v.f<2?'passed':'blocked')+'.'
+      'The filter passes the input unchanged when \\(f_0\\lt f_c=0.25\\,\\text{Hz}\\), and blocks it otherwise. Here \\(f_0='+v.f.toFixed(2)+'\\,\\text{Hz}\\): the signal is '+(v.f<2?'passed':'blocked')+'.'
     ][v.s]+'<br>';
   }
 });
