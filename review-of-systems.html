@@ -878,14 +878,15 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
 <div class="card">
   <p>For an LTI system with impulse response $h(t)$ and a complex sinusoidal input $x(t)=e^{j(2\pi f_0t+\theta)}$, the output is:</p>
   <div class="eq-box">\[y(t)=x(t)\circledast h(t)=e^{j(2\pi f_0t+\theta)}H(f_0)=|H(f_0)|e^{j(2\pi f_0t+\theta+\angle H(f_0))}\] 
-    \[H(f_0)=\int_{-\infty}^{\infty}h(\tau)e^{-j2\pi f_0\tau}d\tau\]</div> 
+    where 
+    \(H(f_0)=\int_{-\infty}^{\infty}h(\tau)e^{-j2\pi f_0\tau}d\tau.\)</div> 
   <p class="sub">The response to a complex sinusoid is a complex sinusoid with the <b>same frequency</b>, scaled by $|H(f_0)|$ and 
     phase-shifted by $\angle H(f_0)$.</p> 
   <p>For this reason complex sinusoids are called <b>eigenfunctions</b> of LTI systems.</p>
-  <div><b>Note:</b> This property also applies to cosine and sine inputs. For example, if the input is $\cos(2\pi f_0t+\theta), 
+  <div><b>Note:</b> This property also applies to cosine and sine inputs. For example, if the input is $\cos(2\pi f_0t+\theta)$, 
     the output is $|H(f_0)|\cos(2\pi f_0t+\theta+\angle H(f_0)).$</div>
 </div>
-<p class="sub">Test this with he widget feeds a cosine (the real part of a complex sinusoid) through $h(t)=e^{-at}u(t)$, for which $H(f)=1/(a+j2\pi f)$.</p>
+<p class="sub">Test this with a cosine input through a system with $h(t)=e^{-at}u(t)$, for which $H(f)=1/(a+j2\pi f)$.</p>
 <div data-w="eig"></div>
 <div class="card"><h3>Key results</h3><ul>
 <li>A system maps $x(t)$ to $y(t)=\mathcal{T}[x(t)]$; classify it as linear, time-invariant and causal.</li>
