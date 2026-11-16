@@ -373,7 +373,7 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
 .test-plot-titles span {
   display:block;
   margin-top:4px;
-  color:#265d87;
+  color:#0d3859;
   font-size:.76rem;
 }
 
@@ -612,8 +612,8 @@ header{align-items:center}
 <div class="card"><h3>Three simple systems</h3>
   <p class="sub">Use the interactive example below to experiment with the following systems:</small>
   <div class="grid">
-    <div class="eq-box"><b>Differentiator</b> \[\mathcal{T}[x(t)]=\dfrac{d}{dt}x(t)\].</div>
-    <div class="eq-box"><b>Amplifier</b> \[\mathcal{T}[x(t)]=a\,x(t)\].</div>
+    <div class="eq-box"><b>Differentiator</b> \[\mathcal{T}[x(t)]=\dfrac{d}{dt}x(t)\]</div>
+    <div class="eq-box"><b>Amplifier</b> \[\mathcal{T}[x(t)]=a\,x(t)\]</div>
     <div class="eq-box"><b>Lowpass filter, cutoff freq. $f_c$</b> $x(t)=\cos(2\pi f_0 t)$ $\Rightarrow$ \[\mathcal{T}[x(t)]=\begin{cases}
       x(t),& f_0\lt f_c\\ 0, &f_0\geq f_c\end{cases}\]</div>
   </div>
@@ -814,7 +814,7 @@ header{align-items:center}
 </div>
 
 <p>Test the systems below yourself, where 
-  \[x_1(t)=\Lambda(t), y_1(t)=\mathcal{T}[x_1(t)], \quad x_2(t)=\Lambda(t-1), y_2(t)=\mathcal{T}[x_2(t)]\].
+  \[x_1(t)=\Lambda(t), y_1(t)=\mathcal{T}[x_1(t)], \quad x_2(t)=\Lambda(t-1), y_2(t)=\mathcal{T}[x_2(t)].\]
 </p>
 <p class="sub"> Do the two curves coincide?.</p>
 
@@ -1837,8 +1837,7 @@ W('eig',{
       titles.className='test-plot-titles';
       titles.innerHTML=`
         <div>
-          <span>Blue dashed: Input cos(2πf₀t)</span>
-          <span>Red: Output y(t)</span>
+          <span>Red dashed: Input cos(2πf₀t); Blue: Output y(t)</span>
         </div>
       `;
       parent.insertBefore(titles,c);
