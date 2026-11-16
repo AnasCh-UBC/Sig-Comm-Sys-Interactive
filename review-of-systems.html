@@ -869,11 +869,9 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
 <h3>Properties of convolution</h3>
 <div class="grid">
 <div class="tile"><b class="tag">Commutativity</b><p>$x(t)\circledast y(t)=y(t)\circledast x(t)$</p></div>
-<div class="tile"><b class="tag">Associativity</b><p>$x\circledast(y_1\circledast y_2)=(x\circledast y_1)\circledast y_2$</p></div>
-<div class="tile"><b class="tag">Distributivity</b><p>$x\circledast(y_1+y_2)=x\circledast y_1+x\circledast y_2$</p></div>
+<div class="tile"><b class="tag">Associativity</b><p>$x(t)\circledast(y_1(t)\circledast y_2(t))=(x(t)\circledast y_1(t))\circledast y_2(t)$</p></div>
+<div class="tile"><b class="tag">Distributivity</b><p>$x(t)\circledast(y_1(t)+y_2(t))=x(t)\circledast y_1(t)+x(t)\circledast y_2(t)$</p></div>
 <div class="tile"><b class="tag">Identity element</b><p>$x(t)\circledast\delta(t)=x(t)$</p></div></div>
-<p>(Proofs are in the exercises.) The dashed red curve in the widget above is $h\circledast x$ with the roles swapped: it lands exactly on $x\circledast h$.</p>
-<div class="callout"><b>You should be able to</b> express and plot the convolution of two signals.</div>
 
 <h2 id="eigen"><small>5</small>Eigenfunctions of LTI systems</h2>
 <p class="sub">Complex sinusoids pass through LTI systems unchanged in shape</p>
@@ -1538,7 +1536,7 @@ W('conv',{
     // Right plot: convolution output
     plot(right,[
       {f:y1,c:'a',lw:2},
-      {f:y2,c:'b',lw:1.5,d:[4,4]},
+      //{f:y2,c:'b',lw:1.5,d:[4,4]},
       {pts:[[v.t,cur]],c:'b'}
     ],-3,6,-.15*ym,1.2*ym);
 
