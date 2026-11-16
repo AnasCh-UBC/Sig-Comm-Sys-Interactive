@@ -14,7 +14,18 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
 </style>
 <script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},svg:{fontCache:'global'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 </head><body>
-<header><span>APSC 270 – Signals and Communication Systems</span><span>Introduction</span></header>
+<header><span>APSC 270 – Signals and Communication Systems</span>
+    <div class="header-right">
+        <label class="lecture-nav-label" for="lectureNav">Go to</label>
+        <select id="lectureNav" class="lecture-nav" aria-label="Navigate to another course page" onchange="if(this.value) window.location.href=this.value">
+          <option value="index.html">Course home</option>
+          <option value="preliminaries.html">Preliminaries</option>
+          <option value="introduction.html" selected>Lecture 1 · Introduction</option>
+          <option value="review-of-signals.html">Lecture 2 · Review of Signals</option>
+          <option value="review-of-systems.html">Lecture 3 · Review of Systems</option>
+        </select>
+      </div>
+</header>
 <main class="wrap">
 <p class="over">APSC 270 · Lecture 1</p><h1>Introduction to Communication Systems</h1>
 <p class="lede">From everyday messages to the technologies that move information around the world. Explore what communication systems do, how they evolved, and what you will learn in this course.</p>
@@ -325,6 +336,15 @@ header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-betwee
         grid-template-columns: 1fr;
     }
 }
+
+/* Header navigation */
+header{align-items:center}
+.site-title{flex:1;min-width:0}
+.header-right{display:flex;align-items:center;justify-content:flex-end;gap:9px;min-width:0}
+.lecture-nav-label{font-size:.72rem;font-weight:600;color:#c8e5f2;white-space:nowrap}
+.lecture-nav{max-width:240px;min-width:145px;padding:6px 28px 6px 9px;border:1px solid rgba(255,255,255,.35);border-radius:7px;background:#102b46;color:#f4fbff;font:600 .78rem system-ui,sans-serif;cursor:pointer}
+.lecture-nav option{background:#102b46;color:#f4fbff}
+
             </style>
 
 <div class="tile tile-dark"><b class="tag">Communication Systems</b><h3>Where do we see it?</h3><p>Examples of communication systems:</p>

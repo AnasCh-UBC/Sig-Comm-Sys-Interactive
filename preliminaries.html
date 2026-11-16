@@ -35,6 +35,15 @@ details summary{cursor:pointer;color:var(--acc);font-weight:600;margin-top:8px}.
 .q{margin:10px 0}.q p{margin:2px 0;font-weight:600}.q label{font-weight:400;margin:2px 0}
 footer{border-top:1px solid var(--ln);padding:20px;text-align:center;font-size:.85rem;color:var(--mut)}footer a{color:var(--acc)}
 @media(max-width:640px){.toc{columns:1}header{font-size:.85rem}}
+
+/* Header navigation */
+header{align-items:center}
+.site-title{flex:1;min-width:0}
+.header-right{display:flex;align-items:center;justify-content:flex-end;gap:9px;min-width:0}
+.lecture-nav-label{font-size:.72rem;font-weight:600;color:#c8e5f2;white-space:nowrap}
+.lecture-nav{max-width:240px;min-width:145px;padding:6px 28px 6px 9px;border:1px solid rgba(255,255,255,.35);border-radius:7px;background:#102b46;color:#f4fbff;font:600 .78rem system-ui,sans-serif;cursor:pointer}
+.lecture-nav option{background:#102b46;color:#f4fbff}
+
 </style>
 <script>
     window.MathJax = {
@@ -56,7 +65,19 @@ footer{border-top:1px solid var(--ln);padding:20px;text-align:center;font-size:.
     </script>
 </head>
 <body>
-<header><span>APSC 270 – Signals and Communication Systems</span><span>Preliminaries</span></header>
+<header>
+    <span>APSC 270 – Signals and Communication Systems</span>
+    <div class="header-right">
+        <label class="lecture-nav-label" for="lectureNav">Go to</label>
+        <select id="lectureNav" class="lecture-nav" aria-label="Navigate to another course page" onchange="if(this.value) window.location.href=this.value">
+          <option value="index.html">Course home</option>
+          <option value="preliminaries.html" selected>Preliminaries</option>
+          <option value="introduction.html">Lecture 1 · Introduction</option>
+          <option value="review-of-signals.html">Lecture 2 · Review of Signals</option>
+          <option value="review-of-systems.html">Lecture 3 · Review of Systems</option>
+        </select>
+      </div>
+</header>
 <div class="wrap">
 <p class="over">APSC 270 · Preliminaries</p>
 <h1>What you are expected to know</h1>

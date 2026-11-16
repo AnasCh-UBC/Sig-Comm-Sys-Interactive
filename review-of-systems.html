@@ -1026,62 +1026,83 @@ function plot(c,S,x0,x1,y0,y1,r,tk){
 
  x.fillStyle='#05090f';
  x.fillRect(0,oy,w,hh);
- x.font='12px system-ui';
+ x.font='11px system-ui';
  x.lineWidth=1;
  x.setLineDash([]);
 
+ // Grid and x-axis ticks/labels
  const st=tk||1;
-
- // Vertical grid lines and time labels
  for(let k=Math.ceil(x0/st)*st;k<=x1+1e-9;k+=st){
+  const xx=X(k);
   x.strokeStyle='rgba(145,195,225,.38)';
+  x.lineWidth=1;
   x.beginPath();
-  x.moveTo(X(k),oy);
-  x.lineTo(X(k),oy+hh);
+  x.moveTo(xx,oy);
+  x.lineTo(xx,oy+hh);
   x.stroke();
 
-  if(Math.abs(k)>1e-9){
-   x.fillStyle='#e2f0f8';
-   x.fillText(+k.toFixed(2),X(k)+3,Y(0)+13);
-  }
+  // Tick mark on the horizontal axis
+  const zeroY=Y(0);
+  x.strokeStyle='rgba(240,249,255,.95)';
+  x.beginPath();
+  x.moveTo(xx,zeroY-3);
+  x.lineTo(xx,zeroY+3);
+  x.stroke();
+
+  x.fillStyle='#e2f0f8';
+  x.textAlign='center';
+  x.textBaseline='top';
+  x.fillText(String(+k.toFixed(2)),xx,zeroY+6);
  }
 
- // Horizontal axis at amplitude = 0
+ // Horizontal grid, y-axis ticks and labels
+ const yStep=(y1-y0)/5;
+ const yAxisX=(x0<=0&&x1>=0)?X(0):0;
+ for(let i=0;i<=5;i++){
+  const value=y0+i*yStep;
+  const yy=Y(value);
+
+  x.strokeStyle='rgba(145,195,225,.38)';
+  x.lineWidth=1;
+  x.beginPath();
+  x.moveTo(0,yy);
+  x.lineTo(w,yy);
+  x.stroke();
+
+  x.strokeStyle='rgba(240,249,255,.95)';
+  x.beginPath();
+  x.moveTo(yAxisX-3,yy);
+  x.lineTo(yAxisX+3,yy);
+  x.stroke();
+
+  x.fillStyle='#e2f0f8';
+  x.font='10px system-ui';
+  x.textAlign='right';
+  x.textBaseline='middle';
+  x.fillText(+value.toFixed(2),yAxisX-6,yy);
+ }
+
+ // Stronger horizontal and vertical axes
  x.strokeStyle='rgba(240,249,255,.98)';
- x.lineWidth=1.2;
+ x.lineWidth=1.5;
  x.beginPath();
  x.moveTo(0,Y(0));
  x.lineTo(w,Y(0));
  x.stroke();
 
- // Vertical axis at time t = 0
  if(x0<=0 && x1>=0){
-  x.strokeStyle='rgba(240,249,255,.98)';
-  x.lineWidth=1.5;
   x.beginPath();
   x.moveTo(X(0),oy);
   x.lineTo(X(0),oy+hh);
   x.stroke();
-
-  // Amplitude-axis ticks and labels
-  const dy=st;
-  for(let v=Math.ceil(y0/dy)*dy;v<=y1+1e-9;v+=dy){
-   const yy=Y(v);
-
-   // Tick marks
-   x.beginPath();
-   x.moveTo(X(0)-4,yy);
-   x.lineTo(X(0)+4,yy);
-   x.stroke();
-
-   // Tick labels (skip zero, already marked by axis intersection)
-   if(Math.abs(v)>1e-9){
-    x.fillStyle='#e2f0f8';
-    x.textAlign='right';
-    x.fillText(+v.toFixed(1),X(0)-7,yy+4);
-   }
-  }
  }
+
+ // Time label just above the right-most end of the horizontal axis
+ x.fillStyle='#e2f0f8';
+ x.font='italic 13px Georgia';
+ x.textAlign='right';
+ x.textBaseline='bottom';
+ x.fillText('t',w-5,Y(0)-4);
 
  // Signals
  S.forEach(s=>{
@@ -1423,18 +1444,30 @@ for(let k=-2;k<=2;k++){
   ctx.fillText(value.toFixed(1),X(0)-7,yy);
 }
 
-    // Tick labels
+    // Horizontal-axis ticks and labels
     ctx.fillStyle = text;
+    ctx.strokeStyle = axis;
     ctx.font = '10px Arial';
     ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
 
     for(let t=-4;t<=4;t+=2){
-      ctx.fillText(t,X(t),mid+17);
+      const xx=X(t);
+
+      ctx.beginPath();
+      ctx.moveTo(xx,mid-4);
+      ctx.lineTo(xx,mid+4);
+      ctx.stroke();
+
+      ctx.fillText(String(t),xx,mid+7);
     }
 
+    // Time label just above the right-most end of the horizontal axis
     ctx.fillStyle=muted;
-    ctx.font='12px Arial';
-    ctx.fillText('Time (s)',(x1+x2)/2,y2+25);
+    ctx.font='italic 13px Georgia';
+    ctx.textAlign='right';
+    ctx.textBaseline='bottom';
+    ctx.fillText('t',x2-3,mid-5);
 
     // Curves
     function curve(fn,color,dashed=false){
@@ -1848,12 +1881,28 @@ W('conv',{
     ctx.stroke();
   }
 
-  // Horizontal-axis label
+  // Horizontal-axis ticks and labels
+  ctx.font = '10px Arial';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  ctx.fillStyle = '#a9bdce';
+  ctx.strokeStyle = '#dceaf5';
+
+  for (let t = xMin; t <= xMax; t += 1) {
+    const px = X(t);
+    ctx.beginPath();
+    ctx.moveTo(px, zeroY - 3);
+    ctx.lineTo(px, zeroY + 3);
+    ctx.stroke();
+    ctx.fillText(String(t), px, zeroY + 5);
+  }
+
+  // Time variable just above the right-most end of the horizontal axis
   ctx.font = 'italic 13px Georgia';
   ctx.textAlign = 'right';
   ctx.textBaseline = 'bottom';
   ctx.fillStyle = '#dceaf5';
-  ctx.fillText(xLabel, W - 5, H - 2);
+  ctx.fillText(xLabel, W - 5, zeroY - 4);
 
   ctx.restore();
 };
@@ -2003,12 +2052,28 @@ W('eig',{
     ctx.lineTo(zeroX,H);
     ctx.stroke();
 
-    // Time-axis label
+    // Horizontal-axis ticks and labels
+    ctx.font='10px Arial';
+    ctx.textAlign='center';
+    ctx.textBaseline='top';
+    ctx.fillStyle='#a9bdce';
+    ctx.strokeStyle='#dceaf5';
+
+    for(let t=-2;t<=2;t+=1){
+      const px=X(t);
+      ctx.beginPath();
+      ctx.moveTo(px,Y(0)-3);
+      ctx.lineTo(px,Y(0)+3);
+      ctx.stroke();
+      ctx.fillText(String(t),px,Y(0)+5);
+    }
+
+    // Time-axis label just above the right-most end of the axis
     ctx.font='italic 13px Georgia';
     ctx.textAlign='right';
     ctx.textBaseline='bottom';
     ctx.fillStyle='#dceaf5';
-    ctx.fillText('t',W-5,H-2);
+    ctx.fillText('t',W-5,Y(0)-4);
 
     ctx.restore();
 
