@@ -1513,18 +1513,15 @@ W('conv',{
     // HTML plot titles / legends
     const parent=c.parentElement;
 
-    if(parent&&!parent.querySelector('.conv-plot-titles')){
+    if(parent && !parent.querySelector('.test-plot-titles')){
       const titles=document.createElement('div');
-      titles.className='conv-plot-titles';
-
+      titles.className='test-plot-titles';
       titles.innerHTML=`
         <div>
-          <b>Input and overlap</b>
-          <span>x(τ): blue · h(t−τ): red · Product: green</span>
+          <span>Blue: x(τ); Red: h(t−τ); Shaded area: y(t)</span>
         </div>
         <div>
-          <b>Convolution output</b>
-          <span>x ⊛ h: blue · h ⊛ x: red dashed</span>
+          <span>Blue: x(t) ⊛ h(t); Red: Calculated value of y at time t</span>
         </div>
       `;
 
