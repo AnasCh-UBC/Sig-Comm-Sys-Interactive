@@ -818,7 +818,7 @@ header{align-items:center}
 <p>Test the systems below yourself, where 
   \[x_1(t)=\Lambda(t), y_1(t)=\mathcal{T}[x_1(t)], \quad x_2(t)=\Lambda(t-1), y_2(t)=\mathcal{T}[x_2(t)].\]
 </p>
-<p class="sub"> Do the two curves coincide?.</p>
+<p class="sub"> Do the two curves coincide?</p>
 
 <div data-w="test"></div>
 
@@ -1056,11 +1056,11 @@ function plot(c,S,x0,x1,y0,y1,r,tk){
  }
 
  // Horizontal grid and y-axis ticks. Choose a readable step that is
- // at least 0.25 and at least one-sixth of the largest y magnitude,
- // rounded UP to the next multiple of 0.25.
+ // at least 0.5 and at least one-sixth of the largest y magnitude,
+ // rounded UP to the next multiple of 0.5.
  const yAxisX=(x0<=0&&x1>=0)?X(0):0;
  const yMaxAbs=Math.max(Math.abs(y0),Math.abs(y1));
- const yStep=Math.ceil(Math.max(0.25,yMaxAbs/6)*4-1e-9)/4;
+ const yStep=Math.ceil(Math.max(0.5,yMaxAbs/6)*4-1e-9)/2;
  const firstYTick=Math.ceil(y0/yStep-1e-9);
  const lastYTick=Math.floor(y1/yStep+1e-9);
  for(let n=firstYTick;n<=lastYTick;n++){
@@ -1388,7 +1388,7 @@ W('test',{
 
     const X=t=>x1+(t+4)/8*(x2-x1);
     const Y=y=>mid-y/maxY*(y2-y1)/2;
-    const yStep=Math.ceil(Math.max(0.25,maxY/6)*4-1e-9)/4;
+    const yStep=Math.ceil(Math.max(0.5,maxY/6)*4-1e-9)/2;
 
     ctx.save();
 
@@ -1681,7 +1681,7 @@ plot(right,[
   g.textAlign = 'right';
   g.textBaseline = 'middle';
 
-  const yStep = Math.ceil(Math.max(0.25,Math.max(Math.abs(yMin),Math.abs(yMax))/6)*4-1e-9)/4;
+  const yStep = Math.ceil(Math.max(0.5,Math.max(Math.abs(yMin),Math.abs(yMax))/6)*4-1e-9)/2;
   for (let n = Math.ceil(yMin/yStep-1e-9); n <= Math.floor(yMax/yStep+1e-9); n++) {
     const value = +(n*yStep).toFixed(8);
     const y = canvas.height - (value - yMin) / (yMax - yMin) * canvas.height;
@@ -1845,7 +1845,7 @@ W('conv',{
   // Adaptive y-tick spacing: at least 0.25 and at least y-range/6,
   // rounded up to a multiple of 0.25.
   const yMaxAbs = Math.max(Math.abs(yMin), Math.abs(yMax));
-  const yStep = Math.ceil(Math.max(0.25, yMaxAbs/6)*4-1e-9)/4;
+  const yStep = Math.ceil(Math.max(0.5, yMaxAbs/6)*4-1e-9)/2;
 
   // Horizontal grid lines and vertical-axis tick labels
   ctx.font = '10px Arial';
@@ -2026,7 +2026,7 @@ W('eig',{
     ctx.textBaseline='middle';
     ctx.fillStyle='#a9bdce';
 
-    const yStep=Math.ceil(Math.max(0.25,m/6)*4-1e-9)/4;
+    const yStep=Math.ceil(Math.max(0.5,m/6)*4-1e-9)/2;
     for(let n=Math.ceil(-m/yStep-1e-9);n<=Math.floor(m/yStep+1e-9);n++){
       const value=+(n*yStep).toFixed(8);
       const py=Y(value);
