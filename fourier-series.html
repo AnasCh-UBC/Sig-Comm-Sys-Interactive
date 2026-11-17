@@ -551,20 +551,20 @@ header{align-items:center}
 <li><b>1</b><a href="#complex">Complex sinusoid: review</a></li><li><b>2</b><a href="#what-is-fs">What is Fourier series?</a></li><li><b>3</b><a href="#coefficients">Fourier coefficients and spectra</a></li><li><b>4</b><a href="#conditions">Properties and conditions</a></li><li><b>5</b><a href="#lti">Fourier series and LTI systems</a></li><li><b>6</b><a href="#parseval">Parseval’s relation</a></li><li><b>7</b><a href="#self-check">Self-assessment</a></li>
 </ol></div>
 
-<h2 id="complex"><small>1</small>Complex sinusoid: review</h2>
+<h2 id="complex"><small>1</small>Complex sinusoid: Review</h2>
 <div class="card"><h3>Complex numbers and Euler’s formula</h3>
   <ol>
     <li>Complex number in <b>rectangular form</b>: \(z=a+jb\), where \(a,b\in\mathbb R\) and \(j=\sqrt{-1}\)</li>
     <li>Complex number in <b>polar form</b>: \(z=re^{j\theta}=r\cos\theta+jr\sin\theta\) where \(r=|z|=\sqrt{a^2+b^2}\) and \(\theta=\angle z\)</li>
   </ol>
   <div class="eq-box">
-    <h3>Complex conjugate</h3>
-    <p>The complex conjugate of \(z\) is \(z^*=a-jb=re^{-j\theta}\)</p>
+    <b>Complex conjugate</b>: The complex conjugate of \(z\) is \(z^*=a-jb=re^{-j\theta}\)
   </div>
-  <p class="sub">The product of two complex numbers multiplies their magnitudes and adds their phases.</p>
-  <p class="sub">Thus: \(zz^*=|z|^2=r\)</p>
+  <p class="sub">The product of two complex numbers multiplies their magnitudes and adds their phases. Thus: \(zz^*=|z|^2=r\).</p>
+  <div class="eq">\[e^{j\theta}=\cos\theta+j\sin\theta,\qquad e^{-j\theta}=\cos\theta-j\sin\theta\]
+    \[\cos\theta=\frac{e^{j\theta}+e^{-j\theta}}{2},\qquad \sin(\theta)=\frac{e^{j\theta}-e^{-j\theta}}{2j}\]
+  </div>
 </div>
-<div class="eq">\[e^{j\theta}=\cos\theta+j\sin\theta,\qquad e^{-j\theta}=\cos\theta-j\sin\theta.\]</div>
 <div class="card"><h3>Complex sinusoid</h3><p>The signal \(x(t)=e^{j2\pi f_0t}\) rotates counterclockwise around the unit circle with angular frequency \(\omega_0=2\pi f_0\) rad/s. Its real and imaginary parts are cosine and sine:</p>
 <div class="eq">\[e^{j2\pi f_0t}=\cos(2\pi f_0t)+j\sin(2\pi f_0t).\]</div>
 <p>Its period is \(T_0=1/f_0\). The signals \(e^{j2\pi kf_0t}\), for integer \(k\), are harmonically related; the \(k\)-th harmonic has frequency \(kf_0\).</p></div>
