@@ -962,9 +962,18 @@ synthesis();
 function coeff(k,D){if(k===0)return D;let a=Math.sin(Math.PI*k*D)/(Math.PI*k);return a;}
 function spectrum(){let D=+$('duty').value,K=+$('specK').value;$('dutyVal').textContent=D.toFixed(2);$('specKVal').textContent=K;let ks=Array.from({length:2*K+1},(_,i)=>i-K),vals=ks.map(k=>coeff(k,D));for(let [id,mode] of [['magCanvas','mag'],['phaseCanvas','phase']]){let c=$(id).getContext('2d'),W=$(id).width,H=$(id).height,max=mode==='mag'?Math.max(.2,...vals.map(Math.abs))*1.2:Math.PI*1.15,m=axes(c,W,H,-K-.7,K+.7,mode==='mag'?0:-max,mode==='mag'?max:max,2,mode==='mag'?Math.max(.05,max/4):Math.PI/2,'harmonic k',mode==='mag'?'|xₖ|':'phase');ks.forEach((k,i)=>{let a=vals[i],ph=Math.atan2(0,a);if(mode==='phase'&&Math.abs(a)>1e-5)ph=a<0?Math.PI:0;let y=mode==='mag'?Math.abs(a):ph,xx=m.X(k);c.strokeStyle=mode==='mag'?'#55c8f2':'#ff6b78';c.lineWidth=3;c.beginPath();c.moveTo(xx,m.Y(0));c.lineTo(xx,m.Y(y));c.stroke();c.fillStyle=mode==='mag'?'#55c8f2':'#ff6b78';c.beginPath();c.arc(xx,m.Y(y),3.5,0,TAU);c.fill();});}$('specReadout').textContent=`For a centered pulse of duty cycle D = ${D.toFixed(2)}, x₀ = D and xₖ = sin(πkD)/(πk), k ≠ 0. The coefficients are real here, so phases are 0 or π (apart from zero coefficients).`;}
 ['duty','specK'].forEach(id=>$(id).addEventListener('input',spectrum));spectrum();
-//-----
-//function gibbs(){let K=+$('gibbsK').value;$('gibbsKVal').textContent=K;let c=$('gibbsCanvas').getContext('2d'),W=$('gibbsCanvas').width,H=$('gibbsCanvas').height,m=axes(c,W,H,-1.5,1.5,-1.5,1.5,.25,.5,'t / T₀');m.W=W;m.xmin=-1.5;m.xmax=1.5;curve(c,m,t=>squareSum(t,K),'#55c8f2');curve(c,m,t=>Math.sin(TAU*t)>=0?1:-1,'#ff6b78',[6,5]);$('gibbsReadout').textContent=`Using ${K} odd harmonics. As K increases, the approximation improves away from the jumps; the overshoot near a jump persists while becoming more localized.`;}
-//$('gibbsK').addEventListener('input',gibbs);gibbs();
+/*/-----
+function gibbs(){
+  let K=+$('gibbsK').value;
+  $('gibbsKVal').textContent=K;
+  let c=$('gibbsCanvas').getContext('2d'),W=$('gibbsCanvas').width,H=$('gibbsCanvas').height,
+  m=axes(c,W,H,-1.5,1.5,-1.5,1.5,.25,.5,'t / T₀');
+  m.W=W;m.xmin=-1.5;m.xmax=1.5;curve(c,m,t=>squareSum(t,K),'#55c8f2');
+  curve(c,m,t=>Math.sin(TAU*t)>=0?1:-1,'#ff6b78',[6,5]);
+  $('gibbsReadout').textContent=`Using ${K} odd harmonics. 
+  As K increases, the approximation improves away from the jumps; the overshoot near a jump persists while becoming more localized.`;}
+$('gibbsK').addEventListener('input',gibbs);gibbs();
+*/
 
 // LTI system h(t)=exp(-a t)u(t), H(f)=1/(a+j2πf)
 function lti(){let f=+$('ltiFreq').value,a=+$('ltiA').value,K=+$('ltiTerms').value;$('ltiFreqVal').textContent=f.toFixed(1)+' Hz';$('ltiAVal').textContent=a.toFixed(1);$('ltiTermsVal').textContent=K;let c=$('ltiCanvas').getContext('2d'),W=$('ltiCanvas').width,H=$('ltiCanvas').height,m=axes(c,W,H,-1.5/f,1.5/f,-1.5,1.5,.25/f,.5,'t (s)');m.W=W;m.xmin=-1.5/f;m.xmax=1.5/f;let input=t=>squareSum(t,K,f),output=t=>{let s=0;for(let n=1;n<=K;n+=2){let om=TAU*n*f,mag=1/Math.hypot(a,om),phase=-Math.atan2(om,a);s+=4/Math.PI/n*mag*Math.sin(om*t+phase);}return s;};curve(c,m,input,'#ff6b78',[6,5]);curve(c,m,output,'#55c8f2');$('ltiReadout').textContent=`The input square-wave harmonics are each multiplied by H(kf₀) = 1/(a + j2πkf₀). Larger a reduces the relative attenuation and phase lag; increasing f₀ moves harmonics further into the system's attenuated range.`;}
@@ -1759,7 +1768,7 @@ window.addEventListener('load',()=>{if(window.MathJax?.typesetPromise)window.Mat
         const m = axes(
           ctx, W, H,
           -K - 0.7, K + 0.7,
-          mode === 'mag' ? -0.12*max : -max,
+          mode === 'mag' ? -0.35*max : -max,
           max,
           2,
           mode === 'mag' ? Math.max(0.05, max / 4) : Math.PI / 2,
