@@ -1662,43 +1662,6 @@ plot(right,[
   {f:yA,c:'b',d:[5,4],lw:2}
 ],-1,6,-.3,1.3);
 
-// Add vertical-axis ticks and labels to both plots
-[left, right].forEach(canvas => {
-  const g = canvas.getContext('2d');
-
-  const yMin = -0.3;
-  const yMax = 1.3;
-  const yAxis = canvas.height - (0 - yMin) / (yMax - yMin) * canvas.height;
-
-  // Position of the vertical axis at t = 0
-  const xAxis = (0 - (-1)) / (6 - (-1)) * canvas.width;
-
-  g.save();
-  g.strokeStyle = '#e2f0f8';
-  g.fillStyle = '#e2f0f8';
-  g.lineWidth = 1;
-  g.font = '11px system-ui';
-  g.textAlign = 'right';
-  g.textBaseline = 'middle';
-
-  const yStep = Math.ceil(Math.max(0.5,Math.max(Math.abs(yMin),Math.abs(yMax))/6)*4-1e-9)/2;
-  for (let n = Math.ceil(yMin/yStep-1e-9); n <= Math.floor(yMax/yStep+1e-9); n++) {
-    const value = +(n*yStep).toFixed(8);
-    const y = canvas.height - (value - yMin) / (yMax - yMin) * canvas.height;
-
-    // Tick mark on the vertical axis
-    g.beginPath();
-    g.moveTo(xAxis - 4, y);
-    g.lineTo(xAxis + 4, y);
-    g.stroke();
-
-    // Tick label
-    g.fillText(value.toFixed(2).replace(/\.?0+$/, ''), xAxis - 7, y);
-  }
-
-  g.restore();
-});
-
     // Draw both plots side by side
     ctx.drawImage(left,0,0);
     ctx.drawImage(right,370,0);
