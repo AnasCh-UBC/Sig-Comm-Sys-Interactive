@@ -827,9 +827,22 @@ header{align-items:center}
 
 
 <h2 id="conditions"><small>4</small>Properties and conditions</h2>
-<div class="card"><h3>Real-valued signals: Hermitian symmetry</h3><p>If \(x(t)\) is real-valued, its Fourier coefficients satisfy</p><div class="eq">\[x_{-k}=x_k^*.\]</div><p>Consequently, \(|x_k|\) is even and \(\angle x_k\) is odd. A real signal can also be represented using cosine terms and phase shifts:</p><div class="eq">\[x(t)=x_0+\sum_{k=1}^{\infty}2|x_k|\cos(2\pi kf_0t+\angle x_k).\]</div></div>
+<div class="card">
+  <h3>Real-valued signals: Hermitian symmetry</h3>
+  <p>If \(x(t)\) is real-valued, its Fourier coefficients satisfy \(x_{-k}=x_k^*.\)</p>
+  <p class="sub">Consequently, \(|x_k|\) is even and \(\angle x_k\) is odd.</p> 
+  <p>A real signal can also be represented using cosine terms and phase shifts:</p>
+  <div class="eq">\[x(t)=x_0+\sum_{k=1}^{\infty}2|x_k|\cos(2\pi kf_0t+\angle x_k).\]</div>
+</div>
+<div class="card">
+  <h3>Trigonometric Fourier series</h3>
+  <p class="sub">Real-valued signals have a trigonometic Fourier series representation.</p>
+  <div class="eq">\[x(t)=\frac{a_0}{2}+\sum_{k=1}^{\infty}\left[a_k\cos(2\pi kf_0t)+b_k\sin(2\pi kf_0t)\right],\]</div>
+  <p>where, over any one period \(a_k=\frac{2}{T_0}\int_{\tau}^{\tau+T_0}x(t)\cos(2\pi kf_0t)\,dt\) 
+    and \(b_k=\frac{2}{T_0}\int_{\tau}^{\tau+T_0}x(t)\sin(2\pi kf_0t)\,dt.\)</p>
+</div>
+
 <div class="grid"><div class="tile"><b class="tag">Even signals</b><p>For an even signal, the sine coefficients are zero. Its trigonometric Fourier series contains cosine terms only.</p></div><div class="tile"><b class="tag">Odd signals</b><p>For an odd signal, the cosine coefficients (including DC) are zero. Its trigonometric Fourier series contains sine terms only.</p></div></div>
-<div class="card"><h3>Trigonometric Fourier series</h3><div class="eq">\[x(t)=\frac{a_0}{2}+\sum_{k=1}^{\infty}\left[a_k\cos(2\pi kf_0t)+b_k\sin(2\pi kf_0t)\right],\]</div><p>where, over any one period,</p><div class="eq">\[a_k=\frac{2}{T_0}\int_{\tau}^{\tau+T_0}x(t)\cos(2\pi kf_0t)\,dt,\quad b_k=\frac{2}{T_0}\int_{\tau}^{\tau+T_0}x(t)\sin(2\pi kf_0t)\,dt.\]</div></div>
 <div class="callout"><b>Dirichlet conditions.</b> These are sufficient (but not necessary) conditions for a Fourier series to exist: over one period, (1) \(x(t)\) is absolutely integrable, (2) it has a finite number of maxima and minima, and (3) it has a finite number of discontinuities.</div>
 <div class="card"><h3>Discontinuities and Gibbs phenomenon</h3><p>Fourier series can represent periodic signals with jumps. Near a discontinuity, finite partial sums exhibit oscillatory overshoot; increasing the number of harmonics makes the oscillations narrower, but the peak overshoot does not disappear entirely.</p></div>
 <div class="fs-demo" id="gibbsDemo"><h3>Interactive: Fourier approximation near a jump</h3><div class="fs-controls"><label>Odd harmonics included <input id="gibbsK" type="range" min="1" max="51" step="2" value="9"><b id="gibbsKVal">9</b></label></div><canvas id="gibbsCanvas" class="fs-canvas" width="900" height="280"></canvas><p class="fs-readout" id="gibbsReadout"></p></div>
@@ -1725,7 +1738,7 @@ window.addEventListener('load',()=>{if(window.MathJax?.typesetPromise)window.Mat
         const m = axes(
           ctx, W, H,
           -K - 0.7, K + 0.7,
-          mode === 'mag' ? 0 : -max,
+          mode === 'mag' ? -0.12*max : -max,
           max,
           2,
           mode === 'mag' ? Math.max(0.05, max / 4) : Math.PI / 2,
