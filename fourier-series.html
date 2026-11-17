@@ -617,10 +617,10 @@ header{align-items:center}
 
 
 <h2 id="what-is-fs"><small>2</small>What is Fourier series?</h2>
-<p class="sub">What is the shape of \(\sum_{k=-\infty}{\infty}x_k e^{j2\pi kf_0 t}\) for some <b>fundamental frequency</b> \(f_0\) and complex \(x_k\)?</p>
+<p class="sub">What is the shape of \(\sum_{k=-\infty}^{\infty}x_k e^{j2\pi kf_0 t}\) for some <b>fundamental frequency</b> \(f_0\) and complex \(x_k\)?</p>
 <!-- signal synthesis explorer-->
 <div class="fs-demo" id="fourierSynthesisDemo">
-  <h3>Explore: Synthesizing a signal using Fourier coefficients</h3>
+  <h3>Explore: Synthesizing a signal using Sinusoids</h3>
   <p class="fs-readout">
     <b>Assumption:</b> To simplify, all coefficients in this example are real and
     \(x_{-k}=x_k\). This is not required in general!</p>
@@ -671,13 +671,27 @@ header{align-items:center}
   </div>
 </div>
 
-<div class="card"><h3>From pulses to harmonically related sinusoids</h3>
-  <p>The signals \(e^{j2\pi kf_0t}\), for integer \(k\), are harmonically related; the \(k\)-th harmonic has frequency \(kf_0\).</p>
-  <p>We have represented signals as sums of shifted pulses to analyze convolution. A complementary idea is to represent a <b>periodic</b> signal as a sum of complex sinusoids. Complex exponentials are eigenfunctions of LTI systems, so this representation makes system analysis especially convenient.</p>
-<div class="eq">\[\boxed{x(t)=\sum_{k=-\infty}^{\infty}x_k e^{j2\pi kf_0t}}\qquad T_0=\frac{1}{f_0}.\]</div>
-<p>This is the <b>complex exponential Fourier series</b>. The coefficients \(x_k\) describe how much of each harmonic is present. The constant term \(x_0\) is the average (DC) value.</p></div>
-<div class="card"><h3>Synthesis: build a signal from harmonics</h3><p>For example, the first few terms are</p><div class="eq">\[x(t)=x_0+x_1e^{j2\pi f_0t}+x_{-1}e^{-j2\pi f_0t}+x_2e^{j2\pi 2f_0t}+x_{-2}e^{-j2\pi 2f_0t}+\cdots\]</div><p>Every term has period \(T_0\), so their sum is also periodic with period \(T_0\).</p></div>
-<div class="fs-demo" id="synthesisDemo"><h3>Interactive: synthesize a square wave</h3><div class="fs-controls"><label>Number of odd harmonics <input id="harmonics" type="range" min="1" max="31" step="2" value="5"><b id="harmonicsVal">5</b></label><label>Fundamental frequency <input id="synthFreq" type="range" min="0.5" max="2" step="0.25" value="1"><b id="synthFreqVal">1 Hz</b></label></div><canvas id="synthCanvas" class="fs-canvas" width="900" height="300"></canvas><p class="fs-readout" id="synthReadout">The partial sum uses the first selected odd harmonics. Increase the number of terms to see the approximation sharpen.</p></div>
+<div class="card"><h3>Periodic signals from harmonically related sinusoids</h3>
+  <p>We can construct a periodic signal with frequency \(f_0\) using \(e^{j2\pi f_0 t\}\) and its harmoics!</p>
+  <div class="tile">
+    Signals of the form \(e^{j2\pi kf_0t}\), for integer \(k\), are harmonically related; the \(k\)-th harmonic has frequency \(kf_0\).
+  </div>
+  <div class="eq">
+    The sum
+    \(x(t)=\sum_{k=-\infty}^{\infty}x_k e^{j2\pi kf_0t}\) is called a Fourier series.
+  </div>
+  <p class="sub"> The coefficients \(x_k\) describe 'how much' of each harmonic is present. The constant term \(x_0\) is the average (DC) value.</p>
+</div>
+<div class="fs-demo" id="synthesisDemo"><h3>Interactive: Synthesize a square wave</h3>
+  <p class="fs-readout">
+    Select the number of harmonics to add. Values of \(x_k\) have been pre-loaded.
+  </p>
+  <div class="fs-controls">
+    <label>Number of odd harmonics <input id="harmonics" type="range" min="1" max="31" step="2" value="5"><b id="harmonicsVal">5</b></label>
+    <label>Fundamental frequency <input id="synthFreq" type="range" min="0.5" max="2" step="0.25" value="1"><b id="synthFreqVal">1 Hz</b></label>
+  </div>
+  <canvas id="synthCanvas" class="fs-canvas" width="900" height="300"></canvas><p class="fs-readout" id="synthReadout">The partial sum uses the first selected odd harmonics. Increase the number of terms to see the approximation sharpen.</p>
+</div>
 
 <h2 id="coefficients"><small>3</small>Fourier coefficients and spectra</h2>
 <div class="card"><h3>Analysis: calculate the coefficients</h3><p>Given a periodic signal \(x(t)\), its Fourier coefficient at harmonic \(k\) is obtained by projecting the signal onto the corresponding complex exponential over any one period:</p>
@@ -731,10 +745,62 @@ function phasor(){let f=+$('phFreq').value,t=+$('phTime').value; $('phFreqVal').
  let q=$('phasorTime').getContext('2d'),w=$('phasorTime').width,h=$('phasorTime').height,m=axes(q,w,h,0,2,-1.25,1.25,.25,.5,'t (s)');for(let [fn,col] of [[z=>Math.cos(TAU*f*z),'#55c8f2'],[z=>Math.sin(TAU*f*z),'#ff6b78']]){q.beginPath();q.strokeStyle=col;q.lineWidth=2.2;for(let i=0;i<=w;i++){let z=2*i/w;i?q.lineTo(m.X(z),m.Y(fn(z))):q.moveTo(m.X(z),m.Y(fn(z)));}q.stroke();}q.strokeStyle='#62d99a';q.setLineDash([4,4]);q.beginPath();q.moveTo(m.X(t),0);q.lineTo(m.X(t),h);q.stroke();q.setLineDash([]);$('phReadout').innerHTML='At this instant, \\(e^{j2\\pi f_0t}= '+Math.cos(ang).toFixed(3)+' + j'+Math.sin(ang).toFixed(3)+'\\). The phasor angle is '+(ang%(TAU)).toFixed(2)+' rad.';typeset($('phReadout'));}
 function typeset(el){if(window.MathJax?.typesetPromise)window.MathJax.typesetPromise([el]).catch(()=>{});}
 ['phFreq','phTime'].forEach(id=>$(id).addEventListener('input',phasor));phasor();
+
 // Square-wave synthesis using odd cosine-free sine harmonics
-function squareSum(t,K,f=1){let s=0;for(let n=1;n<=K;n+=2)s+=4/Math.PI*Math.sin(TAU*n*f*t)/n;return s;}
-function synthesis(){let K=+$('harmonics').value,f=+$('synthFreq').value;$('harmonicsVal').textContent=K;$('synthFreqVal').textContent=f+' Hz';let c=$('synthCanvas').getContext('2d'),W=$('synthCanvas').width,H=$('synthCanvas').height,m=axes(c,W,H,-1.5/f,1.5/f,-1.6,1.6,.25/f,.5);m.W=W;m.xmin=-1.5/f;m.xmax=1.5/f;curve(c,m,t=>squareSum(t,K,f),'#55c8f2');curve(c,m,t=>Math.sin(TAU*f*t)>=0?1:-1,'#ff6b78',[6,5]);$('synthReadout').textContent=`The partial sum includes ${K} odd harmonics. The red dashed curve is the ideal ±1 square wave. Notice the overshoot near each jump (Gibbs phenomenon).`;}
-['harmonics','synthFreq'].forEach(id=>$(id).addEventListener('input',synthesis));synthesis();
+function squareSum(t, K, f = 1) {
+  let s = 0;
+  for (let n = 1; n <= K; n += 2) {
+    s += 4 / Math.PI * Math.sin(TAU * n * f * t) / n;
+  }
+  return s;
+}
+
+function synthesis() {
+  let K = +$('harmonics').value;
+  let f = +$('synthFreq').value;
+
+  $('harmonicsVal').textContent = K;
+  $('synthFreqVal').textContent = f + ' Hz';
+
+  let c = $('synthCanvas').getContext('2d');
+  let W = $('synthCanvas').width;
+  let H = $('synthCanvas').height;
+
+  // Fixed time-axis limits: independent of frequency
+  const tMin = -2 * Math.PI;
+  const tMax =  2 * Math.PI;
+
+  // Fixed horizontal tick spacing
+  let m = axes(c, W, H, tMin, tMax, -1.6, 1.6, Math.PI / 2, 0.5);
+
+  m.W = W;
+  m.xmin = tMin;
+  m.xmax = tMax;
+
+  // Synthesized signal: frequency changes the harmonics
+  curve(c, m, t => squareSum(t, K, f), '#55c8f2');
+
+  // Ideal square wave at the selected frequency
+  curve(
+    c,
+    m,
+    t => Math.sin(TAU * f * t) >= 0 ? 1 : -1,
+    '#ff6b78',
+    [6, 5]
+  );
+
+  $('synthReadout').textContent =
+    `The partial sum includes ${K} odd harmonics. ` +
+    `The red dashed curve is the ideal ±1 square wave. ` +
+    `The fundamental frequency is ${f} Hz. `;
+}
+
+['harmonics', 'synthFreq'].forEach(id =>
+  $(id).addEventListener('input', synthesis)
+);
+
+synthesis();
+
 // Fourier coefficients for a centered rectangular pulse, period 1, duty D
 function coeff(k,D){if(k===0)return D;let a=Math.sin(Math.PI*k*D)/(Math.PI*k);return a;}
 function spectrum(){let D=+$('duty').value,K=+$('specK').value;$('dutyVal').textContent=D.toFixed(2);$('specKVal').textContent=K;let ks=Array.from({length:2*K+1},(_,i)=>i-K),vals=ks.map(k=>coeff(k,D));for(let [id,mode] of [['magCanvas','mag'],['phaseCanvas','phase']]){let c=$(id).getContext('2d'),W=$(id).width,H=$(id).height,max=mode==='mag'?Math.max(.2,...vals.map(Math.abs))*1.2:Math.PI*1.15,m=axes(c,W,H,-K-.7,K+.7,mode==='mag'?0:-max,mode==='mag'?max:max,2,mode==='mag'?Math.max(.05,max/4):Math.PI/2,'harmonic k',mode==='mag'?'|xₖ|':'phase');ks.forEach((k,i)=>{let a=vals[i],ph=Math.atan2(0,a);if(mode==='phase'&&Math.abs(a)>1e-5)ph=a<0?Math.PI:0;let y=mode==='mag'?Math.abs(a):ph,xx=m.X(k);c.strokeStyle=mode==='mag'?'#55c8f2':'#ff6b78';c.lineWidth=3;c.beginPath();c.moveTo(xx,m.Y(0));c.lineTo(xx,m.Y(y));c.stroke();c.fillStyle=mode==='mag'?'#55c8f2':'#ff6b78';c.beginPath();c.arc(xx,m.Y(y),3.5,0,TAU);c.fill();});}$('specReadout').textContent=`For a centered pulse of duty cycle D = ${D.toFixed(2)}, x₀ = D and xₖ = sin(πkD)/(πk), k ≠ 0. The coefficients are real here, so phases are 0 or π (apart from zero coefficients).`;}
