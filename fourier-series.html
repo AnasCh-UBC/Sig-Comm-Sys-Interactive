@@ -1170,8 +1170,8 @@ window.addEventListener('load',()=>{if(window.MathJax?.typesetPromise)window.Mat
     ctx.clearRect(0, 0, w, h);
 
     // Plot limits: one fundamental period, from -π to π.
-    const tMin = -Math.PI;
-    const tMax = Math.PI;
+    const tMin = -2*Math.PI;
+    const tMax = 2*Math.PI;
 
     const left = 55;
     const right = w - 20;
@@ -1203,11 +1203,11 @@ window.addEventListener('load',()=>{if(window.MathJax?.typesetPromise)window.Mat
 
     // Vertical grid lines and time labels.
     const ticks = [
+      [-2 * Math.PI, '−2π'],
       [-Math.PI, '−π'],
-      [-Math.PI / 2, '−π/2'],
       [0, '0'],
-      [Math.PI / 2, 'π/2'],
-      [Math.PI, 'π']
+      [Math.PI, 'π'],
+      [2 * Math.PI, '2π']
     ];
 
     ctx.font = '12px Arial';
