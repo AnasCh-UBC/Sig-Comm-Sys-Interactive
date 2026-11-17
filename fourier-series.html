@@ -786,7 +786,7 @@ header{align-items:center}
   </p>
 </div>
 <div class="fs-demo" id="spectrumDemo">
-  <h3>Interactive 3.1: Time-domain signal and magnitude and phase spectra of a periodic pulse train</h3>
+  <h3>Interactive 3.1: Magnitude and phase spectra of a periodic pulse train</h3>
 
   <div class="fs-controls">
     <label>
@@ -863,9 +863,9 @@ header{align-items:center}
   </p>
   <p class="sub">Explore this using the Interactive 2.2 example above.</p>
 </div>
-<!--
+
 <div class="fs-demo" id="gibbsDemo"><h3>Interactive: Fourier approximation near a jump</h3><div class="fs-controls"><label>Odd harmonics included <input id="gibbsK" type="range" min="1" max="51" step="2" value="9"><b id="gibbsKVal">9</b></label></div><canvas id="gibbsCanvas" class="fs-canvas" width="900" height="280"></canvas><p class="fs-readout" id="gibbsReadout"></p></div>
--->
+
 
 <h2 id="lti"><small>5</small>Fourier series and LTI systems</h2>
 <div class="card"><h3>Periodic input to an LTI system</h3><p>Complex exponentials are eigenfunctions of LTI systems. If the input is periodic with Fourier series \(x(t)=\sum_k x_ke^{j2\pi kf_0t}\), then the output is</p><div class="eq">\[\boxed{y(t)=\sum_{k=-\infty}^{\infty}x_kH(kf_0)e^{j2\pi kf_0t}.}\]</div><p>Here \(H(f)=\int_{-\infty}^{\infty}h(t)e^{-j2\pi ft}\,dt\) is the frequency response. The output coefficient at harmonic \(k\) is \(x_kH(kf_0)\). An LTI system changes the amplitude and phase of existing harmonics; it does not create new frequencies.</p></div>
