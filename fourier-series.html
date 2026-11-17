@@ -530,7 +530,7 @@ header{align-items:center}
 .fs-canvas{display:block;width:100%;height:auto;border:1px solid rgba(85,200,242,.38);border-radius:8px;background:#05090f}
 .fs-readout{font-size:.88rem;color:var(--mut);margin:8px 0 0}
 .fs-two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.fs-panel{min-width:0}.fs-panel b{display:block;color:#dceaf5;font-size:.82rem;margin:0 0 5px;text-align:center}
+.fs-panel{min-width:0}.fs-panel b{display:block;color:#2f6e9e;font-size:.82rem;margin:0 0 5px;text-align:center}
 @media(max-width:650px){.fs-two{grid-template-columns:1fr}.fs-controls label{width:100%;justify-content:space-between}.fs-controls input[type=range]{width:45%}}
 </style>
 <script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},svg:{fontCache:'global'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script></head><body>
@@ -565,13 +565,19 @@ header{align-items:center}
     \[\cos\theta=\frac{e^{j\theta}+e^{-j\theta}}{2},\qquad \sin(\theta)=\frac{e^{j\theta}-e^{-j\theta}}{2j}\]
   </div>
 </div>
-<div class="card"><h3>Complex sinusoid</h3><p>The signal \(x(t)=e^{j2\pi f_0t}\) rotates counterclockwise around the unit circle with angular frequency \(\omega_0=2\pi f_0\) rad/s. Its real and imaginary parts are cosine and sine:</p>
-<div class="eq">\[e^{j2\pi f_0t}=\cos(2\pi f_0t)+j\sin(2\pi f_0t).\]</div>
-<p>Its period is \(T_0=1/f_0\). The signals \(e^{j2\pi kf_0t}\), for integer \(k\), are harmonically related; the \(k\)-th harmonic has frequency \(kf_0\).</p></div>
+
+<div class="card"><h3>Complex sinusoid</h3>
+  <p>The signal \(e^{j2\pi f_0t}\) is a complex sinusoidal signal. 
+    It rotates counterclockwise around the unit circle with angular frequency \(\omega_0=2\pi f_0\) rad/s.</p> 
+  <p class="sub">Its real and imaginary parts are cosine and sine with frequency \(f_0\), period \(T_0=\frac{1}{f_0}\):</p>
+  <div class="eq">\[e^{j2\pi f_0t}=\cos(2\pi f_0t)+j\sin(2\pi f_0t).\]</div>
+</div>
 <div class="fs-demo" id="phasorDemo"><h3>Interactive: rotating complex sinusoid</h3><div class="fs-controls"><label>Frequency \(f_0\) <input id="phFreq" type="range" min="0.2" max="2" step="0.1" value="0.5"><b id="phFreqVal">0.5 Hz</b></label><label>Time \(t\) <input id="phTime" type="range" min="0" max="2" step="0.01" value="0.35"><b id="phTimeVal">0.35 s</b></label></div><div class="fs-two"><div class="fs-panel"><b>Complex plane</b><canvas id="phasorPlane" class="fs-canvas" width="600" height="270"></canvas></div><div class="fs-panel"><b>Real and imaginary parts versus time</b><canvas id="phasorTime" class="fs-canvas" width="600" height="270"></canvas></div></div><p class="fs-readout" id="phReadout"></p></div>
 
 <h2 id="what-is-fs"><small>2</small>What is Fourier series?</h2>
-<div class="card"><h3>From pulses to harmonically related sinusoids</h3><p>We have represented signals as sums of shifted pulses to analyze convolution. A complementary idea is to represent a <b>periodic</b> signal as a sum of complex sinusoids. Complex exponentials are eigenfunctions of LTI systems, so this representation makes system analysis especially convenient.</p>
+<div class="card"><h3>From pulses to harmonically related sinusoids</h3>
+  <p>The signals \(e^{j2\pi kf_0t}\), for integer \(k\), are harmonically related; the \(k\)-th harmonic has frequency \(kf_0\).</p>
+  <p>We have represented signals as sums of shifted pulses to analyze convolution. A complementary idea is to represent a <b>periodic</b> signal as a sum of complex sinusoids. Complex exponentials are eigenfunctions of LTI systems, so this representation makes system analysis especially convenient.</p>
 <div class="eq">\[\boxed{x(t)=\sum_{k=-\infty}^{\infty}x_k e^{j2\pi kf_0t}}\qquad T_0=\frac{1}{f_0}.\]</div>
 <p>This is the <b>complex exponential Fourier series</b>. The coefficients \(x_k\) describe how much of each harmonic is present. The constant term \(x_0\) is the average (DC) value.</p></div>
 <div class="card"><h3>Synthesis: build a signal from harmonics</h3><p>For example, the first few terms are</p><div class="eq">\[x(t)=x_0+x_1e^{j2\pi f_0t}+x_{-1}e^{-j2\pi f_0t}+x_2e^{j2\pi 2f_0t}+x_{-2}e^{-j2\pi 2f_0t}+\cdots\]</div><p>Every term has period \(T_0\), so their sum is also periodic with period \(T_0\).</p></div>
