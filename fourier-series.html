@@ -786,7 +786,7 @@ header{align-items:center}
   </p>
 </div>
 <div class="fs-demo" id="spectrumDemo">
-  <h3>Interactive: time-domain signal and magnitude and phase spectra of a periodic pulse train</h3>
+  <h3>Interactive: Time-domain signal and magnitude and phase spectra of a periodic pulse train</h3>
 
   <div class="fs-controls">
     <label>
@@ -1545,241 +1545,264 @@ window.addEventListener('load',()=>{if(window.MathJax?.typesetPromise)window.Mat
 })();
 
 
+(function () {
+  // Keep all variables and functions local to this demo
+  function initPulseSpectrumDemo() {
+    const root = document.getElementById('spectrumDemo');
+    if (!root || root.dataset.initialized === 'true') return;
 
-//-------------------------
-// PULSE SPECTRUM DEMO
-//-------------------------
+    root.dataset.initialized = 'true';
 
-// Fourier coefficients of a centered periodic rectangular pulse
-function pulseSpectrumCoeff(k, D) {
-  if (k === 0) return D;
-  return Math.sin(Math.PI * k * D) / (Math.PI * k);
-}
+    const get = id => root.querySelector('#' + id);
 
+    const dutyInput = get('duty');
+    const harmonicInput = get('specK');
+    const timeCanvas = get('timeCanvas');
+    const magCanvas = get('magCanvas');
+    const phaseCanvas = get('phaseCanvas');
 
-// Draw the time-domain pulse train
-function drawPulseTimeDomain(D) {
-  const canvas = document.getElementById('timeCanvas');
-
-  if (!canvas) {
-    console.error('timeCanvas was not found.');
-    return;
-  }
-
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
-
-  const W = canvas.width;
-  const H = canvas.height;
-
-  const left = 55;
-  const right = 20;
-  const top = 22;
-  const bottom = 35;
-
-  const tMin = -1.5;
-  const tMax = 1.5;
-
-  const X = t =>
-    left + (t - tMin) / (tMax - tMin) * (W - left - right);
-
-  const Y = v =>
-    top + (1.2 - v) / 1.5 * (H - top - bottom);
-
-  // Clear canvas
-  ctx.clearRect(0, 0, W, H);
-
-  // Background
-  ctx.fillStyle = '#111827';
-  ctx.fillRect(0, 0, W, H);
-
-  // Horizontal grid lines
-  ctx.strokeStyle = '#354456';
-  ctx.lineWidth = 1;
-
-  [0, 0.5, 1].forEach(v => {
-    ctx.beginPath();
-    ctx.moveTo(left, Y(v));
-    ctx.lineTo(W - right, Y(v));
-    ctx.stroke();
-  });
-
-  // Vertical grid lines
-  [-1, -0.5, 0.5, 1].forEach(t => {
-    ctx.beginPath();
-    ctx.moveTo(X(t), top);
-    ctx.lineTo(X(t), H - bottom);
-    ctx.stroke();
-  });
-
-  // Axes
-  ctx.strokeStyle = '#d0d8e2';
-  ctx.lineWidth = 1.5;
-
-  ctx.beginPath();
-  ctx.moveTo(left, Y(0));
-  ctx.lineTo(W - right, Y(0));
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.moveTo(X(0), top);
-  ctx.lineTo(X(0), H - bottom);
-  ctx.stroke();
-
-  // Axis labels and tick labels
-  ctx.fillStyle = '#d0d8e2';
-  ctx.font = '12px Arial';
-
-  ctx.textAlign = 'center';
-
-  [-1.5, -1, -0.5, 0, 0.5, 1, 1.5].forEach(t => {
-    const x = X(t);
-
-    ctx.beginPath();
-    ctx.moveTo(x, Y(0) - 4);
-    ctx.lineTo(x, Y(0) + 4);
-    ctx.stroke();
-
-    ctx.fillText(t.toFixed(1), x, H - 12);
-  });
-
-  ctx.textAlign = 'right';
-
-  [0, 0.5, 1].forEach(v => {
-    ctx.fillText(v.toFixed(1), left - 8, Y(v) + 4);
-  });
-
-  ctx.textAlign = 'left';
-  ctx.fillText('Amplitude', left, 14);
-
-  ctx.textAlign = 'right';
-  ctx.fillText('Time (t)', W - right, H - 12);
-
-  // Draw the centered periodic rectangular pulses
-  ctx.strokeStyle = '#55c8f2';
-  ctx.lineWidth = 3;
-  ctx.lineCap = 'butt';
-
-  for (let n = -2; n <= 2; n++) {
-    const start = n - D / 2;
-    const end = n + D / 2;
-
-    // Top horizontal part of pulse
-    const a = Math.max(start, tMin);
-    const b = Math.min(end, tMax);
-
-    if (a < b) {
-      ctx.beginPath();
-      ctx.moveTo(X(a), Y(1));
-      ctx.lineTo(X(b), Y(1));
-      ctx.stroke();
+    if (!dutyInput || !harmonicInput || !timeCanvas ||
+        !magCanvas || !phaseCanvas) {
+      console.error('Pulse spectrum demo: one or more HTML elements are missing.');
+      return;
     }
 
-    // Rising edge
-    if (start >= tMin && start <= tMax) {
-      ctx.beginPath();
-      ctx.moveTo(X(start), Y(0));
-      ctx.lineTo(X(start), Y(1));
-      ctx.stroke();
+    // Fourier coefficients of a centered rectangular pulse
+    function coefficient(k, D) {
+      if (k === 0) return D;
+      return Math.sin(Math.PI * k * D) / (Math.PI * k);
     }
 
-    // Falling edge
-    if (end >= tMin && end <= tMax) {
+    // ------------------------------------------------
+    // TIME-DOMAIN PLOT
+    // ------------------------------------------------
+    function drawTimeDomain(D) {
+      const ctx = timeCanvas.getContext('2d');
+      const W = timeCanvas.width;
+      const H = timeCanvas.height;
+
+      const left = 55;
+      const right = 20;
+      const top = 22;
+      const bottom = 35;
+
+      const tMin = -1.5;
+      const tMax = 1.5;
+
+      const X = t =>
+        left + (t - tMin) / (tMax - tMin) * (W - left - right);
+
+      const Y = v =>
+        top + (1.2 - v) / 1.5 * (H - top - bottom);
+
+      // Clear and paint the canvas
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = '#111827';
+      ctx.fillRect(0, 0, W, H);
+
+      // Grid
+      ctx.strokeStyle = '#354456';
+      ctx.lineWidth = 1;
+
+      [0, 0.5, 1].forEach(v => {
+        ctx.beginPath();
+        ctx.moveTo(left, Y(v));
+        ctx.lineTo(W - right, Y(v));
+        ctx.stroke();
+      });
+
+      [-1, -0.5, 0.5, 1].forEach(t => {
+        ctx.beginPath();
+        ctx.moveTo(X(t), top);
+        ctx.lineTo(X(t), H - bottom);
+        ctx.stroke();
+      });
+
+      // Axes
+      ctx.strokeStyle = '#d0d8e2';
+      ctx.lineWidth = 1.4;
+
       ctx.beginPath();
-      ctx.moveTo(X(end), Y(1));
-      ctx.lineTo(X(end), Y(0));
+      ctx.moveTo(left, Y(0));
+      ctx.lineTo(W - right, Y(0));
       ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(X(0), top);
+      ctx.lineTo(X(0), H - bottom);
+      ctx.stroke();
+
+      // Tick labels
+      ctx.fillStyle = '#d0d8e2';
+      ctx.font = '12px Arial';
+      ctx.textAlign = 'center';
+
+      [-1.5, -1, -0.5, 0, 0.5, 1, 1.5].forEach(t => {
+        const x = X(t);
+
+        ctx.beginPath();
+        ctx.moveTo(x, Y(0) - 4);
+        ctx.lineTo(x, Y(0) + 4);
+        ctx.stroke();
+
+        ctx.fillText(t.toFixed(1), x, H - 12);
+      });
+
+      ctx.textAlign = 'right';
+
+      [0, 0.5, 1].forEach(v => {
+        ctx.fillText(v.toFixed(1), left - 8, Y(v) + 4);
+      });
+
+      ctx.textAlign = 'left';
+      ctx.fillText('Amplitude', left, 14);
+
+      ctx.textAlign = 'right';
+      ctx.fillText('Time (t)', W - right, H - 12);
+
+      // Rectangular pulse train
+      ctx.strokeStyle = '#55c8f2';
+      ctx.lineWidth = 3;
+      ctx.lineCap = 'butt';
+
+      for (let n = -2; n <= 2; n++) {
+        const start = n - D / 2;
+        const end = n + D / 2;
+
+        // Top of pulse
+        const a = Math.max(start, tMin);
+        const b = Math.min(end, tMax);
+
+        if (a < b) {
+          ctx.beginPath();
+          ctx.moveTo(X(a), Y(1));
+          ctx.lineTo(X(b), Y(1));
+          ctx.stroke();
+        }
+
+        // Rising edge
+        if (start >= tMin && start <= tMax) {
+          ctx.beginPath();
+          ctx.moveTo(X(start), Y(0));
+          ctx.lineTo(X(start), Y(1));
+          ctx.stroke();
+        }
+
+        // Falling edge
+        if (end >= tMin && end <= tMax) {
+          ctx.beginPath();
+          ctx.moveTo(X(end), Y(1));
+          ctx.lineTo(X(end), Y(0));
+          ctx.stroke();
+        }
+      }
     }
+
+    // ------------------------------------------------
+    // MAGNITUDE AND PHASE SPECTRA
+    // ------------------------------------------------
+    function drawSpectra(D, K) {
+      const ks = Array.from(
+        { length: 2 * K + 1 },
+        (_, i) => i - K
+      );
+
+      const vals = ks.map(k => coefficient(k, D));
+
+      for (const [id, mode] of [
+        ['magCanvas', 'mag'],
+        ['phaseCanvas', 'phase']
+      ]) {
+        const canvas = get(id);
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width;
+        const H = canvas.height;
+
+        const max = mode === 'mag'
+          ? Math.max(0.2, ...vals.map(Math.abs)) * 1.2
+          : Math.PI * 1.15;
+
+        const m = axes(
+          ctx, W, H,
+          -K - 0.7, K + 0.7,
+          mode === 'mag' ? 0 : -max,
+          max,
+          2,
+          mode === 'mag' ? Math.max(0.05, max / 4) : Math.PI / 2,
+          'harmonic k',
+          mode === 'mag' ? '|xₖ|' : 'phase'
+        );
+
+        ks.forEach((k, i) => {
+          const a = vals[i];
+
+          // Phase is 0 for positive coefficients, π for negative
+          if (mode === 'phase' && Math.abs(a) <= 1e-5) return;
+
+          const y = mode === 'mag'
+            ? Math.abs(a)
+            : (a < 0 ? Math.PI : 0);
+
+          const xx = m.X(k);
+
+          ctx.strokeStyle = mode === 'mag' ? '#55c8f2' : '#ff6b78';
+          ctx.lineWidth = 3;
+
+          ctx.beginPath();
+          ctx.moveTo(xx, m.Y(0));
+          ctx.lineTo(xx, m.Y(y));
+          ctx.stroke();
+
+          ctx.fillStyle = mode === 'mag' ? '#55c8f2' : '#ff6b78';
+
+          ctx.beginPath();
+          ctx.arc(xx, m.Y(y), 3.5, 0, 2 * Math.PI);
+          ctx.fill();
+        });
+      }
+    }
+
+    // ------------------------------------------------
+    // UPDATE ALL THREE PLOTS
+    // ------------------------------------------------
+    function update() {
+      const D = Number(dutyInput.value);
+      const K = Number(harmonicInput.value);
+
+      get('dutyVal').textContent = D.toFixed(2);
+      get('specKVal').textContent = K;
+
+      // Draw the time plot independently of the spectrum plots
+      drawTimeDomain(D);
+
+      // Draw magnitude and phase
+      drawSpectra(D, K);
+
+      get('specReadout').textContent =
+        `For a centered pulse of duty cycle D = ${D.toFixed(2)}, ` +
+        `x₀ = D and xₖ = sin(πkD)/(πk), k ≠ 0. ` +
+        `The coefficients are real here, so phases are 0 or π ` +
+        `(apart from zero coefficients).`;
+    }
+
+    // Slider events
+    dutyInput.addEventListener('input', update);
+    harmonicInput.addEventListener('input', update);
+
+    // Initial drawing
+    drawTimeDomain(Number(dutyInput.value));
+    update();
+
+    console.log('Pulse spectrum demo initialized successfully.');
   }
-}
 
-
-// Update all three plots
-function updatePulseSpectrum() {
-  const D = +$('duty').value;
-  const K = +$('specK').value;
-
-  $('dutyVal').textContent = D.toFixed(2);
-  $('specKVal').textContent = K;
-
-  // Draw time-domain signal
-  drawPulseTimeDomain(D);
-
-  // Calculate Fourier coefficients
-  const ks = Array.from(
-    {length: 2 * K + 1},
-    (_, i) => i - K
-  );
-
-  const vals = ks.map(k => pulseSpectrumCoeff(k, D));
-
-  // Draw magnitude and phase spectra
-  for (const [id, mode] of [
-    ['magCanvas', 'mag'],
-    ['phaseCanvas', 'phase']
-  ]) {
-    const c = $(id).getContext('2d');
-    const W = $(id).width;
-    const H = $(id).height;
-
-    const max = mode === 'mag'
-      ? Math.max(0.2, ...vals.map(Math.abs)) * 1.2
-      : Math.PI * 1.15;
-
-    const m = axes(
-      c, W, H,
-      -K - 0.7, K + 0.7,
-      mode === 'mag' ? 0 : -max,
-      max,
-      2,
-      mode === 'mag' ? Math.max(0.05, max / 4) : Math.PI / 2,
-      'harmonic k',
-      mode === 'mag' ? '|xₖ|' : 'phase'
-    );
-
-    ks.forEach((k, i) => {
-      const a = vals[i];
-
-      let ph = 0;
-      if (a < 0) ph = Math.PI;
-
-      // Phase is undefined for zero coefficients
-      if (mode === 'phase' && Math.abs(a) <= 1e-5) return;
-
-      const y = mode === 'mag' ? Math.abs(a) : ph;
-      const xx = m.X(k);
-
-      c.strokeStyle = mode === 'mag' ? '#55c8f2' : '#ff6b78';
-      c.lineWidth = 3;
-
-      c.beginPath();
-      c.moveTo(xx, m.Y(0));
-      c.lineTo(xx, m.Y(y));
-      c.stroke();
-
-      c.fillStyle = mode === 'mag' ? '#55c8f2' : '#ff6b78';
-
-      c.beginPath();
-      c.arc(xx, m.Y(y), 3.5, 0, TAU);
-      c.fill();
-    });
+  // Run after the HTML elements are available
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPulseSpectrumDemo);
+  } else {
+    initPulseSpectrumDemo();
   }
+})();
 
-  $('specReadout').textContent =
-    `For a centered pulse of duty cycle D = ${D.toFixed(2)}, ` +
-    `x₀ = D and xₖ = sin(πkD)/(πk), k ≠ 0. ` +
-    `The coefficients are real here, so phases are 0 or π ` +
-    `(apart from zero coefficients).`;
-}
-
-
-// Slider listeners — only for this demo
-['duty', 'specK'].forEach(id => {
-  $(id).addEventListener('input', updatePulseSpectrum);
-});
-
-
-// Initial drawing
-updatePulseSpectrum();
 
 </script></body></html>
