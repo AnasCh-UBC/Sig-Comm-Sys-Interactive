@@ -557,7 +557,7 @@ header{align-items:center}
     <li>Complex number in <b>rectangular form</b>: \(z=a+jb\), where \(a,b\in\mathbb R\) and \(j=\sqrt{-1}\)</li>
     <li>Complex number in <b>polar form</b>: \(z=re^{j\theta}=r\cos\theta+jr\sin\theta\) where \(r=|z|=\sqrt{a^2+b^2}\) and \(\theta=\angle z\)</li>
   </ol>
-  <div class="eq-box">
+  <div class="eq">
     <b>Complex conjugate</b>: The complex conjugate of \(z\) is \(z^*=a-jb=re^{-j\theta}\)
   </div>
   <p class="sub">The product of two complex numbers multiplies their magnitudes and adds their phases. Thus: \(zz^*=|z|^2=r\).</p>
@@ -672,7 +672,7 @@ header{align-items:center}
 </div>
 
 <div class="card"><h3>Synthesis: Periodic signals from harmonically related sinusoids</h3>
-  <div class="eq-box">
+  <div class="eq">
     Signals of the form \(e^{j2\pi kf_0t}\), for integer \(k\), are harmonically related; the \(k\)-th harmonic has frequency \(kf_0\).
   </div>
   <p clas="sub">We can construct a periodic signal with frequency \(f_0\) using \(e^{j2\pi f_0 t}\) and its harmoics!</p>  
@@ -698,7 +698,7 @@ header{align-items:center}
 <h2 id="coefficients"><small>3</small>Fourier coefficients and spectra</h2>
 <div class="card"><h3>Analysis: Calculating the coefficients</h3>
   <div class="grid">
-    <div class="tile">
+    <div class="eq">
       Given a periodic signal \(x(t)\), its Fourier coefficient at harmonic \(k\) is obtained by projecting \(x(t)\) onto \(e^{j2\pi kf_0t}\) over any one period.
     </div>
     <div class="eq">
@@ -709,7 +709,96 @@ header{align-items:center}
   <p class="sub"> Tip: Select \(\tau\) to simplify the integration. 
     A common choice is \(\tau=-\frac{T_0}{2}\) leading to the integration interval\([-\frac{T_0}{2},\frac{T_0}{2}]\), or \(\tau=0\) leading to \([0,T_0]\).</p>
 </div>
-<div class="card"><h3>Example: a cosine</h3><p>Using Euler’s identity,</p><div class="eq">\[\cos(2\pi f_0t)=\frac{1}{2}e^{j2\pi f_0t}+\frac{1}{2}e^{-j2\pi f_0t}.\]</div><p>Therefore, \(x_{1}=x_{-1}=1/2\), and all other coefficients are zero.</p></div>
+
+<div class="card"><h3>Example: A cosine</h3>
+  <p>The Fourier coefficients of \(\cos(2\pi f_0 t)\) are \(x_1=x_{-1}=\frac{1}{2}\), and \(x_k=0,\forall k\neq \pm 1\).</p>
+  <button type="button" id="cosDerivationBtn"
+          aria-expanded="false">
+    Show derivation
+  </button>
+
+  <div id="cosDerivation" hidden>
+
+    <h4>Derivation of the Fourier coefficients</h4>
+
+    <p>
+      The complex Fourier-series coefficients are obtained from
+    </p>
+
+    <div class="eq">
+      \[
+      x_k=\frac{1}{T_0}
+      \int_{T_0}x(t)e^{-jk\omega_0t}\,dt,
+      \qquad \omega_0=2\pi f_0.
+      \]
+    </div>
+
+    <p>
+      Substitute \(x(t)=\cos(\omega_0t)\) and use Euler's identity:
+    </p>
+
+    <div class="eq">
+      \[
+      \begin{aligned}
+      x_k
+      &=\frac{1}{T_0}\int_{T_0}
+      \frac{1}{2}
+      \left(e^{j\omega_0t}+e^{-j\omega_0t}\right)
+      e^{-jk\omega_0t}\,dt\\[6pt]
+      &=\frac{1}{2T_0}\int_{T_0}
+      \left[
+      e^{-j(k-1)\omega_0t}
+      +e^{-j(k+1)\omega_0t}
+      \right]dt.
+      \end{aligned}
+      \]
+    </div>
+
+    <p>
+      Recall the orthogonality property of complex exponentials:
+    </p>
+
+    <div class="eq">
+      \[
+      \frac{1}{T_0}\int_{T_0}
+      e^{-jm\omega_0t}\,dt
+      =
+      \begin{cases}
+      1, & m=0,\\
+      0, & m\ne 0,
+      \end{cases}
+      \]
+    </div>
+
+    <p>
+      Thus, the first integral is nonzero only when \(k=1\),
+      and the second is nonzero only when \(k=-1\).
+    </p>
+
+    <div class="eq">
+      \[
+      x_k=
+      \begin{cases}
+      \dfrac{1}{2}, & k=1,\\[4pt]
+      \dfrac{1}{2}, & k=-1,\\[4pt]
+      0, & \text{otherwise}.
+      \end{cases}
+      \]
+    </div>
+
+    <p><b>Final result:</b></p>
+
+    <div class="eq">
+      \[
+      \boxed{x_1=x_{-1}=\frac{1}{2}}
+      \]
+      \[
+      \boxed{x_k=0,\qquad k\ne\pm1}
+      \]
+    </div>
+
+  </div>
+</div>
 <div class="card"><h3>Discrete spectrum</h3><p>The Fourier coefficients form a frequency-domain representation. The <b>magnitude spectrum</b> plots \(|x_k|\) versus \(k\), the <b>phase spectrum</b> plots \(\angle x_k\), and the <b>power spectrum</b> plots \(|x_k|^2\).</p></div>
 <div class="fs-demo" id="spectrumDemo"><h3>Interactive: magnitude and phase spectra of a periodic pulse train</h3><div class="fs-controls"><label>Duty cycle <input id="duty" type="range" min="0.1" max="0.9" step="0.05" value="0.5"><b id="dutyVal">0.50</b></label><label>Harmonics shown <input id="specK" type="range" min="3" max="15" step="2" value="9"><b id="specKVal">9</b></label></div><div class="fs-two"><div class="fs-panel"><b>Magnitude \(|x_k|\)</b><canvas id="magCanvas" class="fs-canvas" width="600" height="245"></canvas></div><div class="fs-panel"><b>Phase \(\angle x_k\) (rad)</b><canvas id="phaseCanvas" class="fs-canvas" width="600" height="245"></canvas></div></div><p class="fs-readout" id="specReadout"></p></div>
 
