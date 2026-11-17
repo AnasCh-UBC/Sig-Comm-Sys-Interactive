@@ -1055,12 +1055,16 @@ function plot(c,S,x0,x1,y0,y1,r,tk){
   x.fillText(String(+k.toFixed(2)),xx,zeroY+6);
  }
 
- // Horizontal grid, y-axis ticks and labels: multiples of 0.25 only
+ // Horizontal grid and y-axis ticks. Choose a readable step that is
+ // at least 0.25 and at least one-sixth of the largest y magnitude,
+ // rounded UP to the next multiple of 0.25.
  const yAxisX=(x0<=0&&x1>=0)?X(0):0;
- const firstYTick=Math.ceil(y0*4-1e-9);
- const lastYTick=Math.floor(y1*4+1e-9);
+ const yMaxAbs=Math.max(Math.abs(y0),Math.abs(y1));
+ const yStep=Math.ceil(Math.max(0.25,yMaxAbs/6)*4-1e-9)/4;
+ const firstYTick=Math.ceil(y0/yStep-1e-9);
+ const lastYTick=Math.floor(y1/yStep+1e-9);
  for(let n=firstYTick;n<=lastYTick;n++){
-  const value=n/4;
+  const value=+(n*yStep).toFixed(8);
   const yy=Y(value);
 
   x.strokeStyle='rgba(145,195,225,.38)';
@@ -1162,6 +1166,7 @@ window.addEventListener('load',()=>{
  }
 },{once:true});
 function W(id,o){const host=document.querySelector('[data-w="'+id+'"]'),d=document.createElement('div'),inp={},bs={};d.className='card wd';
+ if(!host){console.error('Interactive widget host not found:',id);return;}
  d.innerHTML='<div class="cap">'+o.cap+'</div><h4>'+o.title+'</h4><canvas width="720" height="'+(o.h||260)+'"></canvas><div class="ctl"></div><p class="note"></p>';
  const ctl=d.querySelector('.ctl');
  o.ctl.forEach(c=>{const l=document.createElement('label');
@@ -1196,9 +1201,14 @@ const up=()=>{
     if(bs[k]) bs[k].textContent=inp[k].value;
   }
   const note=d.querySelector('.note');
-  if(window.MathJax?.typesetClear) window.MathJax.typesetClear([note]);
-  note.innerHTML=o.draw(d.querySelector('canvas'),v);
-  typesetMath(note);
+  try{
+   if(window.MathJax?.typesetClear) window.MathJax.typesetClear([note]);
+   note.innerHTML=o.draw(d.querySelector('canvas'),v);
+   typesetMath(note);
+  }catch(err){
+   console.error('Interactive widget "'+id+'" failed:',err);
+   note.textContent='This interactive demo encountered an error: '+(err?.message||String(err));
+  }
  };
  d.addEventListener('input',up);
  host.appendChild(d);
@@ -1259,15 +1269,7 @@ const up=()=>{
       {f:x,c:'b',d:[5,4]},
       {f:y,c:'a'}
     ],-4,4,-m,m);
-    const ctx = c.getContext('2d');
-    ctx.save();
-    ctx.fillStyle = '#e2f0f8';
-    ctx.font = '13px system-ui';
-    ctx.textAlign = 'right';
-    const axisY = c.height - (0 - yMin) / (yMax - yMin) * c.height;
-    ctx.textAlign = 'right';
-    ctx.fillText('t', c.width - 8, axisY - 8);
-    ctx.restore();
+    // plot() already draws the time-axis label.
 
     return [
       'The amplifier scales the input by \\(a\\): \\(y(t)=a\\cos(2\\pi f_0t)\\). The output amplitude is \\(a='+v.a.toFixed(1)+'\\).',
@@ -1386,6 +1388,7 @@ W('test',{
 
     const X=t=>x1+(t+4)/8*(x2-x1);
     const Y=y=>mid-y/maxY*(y2-y1)/2;
+    const yStep=Math.ceil(Math.max(0.25,maxY/6)*4-1e-9)/4;
 
     ctx.save();
 
@@ -1401,8 +1404,8 @@ W('test',{
       ctx.stroke();
     }
 
-    for(let k=-2;k<=2;k++){
-      const yy=mid+k*(y2-y1)/4;
+    for(let n=Math.ceil(-maxY/yStep-1e-9);n<=Math.floor(maxY/yStep+1e-9);n++){
+      const yy=Y(n*yStep);
       ctx.beginPath();
       ctx.moveTo(x1,yy);
       ctx.lineTo(x2,yy);
@@ -1431,8 +1434,8 @@ ctx.font = '10px Arial';
 ctx.textAlign = 'right';
 ctx.textBaseline = 'middle';
 
-for(let n=Math.ceil(-maxY*4-1e-9);n<=Math.floor(maxY*4+1e-9);n++){
-  const value=n/4;
+for(let n=Math.ceil(-maxY/yStep-1e-9);n<=Math.floor(maxY/yStep+1e-9);n++){
+  const value=+(n*yStep).toFixed(8);
   const yy=Y(value);
 
   // Tick mark and label at each 0.25 increment
@@ -1678,8 +1681,9 @@ plot(right,[
   g.textAlign = 'right';
   g.textBaseline = 'middle';
 
-  for (let n = Math.ceil(yMin*4); n <= Math.floor(yMax*4); n++) {
-    const value = n/4;
+  const yStep = Math.ceil(Math.max(0.25,Math.max(Math.abs(yMin),Math.abs(yMax))/6)*4-1e-9)/4;
+  for (let n = Math.ceil(yMin/yStep-1e-9); n <= Math.floor(yMax/yStep+1e-9); n++) {
+    const value = +(n*yStep).toFixed(8);
     const y = canvas.height - (value - yMin) / (yMax - yMin) * canvas.height;
 
     // Tick mark on the vertical axis
@@ -1838,17 +1842,21 @@ W('conv',{
 
   ctx.save();
 
+  // Adaptive y-tick spacing: at least 0.25 and at least y-range/6,
+  // rounded up to a multiple of 0.25.
+  const yMaxAbs = Math.max(Math.abs(yMin), Math.abs(yMax));
+  const yStep = Math.ceil(Math.max(0.25, yMaxAbs/6)*4-1e-9)/4;
+
   // Horizontal grid lines and vertical-axis tick labels
   ctx.font = '10px Arial';
   ctx.textAlign = 'right';
   ctx.textBaseline = 'middle';
   ctx.fillStyle = '#a9bdce';
 
-  for (let n = Math.ceil(yMin*4-1e-9); n <= Math.floor(yMax*4+1e-9); n++) {
-    const value = n/4;
+  for (let n = Math.ceil(yMin/yStep-1e-9); n <= Math.floor(yMax/yStep+1e-9); n++) {
+    const value = +(n*yStep).toFixed(8);
     const py = Y(value);
 
-    // Horizontal grid line at each 0.25 increment
     ctx.strokeStyle = 'rgba(160,185,205,0.25)';
     ctx.lineWidth = 0.7;
     ctx.beginPath();
@@ -1856,7 +1864,6 @@ W('conv',{
     ctx.lineTo(W, py);
     ctx.stroke();
 
-    // Numerical tick label
     ctx.fillText(value.toFixed(2).replace(/\.?0+$/, ''), zeroX - 7, py);
   }
 
@@ -1869,8 +1876,8 @@ W('conv',{
   ctx.stroke();
 
   // Small tick marks on the vertical axis, at multiples of 0.25
-  for (let n = Math.ceil(yMin*4-1e-9); n <= Math.floor(yMax*4+1e-9); n++) {
-    const value = n/4;
+  for (let n = Math.ceil(yMin/yStep-1e-9); n <= Math.floor(yMax/yStep+1e-9); n++) {
+    const value = +(n*yStep).toFixed(8);
     const py = Y(value);
 
     ctx.beginPath();
@@ -2019,8 +2026,9 @@ W('eig',{
     ctx.textBaseline='middle';
     ctx.fillStyle='#a9bdce';
 
-    for(let n=Math.ceil(-m*4-1e-9);n<=Math.floor(m*4+1e-9);n++){
-      const value=n/4;
+    const yStep=Math.ceil(Math.max(0.25,m/6)*4-1e-9)/4;
+    for(let n=Math.ceil(-m/yStep-1e-9);n<=Math.floor(m/yStep+1e-9);n++){
+      const value=+(n*yStep).toFixed(8);
       const py=Y(value);
 
       ctx.strokeStyle='rgba(160,185,205,0.25)';
