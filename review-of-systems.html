@@ -283,7 +283,7 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
   flex-wrap: wrap;
   margin-bottom: 18px;
   padding-bottom: 14px;
-  border-bottom: 1px solid rgba(52, 141, 174, 0.381);
+  border-bottom: 1px solid rgba(218, 240, 248, 0.381);
 }
 
 .system-selector label {
@@ -875,7 +875,7 @@ header{align-items:center}
   </div>
 </div>
 
-<p>Slide the spacing $\Delta$ below to build the output from impulses</p>
+<p>Slide the pulse width $\Delta_{\tau}$ below to build the output from impulses</p>
 <p class="sub">The sum of scaled, delayed copies of the response to each impulse converges to the convolution as the impulses get thinner.</p>
 <div data-w="imp"></div>
 
@@ -1562,7 +1562,7 @@ W('imp',{
   h:220,
 
   ctl:[
-    {k:'D',l:'Pulse width Δ (s)',min:.01,max:1,step:.01,v:.5}
+    {k:'D',l:'Pulse width Δ_τ(s)',min:.01,max:1,step:.01,v:.5}
   ],
 
   draw(c,v){
@@ -1579,7 +1579,7 @@ W('imp',{
     }
 
     // Rectangular-pulse approximation of the input
-    const rect=(t,u)=>t>=u && t<u+D ? x(u):0;
+    const rect=(t,u)=>t>=u && t<u+D ? x(u+D/2):0;
     const xA=t=>ks.reduce((s,u)=>s+rect(t,u),0);
 
     // Exact convolution
@@ -1715,14 +1715,14 @@ plot(right,[
     return `
       <div>
         Input approximated by <b>${ks.length} rectangular pulses</b>
-        of width Δ = ${D.toFixed(2)} s.
+        of width Δ_τ = ${D.toFixed(2)} s.
       </div>
       <div>
         Each pulse produces a shifted response. By linearity,
         the individual responses add to form the total output.
       </div>
       <div>
-        Decreasing Δ improves the input and output approximations.
+        Decreasing Δ_τ improves the input and output approximations.
       </div>
     `;
   }
