@@ -1497,4 +1497,26 @@ window.addEventListener('load',()=>{if(window.MathJax?.typesetPromise)window.Mat
   updateDemo();
 })();
 
+(() => {
+  const btn = document.getElementById('cosDerivationBtn');
+  const derivation = document.getElementById('cosDerivation');
+
+  if (!btn || !derivation) return;
+
+  btn.addEventListener('click', () => {
+    const isHidden = derivation.hidden;
+
+    derivation.hidden = !isHidden;
+    btn.textContent = isHidden
+      ? 'Hide derivation'
+      : 'Show derivation';
+
+    btn.setAttribute('aria-expanded', String(isHidden));
+
+    if (isHidden && window.MathJax?.typesetPromise) {
+      window.MathJax.typesetPromise([derivation]);
+    }
+  });
+})();
+
 </script></body></html>
