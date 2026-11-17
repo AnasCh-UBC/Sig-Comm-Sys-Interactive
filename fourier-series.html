@@ -1559,108 +1559,136 @@ function pulseSpectrumCoeff(k, D) {
 
 // Draw the time-domain pulse train
 function drawPulseTimeDomain(D) {
-  const c = $('timeCanvas').getContext('2d');
-  const W = $('timeCanvas').width;
-  const H = $('timeCanvas').height;
+  const canvas = document.getElementById('timeCanvas');
 
-  const left = 55, right = 20, top = 20, bottom = 35;
-  const pw = W - left - right;
+  if (!canvas) {
+    console.error('timeCanvas was not found.');
+    return;
+  }
+
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  const W = canvas.width;
+  const H = canvas.height;
+
+  const left = 55;
+  const right = 20;
+  const top = 22;
+  const bottom = 35;
 
   const tMin = -1.5;
   const tMax = 1.5;
 
-  const X = t => left + (t - tMin) / (tMax - tMin) * pw;
-  const Y = x => top + (1.2 - x) / 1.5 * (H - top - bottom);
+  const X = t =>
+    left + (t - tMin) / (tMax - tMin) * (W - left - right);
 
-  c.clearRect(0, 0, W, H);
+  const Y = v =>
+    top + (1.2 - v) / 1.5 * (H - top - bottom);
+
+  // Clear canvas
+  ctx.clearRect(0, 0, W, H);
+
+  // Background
+  ctx.fillStyle = '#111827';
+  ctx.fillRect(0, 0, W, H);
 
   // Horizontal grid lines
-  c.strokeStyle = 'rgba(130,160,190,0.22)';
-  c.lineWidth = 1;
+  ctx.strokeStyle = '#354456';
+  ctx.lineWidth = 1;
 
   [0, 0.5, 1].forEach(v => {
-    c.beginPath();
-    c.moveTo(left, Y(v));
-    c.lineTo(W - right, Y(v));
-    c.stroke();
+    ctx.beginPath();
+    ctx.moveTo(left, Y(v));
+    ctx.lineTo(W - right, Y(v));
+    ctx.stroke();
   });
 
-  // Horizontal time axis
-  c.strokeStyle = '#aab8c8';
-  c.lineWidth = 1.2;
-  c.beginPath();
-  c.moveTo(left, Y(0));
-  c.lineTo(W - right, Y(0));
-  c.stroke();
+  // Vertical grid lines
+  [-1, -0.5, 0.5, 1].forEach(t => {
+    ctx.beginPath();
+    ctx.moveTo(X(t), top);
+    ctx.lineTo(X(t), H - bottom);
+    ctx.stroke();
+  });
 
-  // Vertical axis at t = 0
-  c.beginPath();
-  c.moveTo(X(0), top);
-  c.lineTo(X(0), H - bottom);
-  c.stroke();
+  // Axes
+  ctx.strokeStyle = '#d0d8e2';
+  ctx.lineWidth = 1.5;
 
-  // Time-axis ticks and labels
-  c.fillStyle = '#aab8c8';
-  c.font = '12px Arial';
-  c.textAlign = 'center';
+  ctx.beginPath();
+  ctx.moveTo(left, Y(0));
+  ctx.lineTo(W - right, Y(0));
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(X(0), top);
+  ctx.lineTo(X(0), H - bottom);
+  ctx.stroke();
+
+  // Axis labels and tick labels
+  ctx.fillStyle = '#d0d8e2';
+  ctx.font = '12px Arial';
+
+  ctx.textAlign = 'center';
 
   [-1.5, -1, -0.5, 0, 0.5, 1, 1.5].forEach(t => {
     const x = X(t);
 
-    c.beginPath();
-    c.moveTo(x, Y(0) - 4);
-    c.lineTo(x, Y(0) + 4);
-    c.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x, Y(0) - 4);
+    ctx.lineTo(x, Y(0) + 4);
+    ctx.stroke();
 
-    c.fillText(t.toFixed(1), x, H - 12);
+    ctx.fillText(t.toFixed(1), x, H - 12);
   });
 
-  // Amplitude-axis labels
-  c.textAlign = 'right';
+  ctx.textAlign = 'right';
 
   [0, 0.5, 1].forEach(v => {
-    c.fillText(v.toFixed(1), left - 8, Y(v) + 4);
+    ctx.fillText(v.toFixed(1), left - 8, Y(v) + 4);
   });
 
-  c.textAlign = 'left';
-  c.fillText('Amplitude', left, top - 5);
+  ctx.textAlign = 'left';
+  ctx.fillText('Amplitude', left, 14);
 
-  c.textAlign = 'right';
-  c.fillText('Time (t)', W - right, H - 12);
+  ctx.textAlign = 'right';
+  ctx.fillText('Time (t)', W - right, H - 12);
 
-  // Draw centered rectangular pulses
-  c.strokeStyle = '#55c8f2';
-  c.lineWidth = 2.5;
+  // Draw the centered periodic rectangular pulses
+  ctx.strokeStyle = '#55c8f2';
+  ctx.lineWidth = 3;
+  ctx.lineCap = 'butt';
 
   for (let n = -2; n <= 2; n++) {
     const start = n - D / 2;
     const end = n + D / 2;
 
-    // Rising edge
-    if (start >= tMin && start <= tMax) {
-      c.beginPath();
-      c.moveTo(X(start), Y(0));
-      c.lineTo(X(start), Y(1));
-      c.stroke();
+    // Top horizontal part of pulse
+    const a = Math.max(start, tMin);
+    const b = Math.min(end, tMax);
+
+    if (a < b) {
+      ctx.beginPath();
+      ctx.moveTo(X(a), Y(1));
+      ctx.lineTo(X(b), Y(1));
+      ctx.stroke();
     }
 
-    // Top horizontal section
-    const clippedStart = Math.max(start, tMin);
-    const clippedEnd = Math.min(end, tMax);
-
-    if (clippedStart < clippedEnd) {
-      c.beginPath();
-      c.moveTo(X(clippedStart), Y(1));
-      c.lineTo(X(clippedEnd), Y(1));
-      c.stroke();
+    // Rising edge
+    if (start >= tMin && start <= tMax) {
+      ctx.beginPath();
+      ctx.moveTo(X(start), Y(0));
+      ctx.lineTo(X(start), Y(1));
+      ctx.stroke();
     }
 
     // Falling edge
     if (end >= tMin && end <= tMax) {
-      c.beginPath();
-      c.moveTo(X(end), Y(1));
-      c.lineTo(X(end), Y(0));
-      c.stroke();
+      ctx.beginPath();
+      ctx.moveTo(X(end), Y(1));
+      ctx.lineTo(X(end), Y(0));
+      ctx.stroke();
     }
   }
 }
