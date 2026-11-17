@@ -672,10 +672,10 @@ header{align-items:center}
 </div>
 
 <div class="card"><h3>Periodic signals from harmonically related sinusoids</h3>
-  <p>We can construct a periodic signal with frequency \(f_0\) using \(e^{j2\pi f_0 t\}\) and its harmoics!</p>
-  <div class="tile">
+  <div class="eq-box">
     Signals of the form \(e^{j2\pi kf_0t}\), for integer \(k\), are harmonically related; the \(k\)-th harmonic has frequency \(kf_0\).
   </div>
+  <p clas="sub">We can construct a periodic signal with frequency \(f_0\) using \(e^{j2\pi f_0 t}\) and its harmoics!</p>  
   <div class="eq">
     The sum
     \(x(t)=\sum_{k=-\infty}^{\infty}x_k e^{j2\pi kf_0t}\) is called a Fourier series.
@@ -692,6 +692,8 @@ header{align-items:center}
   </div>
   <canvas id="synthCanvas" class="fs-canvas" width="900" height="300"></canvas><p class="fs-readout" id="synthReadout">The partial sum uses the first selected odd harmonics. Increase the number of terms to see the approximation sharpen.</p>
 </div>
+<div class="callout"><b>Question:</b> Given a periodic signal \(x(t)\), how do we find its Fourier series coefficients \(x_k\)?</div>
+
 
 <h2 id="coefficients"><small>3</small>Fourier coefficients and spectra</h2>
 <div class="card"><h3>Analysis: calculate the coefficients</h3><p>Given a periodic signal \(x(t)\), its Fourier coefficient at harmonic \(k\) is obtained by projecting the signal onto the corresponding complex exponential over any one period:</p>
@@ -791,8 +793,7 @@ function synthesis() {
 
   $('synthReadout').textContent =
     `The partial sum includes ${K} odd harmonics. ` +
-    `The red dashed curve is the ideal ±1 square wave. ` +
-    `The fundamental frequency is ${f} Hz. `;
+    `The red curve is the ideal ±1 square wave with fundamental frequency ${f} Hz.`;
 }
 
 ['harmonics', 'synthFreq'].forEach(id =>
@@ -1211,7 +1212,7 @@ window.addEventListener('load',()=>{if(window.MathJax?.typesetPromise)window.Mat
 
       terms.push(
         `${sign} ${formatNumber(Math.abs(amplitude))}` +
-        `\\cos(2\\pi ${k} f_0t)`
+        `\\cos(2\\pi (${k}) f_0t)`
       );
     }
 
