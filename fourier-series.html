@@ -721,47 +721,40 @@ header{align-items:center}
 
     <h4>Derivation of the Fourier coefficients</h4>
 
-    <p>
-      The complex Fourier-series coefficients are obtained from
-    </p>
-
+    <p>The complex Fourier-series coefficients are obtained from</p>
     <div class="eq">
       \[
       x_k=\frac{1}{T_0}
-      \int_{T_0}x(t)e^{-jk\omega_0t}\,dt,
-      \qquad \omega_0=2\pi f_0.
+      \int_{0}^{T_0}x(t)e^{-jk2\pi k f_0t}\,dt.
       \]
     </div>
-
-    <p>
-      Substitute \(x(t)=\cos(\omega_0t)\) and use Euler's identity:
-    </p>
-
+    <p>Substitute \(x(t)=\cos(\omega_0t)\) and use Euler's identity:</p>
     <div class="eq">
       \[
       \begin{aligned}
       x_k
-      &=\frac{1}{T_0}\int_{T_0}
+      &=\frac{1}{T_0}\int_{0}^{T_0}
       \frac{1}{2}
-      \left(e^{j\omega_0t}+e^{-j\omega_0t}\right)
-      e^{-jk\omega_0t}\,dt\\[6pt]
-      &=\frac{1}{2T_0}\int_{T_0}
+      \left(e^{j2\pi f_0 t}+e^{-j2\pi f_0t}\right)
+      e^{-j2\pi kf_0t}\,dt\\[6pt]
+      &=\frac{1}{2T_0}\int_{0}^{T_0}
       \left[
-      e^{-j(k-1)\omega_0t}
-      +e^{-j(k+1)\omega_0t}
+      e^{-j(k-1)2\pi f_0t}
+      +e^{-j(k+1)2\pi f_0t}
       \right]dt.
+      &=\frac{1}{2T_0}\int_{0}^{T_0}
+      e^{-j(k-1)2\pi f_0t}
+      dt+\frac{1}{2T_0}\int_{0}^{T_0}
+      e^{-j(k+1)2\pi f_0t}
+      dt.
       \end{aligned}
       \]
     </div>
-
-    <p>
-      Recall the orthogonality property of complex exponentials:
-    </p>
-
+    <p>Note that:</p>
     <div class="eq">
       \[
-      \frac{1}{T_0}\int_{T_0}
-      e^{-jm\omega_0t}\,dt
+      \frac{1}{T_0}\int_{0}^{T_0}
+      e^{-j2\pi mf_0t}\,dt
       =
       \begin{cases}
       1, & m=0,\\
@@ -769,34 +762,17 @@ header{align-items:center}
       \end{cases}
       \]
     </div>
-
-    <p>
-      Thus, the first integral is nonzero only when \(k=1\),
-      and the second is nonzero only when \(k=-1\).
-    </p>
-
+    <p>Thus, the first integral is nonzero only when \(k=1\),
+      and the second is nonzero only when \(k=-1\). Hence,</p>
     <div class="eq">
       \[
       x_k=
       \begin{cases}
-      \dfrac{1}{2}, & k=1,\\[4pt]
-      \dfrac{1}{2}, & k=-1,\\[4pt]
+      \dfrac{1}{2}, & k=\pm 1,\\[4pt]
       0, & \text{otherwise}.
       \end{cases}
       \]
     </div>
-
-    <p><b>Final result:</b></p>
-
-    <div class="eq">
-      \[
-      \boxed{x_1=x_{-1}=\frac{1}{2}}
-      \]
-      \[
-      \boxed{x_k=0,\qquad k\ne\pm1}
-      \]
-    </div>
-
   </div>
 </div>
 <div class="card"><h3>Discrete spectrum</h3>
