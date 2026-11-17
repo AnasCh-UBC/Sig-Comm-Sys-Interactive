@@ -298,7 +298,7 @@ mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
   max-width: 440px;
   padding: 6px 6px;
   color: #162c3d;
-  background: #ebf5ff;
+  background: #ffffff;
   border: 1px solid rgba(32, 80, 98, 0.5);
   border-radius: 8px;
   font: inherit;
@@ -1345,6 +1345,7 @@ W('test',{
 
   const ctx=c.getContext('2d');
   const W=720,H=190;
+  c.width=W;
   c.height=H;
   ctx.clearRect(0,0,W,H);
   // Dark plotting background, consistent with the other interactive plots
@@ -1380,10 +1381,10 @@ W('test',{
   }
 
   function panel(x0,fn1,fn2,maxY){
-    const x1=x0+43;
-    const x2=x0+337;
-    const y1=8;
-    const y2=145;
+    const x1=x0+30;
+    const x2=x0+350;
+    const y1=12;
+    const y2=178;
     const mid=(y1+y2)/2;
 
     const X=t=>x1+(t+4)/8*(x2-x1);
@@ -1519,7 +1520,7 @@ for(let n=Math.ceil(-maxY/yStep-1e-9);n<=Math.floor(maxY/yStep+1e-9);n++){
   ctx.lineWidth=1.2;
   ctx.beginPath();
   ctx.moveTo(360,5);
-  ctx.lineTo(360,165);
+  ctx.lineTo(360,185);
   ctx.stroke();
 
   // Results
