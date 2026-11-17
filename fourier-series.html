@@ -1,0 +1,642 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Fourier Series · APSC 270</title><style>
+
+
+:root{--bg:#fff;--fg:#1b1f2a;--mut:#5b6475;--card:#f3f5fa;--acc:#0b3d91;--ln:#d5d9e3;--blue:#2f6fe0;--red:#e0562f;--hd:#0b3d91}
+@media(prefers-color-scheme:dark){:root{--bg:#12151c;--fg:#e8eaf0;--mut:#9aa3b5;--card:#1b2030;--acc:#7fa8ff;--ln:#2e3547;--blue:#6ea2ff;--red:#ff8f6b;--hd:#0a2a66}}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:65px}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}
+header{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;gap:10px;padding:12px max(20px,calc((100vw - 880px)/2));background:var(--hd);color:white;font-weight:600}.wrap{max-width:880px;margin:auto;padding:0 20px 40px}
+.over{margin:34px 0 4px;color:var(--acc);font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700}h1,h2{font-family:Georgia,serif}h1{font-size:clamp(2rem,5vw,2.7rem);line-height:1.2;margin:.1em 0 .3em}h2{font-size:1.6rem;margin:2.2em 0 .1em;padding-top:.4em;border-top:1px solid var(--ln)}h2 small{color:var(--acc);margin-right:.4em;font:700 .8em system-ui}h3{margin:1.2em 0 .3em}.lede{font-size:1.1rem;color:var(--mut)}.sub{color:var(--mut);font-style:italic;margin:.1em 0 1em}
+.card{background:var(--card);border-radius:12px;padding:10px 14px;
+  margin:12px 0}.meta,.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:10px;margin:12px 0}.meta div,.tile{border:1px solid var(--ln);
+      border-radius:10px;padding:10px 13px}.meta b,.tag{display:block;color:var(--acc);
+        font-size:.75rem;text-transform:uppercase;
+        letter-spacing:.08em;font-weight:700}.toc{columns:2;list-style:none;padding:0}.toc li{break-inside:avoid;margin:4px 0}.toc a{color:var(--fg);
+          text-decoration:none}.toc a:hover{color:var(--acc)}.toc b{color:var(--acc);margin-right:7px}.pill{display:inline-block;border:1px solid var(--ln);
+            border-radius:99px;padding:2px 9px;margin:3px;font-size:.85rem}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin:20px 0}.stage{position:relative;text-align:center;background:var(--card);border:1px solid var(--ln);border-radius:12px;padding:14px 8px}.stage:not(:last-child):after{content:"→";position:absolute;right:-19px;top:30%;font-size:1.4rem;color:var(--acc)}.stage b{display:block;color:var(--acc)}.stage small{color:var(--mut)}.symbol{font-size:1.7rem}.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}.event{border-top:3px solid var(--acc);padding:10px;background:var(--card);border-radius:0 0 8px 8px}.event b{color:var(--acc)}.event p{font-size:.9rem;margin:.3em 0}
+.barrow{display:grid;grid-template-columns:140px 1fr 42px;gap:10px;align-items:center;margin:10px 0;font-size:.9rem}.bar{height:10px;background:var(--ln);border-radius:10px;overflow:hidden}.bar i{display:block;height:100%;background:var(--blue)}.eq{padding:12px 16px;background:var(--card);border-left:4px solid var(--acc);border-radius:6px;overflow:auto}.callout{border:1px solid var(--red);border-left:5px solid var(--red);border-radius:8px;padding:12px 18px;margin:16px 0;background:color-mix(in srgb,var(--red) 7%,var(--bg))}footer{border-top:1px solid var(--ln);padding:20px;text-align:center;color:var(--mut);font-size:.85rem;margin-top:35px}footer a{color:var(--acc)}
+@media(max-width:640px){header{font-size:.82rem}.toc{columns:1}.flow{grid-template-columns:1fr 1fr;gap:10px}.stage:after{display:none}.timeline{grid-template-columns:1fr 1fr}.barrow{grid-template-columns:110px 1fr 38px}}
+
+/* Lecture 2 additions: reuse the site's dark cards, borders, and accent palette. */
+.demo-card{border:1px solid var(--ln);border-radius:12px;background:var(--card);padding:16px;margin:16px 0;box-shadow:0 8px 22px rgba(0,0,0,.16)}
+.demo-card h3{margin-top:0}
+.demo-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.demo-controls{display:flex;gap:10px 14px;align-items:center;flex-wrap:wrap;margin:10px 0}
+.demo-controls label{display:flex;align-items:center;gap:6px;color:var(--mut);font-size:.85rem}
+.demo-controls input[type=range]{width:75px;accent-color:#38bdf8}
+.demo-controls select,.demo-controls button,.demo-controls input[type=number]{background:var(--card);color:var(--fg);border:1px solid var(--ln);border-radius:7px;padding:6px 9px}
+.demo-controls button{cursor:pointer;padding:7px 12px;font-size:.85rem}
+.demo-controls button:hover{border-color:var(--acc);background:var(--bg)}
+.demo-canvas{display:block;width:100%;height:280px;min-height:190px;border:1px solid var(--ln);border-radius:9px;background:var(--bg)}
+.demo-note{color:var(--mut);font-size:.88rem;margin:10px 0 0}
+.readout{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.readout-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+.readout small {
+  font-size: 0.72rem;
+}
+.readout .equation {
+  display: block;
+  margin: 4px 0;
+}
+.readout span{border:1px solid var(--ln);background:var(--card);border-radius:7px;padding:6px 10px;font-size:.88rem}
+.eq-box{border:1px solid var(--ln);border-left:2px solid var(--acc);border-radius:8px;background:var(--card);
+  padding:8px 8px;margin:8px 0;overflow-x:auto}
+.eq-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.signal-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.signal-card{border:1px solid var(--ln);border-radius:10px;padding:13px;background:var(--card)}
+.signal-card h3{font-size:1rem;margin:0 0 7px;color:#7dd3fc}
+.signal-card p{margin:6px 0}
+.pill-row{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}
+.pill-row .pill{margin:0}
+.quiz-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.quiz-card{border:1px solid var(--ln);border-radius:12px;padding:15px;background:var(--card)}
+.quiz-card h3{margin-top:0}
+.quiz-meta{font-size:.8rem;color:var(--mut);margin:-5px 0 12px}
+.quiz-question{border:0;border-top:1px solid var(--ln);padding:12px 0;margin:0;min-width:0}
+.quiz-question legend{font-weight:650;padding:0 0 8px}
+.quiz-option{display:block;padding:5px 7px;border-radius:6px;font-size:.9rem;cursor:pointer}
+.quiz-option:hover{background:rgba(56,189,248,.08)}
+.quiz-option input{accent-color:#38bdf8;margin-right:7px}
+.quiz-feedback{font-size:.84rem;margin:7px 0 0;color:var(--mut);min-height:1.2em}
+.quiz-feedback.correct{color:#62d6a3}.quiz-feedback.incorrect{color:#ff9c9c}
+.quiz-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
+.quiz-actions button{background:#0b3152;color:#d9edff;border:1px solid #2879a9;border-radius:7px;padding:7px 12px;cursor:pointer}
+.quiz-score{font-size:.88rem;color:#7dd3fc}
+.section-kicker{color:#7dd3fc;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;margin-bottom:5px}
+.two-col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+
+@media(max-width:700px){.signal-grid,.eq-grid,.quiz-grid,.two-col{grid-template-columns:1fr}.demo-controls label{width:100%;justify-content:space-between}.demo-controls input[type=range]{width:48%}}
+
+.euler-portrait {
+  text-align: center;
+  min-width: 0;
+}
+
+.euler-portrait img {
+  display: block;
+  width: 100%;
+  height: 165px;
+  margin: 0 auto;
+  object-fit: contain;
+  border-radius: 6px;
+  border: 1px solid rgba(85, 200, 242, 0.4);
+}
+
+.euler-portrait small {
+  display: block;
+  margin-top: 5px;
+  color: #9fb5c7;
+  font-size: 0.68rem;
+  line-height: 1.3;
+}
+
+@media (max-width: 550px) {
+  .euler-portrait img {
+    max-width: 80px;
+    height: 100px;
+  }
+}
+
+/* Side-by-side complex-plane and time-domain plots */
+.complex-two-plots {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 14px;
+}
+
+.complex-plot-panel {
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid rgba(85, 200, 242, 0.25);
+  border-radius: 10px;
+  background: rgba(11, 27, 43, 0.55);
+}
+
+.complex-plot-panel h4 {
+  margin: 2px 0 10px;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #eaf3fa;
+}
+
+.complex-plot-panel .demo-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 800px) {
+  .complex-two-plots {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* Interactive systems widgets: same card, border, and accent language */
+.wd{border:1px solid var(--ln);background:var(--card);border-radius:12px;padding:14px 16px;margin:16px 0;box-shadow:0 8px 22px rgba(0,0,0,.12)}
+.wd h4{margin:.2em 0 .5em;color:var(--fg);font-size:1.02rem}
+.cap{color:var(--acc);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+.wd canvas{display:block;width:100%;height:auto;border:1px solid var(--ln);border-radius:8px;background:var(--bg)}
+.ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:0 18px;margin-top:8px}
+.ctl label{display:block;margin:8px 0 2px;font-size:.9rem;color:var(--mut)}
+.ctl input[type=range]{width:100%;accent-color:var(--blue)}
+.ctl select{width:100%;padding:7px 9px;border-radius:8px;border:1px solid var(--ln);background:var(--bg);color:var(--fg);font:inherit}
+.note{font-size:.9rem;color:var(--mut);margin:9px 0 0;line-height:1.55}
+.badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:.82rem;margin-right:6px;border:1px solid currentColor}
+.ok{color:#16a36a}.bad{color:var(--red)}
+.ex{border:1px solid var(--ln);border-radius:12px;margin:18px 0;padding:14px 18px;background:var(--card)}
+details summary{cursor:pointer;color:var(--acc);font-weight:650;margin-top:8px}
+mjx-container[display="true"]{overflow-x:auto;overflow-y:hidden;max-width:100%}
+.eq{padding:10px 14px;margin:14px 0;background:var(--card);border:1px solid var(--ln);border-left:3px solid var(--acc);border-radius:8px;overflow-x:auto}
+.callout{border:1px solid var(--red);border-left:5px solid var(--red);border-radius:9px;padding:12px 17px;margin:16px 0;background:color-mix(in srgb,var(--red) 8%,var(--card))}
+.callout b{color:var(--red)}
+.tile{background:var(--card)}
+.quiz-card{border:1px solid var(--ln);border-radius:12px;padding:15px;background:var(--card)}
+.quiz-card h3{margin-top:0;color:var(--acc)}
+.quiz-meta{font-size:.8rem;color:var(--mut);margin:-5px 0 12px}
+.quiz-question{border:0;border-top:1px solid var(--ln);padding:12px 0;margin:0;min-width:0}
+.quiz-question legend{font-weight:650;padding:0 0 8px}
+.quiz-option{display:block;padding:5px 8px;border-radius:6px;font-size:.9rem;cursor:pointer}
+.quiz-option:hover{background:color-mix(in srgb,var(--blue) 8%,var(--card))}
+.quiz-option input{accent-color:var(--blue);margin-right:7px}
+.quiz-feedback{font-size:.84rem;margin:7px 0 0;color:var(--mut);min-height:1.2em}
+.quiz-feedback.correct{color:#62d6a3}.quiz-feedback.incorrect{color:#ff9c9c}
+.quiz-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}
+.quiz-actions button{background:var(--acc);color:white;border:1px solid var(--acc);border-radius:7px;padding:7px 12px;cursor:pointer;font:inherit;font-size:.85rem}
+.quiz-actions button.secondary{background:transparent;color:var(--acc)}
+.quiz-score,.quiz-result{font-size:.88rem;color:var(--acc);font-weight:650}
+.quiz-intro{color:var(--mut);margin-bottom:20px}
+.quiz-note{color:var(--mut);font-size:.85rem;margin-top:20px}
+.section-kicker{color:var(--acc);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;margin-bottom:5px}
+@media(max-width:700px){.ctl{grid-template-columns:1fr}.quiz-grid{grid-template-columns:1fr}.wd{padding:12px}}
+
+.flow-diagram {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 55px minmax(0,1fr) 55px minmax(0,1fr);
+  align-items: center;
+  gap: 8px;
+  max-width: 850px;
+  margin: 12px auto;
+  padding: 10px;
+  border: 1px solid rgba(127, 208, 238, 0.432);
+  border-radius: 14px;
+  background: rgba(11,27,43,.65);
+}
+
+.flow-stage {
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 8px;
+  text-align: center;
+  border: 1px solid rgba(85,200,242,.5);
+  border-radius: 11px;
+  background: linear-gradient(145deg, #142f47, #10263a);
+  box-shadow: 0 4px 14px rgba(0,0,0,.2);
+}
+
+.flow-stage b {
+  color: #eaf3fa;
+  font-size: .85rem;
+}
+
+.flow-stage .symbol {
+  color: #55c8f2;
+  font-size: .95rem;
+  font-weight: 600;
+}
+
+.flow-stage small {
+  color: #9fb5c7;
+  font-size: .70rem;
+}
+
+.system-stage {
+  border-color: rgba(98,217,154,.65);
+  background: linear-gradient(145deg, #173b3d, #102f39);
+}
+
+.system-stage .symbol {
+  color: #62d99a;
+}
+
+.output-stage {
+  border-color: rgba(243,180,95,.6);
+}
+
+.output-stage .symbol {
+  color: #f3b45f;
+}
+
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #55c8f2;
+  font-size: 1.8rem;
+}
+
+.flow-arrow span {
+  display: none;
+}
+
+@media(max-width:600px) {
+  .flow-diagram {
+    grid-template-columns: 1fr;
+    max-width: 340px;
+    gap: 5px;
+  }
+
+  .flow-stage {
+    min-height: 70px;
+  }
+
+  .flow-arrow {
+    transform: rotate(90deg);
+    height: 28px;
+  }
+}
+
+/* Interactive system classification */
+.system-classifier {
+  padding: 18px;
+  margin: 18px 0;
+}
+
+.system-selector {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(218, 240, 248, 0.381);
+}
+
+.system-selector label {
+  color: #344a5b;
+  font-size: .9rem;
+  font-weight: 600;
+}
+
+.system-selector select {
+  flex: 1;
+  min-width: 230px;
+  max-width: 440px;
+  padding: 6px 6px;
+  color: #162c3d;
+  background: #ffffff;
+  border: 1px solid rgba(32, 80, 98, 0.5);
+  border-radius: 8px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.system-selector select:focus {
+  outline: 2px solid rgba(85,200,242,.35);
+  outline-offset: 2px;
+}
+
+.system-property-content h3 {
+  margin: 8px 0 12px;
+  color: #152d38;
+}
+
+.system-property-content > p {
+  line-height: 1.65;
+}
+
+.system-property-content .grid {
+  margin-top: 16px;
+  align-items: stretch;
+}
+
+.system-property-content .tile {
+  min-width: 0;
+}
+
+.system-property-content .eq-box {
+  overflow-x: auto;
+  margin: 12px 0;
+}
+
+.system-property-content[hidden] {
+  display: none;
+}
+
+@media(max-width:650px) {
+  .system-classifier {
+    padding: 13px;
+  }
+
+  .system-selector {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .system-selector select {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.test-plot-titles {
+  display: grid;
+  text-align: center;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 8px 0 4px;
+}
+
+.test-plot-titles > div {
+  min-width: 0;
+  padding: 7px 5px;
+  border-bottom: 1px solid #31516d;
+  color: #092b46;
+  font-size: .85rem;
+  font-weight: 600;
+}
+
+.test-plot-titles span {
+  display: block;
+  margin-top: 4px;
+  color: #163e5c;
+  font-size: .8rem;
+  font-weight: 500;
+}
+
+@media(max-width:600px) {
+  .test-plot-titles {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* System-testing widget controls */
+[data-w="test"] .ctl {
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+[data-w="test"] .test-system-control {
+  width:100%;
+}
+
+[data-w="test"] .test-slider-row {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+  width:100%;
+}
+
+[data-w="test"] .test-slider-control {
+  min-width:0;
+}
+
+[data-w="test"] .test-slider-control input {
+  width:100%;
+}
+
+@media(max-width:600px) {
+  [data-w="test"] .test-slider-row {
+    grid-template-columns:1fr;
+  }
+}
+
+.classification-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.classification-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid rgba(70, 170, 220, 0.35);
+  border-radius: 12px;
+  background: rgba(20, 65, 95, 0.22);
+}
+
+.classification-number {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #48c8e8;
+  opacity: 0.9;
+}
+
+.classification-item strong {
+  display: block;
+  color: #75d5f2;
+  font-size: 0.95rem;
+  margin-bottom: 5px;
+}
+
+.classification-item p {
+  margin: 0;
+  color: #e1edf5;
+  font-size: 0.95rem;
+}
+
+.classification-item .or {
+  color: #48c8e8;
+  font-weight: 600;
+  padding: 0 5px;
+}
+
+@media (max-width: 650px) {
+  .classification-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.conv-plot-titles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 0 0 5px;
+  font-size: 0.82rem;
+  color: #dceaf5;
+}
+
+.conv-plot-titles > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.conv-plot-titles b {
+  color: #75d5f2;
+}
+
+.conv-plot-titles span {
+  color: #a9bdce;
+  font-size: 0.76rem;
+}
+
+@media(max-width:600px) {
+  .conv-plot-titles {
+    gap: 8px;
+    font-size: 0.72rem;
+  }
+
+  .conv-plot-titles span {
+    font-size: 0.68rem;
+  }
+}
+
+/* Header navigation */
+header{align-items:center}
+.site-title{flex:1;min-width:0}
+.header-right{display:flex;align-items:center;justify-content:flex-end;gap:9px;min-width:0}
+.lecture-nav-label{font-size:.72rem;font-weight:600;color:#c8e5f2;white-space:nowrap}
+.lecture-nav{max-width:240px;min-width:145px;padding:6px 28px 6px 9px;border:1px solid rgba(255,255,255,.35);border-radius:7px;background:#102b46;color:#f4fbff;font:600 .78rem system-ui,sans-serif;cursor:pointer}
+.lecture-nav option{background:#102b46;color:#f4fbff}
+
+/* Bright, high-contrast plotting surfaces, matching the signal-lecture plots */
+.demo-canvas,.wd canvas,.complex-plot-panel canvas{background:#05090f;border-color:rgba(85,200,242,.38)}
+.test-plot-titles > div{color:#eaf3fa;border-bottom-color:rgba(85,200,242,.35)}
+.test-plot-titles span{color:#11314d}
+@media(max-width:700px){
+  header{align-items:flex-start;flex-wrap:wrap}
+  .site-title{flex-basis:100%}
+  .header-right{width:100%;justify-content:flex-start;flex-wrap:wrap}
+}
+@media(max-width:430px){
+  .header-right{gap:7px}
+  .lecture-nav{flex:1;min-width:130px;max-width:none}
+}
+
+/* Lecture 4: compact Fourier-series demonstrations */
+.fs-demo{border:1px solid var(--ln);border-radius:12px;background:var(--card);padding:13px 15px;margin:14px 0;box-shadow:0 8px 22px rgba(0,0,0,.13)}
+.fs-demo h3{margin:0 0 8px;color:var(--fg)}
+.fs-controls{display:flex;gap:10px 18px;align-items:center;flex-wrap:wrap;margin:8px 0}
+.fs-controls label{display:flex;align-items:center;gap:7px;color:var(--mut);font-size:.86rem}
+.fs-controls input[type=range]{width:115px;accent-color:#38bdf8}
+.fs-controls select{background:var(--bg);color:var(--fg);border:1px solid var(--ln);border-radius:7px;padding:5px 8px}
+.fs-canvas{display:block;width:100%;height:auto;border:1px solid rgba(85,200,242,.38);border-radius:8px;background:#05090f}
+.fs-readout{font-size:.88rem;color:var(--mut);margin:8px 0 0}
+.fs-two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.fs-panel{min-width:0}.fs-panel b{display:block;color:#dceaf5;font-size:.82rem;margin:0 0 5px;text-align:center}
+@media(max-width:650px){.fs-two{grid-template-columns:1fr}.fs-controls label{width:100%;justify-content:space-between}.fs-controls input[type=range]{width:45%}}
+</style>
+<script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},svg:{fontCache:'global'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script></head><body>
+<header><span class="site-title">APSC 270 – Signals and Communication Systems</span>
+  <div class="header-right"><label class="lecture-nav-label" for="lectureNav">Go to</label><select id="lectureNav" class="lecture-nav" aria-label="Navigate to another course page" onchange="if(this.value) window.location.href=this.value">
+    <option value="index.html">Course home</option>
+    <option value="preliminaries.html">Preliminaries</option>
+    <option value="introduction.html">Lecture 1 · Introduction</option>
+    <option value="review-of-signals.html">Lecture 2 · Review of Signals</option>
+    <option value="review-of-systems.html">Lecture 3 · Review of Systems</option>
+    <option value="fourier-series.html" selected>Lecture 4 · Fourier Series</option>
+  </select></div></header>
+<main class="wrap">
+<p class="over">APSC 270 · Lecture 4</p><h1>Fourier Series</h1>
+<p class="lede">Represent periodic signals as sums of harmonically related complex sinusoids—and use that representation to understand spectra, LTI-system responses, and signal power.</p>
+<div class="meta"><div><b>Course</b>APSC 270 · Signals and Communication Systems</div><div><b>Focus</b>Complex exponentials, Fourier coefficients, synthesis and analysis</div><div><b>Key idea</b>A periodic signal can be built from a fundamental frequency and its harmonics.</div></div>
+<div class="card"><h3>Contents</h3><ol class="toc">
+<li><b>1</b><a href="#complex">Complex sinusoid: review</a></li><li><b>2</b><a href="#what-is-fs">What is Fourier series?</a></li><li><b>3</b><a href="#coefficients">Fourier coefficients and spectra</a></li><li><b>4</b><a href="#conditions">Properties and conditions</a></li><li><b>5</b><a href="#lti">Fourier series and LTI systems</a></li><li><b>6</b><a href="#parseval">Parseval’s relation</a></li><li><b>7</b><a href="#self-check">Self-assessment</a></li>
+</ol></div>
+
+<h2 id="complex"><small>1</small>Complex sinusoid: review</h2>
+<div class="card"><h3>Complex numbers and Euler’s formula</h3>
+<p>A complex number has the form \(z=a+jb\), where \(a,b\in\mathbb R\) and \(j=\sqrt{-1}\). In polar form,</p>
+<div class="eq">\[z=re^{j\theta}=r\cos\theta+jr\sin\theta,\qquad r=|z|=\sqrt{a^2+b^2}.\]</div>
+<p>The complex conjugate is \(z^*=a-jb\), so \(zz^*=|z|^2\). The product of two complex numbers multiplies their magnitudes and adds their phases.</p>
+</div>
+<div class="eq">\[e^{j\theta}=\cos\theta+j\sin\theta,\qquad e^{-j\theta}=\cos\theta-j\sin\theta.\]</div>
+<div class="card"><h3>Complex sinusoid</h3><p>The signal \(x(t)=e^{j2\pi f_0t}\) rotates counterclockwise around the unit circle with angular frequency \(\omega_0=2\pi f_0\) rad/s. Its real and imaginary parts are cosine and sine:</p>
+<div class="eq">\[e^{j2\pi f_0t}=\cos(2\pi f_0t)+j\sin(2\pi f_0t).\]</div>
+<p>Its period is \(T_0=1/f_0\). The signals \(e^{j2\pi kf_0t}\), for integer \(k\), are harmonically related; the \(k\)-th harmonic has frequency \(kf_0\).</p></div>
+<div class="fs-demo" id="phasorDemo"><h3>Interactive: rotating complex sinusoid</h3><div class="fs-controls"><label>Frequency \(f_0\) <input id="phFreq" type="range" min="0.2" max="2" step="0.1" value="0.5"><b id="phFreqVal">0.5 Hz</b></label><label>Time \(t\) <input id="phTime" type="range" min="0" max="2" step="0.01" value="0.35"><b id="phTimeVal">0.35 s</b></label></div><div class="fs-two"><div class="fs-panel"><b>Complex plane</b><canvas id="phasorPlane" class="fs-canvas" width="600" height="270"></canvas></div><div class="fs-panel"><b>Real and imaginary parts versus time</b><canvas id="phasorTime" class="fs-canvas" width="600" height="270"></canvas></div></div><p class="fs-readout" id="phReadout"></p></div>
+
+<h2 id="what-is-fs"><small>2</small>What is Fourier series?</h2>
+<div class="card"><h3>From pulses to harmonically related sinusoids</h3><p>We have represented signals as sums of shifted pulses to analyze convolution. A complementary idea is to represent a <b>periodic</b> signal as a sum of complex sinusoids. Complex exponentials are eigenfunctions of LTI systems, so this representation makes system analysis especially convenient.</p>
+<div class="eq">\[\boxed{x(t)=\sum_{k=-\infty}^{\infty}x_k e^{j2\pi kf_0t}}\qquad T_0=\frac{1}{f_0}.\]</div>
+<p>This is the <b>complex exponential Fourier series</b>. The coefficients \(x_k\) describe how much of each harmonic is present. The constant term \(x_0\) is the average (DC) value.</p></div>
+<div class="card"><h3>Synthesis: build a signal from harmonics</h3><p>For example, the first few terms are</p><div class="eq">\[x(t)=x_0+x_1e^{j2\pi f_0t}+x_{-1}e^{-j2\pi f_0t}+x_2e^{j2\pi 2f_0t}+x_{-2}e^{-j2\pi 2f_0t}+\cdots\]</div><p>Every term has period \(T_0\), so their sum is also periodic with period \(T_0\).</p></div>
+<div class="fs-demo" id="synthesisDemo"><h3>Interactive: synthesize a square wave</h3><div class="fs-controls"><label>Number of odd harmonics <input id="harmonics" type="range" min="1" max="31" step="2" value="5"><b id="harmonicsVal">5</b></label><label>Fundamental frequency <input id="synthFreq" type="range" min="0.5" max="2" step="0.25" value="1"><b id="synthFreqVal">1 Hz</b></label></div><canvas id="synthCanvas" class="fs-canvas" width="900" height="300"></canvas><p class="fs-readout" id="synthReadout">The partial sum uses the first selected odd harmonics. Increase the number of terms to see the approximation sharpen.</p></div>
+
+<h2 id="coefficients"><small>3</small>Fourier coefficients and spectra</h2>
+<div class="card"><h3>Analysis: calculate the coefficients</h3><p>Given a periodic signal \(x(t)\), its Fourier coefficient at harmonic \(k\) is obtained by projecting the signal onto the corresponding complex exponential over any one period:</p>
+<div class="eq">\[\boxed{x_k=\frac{1}{T_0}\int_{\tau}^{\tau+T_0}x(t)e^{-j2\pi kf_0t}\,dt.}\]</div>
+<p>Because the integrand is periodic, the integration interval can start at any \(\tau\). A common choice is \([-T_0/2,T_0/2]\) or \([0,T_0]\).</p></div>
+<div class="card"><h3>Example: a cosine</h3><p>Using Euler’s identity,</p><div class="eq">\[\cos(2\pi f_0t)=\frac{1}{2}e^{j2\pi f_0t}+\frac{1}{2}e^{-j2\pi f_0t}.\]</div><p>Therefore, \(x_{1}=x_{-1}=1/2\), and all other coefficients are zero.</p></div>
+<div class="card"><h3>Discrete spectrum</h3><p>The Fourier coefficients form a frequency-domain representation. The <b>magnitude spectrum</b> plots \(|x_k|\) versus \(k\), the <b>phase spectrum</b> plots \(\angle x_k\), and the <b>power spectrum</b> plots \(|x_k|^2\).</p></div>
+<div class="fs-demo" id="spectrumDemo"><h3>Interactive: magnitude and phase spectra of a periodic pulse train</h3><div class="fs-controls"><label>Duty cycle <input id="duty" type="range" min="0.1" max="0.9" step="0.05" value="0.5"><b id="dutyVal">0.50</b></label><label>Harmonics shown <input id="specK" type="range" min="3" max="15" step="2" value="9"><b id="specKVal">9</b></label></div><div class="fs-two"><div class="fs-panel"><b>Magnitude \(|x_k|\)</b><canvas id="magCanvas" class="fs-canvas" width="600" height="245"></canvas></div><div class="fs-panel"><b>Phase \(\angle x_k\) (rad)</b><canvas id="phaseCanvas" class="fs-canvas" width="600" height="245"></canvas></div></div><p class="fs-readout" id="specReadout"></p></div>
+
+<h2 id="conditions"><small>4</small>Properties and conditions</h2>
+<div class="card"><h3>Real-valued signals: Hermitian symmetry</h3><p>If \(x(t)\) is real-valued, its Fourier coefficients satisfy</p><div class="eq">\[x_{-k}=x_k^*.\]</div><p>Consequently, \(|x_k|\) is even and \(\angle x_k\) is odd. A real signal can also be represented using cosine terms and phase shifts:</p><div class="eq">\[x(t)=x_0+\sum_{k=1}^{\infty}2|x_k|\cos(2\pi kf_0t+\angle x_k).\]</div></div>
+<div class="grid"><div class="tile"><b class="tag">Even signals</b><p>For an even signal, the sine coefficients are zero. Its trigonometric Fourier series contains cosine terms only.</p></div><div class="tile"><b class="tag">Odd signals</b><p>For an odd signal, the cosine coefficients (including DC) are zero. Its trigonometric Fourier series contains sine terms only.</p></div></div>
+<div class="card"><h3>Trigonometric Fourier series</h3><div class="eq">\[x(t)=\frac{a_0}{2}+\sum_{k=1}^{\infty}\left[a_k\cos(2\pi kf_0t)+b_k\sin(2\pi kf_0t)\right],\]</div><p>where, over any one period,</p><div class="eq">\[a_k=\frac{2}{T_0}\int_{\tau}^{\tau+T_0}x(t)\cos(2\pi kf_0t)\,dt,\quad b_k=\frac{2}{T_0}\int_{\tau}^{\tau+T_0}x(t)\sin(2\pi kf_0t)\,dt.\]</div></div>
+<div class="callout"><b>Dirichlet conditions.</b> These are sufficient (but not necessary) conditions for a Fourier series to exist: over one period, (1) \(x(t)\) is absolutely integrable, (2) it has a finite number of maxima and minima, and (3) it has a finite number of discontinuities.</div>
+<div class="card"><h3>Discontinuities and Gibbs phenomenon</h3><p>Fourier series can represent periodic signals with jumps. Near a discontinuity, finite partial sums exhibit oscillatory overshoot; increasing the number of harmonics makes the oscillations narrower, but the peak overshoot does not disappear entirely.</p></div>
+<div class="fs-demo" id="gibbsDemo"><h3>Interactive: Fourier approximation near a jump</h3><div class="fs-controls"><label>Odd harmonics included <input id="gibbsK" type="range" min="1" max="51" step="2" value="9"><b id="gibbsKVal">9</b></label></div><canvas id="gibbsCanvas" class="fs-canvas" width="900" height="280"></canvas><p class="fs-readout" id="gibbsReadout"></p></div>
+
+<h2 id="lti"><small>5</small>Fourier series and LTI systems</h2>
+<div class="card"><h3>Periodic input to an LTI system</h3><p>Complex exponentials are eigenfunctions of LTI systems. If the input is periodic with Fourier series \(x(t)=\sum_k x_ke^{j2\pi kf_0t}\), then the output is</p><div class="eq">\[\boxed{y(t)=\sum_{k=-\infty}^{\infty}x_kH(kf_0)e^{j2\pi kf_0t}.}\]</div><p>Here \(H(f)=\int_{-\infty}^{\infty}h(t)e^{-j2\pi ft}\,dt\) is the frequency response. The output coefficient at harmonic \(k\) is \(x_kH(kf_0)\). An LTI system changes the amplitude and phase of existing harmonics; it does not create new frequencies.</p></div>
+<div class="fs-demo" id="ltiDemo"><h3>Interactive: an LTI system filters a periodic square wave</h3><div class="fs-controls"><label>Fundamental frequency \(f_0\) <input id="ltiFreq" type="range" min="0.2" max="3" step="0.1" value="1"><b id="ltiFreqVal">1.0 Hz</b></label><label>Decay rate \(a\) <input id="ltiA" type="range" min="0.5" max="8" step="0.5" value="2"><b id="ltiAVal">2</b></label><label>Odd harmonics <input id="ltiTerms" type="range" min="1" max="25" step="2" value="9"><b id="ltiTermsVal">9</b></label></div><canvas id="ltiCanvas" class="fs-canvas" width="900" height="290"></canvas><p class="fs-readout" id="ltiReadout"></p></div>
+
+<h2 id="parseval"><small>6</small>Parseval’s relation</h2>
+<div class="card"><h3>Power in time and frequency domains</h3><p>The average power of a periodic signal equals the sum of the power in its Fourier-series components:</p><div class="eq">\[\boxed{P_x=\frac{1}{T_0}\int_{\tau}^{\tau+T_0}|x(t)|^2\,dt=\sum_{k=-\infty}^{\infty}|x_k|^2.}\]</div><p>Power is conserved by the Fourier-series representation. We can calculate it either by averaging the squared time-domain waveform or by summing the squared magnitudes of its Fourier coefficients.</p></div>
+<div class="fs-demo" id="parsevalDemo"><h3>Interactive: verify Parseval’s relation</h3><div class="fs-controls"><label>Odd harmonics included <input id="parsevalK" type="range" min="1" max="51" step="2" value="9"><b id="parsevalKVal">9</b></label></div><canvas id="parsevalCanvas" class="fs-canvas" width="900" height="235"></canvas><p class="fs-readout" id="parsevalReadout"></p></div>
+
+<h2 id="self-check"><small>7</small>Self-assessment</h2>
+<div class="quiz-grid">
+<div class="quiz-card" data-quiz><h3>Question 1 · Harmonics</h3><p>For a periodic signal with fundamental frequency \(f_0\), the frequency of its \(k\)-th harmonic is:</p><fieldset class="quiz-question" data-answer="b" data-feedback="Harmonics occur at integer multiples kf₀ of the fundamental frequency."><label class="quiz-option"><input type="radio" name="q1" value="a"> \(f_0/k\)</label><label class="quiz-option"><input type="radio" name="q1" value="b"> \(kf_0\)</label><label class="quiz-option"><input type="radio" name="q1" value="c"> \(f_0+k\)</label><p class="quiz-feedback"></p></fieldset><div class="quiz-actions"><button data-check>Check</button><button class="secondary" data-reset>Reset</button><span class="quiz-result"></span></div></div>
+<div class="quiz-card" data-quiz><h3>Question 2 · Coefficients</h3><p>For a real-valued periodic signal, which property must hold?</p><fieldset class="quiz-question" data-answer="c" data-feedback="Real-valued signals have Hermitian-symmetric Fourier coefficients."><label class="quiz-option"><input type="radio" name="q2" value="a"> \(x_{-k}=x_k\) always</label><label class="quiz-option"><input type="radio" name="q2" value="b"> \(|x_k|\) is odd</label><label class="quiz-option"><input type="radio" name="q2" value="c"> \(x_{-k}=x_k^*\)</label><p class="quiz-feedback"></p></fieldset><div class="quiz-actions"><button data-check>Check</button><button class="secondary" data-reset>Reset</button><span class="quiz-result"></span></div></div>
+<div class="quiz-card" data-quiz><h3>Question 3 · LTI systems</h3><p>If the input has Fourier coefficient \(x_k\), what is the output coefficient at harmonic \(k\)?</p><fieldset class="quiz-question" data-answer="a" data-feedback="Each input harmonic is multiplied by the system frequency response at that harmonic."><label class="quiz-option"><input type="radio" name="q3" value="a"> \(x_kH(kf_0)\)</label><label class="quiz-option"><input type="radio" name="q3" value="b"> \(x_k+H(kf_0)\)</label><label class="quiz-option"><input type="radio" name="q3" value="c"> \(H(f_0)\) only</label><p class="quiz-feedback"></p></fieldset><div class="quiz-actions"><button data-check>Check</button><button class="secondary" data-reset>Reset</button><span class="quiz-result"></span></div></div>
+<div class="quiz-card" data-quiz><h3>Question 4 · Parseval</h3><p>Parseval’s relation connects average signal power to:</p><fieldset class="quiz-question" data-answer="b" data-feedback="The average squared magnitude equals the sum of squared Fourier-coefficient magnitudes."><label class="quiz-option"><input type="radio" name="q4" value="a"> The sum of coefficient phases</label><label class="quiz-option"><input type="radio" name="q4" value="b"> \(\sum_k|x_k|^2\)</label><label class="quiz-option"><input type="radio" name="q4" value="c"> The largest harmonic frequency</label><p class="quiz-feedback"></p></fieldset><div class="quiz-actions"><button data-check>Check</button><button class="secondary" data-reset>Reset</button><span class="quiz-result"></span></div></div>
+</div>
+<footer>APSC 270 · Signals and Communication Systems · Fourier Series</footer>
+</main>
+<script>
+(()=>{
+const $=id=>document.getElementById(id),TAU=2*Math.PI;
+function axes(ctx,W,H,xmin,xmax,ymin,ymax,xstep,ystep,xlabel='t',ylabel='Amplitude'){
+ ctx.fillStyle='#05090f';ctx.fillRect(0,0,W,H);const X=x=>(x-xmin)/(xmax-xmin)*W,Y=y=>H-(y-ymin)/(ymax-ymin)*H;
+ ctx.font='11px system-ui';ctx.lineWidth=1;ctx.strokeStyle='rgba(145,195,225,.28)';ctx.fillStyle='#d7e7f1';
+ for(let x=Math.ceil(xmin/xstep-1e-9)*xstep;x<=xmax+1e-9;x+=xstep){let px=X(x);ctx.beginPath();ctx.moveTo(px,0);ctx.lineTo(px,H);ctx.stroke();ctx.fillText(Number(x.toFixed(3)).toString(),px+2,Y(0)+14);}
+ for(let y=Math.ceil(ymin/ystep-1e-9)*ystep;y<=ymax+1e-9;y+=ystep){let py=Y(y);ctx.beginPath();ctx.moveTo(0,py);ctx.lineTo(W,py);ctx.stroke();ctx.textAlign='right';ctx.fillText(Number(y.toFixed(3)).toString(),X(0)-6,py-3);}
+ ctx.strokeStyle='#f0f9ff';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(0,Y(0));ctx.lineTo(W,Y(0));ctx.moveTo(X(0),0);ctx.lineTo(X(0),H);ctx.stroke();ctx.textAlign='right';ctx.fillStyle='#e2f0f8';ctx.font='italic 13px Georgia';ctx.fillText(xlabel,W-5,Y(0)-5);ctx.textAlign='left';ctx.fillText(ylabel,6,14);return {X,Y};
+}
+function curve(ctx,map,fn,color='#55c8f2',dash=[]){ctx.beginPath();ctx.strokeStyle=color;ctx.lineWidth=2.3;ctx.setLineDash(dash);for(let i=0;i<=map.W;i++){let x=map.xmin+i/map.W*(map.xmax-map.xmin),y=fn(x);if(!Number.isFinite(y)){continue;}i?ctx.lineTo(map.X(x),map.Y(y)):ctx.moveTo(map.X(x),map.Y(y));}ctx.stroke();ctx.setLineDash([]);}
+function drawTime(canvas,fn,xmin,xmax,ymin,ymax,label='t'){const c=canvas.getContext('2d'),W=canvas.width,H=canvas.height,m=axes(c,W,H,xmin,xmax,ymin,ymax,1,0.5,label);m.W=W;m.xmin=xmin;m.xmax=xmax;curve(c,m,fn);}
+// Rotating phasor and its real/imaginary projections
+function phasor(){let f=+$('phFreq').value,t=+$('phTime').value; $('phFreqVal').textContent=f.toFixed(1)+' Hz';$('phTimeVal').textContent=t.toFixed(2)+' s';let p=$('phasorPlane'),g=p.getContext('2d'),W=p.width,H=p.height,cx=W/2,cy=H/2,R=94,ang=TAU*f*t;g.fillStyle='#05090f';g.fillRect(0,0,W,H);g.strokeStyle='rgba(145,195,225,.35)';g.lineWidth=1;g.beginPath();g.moveTo(35,cy);g.lineTo(W-25,cy);g.moveTo(cx,18);g.lineTo(cx,H-18);g.stroke();g.fillStyle='#dceaf5';g.font='10px system-ui';g.textAlign='center';[-1,0,1].forEach(v=>{let xx=cx+v*R;g.beginPath();g.moveTo(xx,cy-4);g.lineTo(xx,cy+4);g.stroke();g.fillText(String(v),xx,cy+16);let yy=cy-v*R;g.beginPath();g.moveTo(cx-4,yy);g.lineTo(cx+4,yy);g.stroke();if(v!==0)g.fillText(String(v),cx-12,yy+3);});g.strokeStyle='#55c8f2';g.beginPath();g.arc(cx,cy,R,0,TAU);g.stroke();g.strokeStyle='#ff6b78';g.lineWidth=3;g.beginPath();g.moveTo(cx,cy);g.lineTo(cx+R*Math.cos(ang),cy-R*Math.sin(ang));g.stroke();g.fillStyle='#ff6b78';g.beginPath();g.arc(cx+R*Math.cos(ang),cy-R*Math.sin(ang),5,0,TAU);g.fill();g.setLineDash([4,4]);g.strokeStyle='#62d99a';g.beginPath();g.moveTo(cx+R*Math.cos(ang),cy-R*Math.sin(ang));g.lineTo(cx+R*Math.cos(ang),cy);g.moveTo(cx+R*Math.cos(ang),cy-R*Math.sin(ang));g.lineTo(cx,cy-R*Math.sin(ang));g.stroke();g.setLineDash([]);g.fillStyle='#dceaf5';g.font='13px system-ui';g.fillText('Re',W-34,cy-8);g.fillText('Im',cx+8,22);g.fillText('cos = '+Math.cos(ang).toFixed(3),12,H-34);g.fillText('sin = '+Math.sin(ang).toFixed(3),12,H-14);
+ let q=$('phasorTime').getContext('2d'),w=$('phasorTime').width,h=$('phasorTime').height,m=axes(q,w,h,0,2,-1.25,1.25,.25,.5,'t (s)');for(let [fn,col] of [[z=>Math.cos(TAU*f*z),'#55c8f2'],[z=>Math.sin(TAU*f*z),'#ff6b78']]){q.beginPath();q.strokeStyle=col;q.lineWidth=2.2;for(let i=0;i<=w;i++){let z=2*i/w;i?q.lineTo(m.X(z),m.Y(fn(z))):q.moveTo(m.X(z),m.Y(fn(z)));}q.stroke();}q.strokeStyle='#62d99a';q.setLineDash([4,4]);q.beginPath();q.moveTo(m.X(t),0);q.lineTo(m.X(t),h);q.stroke();q.setLineDash([]);$('phReadout').innerHTML='At this instant, \\(e^{j2\\pi f_0t}= '+Math.cos(ang).toFixed(3)+' + j'+Math.sin(ang).toFixed(3)+'\\). The phasor angle is '+(ang%(TAU)).toFixed(2)+' rad.';typeset($('phReadout'));}
+function typeset(el){if(window.MathJax?.typesetPromise)window.MathJax.typesetPromise([el]).catch(()=>{});}
+['phFreq','phTime'].forEach(id=>$(id).addEventListener('input',phasor));phasor();
+// Square-wave synthesis using odd cosine-free sine harmonics
+function squareSum(t,K,f=1){let s=0;for(let n=1;n<=K;n+=2)s+=4/Math.PI*Math.sin(TAU*n*f*t)/n;return s;}
+function synthesis(){let K=+$('harmonics').value,f=+$('synthFreq').value;$('harmonicsVal').textContent=K;$('synthFreqVal').textContent=f+' Hz';let c=$('synthCanvas').getContext('2d'),W=$('synthCanvas').width,H=$('synthCanvas').height,m=axes(c,W,H,-1.5/f,1.5/f,-1.6,1.6,.25/f,.5);m.W=W;m.xmin=-1.5/f;m.xmax=1.5/f;curve(c,m,t=>squareSum(t,K,f),'#55c8f2');curve(c,m,t=>Math.sin(TAU*f*t)>=0?1:-1,'#ff6b78',[6,5]);$('synthReadout').textContent=`The partial sum includes ${K} odd harmonics. The red dashed curve is the ideal ±1 square wave. Notice the overshoot near each jump (Gibbs phenomenon).`;}
+['harmonics','synthFreq'].forEach(id=>$(id).addEventListener('input',synthesis));synthesis();
+// Fourier coefficients for a centered rectangular pulse, period 1, duty D
+function coeff(k,D){if(k===0)return D;let a=Math.sin(Math.PI*k*D)/(Math.PI*k);return a;}
+function spectrum(){let D=+$('duty').value,K=+$('specK').value;$('dutyVal').textContent=D.toFixed(2);$('specKVal').textContent=K;let ks=Array.from({length:2*K+1},(_,i)=>i-K),vals=ks.map(k=>coeff(k,D));for(let [id,mode] of [['magCanvas','mag'],['phaseCanvas','phase']]){let c=$(id).getContext('2d'),W=$(id).width,H=$(id).height,max=mode==='mag'?Math.max(.2,...vals.map(Math.abs))*1.2:Math.PI*1.15,m=axes(c,W,H,-K-.7,K+.7,mode==='mag'?0:-max,mode==='mag'?max:max,2,mode==='mag'?Math.max(.05,max/4):Math.PI/2,'harmonic k',mode==='mag'?'|xₖ|':'phase');ks.forEach((k,i)=>{let a=vals[i],ph=Math.atan2(0,a);if(mode==='phase'&&Math.abs(a)>1e-5)ph=a<0?Math.PI:0;let y=mode==='mag'?Math.abs(a):ph,xx=m.X(k);c.strokeStyle=mode==='mag'?'#55c8f2':'#ff6b78';c.lineWidth=3;c.beginPath();c.moveTo(xx,m.Y(0));c.lineTo(xx,m.Y(y));c.stroke();c.fillStyle=mode==='mag'?'#55c8f2':'#ff6b78';c.beginPath();c.arc(xx,m.Y(y),3.5,0,TAU);c.fill();});}$('specReadout').textContent=`For a centered pulse of duty cycle D = ${D.toFixed(2)}, x₀ = D and xₖ = sin(πkD)/(πk), k ≠ 0. The coefficients are real here, so phases are 0 or π (apart from zero coefficients).`;}
+['duty','specK'].forEach(id=>$(id).addEventListener('input',spectrum));spectrum();
+function gibbs(){let K=+$('gibbsK').value;$('gibbsKVal').textContent=K;let c=$('gibbsCanvas').getContext('2d'),W=$('gibbsCanvas').width,H=$('gibbsCanvas').height,m=axes(c,W,H,-1.5,1.5,-1.5,1.5,.25,.5,'t / T₀');m.W=W;m.xmin=-1.5;m.xmax=1.5;curve(c,m,t=>squareSum(t,K),'#55c8f2');curve(c,m,t=>Math.sin(TAU*t)>=0?1:-1,'#ff6b78',[6,5]);$('gibbsReadout').textContent=`Using ${K} odd harmonics. As K increases, the approximation improves away from the jumps; the overshoot near a jump persists while becoming more localized.`;}
+$('gibbsK').addEventListener('input',gibbs);gibbs();
+// LTI system h(t)=exp(-a t)u(t), H(f)=1/(a+j2πf)
+function lti(){let f=+$('ltiFreq').value,a=+$('ltiA').value,K=+$('ltiTerms').value;$('ltiFreqVal').textContent=f.toFixed(1)+' Hz';$('ltiAVal').textContent=a.toFixed(1);$('ltiTermsVal').textContent=K;let c=$('ltiCanvas').getContext('2d'),W=$('ltiCanvas').width,H=$('ltiCanvas').height,m=axes(c,W,H,-1.5/f,1.5/f,-1.5,1.5,.25/f,.5,'t (s)');m.W=W;m.xmin=-1.5/f;m.xmax=1.5/f;let input=t=>squareSum(t,K,f),output=t=>{let s=0;for(let n=1;n<=K;n+=2){let om=TAU*n*f,mag=1/Math.hypot(a,om),phase=-Math.atan2(om,a);s+=4/Math.PI/n*mag*Math.sin(om*t+phase);}return s;};curve(c,m,input,'#ff6b78',[6,5]);curve(c,m,output,'#55c8f2');$('ltiReadout').textContent=`The input square-wave harmonics are each multiplied by H(kf₀) = 1/(a + j2πkf₀). Larger a reduces the relative attenuation and phase lag; increasing f₀ moves harmonics further into the system's attenuated range.`;}
+['ltiFreq','ltiA','ltiTerms'].forEach(id=>$(id).addEventListener('input',lti));lti();
+function parseval(){let K=+$('parsevalK').value;$('parsevalKVal').textContent=K;let sum=0;for(let k=1;k<=K;k+=2){let x=2/(Math.PI*k);sum+=2*x*x;}let ptime=0,N=30000;for(let i=0;i<N;i++){let t=(i+.5)/N,v=squareSum(t,K);ptime+=v*v/N;}let c=$('parsevalCanvas').getContext('2d'),W=$('parsevalCanvas').width,H=$('parsevalCanvas').height;c.fillStyle='#05090f';c.fillRect(0,0,W,H);let vals=[1,ptime,sum],labels=['Ideal square-wave power','Time-domain partial-sum power','Frequency-domain partial-sum power'],max=1.2,base=178,top=25,barW=150;for(let tick=0;tick<=1.2+1e-9;tick+=.2){let yy=base-tick/1.2*(base-top);c.strokeStyle='rgba(145,195,225,.28)';c.beginPath();c.moveTo(55,yy);c.lineTo(W-30,yy);c.stroke();c.fillStyle='#dceaf5';c.font='11px system-ui';c.textAlign='right';c.fillText(tick.toFixed(1),48,yy+4);}for(let i=0;i<3;i++){let x=105+i*255,h=vals[i]/max*(base-top);c.fillStyle=['#62d99a','#55c8f2','#ff6b78'][i];c.fillRect(x,base-h,barW,h);c.fillStyle='#e2f0f8';c.font='14px system-ui';c.textAlign='center';c.fillText(vals[i].toFixed(4),x+barW/2,base-h-7);c.font='12px system-ui';c.fillText(labels[i],x+barW/2,210);}c.strokeStyle='#f0f9ff';c.lineWidth=1.4;c.beginPath();c.moveTo(55,top);c.lineTo(55,base);c.lineTo(W-30,base);c.stroke();c.fillStyle='#e2f0f8';c.font='italic 13px Georgia';c.textAlign='left';c.fillText('Power',8,18);$('parsevalReadout').textContent=`With ${K} odd harmonics, the truncated-series power from its coefficients is ${sum.toFixed(5)} and the numerically averaged time-domain power is ${ptime.toFixed(5)}. Both approach the ideal square-wave power 1 as more terms are included.`;}
+$('parsevalK').addEventListener('input',parseval);parseval();
+// Quiz interaction
+ document.querySelectorAll('[data-quiz]').forEach(q=>{let qs=[...q.querySelectorAll('.quiz-question')],result=q.querySelector('.quiz-result');q.querySelector('[data-check]').addEventListener('click',()=>{let score=0,answered=0;qs.forEach(z=>{let a=z.querySelector('input:checked'),f=z.querySelector('.quiz-feedback');if(!a){f.textContent='Select an answer.';f.className='quiz-feedback incorrect';return;}answered++;let ok=a.value===z.dataset.answer;if(ok)score++;f.textContent=(ok?'Correct! ':'Not quite. ')+z.dataset.feedback;f.className='quiz-feedback '+(ok?'correct':'incorrect');});result.textContent=answered===qs.length?`Score: ${score}/${qs.length}`:`Answered ${answered}/${qs.length}`;});q.querySelector('[data-reset]').addEventListener('click',()=>{q.querySelectorAll('input').forEach(i=>i.checked=false);q.querySelectorAll('.quiz-feedback').forEach(f=>{f.textContent='';f.className='quiz-feedback';});result.textContent='';});});
+window.addEventListener('load',()=>{if(window.MathJax?.typesetPromise)window.MathJax.typesetPromise();},{once:true});
+})();
+</script></body></html>
