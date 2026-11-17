@@ -1535,8 +1535,8 @@ for(let n=Math.ceil(-maxY/yStep-1e-9);n<=Math.floor(maxY/yStep+1e-9);n++){
       return `
       <div class="test-results">
         <div>
-          <b>Time invariance:</b> ${Z(errTI)}, Δ = ${errTI.toFixed(4)}; 
-          <b>Linearity:</b> ${Z(errLin)}, Δ = ${errLin.toFixed(4)}
+          <b>Time invariance:</b> ${Z(errTI)}; 
+          <b>Linearity:</b> ${Z(errLin)}
         </div>
         <div class="test-properties">
           ${B('Linear',P[0])}
@@ -1715,14 +1715,14 @@ plot(right,[
     return `
       <div>
         Input approximated by <b>${ks.length} rectangular pulses</b>
-        of width Δ_τ = ${D.toFixed(2)} s.
+        of width Δ<sub>τ</sub> = ${D.toFixed(2)} s.
       </div>
       <div>
         Each pulse produces a shifted response. By linearity,
         the individual responses add to form the total output.
       </div>
       <div>
-        Decreasing Δ_τ improves the input and output approximations.
+        Decreasing Δ<sub>τ</sub> improves the input and output approximations.
       </div>
     `;
   }
