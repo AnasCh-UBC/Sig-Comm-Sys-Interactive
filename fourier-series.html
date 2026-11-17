@@ -562,7 +562,7 @@ header{align-items:center}
   </div>
   <p class="sub">The product of two complex numbers multiplies their magnitudes and adds their phases. Thus: \(zz^*=|z|^2=r\).</p>
   <div class="eq">\[e^{j\theta}=\cos\theta+j\sin\theta,\qquad e^{-j\theta}=\cos\theta-j\sin\theta\]
-    \[\cos\theta=\frac{e^{j\theta}+e^{-j\theta}}{2},\qquad \sin(\theta)=\frac{e^{j\theta}-e^{-j\theta}}{2j}\]
+    \[\cos\theta=\frac{e^{j\theta}+e^{-j\theta}}{2},\qquad \sin\theta=\frac{e^{j\theta}-e^{-j\theta}}{2j}\]
   </div>
 </div>
 
@@ -572,7 +572,46 @@ header{align-items:center}
   <p class="sub">Its real and imaginary parts are cosine and sine with frequency \(f_0\), period \(T_0=\frac{1}{f_0}\):</p>
   <div class="eq">\[e^{j2\pi f_0t}=\cos(2\pi f_0t)+j\sin(2\pi f_0t).\]</div>
 </div>
-<div class="fs-demo" id="phasorDemo"><h3>Interactive: rotating complex sinusoid</h3><div class="fs-controls"><label>Frequency \(f_0\) <input id="phFreq" type="range" min="0.2" max="2" step="0.1" value="0.5"><b id="phFreqVal">0.5 Hz</b></label><label>Time \(t\) <input id="phTime" type="range" min="0" max="2" step="0.01" value="0.35"><b id="phTimeVal">0.35 s</b></label></div><div class="fs-two"><div class="fs-panel"><b>Complex plane</b><canvas id="phasorPlane" class="fs-canvas" width="600" height="270"></canvas></div><div class="fs-panel"><b>Real and imaginary parts versus time</b><canvas id="phasorTime" class="fs-canvas" width="600" height="270"></canvas></div></div><p class="fs-readout" id="phReadout"></p></div>
+<!--<div class="fs-demo" id="phasorDemo"><h3>Interactive: rotating complex sinusoid</h3><div class="fs-controls"><label>Frequency \(f_0\) <input id="phFreq" type="range" min="0.2" max="2" step="0.1" value="0.5"><b id="phFreqVal">0.5 Hz</b></label><label>Time \(t\) <input id="phTime" type="range" min="0" max="2" step="0.01" value="0.35"><b id="phTimeVal">0.35 s</b></label></div><div class="fs-two"><div class="fs-panel"><b>Complex plane</b><canvas id="phasorPlane" class="fs-canvas" width="600" height="270"></canvas></div><div class="fs-panel"><b>Real and imaginary parts versus time</b><canvas id="phasorTime" class="fs-canvas" width="600" height="270"></canvas></div></div><p class="fs-readout" id="phReadout"></p></div>
+-->
+<div class="fs-demo" id="phasorDemo">
+  <h3>Interactive: rotating complex sinusoid</h3>
+
+  <div class="fs-controls">
+    <label>
+      Frequency \(f_0\)
+      <input id="phFreq" type="range" min="0.2" max="2"
+             step="0.1" value="0.5">
+      <b id="phFreqVal">0.5 Hz</b>
+    </label>
+
+    <label>
+      Time \(t\)
+      <input id="phTime" type="range" min="0" max="2"
+             step="0.01" value="0">
+      <b id="phTimeVal">0.00 s</b>
+    </label>
+
+    <button id="phRun">▶ Run</button>
+    <button id="phReset">↺ Reset</button>
+  </div>
+
+  <div class="fs-two">
+    <div class="fs-panel">
+      <b>Complex plane</b>
+      <canvas id="phasorPlane" class="fs-canvas"
+              width="600" height="270"></canvas>
+    </div>
+
+    <div class="fs-panel">
+      <b>Real and imaginary parts versus time</b>
+      <canvas id="phasorTime" class="fs-canvas"
+              width="600" height="270"></canvas>
+    </div>
+  </div>
+
+  <p class="fs-readout" id="phReadout"></p>
+</div>
 
 <h2 id="what-is-fs"><small>2</small>What is Fourier series?</h2>
 <div class="card"><h3>From pulses to harmonically related sinusoids</h3>
@@ -616,6 +655,8 @@ header{align-items:center}
 </div>
 <footer>APSC 270 · Signals and Communication Systems · Fourier Series</footer>
 </main>
+
+
 <script>
 (()=>{
 const $=id=>document.getElementById(id),TAU=2*Math.PI;
@@ -651,5 +692,329 @@ $('parsevalK').addEventListener('input',parseval);parseval();
 // Quiz interaction
  document.querySelectorAll('[data-quiz]').forEach(q=>{let qs=[...q.querySelectorAll('.quiz-question')],result=q.querySelector('.quiz-result');q.querySelector('[data-check]').addEventListener('click',()=>{let score=0,answered=0;qs.forEach(z=>{let a=z.querySelector('input:checked'),f=z.querySelector('.quiz-feedback');if(!a){f.textContent='Select an answer.';f.className='quiz-feedback incorrect';return;}answered++;let ok=a.value===z.dataset.answer;if(ok)score++;f.textContent=(ok?'Correct! ':'Not quite. ')+z.dataset.feedback;f.className='quiz-feedback '+(ok?'correct':'incorrect');});result.textContent=answered===qs.length?`Score: ${score}/${qs.length}`:`Answered ${answered}/${qs.length}`;});q.querySelector('[data-reset]').addEventListener('click',()=>{q.querySelectorAll('input').forEach(i=>i.checked=false);q.querySelectorAll('.quiz-feedback').forEach(f=>{f.textContent='';f.className='quiz-feedback';});result.textContent='';});});
 window.addEventListener('load',()=>{if(window.MathJax?.typesetPromise)window.MathJax.typesetPromise();},{once:true});
+})();
+
+(() => {
+  const root = document.getElementById('phasorDemo');
+  if (!root) return;
+
+  const plane = root.querySelector('#phasorPlane');
+  const timeCanvas = root.querySelector('#phasorTime');
+
+  const pctx = plane.getContext('2d');
+  const tctx = timeCanvas.getContext('2d');
+
+  const freq = root.querySelector('#phFreq');
+  const time = root.querySelector('#phTime');
+  const freqVal = root.querySelector('#phFreqVal');
+  const timeVal = root.querySelector('#phTimeVal');
+  const readout = root.querySelector('#phReadout');
+  const runBtn = root.querySelector('#phRun');
+  const resetBtn = root.querySelector('#phReset');
+
+  let running = false;
+  let animationId = null;
+  let lastFrame = null;
+  let currentTime = Number(time.value);
+
+  const TWO_PI = 2 * Math.PI;
+
+  function drawPlane(theta) {
+    const w = plane.width;
+    const h = plane.height;
+    const cx = w / 2;
+    const cy = h / 2;
+    const R = 95;
+
+    pctx.clearRect(0, 0, w, h);
+
+    // Grid
+    pctx.strokeStyle = '#34445a';
+    pctx.lineWidth = 1;
+
+    for (let i = -R; i <= R; i += 25) {
+      pctx.beginPath();
+      pctx.moveTo(cx + i, 20);
+      pctx.lineTo(cx + i, h - 20);
+      pctx.stroke();
+
+      pctx.beginPath();
+      pctx.moveTo(25, cy + i);
+      pctx.lineTo(w - 25, cy + i);
+      pctx.stroke();
+    }
+
+    // Coordinate axes
+    pctx.strokeStyle = '#aab8ca';
+    pctx.lineWidth = 1.5;
+
+    pctx.beginPath();
+    pctx.moveTo(25, cy);
+    pctx.lineTo(w - 25, cy);
+    pctx.moveTo(cx, 20);
+    pctx.lineTo(cx, h - 20);
+    pctx.stroke();
+
+    pctx.fillStyle = '#e6edf7';
+    pctx.font = '14px Arial';
+    pctx.fillText('Re', w - 42, cy - 9);
+    pctx.fillText('Im', cx + 9, 27);
+
+    // Unit circle
+    pctx.beginPath();
+    pctx.arc(cx, cy, R, 0, TWO_PI);
+    pctx.strokeStyle = '#64748b';
+    pctx.setLineDash([5, 5]);
+    pctx.stroke();
+    pctx.setLineDash([]);
+
+    const x = cx + R * Math.cos(theta);
+    const y = cy - R * Math.sin(theta);
+
+    // Cosine projection
+    pctx.strokeStyle = '#38bdf8';
+    pctx.lineWidth = 2;
+    pctx.setLineDash([5, 4]);
+    pctx.beginPath();
+    pctx.moveTo(x, cy);
+    pctx.lineTo(x, y);
+    pctx.stroke();
+
+    // Sine projection
+    pctx.strokeStyle = '#f59e0b';
+    pctx.beginPath();
+    pctx.moveTo(cx, y);
+    pctx.lineTo(x, y);
+    pctx.stroke();
+    pctx.setLineDash([]);
+
+    // Rotating phasor
+    pctx.strokeStyle = '#f8fafc';
+    pctx.lineWidth = 3;
+    pctx.beginPath();
+    pctx.moveTo(cx, cy);
+    pctx.lineTo(x, y);
+    pctx.stroke();
+
+    // Phasor tip
+    pctx.fillStyle = '#f8fafc';
+    pctx.beginPath();
+    pctx.arc(x, y, 5, 0, TWO_PI);
+    pctx.fill();
+
+    // Angle arc (counterclockwise)
+    pctx.strokeStyle = '#a78bfa';
+    pctx.lineWidth = 2;
+    pctx.beginPath();
+    pctx.arc(cx, cy, 30, 0, -theta, true);
+    pctx.stroke();
+
+    pctx.fillStyle = '#a78bfa';
+    pctx.fillText('θ', cx + 38, cy - 13);
+
+    // Component labels
+    pctx.fillStyle = '#38bdf8';
+    pctx.fillText('cos(θ)', x + (Math.cos(theta) >= 0 ? 7 : -55), cy + 19);
+
+    pctx.fillStyle = '#f59e0b';
+    pctx.fillText('sin(θ)', cx + 8, y - 8);
+  }
+
+  function drawTime(t, f) {
+    const w = timeCanvas.width;
+    const h = timeCanvas.height;
+
+    tctx.clearRect(0, 0, w, h);
+
+    const left = 45;
+    const right = w - 15;
+    const top = 20;
+    const bottom = h - 35;
+
+    const plotW = right - left;
+    const plotH = bottom - top;
+    const midY = top + plotH / 2;
+    const scaleY = plotH * 0.38;
+
+    const maxT = 2;
+    const theta = TWO_PI * f * t;
+
+    // Grid
+    tctx.strokeStyle = '#34445a';
+    tctx.lineWidth = 1;
+
+    for (let i = 0; i <= 4; i++) {
+      const x = left + plotW * i / 4;
+      tctx.beginPath();
+      tctx.moveTo(x, top);
+      tctx.lineTo(x, bottom);
+      tctx.stroke();
+    }
+
+    for (let i = -1; i <= 1; i++) {
+      const y = midY - i * scaleY;
+      tctx.beginPath();
+      tctx.moveTo(left, y);
+      tctx.lineTo(right, y);
+      tctx.stroke();
+    }
+
+    // Axes
+    tctx.strokeStyle = '#aab8ca';
+    tctx.lineWidth = 1.5;
+    tctx.beginPath();
+    tctx.moveTo(left, midY);
+    tctx.lineTo(right, midY);
+    tctx.stroke();
+
+    // Time labels
+    tctx.fillStyle = '#e6edf7';
+    tctx.font = '12px Arial';
+    for (let i = 0; i <= 4; i++) {
+      const x = left + plotW * i / 4;
+      tctx.fillText((maxT * i / 4).toFixed(1), x - 10, bottom + 17);
+    }
+    tctx.fillText('t (s)', right - 25, h - 5);
+
+    // Draw traces only up to current time
+    function trace(fn, color) {
+      tctx.beginPath();
+      tctx.strokeStyle = color;
+      tctx.lineWidth = 2.5;
+
+      const steps = Math.max(2, Math.ceil(t / maxT * 500));
+
+      for (let i = 0; i <= steps; i++) {
+        const ti = t * i / steps;
+        const x = left + plotW * ti / maxT;
+        const y = midY - scaleY * fn(TWO_PI * f * ti);
+
+        if (i === 0) tctx.moveTo(x, y);
+        else tctx.lineTo(x, y);
+      }
+
+      tctx.stroke();
+    }
+
+    trace(Math.cos, '#38bdf8');
+    trace(Math.sin, '#f59e0b');
+
+    // Current-time marker
+    const markerX = left + plotW * t / maxT;
+
+    tctx.strokeStyle = '#f8fafc';
+    tctx.lineWidth = 1.5;
+    tctx.setLineDash([4, 4]);
+    tctx.beginPath();
+    tctx.moveTo(markerX, top);
+    tctx.lineTo(markerX, bottom);
+    tctx.stroke();
+    tctx.setLineDash([]);
+
+    // Current cosine and sine points
+    const cosY = midY - scaleY * Math.cos(theta);
+    const sinY = midY - scaleY * Math.sin(theta);
+
+    [[cosY, '#38bdf8'], [sinY, '#f59e0b']].forEach(([y, color]) => {
+      tctx.fillStyle = color;
+      tctx.beginPath();
+      tctx.arc(markerX, y, 4, 0, TWO_PI);
+      tctx.fill();
+    });
+
+    // Legend
+    tctx.font = '12px Arial';
+    tctx.fillStyle = '#38bdf8';
+    tctx.fillText('cos(2πf₀t)', left + 8, top + 13);
+    tctx.fillStyle = '#f59e0b';
+    tctx.fillText('sin(2πf₀t)', left + 110, top + 13);
+  }
+
+  function update() {
+    const f = Number(freq.value);
+    const theta = TWO_PI * f * currentTime;
+
+    freqVal.textContent = f.toFixed(1) + ' Hz';
+    timeVal.textContent = currentTime.toFixed(2) + ' s';
+
+    time.value = currentTime.toFixed(2);
+
+    drawPlane(theta);
+    drawTime(currentTime, f);
+
+    const re = Math.cos(theta);
+    const im = Math.sin(theta);
+
+    readout.innerHTML =
+      `\\(e^{j2\\pi f_0t} = \\cos(2\\pi f_0t) + j\\sin(2\\pi f_0t)\\)` +
+      `<br>θ = ${(theta % TWO_PI).toFixed(2)} rad &nbsp; | &nbsp; ` +
+      `Real = ${re.toFixed(3)} &nbsp; | &nbsp; ` +
+      `Imaginary = ${im.toFixed(3)}`;
+
+    if (window.MathJax?.typesetPromise) {
+      window.MathJax.typesetPromise([readout]);
+    }
+  }
+
+  function animate(timestamp) {
+    if (!running) return;
+
+    if (lastFrame !== null) {
+      const dt = (timestamp - lastFrame) / 1000;
+      currentTime += dt;
+
+      // Keep the animation within the displayed time window
+      if (currentTime > 2) {
+        currentTime = 0;
+      }
+    }
+
+    lastFrame = timestamp;
+    update();
+
+    animationId = requestAnimationFrame(animate);
+  }
+
+  function start() {
+    if (running) return;
+
+    running = true;
+    lastFrame = null;
+    runBtn.textContent = 'Ⅱ Pause';
+    animationId = requestAnimationFrame(animate);
+  }
+
+  function pause() {
+    running = false;
+    lastFrame = null;
+
+    if (animationId !== null) {
+      cancelAnimationFrame(animationId);
+      animationId = null;
+    }
+
+    runBtn.textContent = '▶ Run';
+  }
+
+  runBtn.addEventListener('click', () => {
+    if (running) pause();
+    else start();
+  });
+
+  resetBtn.addEventListener('click', () => {
+    pause();
+    currentTime = 0;
+    update();
+  });
+
+  freq.addEventListener('input', update);
+
+  time.addEventListener('input', () => {
+    pause();
+    currentTime = Number(time.value);
+    update();
+  });
+
+  update();
 })();
 </script></body></html>
