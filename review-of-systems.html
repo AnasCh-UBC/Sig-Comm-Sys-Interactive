@@ -913,12 +913,12 @@ header{align-items:center}
 <p class="sub">Complex sinusoids pass through LTI systems unchanged in shape</p>
 <p>Let \(H(f_0)=\int_{-\infty}^{\infty}h(\tau)e^{-j2\pi f_0\tau}d\tau.\)</p>
 <div class="card">
+  <h3>Complex sinusoids are <b>eigenfunctions</b> of LTI systems</h3>
   <p>For an LTI system with impulse response $h(t)$ and a complex sinusoidal input $x(t)=e^{j(2\pi f_0t+\theta)}$, the output is:</p>
   <div class="eq-box">\[y(t)=x(t)\circledast h(t)=e^{j(2\pi f_0t+\theta)}H(f_0)=|H(f_0)|e^{j(2\pi f_0t+\theta+\angle H(f_0))}.\] 
     </div> 
   <p class="sub">The response to a complex sinusoid is a complex sinusoid with the <b>same frequency</b>, scaled by $|H(f_0)|$ and 
     phase-shifted by $\angle H(f_0)$.</p> 
-  <p>For this reason complex sinusoids are called <b>eigenfunctions</b> of LTI systems.</p>
 </div>
 <div class="card">
   <b> Note:</b> We can use Eulers identity to find the output corresponding to an input cosine or sine signals. 
@@ -1868,7 +1868,7 @@ addAxisDetails(right, 't', -0.2, 1.4);
 // ---- 5. eigenfunction
 W('eig',{
   cap:'Interactive 5.1',
-  title:'A cosine through the LTI system h(t) = e^(−at)u(t)',
+  title:'A cosine through the LTI system h(t) = exp(−at)u(t)',
   h:200,
 
   ctl:[
@@ -1922,63 +1922,22 @@ W('eig',{
     const ctx=c.getContext('2d');
     const W=c.width,H=c.height;
 
-    const X=t=>(t+2)/4*W;
     const Y=value=>H-(value+m)/(2*m)*H;
-    const zeroX=X(0);
 
     ctx.save();
 
-    // Horizontal grid lines and vertical-axis tick labels
+    /*// Horizontal grid lines and vertical-axis tick labels
     ctx.font='12px Arial';
     ctx.textAlign='right';
     ctx.textBaseline='middle';
-    ctx.fillStyle='#a9bdce';
+    ctx.fillStyle='#a9bdce';*/
 
-    const yStep=Math.ceil(Math.max(0.5,m/6)*4-1e-9)/2;
-    for(let n=Math.ceil(-m/yStep-1e-9);n<=Math.floor(m/yStep+1e-9);n++){
-      const value=+(n*yStep).toFixed(8);
-      const py=Y(value);
-
-      ctx.strokeStyle='rgba(160,185,205,0.25)';
-      ctx.lineWidth=.7;
-      ctx.beginPath();
-      ctx.moveTo(0,py);
-      ctx.lineTo(W,py);
-      ctx.stroke();
-
-      ctx.fillText(value.toFixed(2).replace(/\.?0+$/,''),zeroX-7,py);
-
-      // Tick marks on vertical axis
-      ctx.strokeStyle='#dceaf5';
-      ctx.beginPath();
-      ctx.moveTo(zeroX-3,py);
-      ctx.lineTo(zeroX+3,py);
-      ctx.stroke();
-    }
-
-    // Vertical axis at t = 0
-    ctx.strokeStyle='#dceaf5';
-    ctx.lineWidth=1.4;
-    ctx.beginPath();
-    ctx.moveTo(zeroX,0);
-    ctx.lineTo(zeroX,H);
-    ctx.stroke();
-
-    // Horizontal-axis ticks and labels
+    /*// Horizontal-axis ticks and labels
     ctx.font='10px Arial';
     ctx.textAlign='center';
     ctx.textBaseline='top';
     ctx.fillStyle='#a9bdce';
-    ctx.strokeStyle='#dceaf5';
-
-    for(let t=-2;t<=2;t+=1){
-      const px=X(t);
-      ctx.beginPath();
-      ctx.moveTo(px,Y(0)-3);
-      ctx.lineTo(px,Y(0)+3);
-      ctx.stroke();
-      ctx.fillText(String(t),px,Y(0)+5);
-    }
+    ctx.strokeStyle='#dceaf5';*/
 
     // Time-axis label just above the right-most end of the axis
     ctx.font='italic 13px Georgia';
@@ -1989,7 +1948,7 @@ W('eig',{
 
     ctx.restore();
 
-    return 'Red: output computed by numerical convolution. Blue dashed: input cos(2πf₀t). The output is a cosine at the <b>same frequency</b>, with amplitude |H(f₀)| = <b>'+mag.toFixed(3)+'</b> and phase ∠H(f₀) = <b>'+(ph*180/Math.PI).toFixed(1)+'°</b>, where H(f) = 1/(a + j2πf). Largest difference between the numerical output and |H|cos(2πf₀t+∠H): '+e.toExponential(1)+'.';
+    return 'The output is a cosine at the <b>same frequency</b>, with amplitude |H(f₀)| = <b>'+mag.toFixed(3)+'</b> and phase ∠H(f₀) = <b>'+(ph*180/Math.PI).toFixed(1)+'°</b>, where H(f) = 1/(a + j2πf).';
   }
 });
 
