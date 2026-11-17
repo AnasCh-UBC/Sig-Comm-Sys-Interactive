@@ -617,10 +617,13 @@ header{align-items:center}
 
 
 <h2 id="what-is-fs"><small>2</small>What is Fourier series?</h2>
-<p class="sub">What happens when we add signals of the form \(e^{j2\pi kf_0 t}\) for some <b>fundamental frequency</b> \(f_0\) and integer \(k\)?</p>
+<p class="sub">What is the shape of \(\sum_{k=-\infty}{\infty}x_k e^{j2\pi kf_0 t}\) for some <b>fundamental frequency</b> \(f_0\) and complex \(x_k\)?</p>
 <!-- signal synthesis explorer-->
 <div class="fs-demo" id="fourierSynthesisDemo">
   <h3>Explore: Synthesizing a signal using Fourier coefficients</h3>
+  <p class="fs-readout">
+    <b>Assumption:</b> To simplify, all coefficients in this example are real and
+    \(x_{-k}=x_k\). This is not required in general!</p>
   <p>
     Select an index \(k\), enter a valued for \(x_k\), and click <b>Update coefficient</b>.
   </p>
@@ -666,13 +669,6 @@ header{align-items:center}
     <b>Current synthesis equation</b>
     <p id="fsSynthesisEquation" class="fs-readout"></p>
   </div>
-
-  <p class="fs-readout">
-    <b>Assumption:</b> In this example, all coefficients are real and
-    \(x_{-k}=x_k\). This is the Fourier-series symmetry for a
-    real-valued, even signal. Therefore, each pair of positive- and
-    negative-index harmonics combines into a cosine term.
-  </p>
 </div>
 
 <div class="card"><h3>From pulses to harmonically related sinusoids</h3>
