@@ -799,7 +799,16 @@ header{align-items:center}
 
   </div>
 </div>
-<div class="card"><h3>Discrete spectrum</h3><p>The Fourier coefficients form a frequency-domain representation. The <b>magnitude spectrum</b> plots \(|x_k|\) versus \(k\), the <b>phase spectrum</b> plots \(\angle x_k\), and the <b>power spectrum</b> plots \(|x_k|^2\).</p></div>
+<div class="card"><h3>Discrete spectrum</h3>
+  <p class="sub">The Fourier coefficients (\x_k\) form a frequency-domain representation of \(x(t)\). </p>
+  <p> The frequency domain representation of a periodic signal \(x(t)\) is plotted as a 
+    <ol>
+      <li><b>magnitude spectrum</b> plots \(|x_k|\) versus \(k\)</li>
+      <li><b>phase spectrum</b> plots \(\angle x_k\) versus \(k\)</li>
+      <li><b>power spectrum</b> plots \(|x_k|^2\)  versus \(k\)</li>
+    </ol>
+  </p>
+</div>
 <div class="fs-demo" id="spectrumDemo"><h3>Interactive: magnitude and phase spectra of a periodic pulse train</h3><div class="fs-controls"><label>Duty cycle <input id="duty" type="range" min="0.1" max="0.9" step="0.05" value="0.5"><b id="dutyVal">0.50</b></label><label>Harmonics shown <input id="specK" type="range" min="3" max="15" step="2" value="9"><b id="specKVal">9</b></label></div><div class="fs-two"><div class="fs-panel"><b>Magnitude \(|x_k|\)</b><canvas id="magCanvas" class="fs-canvas" width="600" height="245"></canvas></div><div class="fs-panel"><b>Phase \(\angle x_k\) (rad)</b><canvas id="phaseCanvas" class="fs-canvas" width="600" height="245"></canvas></div></div><p class="fs-readout" id="specReadout"></p></div>
 
 <h2 id="conditions"><small>4</small>Properties and conditions</h2>
