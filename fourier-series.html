@@ -699,7 +699,7 @@ header{align-items:center}
 <div class="card"><h3>Analysis: Calculating the coefficients</h3>
   <div class="grid">
     <div class="tile">
-      Given a periodic signal \(x(t)\), its Fourier coefficient at harmonic \(k\) is obtained by projecting the signal onto the corresponding complex exponential over any one period.
+      Given a periodic signal \(x(t)\), its Fourier coefficient at harmonic \(k\) is obtained by projecting \(x(t)\) onto \(e^{j2\pi kf_0t}\) over any one period.
     </div>
     <div class="eq">
       \[x_k=\frac{1}{T_0}\int_{\tau}^{\tau+T_0}x(t)e^{-j2\pi kf_0t}\,dt.\]
