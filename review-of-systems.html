@@ -1055,11 +1055,12 @@ function plot(c,S,x0,x1,y0,y1,r,tk){
   x.fillText(String(+k.toFixed(2)),xx,zeroY+6);
  }
 
- // Horizontal grid, y-axis ticks and labels
- const yStep=(y1-y0)/5;
+ // Horizontal grid, y-axis ticks and labels: multiples of 0.25 only
  const yAxisX=(x0<=0&&x1>=0)?X(0):0;
- for(let i=0;i<=5;i++){
-  const value=y0+i*yStep;
+ const firstYTick=Math.ceil(y0*4-1e-9);
+ const lastYTick=Math.floor(y1*4+1e-9);
+ for(let n=firstYTick;n<=lastYTick;n++){
+  const value=n/4;
   const yy=Y(value);
 
   x.strokeStyle='rgba(145,195,225,.38)';
@@ -1079,7 +1080,7 @@ function plot(c,S,x0,x1,y0,y1,r,tk){
   x.font='10px system-ui';
   x.textAlign='right';
   x.textBaseline='middle';
-  x.fillText(+value.toFixed(2),yAxisX-6,yy);
+  x.fillText(value.toFixed(2).replace(/\.?0+$/,''),yAxisX-6,yy);
  }
 
  // Stronger horizontal and vertical axes
@@ -1430,18 +1431,16 @@ ctx.font = '10px Arial';
 ctx.textAlign = 'right';
 ctx.textBaseline = 'middle';
 
-for(let k=-2;k<=2;k++){
-  const value = k*maxY/2;
-  const yy = Y(value);
+for(let n=Math.ceil(-maxY*4-1e-9);n<=Math.floor(maxY*4+1e-9);n++){
+  const value=n/4;
+  const yy=Y(value);
 
-  // Tick mark
+  // Tick mark and label at each 0.25 increment
   ctx.beginPath();
   ctx.moveTo(X(0)-4,yy);
   ctx.lineTo(X(0)+4,yy);
   ctx.stroke();
-
-  // Tick label
-  ctx.fillText(value.toFixed(1),X(0)-7,yy);
+  ctx.fillText(value.toFixed(2).replace(/\.?0+$/,''),X(0)-7,yy);
 }
 
     // Horizontal-axis ticks and labels
@@ -1679,7 +1678,8 @@ plot(right,[
   g.textAlign = 'right';
   g.textBaseline = 'middle';
 
-  [0.2, 0.4, 0.6, 0.8, 1.0, 1.2].forEach(value => {
+  for (let n = Math.ceil(yMin*4); n <= Math.floor(yMax*4); n++) {
+    const value = n/4;
     const y = canvas.height - (value - yMin) / (yMax - yMin) * canvas.height;
 
     // Tick mark on the vertical axis
@@ -1689,8 +1689,8 @@ plot(right,[
     g.stroke();
 
     // Tick label
-    g.fillText(value.toFixed(1), xAxis - 7, y);
-  });
+    g.fillText(value.toFixed(2).replace(/\.?0+$/, ''), xAxis - 7, y);
+  }
 
   g.restore();
 });
@@ -1844,13 +1844,11 @@ W('conv',{
   ctx.textBaseline = 'middle';
   ctx.fillStyle = '#a9bdce';
 
-  const ticks = 8;
-
-  for (let i = 1; i <= ticks-1; i++) {
-    const value = yMin + (yMax - yMin) * i / ticks;
+  for (let n = Math.ceil(yMin*4-1e-9); n <= Math.floor(yMax*4+1e-9); n++) {
+    const value = n/4;
     const py = Y(value);
 
-    // Horizontal grid line
+    // Horizontal grid line at each 0.25 increment
     ctx.strokeStyle = 'rgba(160,185,205,0.25)';
     ctx.lineWidth = 0.7;
     ctx.beginPath();
@@ -1859,7 +1857,7 @@ W('conv',{
     ctx.stroke();
 
     // Numerical tick label
-    ctx.fillText(value.toFixed(1), zeroX - 7, py);
+    ctx.fillText(value.toFixed(2).replace(/\.?0+$/, ''), zeroX - 7, py);
   }
 
   // Vertical axis exactly at time = 0
@@ -1870,9 +1868,9 @@ W('conv',{
   ctx.lineTo(zeroX, oy + hh);
   ctx.stroke();
 
-  // Small tick marks on the vertical axis
-  for (let i = 0; i <= ticks; i++) {
-    const value = yMin + (yMax - yMin) * i / ticks;
+  // Small tick marks on the vertical axis, at multiples of 0.25
+  for (let n = Math.ceil(yMin*4-1e-9); n <= Math.floor(yMax*4+1e-9); n++) {
+    const value = n/4;
     const py = Y(value);
 
     ctx.beginPath();
@@ -2021,10 +2019,8 @@ W('eig',{
     ctx.textBaseline='middle';
     ctx.fillStyle='#a9bdce';
 
-    const ticks=4;
-
-    for(let i=0;i<=ticks;i++){
-      const value=-m+2*m*i/ticks;
+    for(let n=Math.ceil(-m*4-1e-9);n<=Math.floor(m*4+1e-9);n++){
+      const value=n/4;
       const py=Y(value);
 
       ctx.strokeStyle='rgba(160,185,205,0.25)';
@@ -2034,7 +2030,7 @@ W('eig',{
       ctx.lineTo(W,py);
       ctx.stroke();
 
-      ctx.fillText(value.toFixed(1),zeroX-7,py);
+      ctx.fillText(value.toFixed(2).replace(/\.?0+$/,''),zeroX-7,py);
 
       // Tick marks on vertical axis
       ctx.strokeStyle='#dceaf5';
