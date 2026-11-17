@@ -615,8 +615,10 @@ header{align-items:center}
 
 
 
-<h2 id="what-is-fs"><small>2</small>What is Fourier series?</h2>
 
+<h2 id="what-is-fs"><small>2</small>What is Fourier series?</h2>
+<p class="sub">What happens when we add signals of the form \(e^{j2\pi kf_0}\) for some <b>fundamental frequency</b> \(f_0\) and integer \(k\)?</p>
+<!-- signal synthesis explorer-->
 <div class="fs-demo" id="fourierSynthesisDemo">
   <h3>Explore: Synthesizing a signal using Fourier coefficients</h3>
   <p>
@@ -635,6 +637,10 @@ header{align-items:center}
         <option value="3">k = 3</option>
         <option value="4">k = 4</option>
         <option value="5">k = 5</option>
+        <option value="6">k = 6</option>
+        <option value="7">k = 7</option>
+        <option value="8">k = 8</option>
+        <option value="9">k = 9</option>
       </select>
     </label>
 
@@ -1095,7 +1101,7 @@ window.addEventListener('load',()=>{if(window.MathJax?.typesetPromise)window.Mat
 
   // Coefficients x_0, x_1, ..., x_5
   // All coefficients initially equal zero.
-  const coeff = [0, 0, 0, 0, 0, 0];
+  const coeff = Array(10).fill(0);
 
   // Fundamental angular frequency (rad/s).
   const omega0 = 1;
@@ -1103,14 +1109,14 @@ window.addEventListener('load',()=>{if(window.MathJax?.typesetPromise)window.Mat
   // Synthesis:
   // x(t) = x_0 + 2 sum_{k=1}^{5} x_k cos(k omega_0 t)
   function signal(t) {
-    let y = coeff[0];
+  let y = coeff[0];
 
-    for (let k = 1; k <= 5; k++) {
-      y += 2 * coeff[k] * Math.cos(k * omega0 * t);
-    }
-
-    return y;
+  for (let k = 1; k <= 9; k++) {
+    y += 2 * coeff[k] * Math.cos(k * omega0 * t);
   }
+
+  return y;
+}
 
   function formatNumber(value) {
     return Number(value).toFixed(2);
@@ -1119,7 +1125,7 @@ window.addEventListener('load',()=>{if(window.MathJax?.typesetPromise)window.Mat
   function updateTable() {
     let html = '';
 
-    for (let k = 0; k <= 5; k++) {
+    for (let k = 0; k <= 9; k++) {
       html += `
         <span style="display:inline-block; margin:4px 12px 4px 0;">
           \\(x_{${k}}\\) = <b>${formatNumber(coeff[k])}</b>
@@ -1137,7 +1143,7 @@ window.addEventListener('load',()=>{if(window.MathJax?.typesetPromise)window.Mat
   function updateEquation() {
     let terms = [formatNumber(coeff[0])];
 
-    for (let k = 1; k <= 5; k++) {
+    for (let k = 1; k <= 9; k++) {
       if (coeff[k] === 0) continue;
 
       const amplitude = 2 * coeff[k];
@@ -1317,7 +1323,7 @@ window.addEventListener('load',()=>{if(window.MathJax?.typesetPromise)window.Mat
   });
 
   resetBtn.addEventListener('click', () => {
-    for (let k = 0; k <= 5; k++) {
+    for (let k = 0; k <= 9; k++) {
       coeff[k] = 0;
     }
 
