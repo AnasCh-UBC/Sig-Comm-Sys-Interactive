@@ -617,14 +617,12 @@ header{align-items:center}
 
 
 <h2 id="what-is-fs"><small>2</small>What is Fourier series?</h2>
-<p class="sub">What happens when we add signals of the form \(e^{j2\pi kf_0}\) for some <b>fundamental frequency</b> \(f_0\) and integer \(k\)?</p>
+<p class="sub">What happens when we add signals of the form \(e^{j2\pi kf_0 t}\) for some <b>fundamental frequency</b> \(f_0\) and integer \(k\)?</p>
 <!-- signal synthesis explorer-->
 <div class="fs-demo" id="fourierSynthesisDemo">
   <h3>Explore: Synthesizing a signal using Fourier coefficients</h3>
   <p>
-    Select a harmonic index \(k\), enter its real-valued coefficient
-    \(x_k\), and click <b>Update coefficient</b>. The synthesized
-    waveform will update automatically.
+    Select an index \(k\), enter a valued for \(x_k\), and click <b>Update coefficient</b>.
   </p>
 
   <div class="fs-controls">
@@ -1151,7 +1149,7 @@ window.addEventListener('load',()=>{if(window.MathJax?.typesetPromise)window.Mat
 
       terms.push(
         `${sign} ${formatNumber(Math.abs(amplitude))}` +
-        `\\cos(${k}\\omega_0t)`
+        `\\cos(2\\pi ${k} f_0t)`
       );
     }
 
