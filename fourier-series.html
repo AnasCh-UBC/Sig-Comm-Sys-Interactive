@@ -567,15 +567,15 @@ header{align-items:center}
 </div>
 
 <div class="card"><h3>Complex sinusoid</h3>
-  <p>The signal \(e^{j2\pi f_0t}\) is a complex sinusoidal signal. 
-    It rotates counterclockwise around the unit circle with angular frequency \(\omega_0=2\pi f_0\) rad/s.</p> 
-  <p class="sub">Its real and imaginary parts are cosine and sine with frequency \(f_0\), period \(T_0=\frac{1}{f_0}\):</p>
+  <p>The signal \(e^{j2\pi f_0t}\) is a complex sinusoidal signal.</p>
+  <p class="sub">It rotates counterclockwise around the unit circle with angular frequency \(\omega_0=2\pi f_0\) rad/s.</p> 
+  <p>Its real and imaginary parts are cosine and sine with frequency \(f_0\), period \(T_0=\frac{1}{f_0}\):</p>
   <div class="eq">\[e^{j2\pi f_0t}=\cos(2\pi f_0t)+j\sin(2\pi f_0t).\]</div>
 </div>
 <!--<div class="fs-demo" id="phasorDemo"><h3>Interactive: rotating complex sinusoid</h3><div class="fs-controls"><label>Frequency \(f_0\) <input id="phFreq" type="range" min="0.2" max="2" step="0.1" value="0.5"><b id="phFreqVal">0.5 Hz</b></label><label>Time \(t\) <input id="phTime" type="range" min="0" max="2" step="0.01" value="0.35"><b id="phTimeVal">0.35 s</b></label></div><div class="fs-two"><div class="fs-panel"><b>Complex plane</b><canvas id="phasorPlane" class="fs-canvas" width="600" height="270"></canvas></div><div class="fs-panel"><b>Real and imaginary parts versus time</b><canvas id="phasorTime" class="fs-canvas" width="600" height="270"></canvas></div></div><p class="fs-readout" id="phReadout"></p></div>
 -->
 <div class="fs-demo" id="phasorDemo">
-  <h3>Interactive: rotating complex sinusoid</h3>
+  <h3>Interactive: Rotating complex sinusoid</h3>
 
   <div class="fs-controls">
     <label>
@@ -613,7 +613,64 @@ header{align-items:center}
   <p class="fs-readout" id="phReadout"></p>
 </div>
 
+
+
 <h2 id="what-is-fs"><small>2</small>What is Fourier series?</h2>
+
+<div class="fs-demo" id="fourierSynthesisDemo">
+  <h3>Explore: Synthesizing a signal using Fourier coefficients</h3>
+  <p>
+    Select a harmonic index \(k\), enter its real-valued coefficient
+    \(x_k\), and click <b>Update coefficient</b>. The synthesized
+    waveform will update automatically.
+  </p>
+
+  <div class="fs-controls">
+    <label>
+      Harmonic index \(k\)
+      <select id="fsCoeffK">
+        <option value="0">k = 0 (DC component)</option>
+        <option value="1">k = 1</option>
+        <option value="2">k = 2</option>
+        <option value="3">k = 3</option>
+        <option value="4">k = 4</option>
+        <option value="5">k = 5</option>
+      </select>
+    </label>
+
+    <label>
+      Coefficient \(x_k\)
+      <input id="fsCoeffValue" type="number" step="0.1" value="0">
+    </label>
+
+    <button id="fsCoeffUpdate">Update coefficient</button>
+    <button id="fsCoeffReset">Reset all</button>
+  </div>
+
+  <div class="fs-panel">
+    <b>Fourier coefficients</b>
+    <div id="fsCoeffTable" class="fs-readout"></div>
+  </div>
+
+  <div class="fs-panel">
+    <b>Synthesized signal</b>
+    <canvas id="fsSynthesisCanvas" class="fs-canvas"
+            width="760" height="310"></canvas>
+  </div>
+
+  <div class="fs-panel">
+    <b>Current synthesis equation</b>
+    <p id="fsSynthesisEquation" class="fs-readout"></p>
+  </div>
+
+  <p class="fs-readout">
+    <b>Assumption:</b> In this example, all coefficients are real and
+    \(x_{-k}=x_k\). This is the Fourier-series symmetry for a
+    real-valued, even signal. Therefore, each pair of positive- and
+    negative-index harmonics combines into a cosine term.
+  </p>
+</div>
+
 <div class="card"><h3>From pulses to harmonically related sinusoids</h3>
   <p>The signals \(e^{j2\pi kf_0t}\), for integer \(k\), are harmonically related; the \(k\)-th harmonic has frequency \(kf_0\).</p>
   <p>We have represented signals as sums of shifted pulses to analyze convolution. A complementary idea is to represent a <b>periodic</b> signal as a sum of complex sinusoids. Complex exponentials are eigenfunctions of LTI systems, so this representation makes system analysis especially convenient.</p>
@@ -694,6 +751,8 @@ $('parsevalK').addEventListener('input',parseval);parseval();
 window.addEventListener('load',()=>{if(window.MathJax?.typesetPromise)window.MathJax.typesetPromise();},{once:true});
 })();
 
+
+// Rotating phasor code
 (() => {
   const root = document.getElementById('phasorDemo');
   if (!root) return;
@@ -1017,4 +1076,259 @@ window.addEventListener('load',()=>{if(window.MathJax?.typesetPromise)window.Mat
 
   update();
 })();
+
+// Explore signal synthesis
+(() => {
+  const root = document.getElementById('fourierSynthesisDemo');
+  if (!root) return;
+
+  const canvas = root.querySelector('#fsSynthesisCanvas');
+  const ctx = canvas.getContext('2d');
+
+  const kSelect = root.querySelector('#fsCoeffK');
+  const valueInput = root.querySelector('#fsCoeffValue');
+  const updateBtn = root.querySelector('#fsCoeffUpdate');
+  const resetBtn = root.querySelector('#fsCoeffReset');
+
+  const table = root.querySelector('#fsCoeffTable');
+  const equation = root.querySelector('#fsSynthesisEquation');
+
+  // Coefficients x_0, x_1, ..., x_5
+  // All coefficients initially equal zero.
+  const coeff = [0, 0, 0, 0, 0, 0];
+
+  // Fundamental angular frequency (rad/s).
+  const omega0 = 1;
+
+  // Synthesis:
+  // x(t) = x_0 + 2 sum_{k=1}^{5} x_k cos(k omega_0 t)
+  function signal(t) {
+    let y = coeff[0];
+
+    for (let k = 1; k <= 5; k++) {
+      y += 2 * coeff[k] * Math.cos(k * omega0 * t);
+    }
+
+    return y;
+  }
+
+  function formatNumber(value) {
+    return Number(value).toFixed(2);
+  }
+
+  function updateTable() {
+    let html = '';
+
+    for (let k = 0; k <= 5; k++) {
+      html += `
+        <span style="display:inline-block; margin:4px 12px 4px 0;">
+          \\(x_{${k}}\\) = <b>${formatNumber(coeff[k])}</b>
+        </span>
+      `;
+    }
+
+    table.innerHTML = html;
+
+    if (window.MathJax?.typesetPromise) {
+      window.MathJax.typesetPromise([table]);
+    }
+  }
+
+  function updateEquation() {
+    let terms = [formatNumber(coeff[0])];
+
+    for (let k = 1; k <= 5; k++) {
+      if (coeff[k] === 0) continue;
+
+      const amplitude = 2 * coeff[k];
+      const sign = amplitude >= 0 ? '+' : '−';
+
+      terms.push(
+        `${sign} ${formatNumber(Math.abs(amplitude))}` +
+        `\\cos(${k}\\omega_0t)`
+      );
+    }
+
+    const expression = terms.join(' ');
+
+    equation.innerHTML =
+      `\\[x(t) = ${expression}\\]`;
+
+    if (window.MathJax?.typesetPromise) {
+      window.MathJax.typesetPromise([equation]);
+    }
+  }
+
+  function drawPlot() {
+    const w = canvas.width;
+    const h = canvas.height;
+
+    ctx.clearRect(0, 0, w, h);
+
+    // Plot limits: one fundamental period, from -π to π.
+    const tMin = -Math.PI;
+    const tMax = Math.PI;
+
+    const left = 55;
+    const right = w - 20;
+    const top = 25;
+    const bottom = h - 45;
+
+    const plotW = right - left;
+    const plotH = bottom - top;
+
+    // Find the signal's amplitude range.
+    let maxAbs = 0;
+    for (let i = 0; i <= 800; i++) {
+      const t = tMin + (tMax - tMin) * i / 800;
+      maxAbs = Math.max(maxAbs, Math.abs(signal(t)));
+    }
+
+    // Keep a useful vertical range even for a zero signal.
+    const yLimit = Math.max(1, Math.ceil(maxAbs * 1.15 * 2) / 2);
+
+    const X = t =>
+      left + (t - tMin) / (tMax - tMin) * plotW;
+
+    const Y = y =>
+      top + (yLimit - y) / (2 * yLimit) * plotH;
+
+    // Background grid.
+    ctx.strokeStyle = '#34445a';
+    ctx.lineWidth = 1;
+
+    // Vertical grid lines and time labels.
+    const ticks = [
+      [-Math.PI, '−π'],
+      [-Math.PI / 2, '−π/2'],
+      [0, '0'],
+      [Math.PI / 2, 'π/2'],
+      [Math.PI, 'π']
+    ];
+
+    ctx.font = '12px Arial';
+    ctx.fillStyle = '#e6edf7';
+    ctx.textAlign = 'center';
+
+    ticks.forEach(([t, label]) => {
+      const x = X(t);
+
+      ctx.beginPath();
+      ctx.moveTo(x, top);
+      ctx.lineTo(x, bottom);
+      ctx.stroke();
+
+      ctx.fillText(label, x, bottom + 20);
+    });
+
+    // Horizontal grid lines.
+    const yStep = yLimit <= 2 ? 0.5 : 1;
+
+    for (let y = -yLimit; y <= yLimit + 0.001; y += yStep) {
+      const py = Y(y);
+
+      ctx.beginPath();
+      ctx.moveTo(left, py);
+      ctx.lineTo(right, py);
+      ctx.stroke();
+
+      ctx.textAlign = 'right';
+      ctx.fillText(y.toFixed(1), left - 9, py + 4);
+    }
+
+    // Coordinate axes.
+    ctx.strokeStyle = '#aab8ca';
+    ctx.lineWidth = 1.6;
+
+    ctx.beginPath();
+    ctx.moveTo(left, Y(0));
+    ctx.lineTo(right, Y(0));
+    ctx.moveTo(X(0), top);
+    ctx.lineTo(X(0), bottom);
+    ctx.stroke();
+
+    // Axis labels.
+    ctx.fillStyle = '#e6edf7';
+    ctx.font = '13px Arial';
+    ctx.textAlign = 'right';
+    ctx.fillText('t', right, h - 8);
+
+    ctx.textAlign = 'left';
+    ctx.fillText('x(t)', left + 5, top - 8);
+
+    // Synthesized waveform.
+    ctx.beginPath();
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 2.8;
+
+    const samples = 1000;
+
+    for (let i = 0; i <= samples; i++) {
+      const t = tMin + (tMax - tMin) * i / samples;
+      const x = X(t);
+      const y = Y(signal(t));
+
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+
+    ctx.stroke();
+
+    // Show a small message if all coefficients are zero.
+    if (coeff.every(v => v === 0)) {
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '14px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText(
+        'Enter Fourier coefficients to synthesize a signal',
+        w / 2,
+        top + 25
+      );
+    }
+  }
+
+  function updateDemo() {
+    updateTable();
+    updateEquation();
+    drawPlot();
+  }
+
+  updateBtn.addEventListener('click', () => {
+    const k = Number(kSelect.value);
+    const value = Number(valueInput.value);
+
+    if (!Number.isFinite(value)) return;
+
+    coeff[k] = value;
+    updateDemo();
+  });
+
+  // Changing the selected index loads its current coefficient.
+  kSelect.addEventListener('change', () => {
+    const k = Number(kSelect.value);
+    valueInput.value = coeff[k];
+  });
+
+  // Also allow Enter to update the selected coefficient.
+  valueInput.addEventListener('keydown', event => {
+    if (event.key === 'Enter') {
+      updateBtn.click();
+    }
+  });
+
+  resetBtn.addEventListener('click', () => {
+    for (let k = 0; k <= 5; k++) {
+      coeff[k] = 0;
+    }
+
+    kSelect.value = '0';
+    valueInput.value = 0;
+
+    updateDemo();
+  });
+
+  // Initial display.
+  updateDemo();
+})();
+
 </script></body></html>
