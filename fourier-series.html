@@ -671,7 +671,7 @@ header{align-items:center}
   </div>
 </div>
 
-<div class="card"><h3>Periodic signals from harmonically related sinusoids</h3>
+<div class="card"><h3>Synthesis: Periodic signals from harmonically related sinusoids</h3>
   <div class="eq-box">
     Signals of the form \(e^{j2\pi kf_0t}\), for integer \(k\), are harmonically related; the \(k\)-th harmonic has frequency \(kf_0\).
   </div>
@@ -697,11 +697,17 @@ header{align-items:center}
 
 <h2 id="coefficients"><small>3</small>Fourier coefficients and spectra</h2>
 <div class="card"><h3>Analysis: Calculating the coefficients</h3>
-  <p>Given a periodic signal \(x(t)\), its Fourier coefficient at harmonic \(k\) is obtained by projecting the signal onto the corresponding complex exponential over any one period:</p>
-  <div class="eq">\[x_k=\frac{1}{T_0}\int_{\tau}^{\tau+T_0}x(t)e^{-j2\pi kf_0t}\,dt.\]</div>
+  <div class="grid">
+    <div class="tile">
+      Given a periodic signal \(x(t)\), its Fourier coefficient at harmonic \(k\) is obtained by projecting the signal onto the corresponding complex exponential over any one period.
+    </div>
+    <div class="eq">
+      \[x_k=\frac{1}{T_0}\int_{\tau}^{\tau+T_0}x(t)e^{-j2\pi kf_0t}\,dt.\]
+    </div>  
+  </div>
   <p>Because the integrand is periodic, the integration interval can start at any \(\tau\).</p>
-  <p class="sub"> Tip: Select (\tau\) to simplify the integration. 
-    A common choice is \(\tau=-\frac{T}{2}\) leading to the integration interval\([-\frac{T_0}{2},\frac{T_0}{2}]\), or \(\tau=0\) leading to \([0,T_0]\).</p>
+  <p class="sub"> Tip: Select \(\tau\) to simplify the integration. 
+    A common choice is \(\tau=-\frac{T_0}{2}\) leading to the integration interval\([-\frac{T_0}{2},\frac{T_0}{2}]\), or \(\tau=0\) leading to \([0,T_0]\).</p>
 </div>
 <div class="card"><h3>Example: a cosine</h3><p>Using Euler’s identity,</p><div class="eq">\[\cos(2\pi f_0t)=\frac{1}{2}e^{j2\pi f_0t}+\frac{1}{2}e^{-j2\pi f_0t}.\]</div><p>Therefore, \(x_{1}=x_{-1}=1/2\), and all other coefficients are zero.</p></div>
 <div class="card"><h3>Discrete spectrum</h3><p>The Fourier coefficients form a frequency-domain representation. The <b>magnitude spectrum</b> plots \(|x_k|\) versus \(k\), the <b>phase spectrum</b> plots \(\angle x_k\), and the <b>power spectrum</b> plots \(|x_k|^2\).</p></div>
