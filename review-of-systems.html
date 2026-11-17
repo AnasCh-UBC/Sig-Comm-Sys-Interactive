@@ -1579,7 +1579,7 @@ W('imp',{
     }
 
     // Rectangular-pulse approximation of the input
-    const rect=(t,u)=>t>=u && t<u+D ? x(u+D/2):0;
+    const rect=(t,u)=>t>=u-1e-9 && t<u+D-1e-9 ? x(u+D/2):0;
     const xA=t=>ks.reduce((s,u)=>s+rect(t,u),0);
 
     // Exact convolution
@@ -1809,22 +1809,6 @@ W('conv',{
   // rounded up to a multiple of 0.25.
   const yMaxAbs = Math.max(Math.abs(yMin), Math.abs(yMax));
   const yStep = Math.ceil(Math.max(0.5, yMaxAbs/6)*4-1e-9)/2;
-
-  // Horizontal-axis ticks and labels
-  ctx.font = '10px Arial';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'top';
-  ctx.fillStyle = '#a9bdce';
-  ctx.strokeStyle = '#dceaf5';
-
-  for (let t = xMin; t <= xMax; t += 1) {
-    const px = X(t);
-    ctx.beginPath();
-    ctx.moveTo(px, zeroY - 3);
-    ctx.lineTo(px, zeroY + 3);
-    ctx.stroke();
-    ctx.fillText(String(t), px, zeroY + 5);
-  }
 
   // Time variable just above the right-most end of the horizontal axis
   ctx.font = 'italic 13px Georgia';
