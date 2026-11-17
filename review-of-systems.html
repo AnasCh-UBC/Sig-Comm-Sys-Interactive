@@ -1810,45 +1810,6 @@ W('conv',{
   const yMaxAbs = Math.max(Math.abs(yMin), Math.abs(yMax));
   const yStep = Math.ceil(Math.max(0.5, yMaxAbs/6)*4-1e-9)/2;
 
-  // Horizontal grid lines and vertical-axis tick labels
-  ctx.font = '10px Arial';
-  ctx.textAlign = 'right';
-  ctx.textBaseline = 'middle';
-  ctx.fillStyle = '#a9bdce';
-
-  for (let n = Math.ceil(yMin/yStep-1e-9); n <= Math.floor(yMax/yStep+1e-9); n++) {
-    const value = +(n*yStep).toFixed(8);
-    const py = Y(value);
-
-    ctx.strokeStyle = 'rgba(160,185,205,0.25)';
-    ctx.lineWidth = 0.7;
-    ctx.beginPath();
-    ctx.moveTo(0, py);
-    ctx.lineTo(W, py);
-    ctx.stroke();
-
-    ctx.fillText(value.toFixed(2).replace(/\.?0+$/, ''), zeroX - 7, py);
-  }
-
-  // Vertical axis exactly at time = 0
-  ctx.strokeStyle = '#dceaf5';
-  ctx.lineWidth = 1.4;
-  ctx.beginPath();
-  ctx.moveTo(zeroX, oy);
-  ctx.lineTo(zeroX, oy + hh);
-  ctx.stroke();
-
-  // Small tick marks on the vertical axis, at multiples of 0.25
-  for (let n = Math.ceil(yMin/yStep-1e-9); n <= Math.floor(yMax/yStep+1e-9); n++) {
-    const value = +(n*yStep).toFixed(8);
-    const py = Y(value);
-
-    ctx.beginPath();
-    ctx.moveTo(zeroX - 3, py);
-    ctx.lineTo(zeroX + 3, py);
-    ctx.stroke();
-  }
-
   // Horizontal-axis ticks and labels
   ctx.font = '10px Arial';
   ctx.textAlign = 'center';
