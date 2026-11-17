@@ -776,7 +776,7 @@ header{align-items:center}
   </div>
 </div>
 <div class="card"><h3>Discrete spectrum</h3>
-  <p class="sub">The Fourier coefficients \(\x_k\) form a frequency-domain representation of \(x(t)\). </p>
+  <p class="sub">The Fourier coefficients \(x_k\) form a frequency-domain representation of \(x(t)\). </p>
   <p> The frequency domain representation of a periodic signal \(x(t)\) is plotted as a 
     <ol>
       <li><b>magnitude spectrum</b> plots \(|x_k|\) versus \(k\)</li>
@@ -1544,8 +1544,12 @@ window.addEventListener('load',()=>{if(window.MathJax?.typesetPromise)window.Mat
   });
 })();
 
+
+
 //-------------------------
-//pulse spec
+// PULSE SPECTRUM DEMO
+//-------------------------
+
 // Fourier coefficients of a centered periodic rectangular pulse
 function pulseSpectrumCoeff(k, D) {
   if (k === 0) return D;
@@ -1561,20 +1565,12 @@ function drawPulseTimeDomain(D) {
 
   const left = 55, right = 20, top = 20, bottom = 35;
   const pw = W - left - right;
-  const ph = H - top - bottom;
 
-  // Show three periods, centered at t = 0
   const tMin = -1.5;
-  const tMax =  1.5;
-
-  // Centered pulse: x(t) = 1 for |t| < D/2, periodically repeated
-  function pulse(t) {
-    const phase = ((t + 0.5 + 0.5) % 1 + 1) % 1 - 0.5;
-    return Math.abs(phase) < D / 2 ? 1 : 0;
-  }
+  const tMax = 1.5;
 
   const X = t => left + (t - tMin) / (tMax - tMin) * pw;
-  const Y = x => top + (1.2 - x) / 1.5 * ph;
+  const Y = x => top + (1.2 - x) / 1.5 * (H - top - bottom);
 
   c.clearRect(0, 0, W, H);
 
@@ -1589,7 +1585,7 @@ function drawPulseTimeDomain(D) {
     c.stroke();
   });
 
-  // Time axis
+  // Horizontal time axis
   c.strokeStyle = '#aab8c8';
   c.lineWidth = 1.2;
   c.beginPath();
@@ -1603,21 +1599,25 @@ function drawPulseTimeDomain(D) {
   c.lineTo(X(0), H - bottom);
   c.stroke();
 
-  // Tick marks and labels
+  // Time-axis ticks and labels
   c.fillStyle = '#aab8c8';
   c.font = '12px Arial';
   c.textAlign = 'center';
 
   [-1.5, -1, -0.5, 0, 0.5, 1, 1.5].forEach(t => {
     const x = X(t);
+
     c.beginPath();
     c.moveTo(x, Y(0) - 4);
     c.lineTo(x, Y(0) + 4);
     c.stroke();
+
     c.fillText(t.toFixed(1), x, H - 12);
   });
 
+  // Amplitude-axis labels
   c.textAlign = 'right';
+
   [0, 0.5, 1].forEach(v => {
     c.fillText(v.toFixed(1), left - 8, Y(v) + 4);
   });
@@ -1628,7 +1628,7 @@ function drawPulseTimeDomain(D) {
   c.textAlign = 'right';
   c.fillText('Time (t)', W - right, H - 12);
 
-  // Draw the rectangular pulse train as horizontal and vertical segments
+  // Draw centered rectangular pulses
   c.strokeStyle = '#55c8f2';
   c.lineWidth = 2.5;
 
@@ -1644,7 +1644,7 @@ function drawPulseTimeDomain(D) {
       c.stroke();
     }
 
-    // Top of pulse
+    // Top horizontal section
     const clippedStart = Math.max(start, tMin);
     const clippedEnd = Math.min(end, tMax);
 
@@ -1668,63 +1668,69 @@ function drawPulseTimeDomain(D) {
 
 // Update all three plots
 function updatePulseSpectrum() {
-  let D = +$('duty').value;
-  let K = +$('specK').value;
+  const D = +$('duty').value;
+  const K = +$('specK').value;
 
   $('dutyVal').textContent = D.toFixed(2);
   $('specKVal').textContent = K;
 
-  // New time-domain plot
+  // Draw time-domain signal
   drawPulseTimeDomain(D);
 
-  // Original magnitude and phase spectrum calculations
-  let ks = Array.from({length: 2 * K + 1}, (_, i) => i - K);
-  let vals = ks.map(k => coeff(k, D));
+  // Calculate Fourier coefficients
+  const ks = Array.from(
+    {length: 2 * K + 1},
+    (_, i) => i - K
+  );
 
-  for (let [id, mode] of [
+  const vals = ks.map(k => pulseSpectrumCoeff(k, D));
+
+  // Draw magnitude and phase spectra
+  for (const [id, mode] of [
     ['magCanvas', 'mag'],
     ['phaseCanvas', 'phase']
   ]) {
-    let c = $(id).getContext('2d');
-    let W = $(id).width;
-    let H = $(id).height;
+    const c = $(id).getContext('2d');
+    const W = $(id).width;
+    const H = $(id).height;
 
-    let max = mode === 'mag'
-      ? Math.max(.2, ...vals.map(Math.abs)) * 1.2
+    const max = mode === 'mag'
+      ? Math.max(0.2, ...vals.map(Math.abs)) * 1.2
       : Math.PI * 1.15;
 
-    let m = axes(
+    const m = axes(
       c, W, H,
-      -K - .7, K + .7,
+      -K - 0.7, K + 0.7,
       mode === 'mag' ? 0 : -max,
-      mode === 'mag' ? max : max,
+      max,
       2,
-      mode === 'mag' ? Math.max(.05, max / 4) : Math.PI / 2,
+      mode === 'mag' ? Math.max(0.05, max / 4) : Math.PI / 2,
       'harmonic k',
       mode === 'mag' ? '|xₖ|' : 'phase'
     );
 
     ks.forEach((k, i) => {
-      let a = vals[i];
-      let ph = Math.atan2(0, a);
+      const a = vals[i];
 
-      if (mode === 'phase' && Math.abs(a) > 1e-5) {
-        ph = a < 0 ? Math.PI : 0;
-      }
+      let ph = 0;
+      if (a < 0) ph = Math.PI;
 
-      let y = mode === 'mag' ? Math.abs(a) : ph;
-      let xx = m.X(k);
-
+      // Phase is undefined for zero coefficients
       if (mode === 'phase' && Math.abs(a) <= 1e-5) return;
+
+      const y = mode === 'mag' ? Math.abs(a) : ph;
+      const xx = m.X(k);
 
       c.strokeStyle = mode === 'mag' ? '#55c8f2' : '#ff6b78';
       c.lineWidth = 3;
+
       c.beginPath();
       c.moveTo(xx, m.Y(0));
       c.lineTo(xx, m.Y(y));
       c.stroke();
 
       c.fillStyle = mode === 'mag' ? '#55c8f2' : '#ff6b78';
+
       c.beginPath();
       c.arc(xx, m.Y(y), 3.5, 0, TAU);
       c.fill();
@@ -1739,12 +1745,13 @@ function updatePulseSpectrum() {
 }
 
 
-// Slider listeners
-['duty', 'specK'].forEach(id =>
-  $(id).addEventListener('input', spectrum)
-);
+// Slider listeners — only for this demo
+['duty', 'specK'].forEach(id => {
+  $(id).addEventListener('input', updatePulseSpectrum);
+});
+
 
 // Initial drawing
-spectrum();
+updatePulseSpectrum();
 
 </script></body></html>
