@@ -913,7 +913,8 @@ header{align-items:center}
   <div class="eq">\[P_x=\frac{1}{T_0}\int_{\tau}^{\tau+T_0}|x(t)|^2\,dt=\sum_{k=-\infty}^{\infty}|x_k|^2.\]</div>
   <p class="sub">Calculate power either by averaging the squared time-domain waveform or by summing the squared magnitudes of its Fourier coefficients.</p>
 </div>
-<div class="fs-demo" id="parsevalDemo"><h3>Interactive: verify Parseval’s relation</h3><div class="fs-controls"><label>Odd harmonics included <input id="parsevalK" type="range" min="1" max="51" step="2" value="9"><b id="parsevalKVal">9</b></label></div><canvas id="parsevalCanvas" class="fs-canvas" width="900" height="235"></canvas><p class="fs-readout" id="parsevalReadout"></p></div>
+<!--<div class="fs-demo" id="parsevalDemo"><h3>Interactive: verify Parseval’s relation</h3><div class="fs-controls"><label>Odd harmonics included <input id="parsevalK" type="range" min="1" max="51" step="2" value="9"><b id="parsevalKVal">9</b></label></div><canvas id="parsevalCanvas" class="fs-canvas" width="900" height="235"></canvas><p class="fs-readout" id="parsevalReadout"></p></div>
+-->
 
 <h2 id="self-check"><small>7</small>Self-assessment</h2>
 <div class="quiz-grid">
@@ -1281,7 +1282,7 @@ $('gibbsK').addEventListener('input',gibbs);gibbs();
         );
 
         // Fourier approximation
-        drawCurve(ctx, W, H, map, input, '#ff6b78', true);
+        drawCurve(ctx, W, H, map, input, '#00FFFF', true);
 
         // Ideal square wave
         drawCurve(ctx, W, H, map, idealSquare, '#f5a623');
@@ -1298,7 +1299,7 @@ $('gibbsK').addEventListener('input',gibbs);gibbs();
         );
 
         // Selected-harmonic output
-        drawCurve(ctx, W, H, map, output, '#ff6b78', true);
+        drawCurve(ctx, W, H, map, output, '#00FFFF', true);
 
         // Ideal filtered output
         drawCurve(ctx, W, H, map, idealOutput, '#f5a623');
@@ -1325,8 +1326,9 @@ $('gibbsK').addEventListener('input',gibbs);gibbs();
 })();
 
 
-function parseval(){let K=+$('parsevalK').value;$('parsevalKVal').textContent=K;let sum=0;for(let k=1;k<=K;k+=2){let x=2/(Math.PI*k);sum+=2*x*x;}let ptime=0,N=30000;for(let i=0;i<N;i++){let t=(i+.5)/N,v=squareSum(t,K);ptime+=v*v/N;}let c=$('parsevalCanvas').getContext('2d'),W=$('parsevalCanvas').width,H=$('parsevalCanvas').height;c.fillStyle='#05090f';c.fillRect(0,0,W,H);let vals=[1,ptime,sum],labels=['Ideal square-wave power','Time-domain partial-sum power','Frequency-domain partial-sum power'],max=1.2,base=178,top=25,barW=150;for(let tick=0;tick<=1.2+1e-9;tick+=.2){let yy=base-tick/1.2*(base-top);c.strokeStyle='rgba(145,195,225,.28)';c.beginPath();c.moveTo(55,yy);c.lineTo(W-30,yy);c.stroke();c.fillStyle='#dceaf5';c.font='11px system-ui';c.textAlign='right';c.fillText(tick.toFixed(1),48,yy+4);}for(let i=0;i<3;i++){let x=105+i*255,h=vals[i]/max*(base-top);c.fillStyle=['#62d99a','#55c8f2','#ff6b78'][i];c.fillRect(x,base-h,barW,h);c.fillStyle='#e2f0f8';c.font='14px system-ui';c.textAlign='center';c.fillText(vals[i].toFixed(4),x+barW/2,base-h-7);c.font='12px system-ui';c.fillText(labels[i],x+barW/2,210);}c.strokeStyle='#f0f9ff';c.lineWidth=1.4;c.beginPath();c.moveTo(55,top);c.lineTo(55,base);c.lineTo(W-30,base);c.stroke();c.fillStyle='#e2f0f8';c.font='italic 13px Georgia';c.textAlign='left';c.fillText('Power',8,18);$('parsevalReadout').textContent=`With ${K} odd harmonics, the truncated-series power from its coefficients is ${sum.toFixed(5)} and the numerically averaged time-domain power is ${ptime.toFixed(5)}. Both approach the ideal square-wave power 1 as more terms are included.`;}
-$('parsevalK').addEventListener('input',parseval);parseval();
+//function parseval(){let K=+$('parsevalK').value;$('parsevalKVal').textContent=K;let sum=0;for(let k=1;k<=K;k+=2){let x=2/(Math.PI*k);sum+=2*x*x;}let ptime=0,N=30000;for(let i=0;i<N;i++){let t=(i+.5)/N,v=squareSum(t,K);ptime+=v*v/N;}let c=$('parsevalCanvas').getContext('2d'),W=$('parsevalCanvas').width,H=$('parsevalCanvas').height;c.fillStyle='#05090f';c.fillRect(0,0,W,H);let vals=[1,ptime,sum],labels=['Ideal square-wave power','Time-domain partial-sum power','Frequency-domain partial-sum power'],max=1.2,base=178,top=25,barW=150;for(let tick=0;tick<=1.2+1e-9;tick+=.2){let yy=base-tick/1.2*(base-top);c.strokeStyle='rgba(145,195,225,.28)';c.beginPath();c.moveTo(55,yy);c.lineTo(W-30,yy);c.stroke();c.fillStyle='#dceaf5';c.font='11px system-ui';c.textAlign='right';c.fillText(tick.toFixed(1),48,yy+4);}for(let i=0;i<3;i++){let x=105+i*255,h=vals[i]/max*(base-top);c.fillStyle=['#62d99a','#55c8f2','#ff6b78'][i];c.fillRect(x,base-h,barW,h);c.fillStyle='#e2f0f8';c.font='14px system-ui';c.textAlign='center';c.fillText(vals[i].toFixed(4),x+barW/2,base-h-7);c.font='12px system-ui';c.fillText(labels[i],x+barW/2,210);}c.strokeStyle='#f0f9ff';c.lineWidth=1.4;c.beginPath();c.moveTo(55,top);c.lineTo(55,base);c.lineTo(W-30,base);c.stroke();c.fillStyle='#e2f0f8';c.font='italic 13px Georgia';c.textAlign='left';c.fillText('Power',8,18);$('parsevalReadout').textContent=`With ${K} odd harmonics, the truncated-series power from its coefficients is ${sum.toFixed(5)} and the numerically averaged time-domain power is ${ptime.toFixed(5)}. Both approach the ideal square-wave power 1 as more terms are included.`;}
+//$('parsevalK').addEventListener('input',parseval);parseval();
+
 // Quiz interaction
  document.querySelectorAll('[data-quiz]').forEach(q=>{let qs=[...q.querySelectorAll('.quiz-question')],result=q.querySelector('.quiz-result');q.querySelector('[data-check]').addEventListener('click',()=>{let score=0,answered=0;qs.forEach(z=>{let a=z.querySelector('input:checked'),f=z.querySelector('.quiz-feedback');if(!a){f.textContent='Select an answer.';f.className='quiz-feedback incorrect';return;}answered++;let ok=a.value===z.dataset.answer;if(ok)score++;f.textContent=(ok?'Correct! ':'Not quite. ')+z.dataset.feedback;f.className='quiz-feedback '+(ok?'correct':'incorrect');});result.textContent=answered===qs.length?`Score: ${score}/${qs.length}`:`Answered ${answered}/${qs.length}`;});q.querySelector('[data-reset]').addEventListener('click',()=>{q.querySelectorAll('input').forEach(i=>i.checked=false);q.querySelectorAll('.quiz-feedback').forEach(f=>{f.textContent='';f.className='quiz-feedback';});result.textContent='';});});
 window.addEventListener('load',()=>{if(window.MathJax?.typesetPromise)window.MathJax.typesetPromise();},{once:true});
