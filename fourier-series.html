@@ -880,8 +880,8 @@ header{align-items:center}
   </div>
   <p class="sub">An LTI system changes the amplitude and phase of existing harmonics; it does not create new frequencies.</p>
 </div>
-<p> Use the following following to see how well a Fourier series approximates the output of an LTI system.</p>
-<p class="sub"> The system is filter with impulse response \(h(t)=e^{-at)u(t)\). The input is a square wave with frequency \(f_0\).</p>
+<p> Use the following demo to see how well a Fourier series approximates the output of an LTI system. 
+  The selected system is a filter with impulse response \(h(t)=e^{-at}u(t)\). The input is a square wave with frequency \(f_0\).</p>
 <p class="sub"> Select the number of odd harmonics: The demo shows the Fourier series approximation of the input and output
   using the selected number of harmonics.</p>
 <div class="fs-demo" id="ltiDemo">
@@ -892,7 +892,7 @@ header{align-items:center}
     <label>Odd harmonics <input id="ltiTerms" type="range" min="1" max="25" step="2" value="9"><b id="ltiTermsVal">9</b></label>
   </div>
   <div class="fs-panel">
-    <b>Input signal x(t): Ideal square wave (red) and Fourier approximation (orange)</b>
+    <b>Input signal x(t): Ideal square wave (orange) and Fourier approximation (red)</b>
     <canvas id="ltiInputCanvas" class="fs-canvas" width="900" height="220"></canvas>
   </div>
   <div class="fs-panel">
@@ -1300,10 +1300,10 @@ $('gibbsK').addEventListener('input',gibbs);gibbs();
         );
 
         // Selected-harmonic output
-        drawCurve(ctx, W, H, map, output, '#55c8f2');
+        drawCurve(ctx, W, H, map, output, '#ff6b78', true);
 
         // Ideal filtered output
-        drawCurve(ctx, W, H, map, idealOutput, '#f5a623', true);
+        drawCurve(ctx, W, H, map, idealOutput, '#f5a623');
       }
 
       get('ltiReadout').textContent =
