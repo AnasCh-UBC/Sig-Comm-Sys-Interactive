@@ -568,6 +568,93 @@ header{align-items:center}
   <div class="tile"><b class="tag">Drum</b><p>Input: Drumstick stroke; Output: Beat sound.</p></div>
   <div class="tile"><b class="tag">Whistle</b><p>Input: Steady flow of air; Output: Pure musical tone.</p></div></div>
 </div>
+<div class="card">
+  <div style="display:grid;grid-template-columns:1.15fr 0.85fr;gap:24px;align-items:center;">
+
+    <!-- Left: System description -->
+    <div>
+      <span class="tag">Example of a physical system</span>
+      <h3>RC Circuit</h3>
+      <p>
+        An RC circuit is an electrical system consisting of a resistor
+        and a capacitor. It takes an input voltage \(x(t)\) and produces
+        an output voltage \(y(t)\) across the capacitor.
+      </p>
+      <p>
+        The resistor limits the current, while the capacitor stores
+        electrical energy. Together, they determine how quickly the
+        output responds to changes in the input.
+      </p>
+      <div class="eq-box" style="margin-top:14px;text-align:center;">
+        \[
+          RC\frac{dy(t)}{dt}+y(t)=x(t)
+        \]
+      </div>
+      <p class="sub" style="margin-top:10px;">
+        The circuit is a simple example of a dynamic system: its output
+        depends on both the present input and its stored energy.
+      </p>
+    </div>
+
+    <!-- Right: RC circuit diagram -->
+    <div style="background:#101b2b;border:1px solid #287da5;border-radius:12px;padding:16px;">
+      <svg viewBox="0 0 420 270" width="100%" role="img"
+           aria-label="RC low-pass circuit with a resistor in series and a capacitor connected to ground">
+        <defs>
+          <marker id="rcArrow" markerWidth="7" markerHeight="7"
+                  refX="5" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6" fill="none"
+                  stroke="#55d9ff" stroke-width="1.2"/>
+          </marker>
+        </defs>
+
+        <!-- Input label -->
+        <text x="18" y="105" fill="#55d9ff" font-size="15"
+              font-weight="bold">x(t)</text>
+
+        <!-- Input wire -->
+        <path d="M48 112 H105" stroke="#dce8f2" stroke-width="2.5" fill="none"/>
+
+        <!-- Resistor -->
+        <path d="M105 112 L115 112 L123 96 L137 128 L151 96
+                 L165 128 L179 96 L193 128 L207 112 L225 112"
+              stroke="#ffbd59" stroke-width="3" fill="none"
+              stroke-linejoin="round"/>
+        <text x="164" y="80" text-anchor="middle"
+              fill="#ffbd59" font-size="15">R</text>
+
+        <!-- Output node and wire -->
+        <path d="M225 112 H330" stroke="#dce8f2" stroke-width="2.5" fill="none"/>
+        <circle cx="225" cy="112" r="4" fill="#55d9ff"/>
+
+        <!-- Capacitor branch -->
+        <path d="M285 112 V151 M267 151 H303 M267 161 H303
+                 M285 161 V205"
+              stroke="#55d9ff" stroke-width="3" fill="none"
+              stroke-linecap="round"/>
+
+        <!-- Ground -->
+        <path d="M269 205 H301 M275 212 H295 M282 219 H288"
+              stroke="#dce8f2" stroke-width="2" fill="none"/>
+
+        <!-- Output label -->
+        <text x="335" y="105" fill="#55d9ff" font-size="15"
+              font-weight="bold">y(t)</text>
+        <text x="310" y="155" fill="#55d9ff" font-size="14">C</text>
+
+        <!-- Output arrow -->
+        <path d="M330 112 H365" stroke="#55d9ff" stroke-width="2"
+              fill="none" marker-end="url(#rcArrow)"/>
+
+        <!-- Bottom caption -->
+        <text x="210" y="250" text-anchor="middle"
+              fill="#a9bacb" font-size="13">RC low-pass filter</text>
+      </svg>
+    </div>
+
+  </div>
+</div>
+
 <p>To characterize a system we model the relation between its input and output, called the <b>input–output relation</b>: $$y(t)=\mathcal{T}[x(t)].$$</p>
 
 <!--
@@ -1226,7 +1313,7 @@ const up=()=>{
 */
   // ---- 1. simple systems
   W('play',{
-  cap:'Interactive 1.2',
+  cap:'Interactive 1.1',
   title:'The three simple systems acting on x(t) = cos(2πf₀t)',
   h:240,
 
