@@ -880,6 +880,10 @@ header{align-items:center}
   </div>
   <p class="sub">An LTI system changes the amplitude and phase of existing harmonics; it does not create new frequencies.</p>
 </div>
+<p> Use the following following to see how well a Fourier series approximates the output of an LTI system.</p>
+<p class="sub"> The system is filter with impulse response \(h(t)=e^{-at)u(t)\). The input is a square wave with frequency \(f_0\).</p>
+<p class="sub"> Select the number of odd harmonics: The demo shows the Fourier series approximation of the input and output
+  using the selected number of harmonics.</p>
 <div class="fs-demo" id="ltiDemo">
   <h3>Interactive 5.1: An LTI system filters a periodic square wave</h3>
   <div class="fs-controls">
@@ -888,11 +892,11 @@ header{align-items:center}
     <label>Odd harmonics <input id="ltiTerms" type="range" min="1" max="25" step="2" value="9"><b id="ltiTermsVal">9</b></label>
   </div>
   <div class="fs-panel">
-    <b>Input signal x(t): Fourier approximation (orange) and ideal square wave (red)</b>
+    <b>Input signal x(t): Ideal square wave (red) and Fourier approximation (orange)</b>
     <canvas id="ltiInputCanvas" class="fs-canvas" width="900" height="220"></canvas>
   </div>
   <div class="fs-panel">
-    <b>Output signal y(t): filtered waveform</b>
+    <b>Output signal \(y(t)\): Ideal output (orange) and output of Fourier approximation (cyan)</b>
     <canvas id="ltiCanvas" class="fs-canvas" width="900" height="220"></canvas>
   </div>
   <p class="fs-readout" id="ltiReadout"></p>
@@ -1240,6 +1244,23 @@ $('gibbsK').addEventListener('input',gibbs);gibbs();
         return s;
       }
 
+      // Ideal filtered output: use many odd harmonics
+      function idealOutput(t) {
+        let s = 0;
+        const Nideal = 501;
+
+        for (let n = 1; n <= Nideal; n += 2) {
+          const omega = 2 * Math.PI * n * f;
+          const magnitude = 1 / Math.hypot(a, omega);
+          const phase = -Math.atan2(omega, a);
+
+          s += 4 / (Math.PI * n) *
+              magnitude * Math.sin(omega * t + phase);
+        }
+
+        return s;
+      }
+
       // Upper plot: input and ideal square wave
       {
         const ctx = inputCanvas.getContext('2d');
@@ -1267,11 +1288,15 @@ $('gibbsK').addEventListener('input',gibbs);gibbs();
           ctx, W, H, xmin, xmax, -0.5, 0.5
         );
 
+        // Selected-harmonic output
         drawCurve(ctx, W, H, map, output, '#55c8f2');
+
+        // Ideal filtered output
+        drawCurve(ctx, W, H, map, idealOutput, '#f5a623', true);
       }
 
       get('ltiReadout').textContent =
-        `The frequency of the square wave is ${f.toFixed(1)} Hz and ${K} odd harmonics are included.` +
+        `The frequency of the square wave is ${f.toFixed(1)} Hz and ${K} odd harmonics are included. ` +
         `The filter has a impulse response h(t)=exp(-at)u(t), frequency response H(f)=1/(a+j2πf), and decay rate a=${a.toFixed(1)}, `;
     }
 
