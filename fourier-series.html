@@ -871,16 +871,32 @@ header{align-items:center}
 <div class="card">
   <h3>Periodic input to an LTI system</h3>
   <p class="sub">Fourier series simplifies finding the output of an LTI system with a periodic input.</p>
-  <p>If the input is periodic with Fourier series \(x(t)=\sum_k x_ke^{j2\pi kf_0t}\), 
-    then since complex sinusoids are eigenfunctions of LTI systems, the output is</p>
+  <p>Consider an LTI system with impulse response \(h(t)\) and a periodic input with Fourier series \(x(t)=\sum_{k=-\infty}^{\infty} x_ke^{j2\pi kf_0t}\).</p> 
+  <p>Since complex sinusoids are eigenfunctions of LTI systems, the output is:</p>
   <div class="eq">\[y(t)=\sum_{k=-\infty}^{\infty}x_kH(kf_0)e^{j2\pi kf_0t}.\]</div>
   <p>where \(H(f)=\int_{-\infty}^{\infty}h(t)e^{-j2\pi ft}\,dt\) is called the frequency response of the system.</p> 
   <div class="eq">
-    <b>Note:</b> The output is periodic with Fourier series coefficients \(x_kH(kf_0)\).
+    <b>Note:</b> The output \(y(t)\) is periodic with Fourier series coefficients \(y_k=x_kH(kf_0)\).
   </div>
   <p class="sub">An LTI system changes the amplitude and phase of existing harmonics; it does not create new frequencies.</p>
 </div>
-<div class="fs-demo" id="ltiDemo"><h3>Interactive: an LTI system filters a periodic square wave</h3><div class="fs-controls"><label>Fundamental frequency \(f_0\) <input id="ltiFreq" type="range" min="0.2" max="3" step="0.1" value="1"><b id="ltiFreqVal">1.0 Hz</b></label><label>Decay rate \(a\) <input id="ltiA" type="range" min="0.5" max="8" step="0.5" value="2"><b id="ltiAVal">2</b></label><label>Odd harmonics <input id="ltiTerms" type="range" min="1" max="25" step="2" value="9"><b id="ltiTermsVal">9</b></label></div><canvas id="ltiCanvas" class="fs-canvas" width="900" height="290"></canvas><p class="fs-readout" id="ltiReadout"></p></div>
+<div class="fs-demo" id="ltiDemo">
+  <h3>Interactive 5.1: an LTI system filters a periodic square wave</h3>
+  <div class="fs-controls">
+    <label>Fundamental frequency \(f_0\) <input id="ltiFreq" type="range" min="0.2" max="3" step="0.1" value="1"><b id="ltiFreqVal">1.0 Hz</b></label>
+    <label>Decay rate \(a\) <input id="ltiA" type="range" min="0.5" max="8" step="0.5" value="2"><b id="ltiAVal">2</b></label>
+    <label>Odd harmonics <input id="ltiTerms" type="range" min="1" max="25" step="2" value="9"><b id="ltiTermsVal">9</b></label>
+  </div>
+  <div class="fs-panel">
+    <b>Input signal \(x(t)\): periodic square wave</b>
+    <canvas id="ltiInputCanvas" class="fs-canvas" width="900" height="220"></canvas>
+  </div>
+  <div class="fs-panel">
+    <b>Output signal \(y(t)\): filtered waveform</b>
+    <canvas id="ltiCanvas" class="fs-canvas" width="900" height="220"></canvas>
+  </div>
+  <p class="fs-readout" id="ltiReadout"></p>
+</div>
 
 <h2 id="parseval"><small>6</small>Parseval’s relation</h2>
 <div class="card"><h3>Power in time and frequency domains</h3><p>The average power of a periodic signal equals the sum of the power in its Fourier-series components:</p><div class="eq">\[\boxed{P_x=\frac{1}{T_0}\int_{\tau}^{\tau+T_0}|x(t)|^2\,dt=\sum_{k=-\infty}^{\infty}|x_k|^2.}\]</div><p>Power is conserved by the Fourier-series representation. We can calculate it either by averaging the squared time-domain waveform or by summing the squared magnitudes of its Fourier coefficients.</p></div>
@@ -1058,8 +1074,81 @@ $('gibbsK').addEventListener('input',gibbs);gibbs();
 */
 
 // LTI system h(t)=exp(-a t)u(t), H(f)=1/(a+j2πf)
-function lti(){let f=+$('ltiFreq').value,a=+$('ltiA').value,K=+$('ltiTerms').value;$('ltiFreqVal').textContent=f.toFixed(1)+' Hz';$('ltiAVal').textContent=a.toFixed(1);$('ltiTermsVal').textContent=K;let c=$('ltiCanvas').getContext('2d'),W=$('ltiCanvas').width,H=$('ltiCanvas').height,m=axes(c,W,H,-1.5/f,1.5/f,-1.5,1.5,.25/f,.5,'t (s)');m.W=W;m.xmin=-1.5/f;m.xmax=1.5/f;let input=t=>squareSum(t,K,f),output=t=>{let s=0;for(let n=1;n<=K;n+=2){let om=TAU*n*f,mag=1/Math.hypot(a,om),phase=-Math.atan2(om,a);s+=4/Math.PI/n*mag*Math.sin(om*t+phase);}return s;};curve(c,m,input,'#ff6b78',[6,5]);curve(c,m,output,'#55c8f2');$('ltiReadout').textContent=`The input square-wave harmonics are each multiplied by H(kf₀) = 1/(a + j2πkf₀). Larger a reduces the relative attenuation and phase lag; increasing f₀ moves harmonics further into the system's attenuated range.`;}
-['ltiFreq','ltiA','ltiTerms'].forEach(id=>$(id).addEventListener('input',lti));lti();
+function lti() {
+  let f = +$('ltiFreq').value;
+  let a = +$('ltiA').value;
+  let K = +$('ltiTerms').value;
+
+  $('ltiFreqVal').textContent = f.toFixed(1) + ' Hz';
+  $('ltiAVal').textContent = a.toFixed(1);
+  $('ltiTermsVal').textContent = K;
+
+  const tMin = -1.5 / f;
+  const tMax =  1.5 / f;
+
+  // Input and output signals
+  let input = t => squareSum(t, K, f);
+
+  let output = t => {
+    let s = 0;
+
+    for (let n = 1; n <= K; n += 2) {
+      let om = TAU * n * f;
+      let mag = 1 / Math.hypot(a, om);
+      let phase = -Math.atan2(om, a);
+
+      s += 4 / Math.PI / n *
+           mag * Math.sin(om * t + phase);
+    }
+
+    return s;
+  };
+
+  // Draw input signal
+  let inputCanvas = $('ltiInputCanvas');
+  let ci = inputCanvas.getContext('2d');
+  let Wi = inputCanvas.width;
+  let Hi = inputCanvas.height;
+
+  let mi = axes(
+    ci, Wi, Hi,
+    tMin, tMax,
+    -1.5, 1.5,
+    0.25 / f, 0.5,
+    't (s)', 'x(t)'
+  );
+
+  curve(ci, mi, input, '#ff6b78', [6, 5]);
+
+  // Draw filtered output
+  let outputCanvas = $('ltiCanvas');
+  let co = outputCanvas.getContext('2d');
+  let Wo = outputCanvas.width;
+  let Ho = outputCanvas.height;
+
+  let mo = axes(
+    co, Wo, Ho,
+    tMin, tMax,
+    -1.5, 1.5,
+    0.25 / f, 0.5,
+    't (s)', 'y(t)'
+  );
+
+  curve(co, mo, output, '#55c8f2');
+
+  $('ltiReadout').textContent =
+    `The input is a square wave containing ${K} odd harmonics. ` +
+    `The LTI system attenuates and phase-shifts each harmonic according to ` +
+    `H(jω) = 1/(a + jω). Increasing the decay rate a changes the ` +
+    `filtering of the individual harmonics.`;
+}
+
+['ltiFreq', 'ltiA', 'ltiTerms'].forEach(id =>
+  $(id).addEventListener('input', lti)
+);
+
+lti();
+
 function parseval(){let K=+$('parsevalK').value;$('parsevalKVal').textContent=K;let sum=0;for(let k=1;k<=K;k+=2){let x=2/(Math.PI*k);sum+=2*x*x;}let ptime=0,N=30000;for(let i=0;i<N;i++){let t=(i+.5)/N,v=squareSum(t,K);ptime+=v*v/N;}let c=$('parsevalCanvas').getContext('2d'),W=$('parsevalCanvas').width,H=$('parsevalCanvas').height;c.fillStyle='#05090f';c.fillRect(0,0,W,H);let vals=[1,ptime,sum],labels=['Ideal square-wave power','Time-domain partial-sum power','Frequency-domain partial-sum power'],max=1.2,base=178,top=25,barW=150;for(let tick=0;tick<=1.2+1e-9;tick+=.2){let yy=base-tick/1.2*(base-top);c.strokeStyle='rgba(145,195,225,.28)';c.beginPath();c.moveTo(55,yy);c.lineTo(W-30,yy);c.stroke();c.fillStyle='#dceaf5';c.font='11px system-ui';c.textAlign='right';c.fillText(tick.toFixed(1),48,yy+4);}for(let i=0;i<3;i++){let x=105+i*255,h=vals[i]/max*(base-top);c.fillStyle=['#62d99a','#55c8f2','#ff6b78'][i];c.fillRect(x,base-h,barW,h);c.fillStyle='#e2f0f8';c.font='14px system-ui';c.textAlign='center';c.fillText(vals[i].toFixed(4),x+barW/2,base-h-7);c.font='12px system-ui';c.fillText(labels[i],x+barW/2,210);}c.strokeStyle='#f0f9ff';c.lineWidth=1.4;c.beginPath();c.moveTo(55,top);c.lineTo(55,base);c.lineTo(W-30,base);c.stroke();c.fillStyle='#e2f0f8';c.font='italic 13px Georgia';c.textAlign='left';c.fillText('Power',8,18);$('parsevalReadout').textContent=`With ${K} odd harmonics, the truncated-series power from its coefficients is ${sum.toFixed(5)} and the numerically averaged time-domain power is ${ptime.toFixed(5)}. Both approach the ideal square-wave power 1 as more terms are included.`;}
 $('parsevalK').addEventListener('input',parseval);parseval();
 // Quiz interaction
