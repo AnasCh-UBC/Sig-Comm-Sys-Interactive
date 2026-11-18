@@ -868,7 +868,18 @@ header{align-items:center}
 -->
 
 <h2 id="lti"><small>5</small>Fourier series and LTI systems</h2>
-<div class="card"><h3>Periodic input to an LTI system</h3><p>Complex exponentials are eigenfunctions of LTI systems. If the input is periodic with Fourier series \(x(t)=\sum_k x_ke^{j2\pi kf_0t}\), then the output is</p><div class="eq">\[\boxed{y(t)=\sum_{k=-\infty}^{\infty}x_kH(kf_0)e^{j2\pi kf_0t}.}\]</div><p>Here \(H(f)=\int_{-\infty}^{\infty}h(t)e^{-j2\pi ft}\,dt\) is the frequency response. The output coefficient at harmonic \(k\) is \(x_kH(kf_0)\). An LTI system changes the amplitude and phase of existing harmonics; it does not create new frequencies.</p></div>
+<div class="card">
+  <h3>Periodic input to an LTI system</h3>
+  <p class="sub">Fourier series simplifies finding the output of an LTI system with a periodic input.</p>
+  <p>If the input is periodic with Fourier series \(x(t)=\sum_k x_ke^{j2\pi kf_0t}\), 
+    then since complex sinusoids are eigenfunctions of LTI systems, the output is</p>
+  <div class="eq">\[y(t)=\sum_{k=-\infty}^{\infty}x_kH(kf_0)e^{j2\pi kf_0t}.\]</div>
+  <p>where \(H(f)=\int_{-\infty}^{\infty}h(t)e^{-j2\pi ft}\,dt\) is called the frequency response of the system.</p> 
+  <div class="eq">
+    <b>Note:</b> The output is periodic with Fourier series coefficients \(x_kH(kf_0)\).
+  </div>
+  <p class="sub">An LTI system changes the amplitude and phase of existing harmonics; it does not create new frequencies.</p>
+</div>
 <div class="fs-demo" id="ltiDemo"><h3>Interactive: an LTI system filters a periodic square wave</h3><div class="fs-controls"><label>Fundamental frequency \(f_0\) <input id="ltiFreq" type="range" min="0.2" max="3" step="0.1" value="1"><b id="ltiFreqVal">1.0 Hz</b></label><label>Decay rate \(a\) <input id="ltiA" type="range" min="0.5" max="8" step="0.5" value="2"><b id="ltiAVal">2</b></label><label>Odd harmonics <input id="ltiTerms" type="range" min="1" max="25" step="2" value="9"><b id="ltiTermsVal">9</b></label></div><canvas id="ltiCanvas" class="fs-canvas" width="900" height="290"></canvas><p class="fs-readout" id="ltiReadout"></p></div>
 
 <h2 id="parseval"><small>6</small>Parseval’s relation</h2>
