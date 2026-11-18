@@ -889,13 +889,84 @@ header{align-items:center}
 <script>
 (()=>{
 const $=id=>document.getElementById(id),TAU=2*Math.PI;
+
 function axes(ctx,W,H,xmin,xmax,ymin,ymax,xstep,ystep,xlabel='t',ylabel='Amplitude'){
- ctx.fillStyle='#05090f';ctx.fillRect(0,0,W,H);const X=x=>(x-xmin)/(xmax-xmin)*W,Y=y=>H-(y-ymin)/(ymax-ymin)*H;
- ctx.font='11px system-ui';ctx.lineWidth=1;ctx.strokeStyle='rgba(145,195,225,.28)';ctx.fillStyle='#d7e7f1';
- for(let x=Math.ceil(xmin/xstep-1e-9)*xstep;x<=xmax+1e-9;x+=xstep){let px=X(x);ctx.beginPath();ctx.moveTo(px,0);ctx.lineTo(px,H);ctx.stroke();ctx.fillText(Number(x.toFixed(3)).toString(),px+2,Y(0)+14);}
- for(let y=Math.ceil(ymin/ystep-1e-9)*ystep;y<=ymax+1e-9;y+=ystep){let py=Y(y);ctx.beginPath();ctx.moveTo(0,py);ctx.lineTo(W,py);ctx.stroke();ctx.textAlign='right';ctx.fillText(Number(y.toFixed(3)).toString(),X(0)-6,py-3);}
- ctx.strokeStyle='#f0f9ff';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(0,Y(0));ctx.lineTo(W,Y(0));ctx.moveTo(X(0),0);ctx.lineTo(X(0),H);ctx.stroke();ctx.textAlign='right';ctx.fillStyle='#e2f0f8';ctx.font='italic 13px Georgia';ctx.fillText(xlabel,W-5,Y(0)-5);ctx.textAlign='left';ctx.fillText(ylabel,6,14);return {X,Y};
+  const left = 48;
+  const right = 16;
+  const top = 20;
+  const bottom = 32;
+
+  const plotW = W - left - right;
+  const plotH = H - top - bottom;
+
+  const X = x => left + (x-xmin)/(xmax-xmin)*plotW;
+  const Y = y => top + (ymax-y)/(ymax-ymin)*plotH;
+
+  ctx.fillStyle='#05090f';
+  ctx.fillRect(0,0,W,H);
+
+  ctx.font='11px system-ui';
+  ctx.lineWidth=1;
+  ctx.strokeStyle='rgba(145,195,225,.28)';
+  ctx.fillStyle='#d7e7f1';
+  ctx.textAlign='center';
+
+  // Vertical grid lines and k-axis tick labels
+  for(let x=Math.ceil(xmin/xstep-1e-9)*xstep;
+      x<=xmax+1e-9;x+=xstep){
+    let px=X(x);
+    ctx.beginPath();
+    ctx.moveTo(px,top);
+    ctx.lineTo(px,H-bottom);
+    ctx.stroke();
+
+    ctx.fillText(
+      Number(x.toFixed(3)).toString(),
+      px,
+      H-10
+    );
+  }
+
+  // Horizontal grid lines and y-axis tick labels
+  for(let y=Math.ceil(ymin/ystep-1e-9)*ystep;
+      y<=ymax+1e-9;y+=ystep){
+    let py=Y(y);
+
+    ctx.beginPath();
+    ctx.moveTo(left,py);
+    ctx.lineTo(W-right,py);
+    ctx.stroke();
+
+    ctx.textAlign='right';
+    ctx.fillText(
+      Number(y.toFixed(3)).toString(),
+      left-7,
+      py-3
+    );
+  }
+
+  // Main axes
+  ctx.strokeStyle='#f0f9ff';
+  ctx.lineWidth=1.5;
+  ctx.beginPath();
+  ctx.moveTo(left,Y(0));
+  ctx.lineTo(W-right,Y(0));
+  ctx.moveTo(X(0),top);
+  ctx.lineTo(X(0),H-bottom);
+  ctx.stroke();
+
+  // Axis labels
+  ctx.fillStyle='#e2f0f8';
+  ctx.font='italic 13px Georgia';
+  ctx.textAlign='right';
+  ctx.fillText(xlabel,W-right,Y(0)-5);
+
+  ctx.textAlign='left';
+  ctx.fillText(ylabel,6,14);
+
+  return {X,Y};
 }
+
 function curve(ctx,map,fn,color='#55c8f2',dash=[]){ctx.beginPath();ctx.strokeStyle=color;ctx.lineWidth=2.3;ctx.setLineDash(dash);for(let i=0;i<=map.W;i++){let x=map.xmin+i/map.W*(map.xmax-map.xmin),y=fn(x);if(!Number.isFinite(y)){continue;}i?ctx.lineTo(map.X(x),map.Y(y)):ctx.moveTo(map.X(x),map.Y(y));}ctx.stroke();ctx.setLineDash([]);}
 function drawTime(canvas,fn,xmin,xmax,ymin,ymax,label='t'){const c=canvas.getContext('2d'),W=canvas.width,H=canvas.height,m=axes(c,W,H,xmin,xmax,ymin,ymax,1,0.5,label);m.W=W;m.xmin=xmin;m.xmax=xmax;curve(c,m,fn);}
 // Rotating phasor and its real/imaginary projections
