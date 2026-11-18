@@ -1074,80 +1074,202 @@ $('gibbsK').addEventListener('input',gibbs);gibbs();
 */
 
 // LTI system h(t)=exp(-a t)u(t), H(f)=1/(a+j2πf)
-function lti() {
-  let f = +$('ltiFreq').value;
-  let a = +$('ltiA').value;
-  let K = +$('ltiTerms').value;
+(function () {
+  function initLTIDemo() {
+    const root = document.getElementById('ltiDemo');
+    if (!root || root.dataset.initialized === 'true') return;
 
-  $('ltiFreqVal').textContent = f.toFixed(1) + ' Hz';
-  $('ltiAVal').textContent = a.toFixed(1);
-  $('ltiTermsVal').textContent = K;
+    const get = id => root.querySelector('#' + id);
 
-  const tMin = -1.5 / f;
-  const tMax =  1.5 / f;
+    const freqInput = get('ltiFreq');
+    const aInput = get('ltiA');
+    const termsInput = get('ltiTerms');
+    const inputCanvas = get('ltiInputCanvas');
+    const outputCanvas = get('ltiCanvas');
 
-  // Input and output signals
-  let input = t => squareSum(t, K, f);
-
-  let output = t => {
-    let s = 0;
-
-    for (let n = 1; n <= K; n += 2) {
-      let om = TAU * n * f;
-      let mag = 1 / Math.hypot(a, om);
-      let phase = -Math.atan2(om, a);
-
-      s += 4 / Math.PI / n *
-           mag * Math.sin(om * t + phase);
+    if (!freqInput || !aInput || !termsInput ||
+        !inputCanvas || !outputCanvas) {
+      console.error('LTI demo: missing HTML element.');
+      return;
     }
 
-    return s;
-  };
+    root.dataset.initialized = 'true';
 
-  // Draw input signal
-  let inputCanvas = $('ltiInputCanvas');
-  let ci = inputCanvas.getContext('2d');
-  let Wi = inputCanvas.width;
-  let Hi = inputCanvas.height;
+    function drawAxes(ctx, W, H, xmin, xmax, ymin, ymax, f) {
+      const left = 52, right = 18, top = 18, bottom = 32;
+      const pw = W - left - right;
+      const ph = H - top - bottom;
 
-  let mi = axes(
-    ci, Wi, Hi,
-    tMin, tMax,
-    -1.5, 1.5,
-    0.25 / f, 0.5,
-    't (s)', 'x(t)'
-  );
+      const X = t => left + (t - xmin) / (xmax - xmin) * pw;
+      const Y = v => top + (ymax - v) / (ymax - ymin) * ph;
 
-  curve(ci, mi, input, '#ff6b78', [6, 5]);
+      ctx.fillStyle = '#05090f';
+      ctx.fillRect(0, 0, W, H);
 
-  // Draw filtered output
-  let outputCanvas = $('ltiCanvas');
-  let co = outputCanvas.getContext('2d');
-  let Wo = outputCanvas.width;
-  let Ho = outputCanvas.height;
+      ctx.font = '11px system-ui';
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = 'rgba(145,195,225,.25)';
+      ctx.fillStyle = '#d7e7f1';
+      ctx.textAlign = 'center';
 
-  let mo = axes(
-    co, Wo, Ho,
-    tMin, tMax,
-    -1.5, 1.5,
-    0.25 / f, 0.5,
-    't (s)', 'y(t)'
-  );
+      // Time-axis grid and tick labels
+      const dt = 0.25 / f;
+      const first = Math.ceil(xmin / dt - 1e-9);
 
-  curve(co, mo, output, '#55c8f2');
+      for (let i = first; i * dt <= xmax + 1e-9; i++) {
+        const t = i * dt;
+        const px = X(t);
 
-  $('ltiReadout').textContent =
-    `The input is a square wave containing ${K} odd harmonics. ` +
-    `The LTI system attenuates and phase-shifts each harmonic according to ` +
-    `H(jω) = 1/(a + jω). Increasing the decay rate a changes the ` +
-    `filtering of the individual harmonics.`;
-}
+        ctx.beginPath();
+        ctx.moveTo(px, top);
+        ctx.lineTo(px, H - bottom);
+        ctx.stroke();
 
-['ltiFreq', 'ltiA', 'ltiTerms'].forEach(id =>
-  $(id).addEventListener('input', lti)
-);
+        ctx.fillText(t.toFixed(2), px, H - 10);
+      }
 
-lti();
+      // Amplitude grid and tick labels
+      for (let v = ymin; v <= ymax + 1e-9; v += 0.5) {
+        const py = Y(v);
+
+        ctx.beginPath();
+        ctx.moveTo(left, py);
+        ctx.lineTo(W - right, py);
+        ctx.stroke();
+
+        ctx.textAlign = 'right';
+        ctx.fillText(v.toFixed(1), left - 7, py + 4);
+      }
+
+      // Main axes
+      ctx.strokeStyle = '#f0f9ff';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(left, Y(0));
+      ctx.lineTo(W - right, Y(0));
+      ctx.moveTo(X(0), top);
+      ctx.lineTo(X(0), H - bottom);
+      ctx.stroke();
+
+      ctx.fillStyle = '#e2f0f8';
+      ctx.font = 'italic 13px Georgia';
+      ctx.textAlign = 'right';
+      ctx.fillText('t (s)', W - right, Y(0) - 5);
+      ctx.textAlign = 'left';
+      ctx.fillText('Amplitude', 5, 13);
+
+      return { X, Y, left, right, top, bottom, xmin, xmax };
+    }
+
+    function drawCurve(ctx, W, H, map, fn, color, dashed = false) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(map.left, map.top,
+               W - map.left - map.right,
+               H - map.top - map.bottom);
+      ctx.clip();
+
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2.2;
+      ctx.setLineDash(dashed ? [6, 5] : []);
+      ctx.beginPath();
+
+      const samples = 1800;
+
+      for (let i = 0; i <= samples; i++) {
+        const t = map.xmin + (map.xmax - map.xmin) * i / samples;
+        const x = map.X(t);
+        const y = map.Y(fn(t));
+
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function update() {
+      const f = Number(freqInput.value);
+      const a = Number(aInput.value);
+      const K = Number(termsInput.value);
+
+      get('ltiFreqVal').textContent = f.toFixed(1) + ' Hz';
+      get('ltiAVal').textContent = a.toFixed(1);
+      get('ltiTermsVal').textContent = K;
+
+      const xmin = -1.5 / f;
+      const xmax =  1.5 / f;
+
+      function input(t) {
+        let s = 0;
+        for (let n = 1; n <= K; n += 2) {
+          s += 4 / (Math.PI * n) *
+               Math.sin(2 * Math.PI * n * f * t);
+        }
+        return s;
+      }
+
+      function output(t) {
+        let s = 0;
+        for (let n = 1; n <= K; n += 2) {
+          const omega = 2 * Math.PI * n * f;
+          const magnitude = 1 / Math.hypot(a, omega);
+          const phase = -Math.atan2(omega, a);
+
+          s += 4 / (Math.PI * n) *
+               magnitude * Math.sin(omega * t + phase);
+        }
+        return s;
+      }
+
+      // Upper plot: input
+      {
+        const ctx = inputCanvas.getContext('2d');
+        const W = inputCanvas.width;
+        const H = inputCanvas.height;
+
+        const map = drawAxes(
+          ctx, W, H, xmin, xmax, -1.5, 1.5, f
+        );
+
+        drawCurve(ctx, W, H, map, input, '#ff6b78', true);
+      }
+
+      // Lower plot: filtered output
+      {
+        const ctx = outputCanvas.getContext('2d');
+        const W = outputCanvas.width;
+        const H = outputCanvas.height;
+
+        const map = drawAxes(
+          ctx, W, H, xmin, xmax, -1.5, 1.5, f
+        );
+
+        drawCurve(ctx, W, H, map, output, '#55c8f2');
+      }
+
+      get('ltiReadout').textContent =
+        `The input contains ${K} odd harmonics. ` +
+        `The system H(jω) = 1/(a + jω) attenuates and phase-shifts ` +
+        `each harmonic. Increasing a changes the attenuation and phase lag.`;
+    }
+
+    freqInput.addEventListener('input', update);
+    aInput.addEventListener('input', update);
+    termsInput.addEventListener('input', update);
+
+    update();
+    console.log('LTI demo initialized.');
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLTIDemo);
+  } else {
+    initLTIDemo();
+  }
+})();
+
 
 function parseval(){let K=+$('parsevalK').value;$('parsevalKVal').textContent=K;let sum=0;for(let k=1;k<=K;k+=2){let x=2/(Math.PI*k);sum+=2*x*x;}let ptime=0,N=30000;for(let i=0;i<N;i++){let t=(i+.5)/N,v=squareSum(t,K);ptime+=v*v/N;}let c=$('parsevalCanvas').getContext('2d'),W=$('parsevalCanvas').width,H=$('parsevalCanvas').height;c.fillStyle='#05090f';c.fillRect(0,0,W,H);let vals=[1,ptime,sum],labels=['Ideal square-wave power','Time-domain partial-sum power','Frequency-domain partial-sum power'],max=1.2,base=178,top=25,barW=150;for(let tick=0;tick<=1.2+1e-9;tick+=.2){let yy=base-tick/1.2*(base-top);c.strokeStyle='rgba(145,195,225,.28)';c.beginPath();c.moveTo(55,yy);c.lineTo(W-30,yy);c.stroke();c.fillStyle='#dceaf5';c.font='11px system-ui';c.textAlign='right';c.fillText(tick.toFixed(1),48,yy+4);}for(let i=0;i<3;i++){let x=105+i*255,h=vals[i]/max*(base-top);c.fillStyle=['#62d99a','#55c8f2','#ff6b78'][i];c.fillRect(x,base-h,barW,h);c.fillStyle='#e2f0f8';c.font='14px system-ui';c.textAlign='center';c.fillText(vals[i].toFixed(4),x+barW/2,base-h-7);c.font='12px system-ui';c.fillText(labels[i],x+barW/2,210);}c.strokeStyle='#f0f9ff';c.lineWidth=1.4;c.beginPath();c.moveTo(55,top);c.lineTo(55,base);c.lineTo(W-30,base);c.stroke();c.fillStyle='#e2f0f8';c.font='italic 13px Georgia';c.textAlign='left';c.fillText('Power',8,18);$('parsevalReadout').textContent=`With ${K} odd harmonics, the truncated-series power from its coefficients is ${sum.toFixed(5)} and the numerically averaged time-domain power is ${ptime.toFixed(5)}. Both approach the ideal square-wave power 1 as more terms are included.`;}
 $('parsevalK').addEventListener('input',parseval);parseval();
