@@ -569,21 +569,21 @@ header{align-items:center}
   <div class="tile"><b class="tag">Whistle</b><p>Input: Steady flow of air; Output: Pure musical tone.</p></div></div>
 </div>
 <div class="card">
-  <div style="display:grid;grid-template-columns:1.15fr 0.85fr;gap:24px;align-items:center;">
+  <div style="display:grid;grid-template-columns:1.05fr 0.95fr;gap:24px;align-items:center;">
 
     <!-- Left: System description -->
     <div>
       <span class="tag">Example of a physical system</span>
       <h3>RC Circuit</h3>
       <p>
-        An RC circuit is an electrical system consisting of a resistor
-        and a capacitor. It takes an input voltage \(x(t)\) and produces
+        An RC circuit consists of a resistor and a capacitor. It takes
+        an input voltage \(x(t)\) from a voltage source and produces
         an output voltage \(y(t)\) across the capacitor.
       </p>
       <p>
         The resistor limits the current, while the capacitor stores
-        electrical energy. Together, they determine how quickly the
-        output responds to changes in the input.
+        electrical energy. As a result, the output cannot change
+        instantaneously: it responds gradually to changes in the input.
       </p>
       <div class="eq-box" style="margin-top:14px;text-align:center;">
         \[
@@ -591,67 +591,115 @@ header{align-items:center}
         \]
       </div>
       <p class="sub" style="margin-top:10px;">
-        The circuit is a simple example of a dynamic system: its output
-        depends on both the present input and its stored energy.
+        This is a dynamic system: its output depends on the input
+        and on the energy stored in the capacitor.
       </p>
     </div>
 
-    <!-- Right: RC circuit diagram -->
-    <div style="background:#101b2b;border:1px solid #287da5;border-radius:12px;padding:16px;">
-      <svg viewBox="0 0 420 270" width="100%" role="img"
-           aria-label="RC low-pass circuit with a resistor in series and a capacitor connected to ground">
-        <defs>
-          <marker id="rcArrow" markerWidth="7" markerHeight="7"
-                  refX="5" refY="3" orient="auto">
-            <path d="M0,0 L6,3 L0,6" fill="none"
-                  stroke="#55d9ff" stroke-width="1.2"/>
-          </marker>
-        </defs>
+    <!-- Right: Circuit and waveforms -->
+    <div style="background:#101b2b;border:1px solid #287da5;border-radius:12px;padding:14px;">
 
-        <!-- Input label -->
-        <text x="18" y="105" fill="#55d9ff" font-size="15"
-              font-weight="bold">x(t)</text>
+      <!-- RC circuit -->
+      <svg viewBox="0 0 440 190" width="100%" role="img"
+           aria-label="RC low-pass circuit driven by an input voltage source">
+        <!-- Input voltage source -->
+        <circle cx="48" cy="105" r="25" fill="none"
+                stroke="#55d9ff" stroke-width="2.5"/>
+        <path d="M39 105 Q43 94 48 105 T57 105"
+              fill="none" stroke="#55d9ff" stroke-width="2"/>
+        <text x="48" y="65" text-anchor="middle"
+              fill="#55d9ff" font-size="14" font-weight="bold">Input</text>
+        <text x="48" y="145" text-anchor="middle"
+              fill="#a9bacb" font-size="12">Voltage source</text>
 
-        <!-- Input wire -->
-        <path d="M48 112 H105" stroke="#dce8f2" stroke-width="2.5" fill="none"/>
+        <!-- Source ground / return wire -->
+        <path d="M48 130 V165 H375 V130"
+              fill="none" stroke="#dce8f2" stroke-width="2.3"/>
+
+        <!-- Top input wire -->
+        <path d="M48 80 V35 H105"
+              fill="none" stroke="#dce8f2" stroke-width="2.3"/>
 
         <!-- Resistor -->
-        <path d="M105 112 L115 112 L123 96 L137 128 L151 96
-                 L165 128 L179 96 L193 128 L207 112 L225 112"
-              stroke="#ffbd59" stroke-width="3" fill="none"
+        <path d="M105 35 L115 35 L123 20 L137 50 L151 20
+                 L165 50 L179 20 L193 50 L207 35 L225 35"
+              fill="none" stroke="#ffbd59" stroke-width="3"
               stroke-linejoin="round"/>
-        <text x="164" y="80" text-anchor="middle"
-              fill="#ffbd59" font-size="15">R</text>
+        <text x="165" y="12" text-anchor="middle"
+              fill="#ffbd59" font-size="14">R</text>
 
-        <!-- Output node and wire -->
-        <path d="M225 112 H330" stroke="#dce8f2" stroke-width="2.5" fill="none"/>
-        <circle cx="225" cy="112" r="4" fill="#55d9ff"/>
+        <!-- Output wire and node -->
+        <path d="M225 35 H375 V80"
+              fill="none" stroke="#dce8f2" stroke-width="2.3"/>
+        <circle cx="225" cy="35" r="4" fill="#55d9ff"/>
 
-        <!-- Capacitor branch -->
-        <path d="M285 112 V151 M267 151 H303 M267 161 H303
-                 M285 161 V205"
-              stroke="#55d9ff" stroke-width="3" fill="none"
+        <!-- Capacitor -->
+        <path d="M375 80 V95 M355 95 H395 M355 105 H395
+                 M375 105 V130"
+              fill="none" stroke="#55d9ff" stroke-width="3"
               stroke-linecap="round"/>
+        <text x="400" y="104" fill="#55d9ff" font-size="14">C</text>
+
+        <!-- Output voltage -->
+        <path d="M375 35 H415" stroke="#55d9ff" stroke-width="2"
+              fill="none"/>
+        <text x="415" y="24" text-anchor="end"
+              fill="#55d9ff" font-size="14" font-weight="bold">y(t)</text>
 
         <!-- Ground -->
-        <path d="M269 205 H301 M275 212 H295 M282 219 H288"
+        <path d="M359 165 H391 M365 172 H385 M371 179 H379"
               stroke="#dce8f2" stroke-width="2" fill="none"/>
 
-        <!-- Output label -->
-        <text x="335" y="105" fill="#55d9ff" font-size="15"
-              font-weight="bold">y(t)</text>
-        <text x="310" y="155" fill="#55d9ff" font-size="14">C</text>
-
-        <!-- Output arrow -->
-        <path d="M330 112 H365" stroke="#55d9ff" stroke-width="2"
-              fill="none" marker-end="url(#rcArrow)"/>
-
-        <!-- Bottom caption -->
-        <text x="210" y="250" text-anchor="middle"
-              fill="#a9bacb" font-size="13">RC low-pass filter</text>
+        <text x="165" y="75" text-anchor="middle"
+              fill="#a9bacb" font-size="12">Resistor</text>
+        <text x="220" y="185" text-anchor="middle"
+              fill="#a9bacb" font-size="12">RC low-pass circuit</text>
       </svg>
-    </div>
 
+      <!-- Waveform plots -->
+      <div style="border-top:1px solid #294158;padding-top:10px;margin-top:4px;">
+        <svg viewBox="0 0 440 190" width="100%" role="img"
+             aria-label="Input square wave and smoothed output voltage">
+          <!-- Plot 1: input -->
+          <text x="8" y="17" fill="#55d9ff" font-size="13"
+                font-weight="bold">Input voltage  x(t)</text>
+          <path d="M48 25 V78 M48 78 H425"
+                stroke="#64788b" stroke-width="1.2" fill="none"/>
+          <path d="M48 69 H105 V35 H190 V69 H275 V35 H360 V69 H425"
+                stroke="#55d9ff" stroke-width="2.8" fill="none"
+                stroke-linejoin="round"/>
+          <text x="30" y="39" fill="#a9bacb" font-size="10">V</text>
+          <text x="425" y="91" text-anchor="end"
+                fill="#a9bacb" font-size="10">Time</text>
+
+          <!-- Plot 2: output -->
+          <text x="8" y="112" fill="#ffbd59" font-size="13"
+                font-weight="bold">Output voltage  y(t)</text>
+          <path d="M48 120 V173 M48 173 H425"
+                stroke="#64788b" stroke-width="1.2" fill="none"/>
+          <path d="M48 164
+                   C62 164 67 148 78 140
+                   C91 132 96 132 105 132
+                   C125 132 137 139 150 148
+                   C165 157 174 164 190 164
+                   C207 164 217 148 228 140
+                   C241 132 250 132 275 132
+                   C296 132 307 139 320 148
+                   C335 157 345 164 360 164
+                   C377 164 388 148 399 140
+                   C410 133 417 132 425 132"
+                stroke="#ffbd59" stroke-width="2.8" fill="none"
+                stroke-linecap="round"/>
+          <text x="30" y="134" fill="#a9bacb" font-size="10">V</text>
+          <text x="425" y="186" text-anchor="end"
+                fill="#a9bacb" font-size="10">Time</text>
+        </svg>
+        <div style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap;font-size:12px;color:#a9bacb;">
+          <span><span style="color:#55d9ff;">━</span> Input</span>
+          <span><span style="color:#ffbd59;">━</span> Output</span>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
