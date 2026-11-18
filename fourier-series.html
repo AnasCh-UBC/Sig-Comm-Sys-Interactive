@@ -888,11 +888,11 @@ header{align-items:center}
     <label>Odd harmonics <input id="ltiTerms" type="range" min="1" max="25" step="2" value="9"><b id="ltiTermsVal">9</b></label>
   </div>
   <div class="fs-panel">
-    <b>Input signal \(x(t)\): periodic square wave</b>
+    <b>Input signal x(t): Fourier approximation and ideal square wave</b>
     <canvas id="ltiInputCanvas" class="fs-canvas" width="900" height="220"></canvas>
   </div>
   <div class="fs-panel">
-    <b>Output signal \(y(t)\): filtered waveform</b>
+    <b>Output signal y(t): filtered waveform</b>
     <canvas id="ltiCanvas" class="fs-canvas" width="900" height="220"></canvas>
   </div>
   <p class="fs-readout" id="ltiReadout"></p>
@@ -1095,7 +1095,7 @@ $('gibbsK').addEventListener('input',gibbs);gibbs();
 
     root.dataset.initialized = 'true';
 
-    function drawAxes(ctx, W, H, xmin, xmax, ymin, ymax, f) {
+    function drawAxes(ctx, W, H, xmin, xmax, ymin, ymax) {
       const left = 52, right = 18, top = 18, bottom = 32;
       const pw = W - left - right;
       const ph = H - top - bottom;
@@ -1112,8 +1112,8 @@ $('gibbsK').addEventListener('input',gibbs);gibbs();
       ctx.fillStyle = '#d7e7f1';
       ctx.textAlign = 'center';
 
-      // Time-axis grid and tick labels
-      const dt = 0.25 / f;
+      // Time-axis grid and labels: fixed 0.25 s spacing
+      const dt = 0.25;
       const first = Math.ceil(xmin / dt - 1e-9);
 
       for (let i = first; i * dt <= xmax + 1e-9; i++) {
@@ -1128,8 +1128,11 @@ $('gibbsK').addEventListener('input',gibbs);gibbs();
         ctx.fillText(t.toFixed(2), px, H - 10);
       }
 
-      // Amplitude grid and tick labels
-      for (let v = ymin; v <= ymax + 1e-9; v += 0.5) {
+      // Amplitude grid and labels
+      const dy = (ymax - ymin) / 4;
+
+      for (let i = 0; i <= 4; i++) {
+        const v = ymin + i * dy;
         const py = Y(v);
 
         ctx.beginPath();
@@ -1138,23 +1141,27 @@ $('gibbsK').addEventListener('input',gibbs);gibbs();
         ctx.stroke();
 
         ctx.textAlign = 'right';
-        ctx.fillText(v.toFixed(1), left - 7, py + 4);
+        ctx.fillText(v.toFixed(2), left - 7, py + 4);
       }
 
       // Main axes
       ctx.strokeStyle = '#f0f9ff';
       ctx.lineWidth = 1.5;
       ctx.beginPath();
-      ctx.moveTo(left, Y(0));
-      ctx.lineTo(W - right, Y(0));
-      ctx.moveTo(X(0), top);
-      ctx.lineTo(X(0), H - bottom);
+      if (ymin <= 0 && ymax >= 0) {
+        ctx.moveTo(left, Y(0));
+        ctx.lineTo(W - right, Y(0));
+      }
+      if (xmin <= 0 && xmax >= 0) {
+        ctx.moveTo(X(0), top);
+        ctx.lineTo(X(0), H - bottom);
+      }
       ctx.stroke();
 
       ctx.fillStyle = '#e2f0f8';
       ctx.font = 'italic 13px Georgia';
       ctx.textAlign = 'right';
-      ctx.fillText('t (s)', W - right, Y(0) - 5);
+      ctx.fillText('t (s)', W - right, H - 3);
       ctx.textAlign = 'left';
       ctx.fillText('Amplitude', 5, 13);
 
@@ -1198,61 +1205,76 @@ $('gibbsK').addEventListener('input',gibbs);gibbs();
       get('ltiAVal').textContent = a.toFixed(1);
       get('ltiTermsVal').textContent = K;
 
-      const xmin = -1.5 / f;
-      const xmax =  1.5 / f;
+      // Fixed time-axis limits, independent of frequency
+      const xmin = -1.5;
+      const xmax =  1.5;
 
+      // Fourier-series approximation of the square-wave input
       function input(t) {
         let s = 0;
         for (let n = 1; n <= K; n += 2) {
           s += 4 / (Math.PI * n) *
-               Math.sin(2 * Math.PI * n * f * t);
+              Math.sin(2 * Math.PI * n * f * t);
         }
         return s;
       }
 
+      // Ideal square wave
+      function idealSquare(t) {
+        return Math.sin(2 * Math.PI * f * t) >= 0 ? 1 : -1;
+      }
+
+      // Filtered output
       function output(t) {
         let s = 0;
+
         for (let n = 1; n <= K; n += 2) {
           const omega = 2 * Math.PI * n * f;
           const magnitude = 1 / Math.hypot(a, omega);
           const phase = -Math.atan2(omega, a);
 
           s += 4 / (Math.PI * n) *
-               magnitude * Math.sin(omega * t + phase);
+              magnitude * Math.sin(omega * t + phase);
         }
+
         return s;
       }
 
-      // Upper plot: input
+      // Upper plot: input and ideal square wave
       {
         const ctx = inputCanvas.getContext('2d');
         const W = inputCanvas.width;
         const H = inputCanvas.height;
 
         const map = drawAxes(
-          ctx, W, H, xmin, xmax, -1.5, 1.5, f
+          ctx, W, H, xmin, xmax, -1.5, 1.5
         );
 
+        // Fourier approximation
         drawCurve(ctx, W, H, map, input, '#ff6b78', true);
+
+        // Ideal square wave
+        drawCurve(ctx, W, H, map, idealSquare, '#f5a623');
       }
 
-      // Lower plot: filtered output
+      // Lower plot: filtered output, smaller vertical range
       {
         const ctx = outputCanvas.getContext('2d');
         const W = outputCanvas.width;
         const H = outputCanvas.height;
 
         const map = drawAxes(
-          ctx, W, H, xmin, xmax, -1.5, 1.5, f
+          ctx, W, H, xmin, xmax, -0.5, 0.5
         );
 
         drawCurve(ctx, W, H, map, output, '#55c8f2');
       }
 
       get('ltiReadout').textContent =
-        `The input contains ${K} odd harmonics. ` +
-        `The system H(jω) = 1/(a + jω) attenuates and phase-shifts ` +
-        `each harmonic. Increasing a changes the attenuation and phase lag.`;
+        `The upper plot compares the Fourier approximation (red dashed) ` +
+        `with the ideal square wave (orange). The lower plot shows the ` +
+        `filtered output. The frequency is ${f.toFixed(1)} Hz, the decay ` +
+        `rate is ${a.toFixed(1)}, and ${K} odd harmonics are included.`;
     }
 
     freqInput.addEventListener('input', update);
