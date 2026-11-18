@@ -881,14 +881,14 @@ header{align-items:center}
   <p class="sub">An LTI system changes the amplitude and phase of existing harmonics; it does not create new frequencies.</p>
 </div>
 <div class="fs-demo" id="ltiDemo">
-  <h3>Interactive 5.1: an LTI system filters a periodic square wave</h3>
+  <h3>Interactive 5.1: An LTI system filters a periodic square wave</h3>
   <div class="fs-controls">
     <label>Fundamental frequency \(f_0\) <input id="ltiFreq" type="range" min="0.2" max="3" step="0.1" value="1"><b id="ltiFreqVal">1.0 Hz</b></label>
     <label>Decay rate \(a\) <input id="ltiA" type="range" min="0.5" max="8" step="0.5" value="2"><b id="ltiAVal">2</b></label>
     <label>Odd harmonics <input id="ltiTerms" type="range" min="1" max="25" step="2" value="9"><b id="ltiTermsVal">9</b></label>
   </div>
   <div class="fs-panel">
-    <b>Input signal x(t): Fourier approximation and ideal square wave</b>
+    <b>Input signal x(t): Fourier approximation (orange) and ideal square wave (red)</b>
     <canvas id="ltiInputCanvas" class="fs-canvas" width="900" height="220"></canvas>
   </div>
   <div class="fs-panel">
@@ -1271,10 +1271,8 @@ $('gibbsK').addEventListener('input',gibbs);gibbs();
       }
 
       get('ltiReadout').textContent =
-        `The upper plot compares the Fourier approximation (red dashed) ` +
-        `with the ideal square wave (orange). The lower plot shows the ` +
-        `filtered output. The frequency is ${f.toFixed(1)} Hz, the decay ` +
-        `rate is ${a.toFixed(1)}, and ${K} odd harmonics are included.`;
+        `The frequency of the square wave is ${f.toFixed(1)} Hz and ${K} odd harmonics are included.` +
+        `The filter has a impulse response h(t)=exp(-at)u(t), frequency response H(f)=1/(a+j2πf), and decay rate a=${a.toFixed(1)}, `;
     }
 
     freqInput.addEventListener('input', update);
