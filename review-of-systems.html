@@ -581,7 +581,7 @@ header{align-items:center}
         an output voltage \(y(t)\) across the capacitor.
       </p>
       <p>
-        The resistor limits the current, while the capacitor stores
+        The resistor limits the current. The capacitor stores
         electrical energy. As a result, the output cannot change
         instantaneously: it responds gradually to changes in the input.
       </p>
@@ -603,9 +603,9 @@ header{align-items:center}
                 stroke="#55d9ff" stroke-width="2.5"/>
         <path d="M39 105 Q43 94 48 105 T57 105"
               fill="none" stroke="#55d9ff" stroke-width="2"/>
-        <text x="82" y="91" text-anchor="start"
+        <text x="82" y="101" text-anchor="start"
               fill="#55d9ff" font-size="14" font-weight="bold">Input</text>
-        <text x="82" y="108" text-anchor="start"
+        <text x="82" y="118" text-anchor="start"
               fill="#a9bacb" font-size="12">Voltage source</text>
 
         <!-- Source ground / return wire -->
@@ -621,9 +621,10 @@ header{align-items:center}
                  L165 50 L179 20 L193 50 L207 35 L225 35"
               fill="none" stroke="#ffbd59" stroke-width="3"
               stroke-linejoin="round"/>
-        <text x="165" y="12" text-anchor="middle"
+        <text x="165" y="70" text-anchor="middle"
               fill="#ffbd59" font-size="14">R</text>
-
+        <text x="165" y="87" text-anchor="middle"
+              fill="#a9bacb" font-size="12">Resistor</text>
         <!-- Output wire and node -->
         <path d="M225 35 H375 V80"
               fill="none" stroke="#dce8f2" stroke-width="2.3"/>
@@ -635,6 +636,8 @@ header{align-items:center}
               fill="none" stroke="#55d9ff" stroke-width="3"
               stroke-linecap="round"/>
         <text x="400" y="104" fill="#55d9ff" font-size="14">C</text>
+        <text x="400" y="121" text-anchor="middle"
+              fill="#a9bacb" font-size="12">Capacitor</text>
 
         <!-- Output voltage -->
         <path d="M375 35 H415" stroke="#55d9ff" stroke-width="2"
@@ -646,8 +649,7 @@ header{align-items:center}
         <path d="M359 165 H391 M365 172 H385 M371 179 H379"
               stroke="#dce8f2" stroke-width="2" fill="none"/>
 
-        <text x="165" y="75" text-anchor="middle"
-              fill="#a9bacb" font-size="12">Resistor</text>
+        
         <text x="220" y="185" text-anchor="middle"
               fill="#a9bacb" font-size="12">RC low-pass circuit</text>
       </svg>
@@ -700,7 +702,6 @@ header{align-items:center}
   <p class="sub" style="margin-top:10px;">
     The output of this system depends on the input and on the energy stored in the capacitor.
   </p>
-
 </div>
 
 <p>To characterize a system we model the relation between its input and output, called the <b>input–output relation</b>: $$y(t)=\mathcal{T}[x(t)].$$</p>
