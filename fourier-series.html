@@ -1282,10 +1282,10 @@ $('gibbsK').addEventListener('input',gibbs);gibbs();
         );
 
         // Fourier approximation
-        drawCurve(ctx, W, H, map, input, '#00FFFF', true);
+        drawCurve(ctx, W, H, map, input, '#00FFFF');
 
         // Ideal square wave
-        drawCurve(ctx, W, H, map, idealSquare, '#f5a623');
+        drawCurve(ctx, W, H, map, idealSquare, '#f5a623', true);
       }
 
       // Lower plot: filtered output, smaller vertical range
@@ -1299,10 +1299,10 @@ $('gibbsK').addEventListener('input',gibbs);gibbs();
         );
 
         // Selected-harmonic output
-        drawCurve(ctx, W, H, map, output, '#00FFFF', true);
+        drawCurve(ctx, W, H, map, output, '#00FFFF');
 
         // Ideal filtered output
-        drawCurve(ctx, W, H, map, idealOutput, '#f5a623');
+        drawCurve(ctx, W, H, map, idealOutput, '#f5a623', true);
       }
 
       get('ltiReadout').textContent =
