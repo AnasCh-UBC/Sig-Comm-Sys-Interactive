@@ -923,7 +923,7 @@ header{align-items:center}
 <div class="quiz-card" data-quiz><h3>Question 3 · LTI systems</h3><p>If the input has Fourier coefficient \(x_k\), what is the output coefficient at harmonic \(k\)?</p><fieldset class="quiz-question" data-answer="a" data-feedback="Each input harmonic is multiplied by the system frequency response at that harmonic."><label class="quiz-option"><input type="radio" name="q3" value="a"> \(x_kH(kf_0)\)</label><label class="quiz-option"><input type="radio" name="q3" value="b"> \(x_k+H(kf_0)\)</label><label class="quiz-option"><input type="radio" name="q3" value="c"> \(H(f_0)\) only</label><p class="quiz-feedback"></p></fieldset><div class="quiz-actions"><button data-check>Check</button><button class="secondary" data-reset>Reset</button><span class="quiz-result"></span></div></div>
 <div class="quiz-card" data-quiz><h3>Question 4 · Parseval</h3><p>Parseval’s relation connects average signal power to:</p><fieldset class="quiz-question" data-answer="b" data-feedback="The average squared magnitude equals the sum of squared Fourier-coefficient magnitudes."><label class="quiz-option"><input type="radio" name="q4" value="a"> The sum of coefficient phases</label><label class="quiz-option"><input type="radio" name="q4" value="b"> \(\sum_k|x_k|^2\)</label><label class="quiz-option"><input type="radio" name="q4" value="c"> The largest harmonic frequency</label><p class="quiz-feedback"></p></fieldset><div class="quiz-actions"><button data-check>Check</button><button class="secondary" data-reset>Reset</button><span class="quiz-result"></span></div></div>
 </div>
-<footer>APSC 270 · Signals and Communication Systems · Fourier Series</footer>
+<footer><b>Dr. Anas Chaaban, P.Eng.</b> · School of Engineering · University of British Columbia (UBC) · <a href="mailto:anas.chaaban@ubc.ca">anas.chaaban@ubc.ca</a><br>© Anas Chaaban. Not to be copied, used, revised, or distributed without explicit written permission from the copyright owner.</footer>
 </main>
 
 
@@ -1282,10 +1282,10 @@ $('gibbsK').addEventListener('input',gibbs);gibbs();
         );
 
         // Fourier approximation
-        drawCurve(ctx, W, H, map, input, '#00FFFF', true);
+        drawCurve(ctx, W, H, map, input, '#00FFFF');
 
         // Ideal square wave
-        drawCurve(ctx, W, H, map, idealSquare, '#f5a623');
+        drawCurve(ctx, W, H, map, idealSquare, '#f5a623', true);
       }
 
       // Lower plot: filtered output, smaller vertical range
@@ -1299,10 +1299,10 @@ $('gibbsK').addEventListener('input',gibbs);gibbs();
         );
 
         // Selected-harmonic output
-        drawCurve(ctx, W, H, map, output, '#00FFFF', true);
+        drawCurve(ctx, W, H, map, output, '#00FFFF');
 
         // Ideal filtered output
-        drawCurve(ctx, W, H, map, idealOutput, '#f5a623');
+        drawCurve(ctx, W, H, map, idealOutput, '#f5a623', true);
       }
 
       get('ltiReadout').textContent =
