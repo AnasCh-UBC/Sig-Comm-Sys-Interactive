@@ -892,7 +892,7 @@ header{align-items:center}
     <label>Odd harmonics <input id="ltiTerms" type="range" min="1" max="25" step="2" value="9"><b id="ltiTermsVal">9</b></label>
   </div>
   <div class="fs-panel">
-    <b>Input signal x(t): Ideal square wave (orange) and Fourier approximation (red)</b>
+    <b>Input signal x(t): Ideal square wave (orange) and Fourier approximation (cyan)</b>
     <canvas id="ltiInputCanvas" class="fs-canvas" width="900" height="220"></canvas>
   </div>
   <div class="fs-panel">
@@ -1282,10 +1282,10 @@ $('gibbsK').addEventListener('input',gibbs);gibbs();
         );
 
         // Fourier approximation
-        drawCurve(ctx, W, H, map, input, '#00FFFF');
+        drawCurve(ctx, W, H, map, input, '#00FFFF', true);
 
         // Ideal square wave
-        drawCurve(ctx, W, H, map, idealSquare, '#f5a623', true);
+        drawCurve(ctx, W, H, map, idealSquare, '#f5a623');
       }
 
       // Lower plot: filtered output, smaller vertical range
@@ -1299,10 +1299,10 @@ $('gibbsK').addEventListener('input',gibbs);gibbs();
         );
 
         // Selected-harmonic output
-        drawCurve(ctx, W, H, map, output, '#00FFFF');
+        drawCurve(ctx, W, H, map, output, '#00FFFF', true);
 
         // Ideal filtered output
-        drawCurve(ctx, W, H, map, idealOutput, '#f5a623', true);
+        drawCurve(ctx, W, H, map, idealOutput, '#f5a623');
       }
 
       get('ltiReadout').textContent =
