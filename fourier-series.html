@@ -902,9 +902,20 @@ header{align-items:center}
   <p class="fs-readout" id="ltiReadout"></p>
 </div>
 
+
+
+
 <h2 id="parseval"><small>6</small>Parseval’s relation</h2>
-<div class="card"><h3>Power in time and frequency domains</h3><p>The average power of a periodic signal equals the sum of the power in its Fourier-series components:</p><div class="eq">\[\boxed{P_x=\frac{1}{T_0}\int_{\tau}^{\tau+T_0}|x(t)|^2\,dt=\sum_{k=-\infty}^{\infty}|x_k|^2.}\]</div><p>Power is conserved by the Fourier-series representation. We can calculate it either by averaging the squared time-domain waveform or by summing the squared magnitudes of its Fourier coefficients.</p></div>
-<div class="fs-demo" id="parsevalDemo"><h3>Interactive: verify Parseval’s relation</h3><div class="fs-controls"><label>Odd harmonics included <input id="parsevalK" type="range" min="1" max="51" step="2" value="9"><b id="parsevalKVal">9</b></label></div><canvas id="parsevalCanvas" class="fs-canvas" width="900" height="235"></canvas><p class="fs-readout" id="parsevalReadout"></p></div>
+<p class="sub">The Fouerier series conserves the power of a signal.</p>
+<div class="card">
+  <h3>Power in time and frequency domains</h3>
+  <p>The average power of a periodic signal equals the sum of the power in its Fourier-series coefficients:</p>
+  <div class="eq">\[P_x=\frac{1}{T_0}\int_{\tau}^{\tau+T_0}|x(t)|^2\,dt=\sum_{k=-\infty}^{\infty}|x_k|^2.\]</div>
+  <p class="sub">Calculate power either by averaging the squared time-domain waveform or by summing the squared magnitudes of its Fourier coefficients.</p>
+</div>
+<!--
+  <div class="fs-demo" id="parsevalDemo"><h3>Interactive: verify Parseval’s relation</h3><div class="fs-controls"><label>Odd harmonics included <input id="parsevalK" type="range" min="1" max="51" step="2" value="9"><b id="parsevalKVal">9</b></label></div><canvas id="parsevalCanvas" class="fs-canvas" width="900" height="235"></canvas><p class="fs-readout" id="parsevalReadout"></p></div>
+-->
 
 <h2 id="self-check"><small>7</small>Self-assessment</h2>
 <div class="quiz-grid">
