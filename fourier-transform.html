@@ -576,19 +576,44 @@ header{align-items:center}
 <main class="wrap">
 <p class="over">APSC 270 · Lecture 5</p><h1>Fourier Transform</h1>
 <p class="lede">Move from Fourier series for periodic signals to a continuous frequency-domain representation for nonperiodic signals—and use transform properties to analyze signals and LTI systems.</p>
-<div class="meta"><div><b>Course</b>APSC 270 · Signals and Communication Systems</div><div><b>Focus</b>Fourier transform, properties, transform pairs, and filtering</div><div><b>Key idea</b>The Fourier transform describes how a signal’s energy is distributed over continuous frequency.</div></div>
+<div class="meta">
+  <div class="meta"><div><b>Instructor</b>Dr. Anas Chaaban, P.Eng.<br>UBC School of Engineering</div>
+  <div><b>Course</b>APSC 270 · Signals and Communication Systems</div>
+  <div><b>Focus</b>Fourier transform, properties, transform pairs, and filtering</div>
+</div>
 <div class="card"><h3>Contents</h3><ol class="toc">
 <li><b>1</b><a href="#fundamentals">Fourier series to Fourier transform</a></li><li><b>2</b><a href="#properties">Properties of the Fourier transform</a></li><li><b>3</b><a href="#pairs">Transform pairs and relations</a></li><li><b>4</b><a href="#lti">Fourier transform and LTI systems</a></li><li><b>5</b><a href="#self-check">Self-assessment</a></li>
 </ol></div>
 
+
+<!--
+  -----------------------------------------------------------
+  ----------------FS to FT-----------------------------------
+  -----------------------------------------------------------
+-->
 <h2 id="fundamentals"><small>1</small>Fourier series to Fourier transform</h2>
-<div class="card"><h3>From periodic to nonperiodic signals</h3>
-<p>Fourier series represents a periodic signal as a sum of harmonically related complex exponentials. For a nonperiodic signal, the frequency components are no longer restricted to discrete harmonics; they form a continuous spectrum.</p>
-<div class="eq">\[X(f)=\mathcal{F}\{x(t)\}=\int_{-\infty}^{\infty}x(t)e^{-j2\pi ft}\,dt\]</div>
-<p>The inverse Fourier transform reconstructs the time-domain signal:</p>
-<div class="eq">\[x(t)=\mathcal{F}^{-1}\{X(f)\}=\int_{-\infty}^{\infty}X(f)e^{j2\pi ft}\,df.\]</div>
-<p class="sub">The forward transform is frequency-domain analysis; the inverse transform is time-domain synthesis.</p>
+<div class="card">
+  <h3>From periodic to nonperiodic signals</h3>
+  <div class="grid">
+    <div class="tile"><h3>Periodic signals</h3>
+      Fourier series represents a periodic signal as a sum of harmonically related complex sinusoids.
+    </div>
+    <div class="tile"><h3>nonperiodic signal</h3>
+      Fourier transform represents a signal as an integral of complex sinusoids with frequencies \(f\in\mathbb{R}\).
+    </div>
+  </div>
+  <p class="sub">The frequency components in a Fourier transform are no longer restricted to discrete harmonics; they form a continuous spectrum.</p>
+  <div class="grid">
+    <div class="eq"><h3>Analysis: Fourier transform</h3>
+      \[X(f)=\mathcal{F}\{x(t)\}=\int_{-\infty}^{\infty}x(t)e^{-j2\pi ft}\,dt.\]
+    </div>
+    <div class="eq"><h3>Synthesis: Inverse Fourier transform</h3>
+      \[x(t)=\mathcal{F}^{-1}\{X(f)\}=\int_{-\infty}^{\infty}X(f)e^{j2\pi ft}\,df.\]
+    </div>
+  </div>
+  <p class="sub"> The Fourier transform produces the frequency domain representation of the signal. The inverse Fourier transform reconstructs the time-domain signal:</p>
 </div>
+
 <div class="card"><h3>Angular-frequency form</h3>
 <p>Using angular frequency \(\omega=2\pi f\), the transform pair can also be written as</p>
 <div class="eq">\[X(\omega)=\int_{-\infty}^{\infty}x(t)e^{-j\omega t}\,dt,\qquad x(t)=\frac{1}{2\pi}\int_{-\infty}^{\infty}X(\omega)e^{j\omega t}\,d\omega.\]</div>
