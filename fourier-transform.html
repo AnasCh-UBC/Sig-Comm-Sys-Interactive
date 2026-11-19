@@ -617,12 +617,14 @@ header{align-items:center}
 <div class="card"><h3>Angular-frequency form</h3>
 <p>Using angular frequency \(\omega=2\pi f\), the transform pair can also be written as</p>
 <div class="eq">\[X(\omega)=\int_{-\infty}^{\infty}x(t)e^{-j\omega t}\,dt,\qquad x(t)=\frac{1}{2\pi}\int_{-\infty}^{\infty}X(\omega)e^{j\omega t}\,d\omega.\]</div>
-<p>In this course, we primarily use frequency \(f\) in Hertz.</p></div>
+<p class="sub">In this course, we primarily use frequency \(f\) in Hertz.</p></div>
 
 <div class="card"><h3>What do we plot?</h3><div class="grid">
-<div class="tile"><b class="tag">Amplitude spectrum</b><p>\(|X(f)|\) versus frequency \(f\). It shows the strength of each frequency component.</p></div>
-<div class="tile"><b class="tag">Phase spectrum</b><p>\(\angle X(f)\) versus frequency \(f\). It shows the phase associated with each component.</p></div>
-</div><p>The spectrum is generally complex-valued. An amplitude spectrum may also be displayed on a decibel scale as \(10\log_{10}|X(f)|\).</p></div>
+  <div class="tile"><b class="tag">Amplitude spectrum</b><p>\(|X(f)|\) versus frequency \(f\). It shows the strength of each frequency component.</p></div>
+  <div class="tile"><b class="tag">Phase spectrum</b><p>\(\angle X(f)\) versus frequency \(f\). It shows the phase associated with each component.</p></div>
+  </div>
+  <p class="sub">The spectrum is generally complex-valued. An amplitude spectrum may also be displayed on a decibel scale as \(10\log_{10}|X(f)|\).</p>
+</div>
 <div class="ft-demo" id="ftExplorer">
   <h3>Interactive 1.1: Explore the Fourier transform</h3>
   <p class="ft-readout">Choose a signal and vary its parameter. The numerical Fourier transform is evaluated from the defining integral.</p>
@@ -644,13 +646,19 @@ header{align-items:center}
   <p class="ft-readout" id="ftReadout"></p>
 </div>
 
-<div class="card"><h3>Examples: rectangular and odd signals</h3>
-<p>For a rectangular pulse of duration \(\tau\),</p>
-<div class="eq">\[x(t)=\Pi\!\left(\frac{t}{\tau}\right)\quad\longleftrightarrow\quad X(f)=\tau\,\operatorname{sinc}(f\tau).\]</div>
-<p>The transform is real and even, as expected for a real-even signal. For the real-odd signal \(x(t)=\sin(t)\Pi(t/\tau)\), the transform is imaginary and odd:</p>
-<div class="eq">\[X(f)=\frac{\sin\!\left((2\pi f-1)\tau/2\right)}{j(2\pi f-1)}-\frac{\sin\!\left((2\pi f+1)\tau/2\right)}{j(2\pi f+1)}.\]</div>
-<p>Here, \(\operatorname{sinc}(f)=\frac{\sin(\pi f)}{\pi f}\), with value 1 at \(f=0\). Also, \(\delta(t)\leftrightarrow1\) and \(1\leftrightarrow\delta(f)\).</p>
+<div class="callout"><h3>Exercise: Rectangular pulse</h3>
+  <p>Show that for a rectangular pulse of duration \(\tau\), the Fourier transform is</p>
+  <div class="eq">\[X(f)=\tau\,\operatorname{sinc}(f\tau).\]</div>
 </div>
+<div class="callout"><h3>Exercise: Sin-pulse</h3>
+  <p> Show that for the real-odd signal \(x(t)=\sin(t)\Pi\left(\frac{t}{\tau}\right)\), the Fourier transform is</p>
+  <div class="eq">\[X(f)=\frac{\sin\!\left((2\pi f-1)\tau/2\right)}{j(2\pi f-1)}-\frac{\sin\!\left((2\pi f+1)\tau/2\right)}{j(2\pi f+1)}.\]</div>
+</div>
+<div class="callout"><h3>Exercise: Unit pulse</h3>
+  <p> Show that for \(x(t)=\delta(t)\), \(X(f)=1\); and that for \(x(t)=1\), \(X(f)=\delta(f)\).</p>
+</div>
+
+
 <div class="callout"><b>Important observation:</b> A short-duration or impulsive signal generally has a broad frequency spectrum. The extreme case is \(\delta(t)\), whose transform is constant at all frequencies.</div>
 
 <h2 id="properties"><small>2</small>Properties of the Fourier transform</h2>
