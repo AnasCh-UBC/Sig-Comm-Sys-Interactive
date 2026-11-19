@@ -596,7 +596,7 @@ header{align-items:center}
   <h3>From periodic to nonperiodic signals</h3>
   <div class="grid">
     <div class="tile"><h3>Periodic signals</h3>
-      Fourier series represents a periodic signal as a sum of harmonically related complex sinusoids with frequencies \(k f_0\) with \(k\in\mathbb{Z}\).
+      Fourier series represents a periodic signal with frequency \(f_0\) as a sum of harmonically related complex sinusoids with frequencies \(k f_0\) with \(k\in\mathbb{Z}\).
     </div>
     <div class="tile"><h3>General signals (periodic and nonperiodic)</h3>
       Fourier transform represents a signal as an integral of complex sinusoids with frequencies \(f\in\mathbb{R}\).
@@ -617,24 +617,33 @@ header{align-items:center}
 <div class="card"><h3>Angular-frequency form</h3>
 <p>Using angular frequency \(\omega=2\pi f\), the transform pair can also be written as</p>
 <div class="eq">\[X(\omega)=\int_{-\infty}^{\infty}x(t)e^{-j\omega t}\,dt,\qquad x(t)=\frac{1}{2\pi}\int_{-\infty}^{\infty}X(\omega)e^{j\omega t}\,d\omega.\]</div>
-<p>In this course, we primarily use frequency \(f\) in hertz.</p></div>
+<p>In this course, we primarily use frequency \(f\) in Hertz.</p></div>
+
 <div class="card"><h3>What do we plot?</h3><div class="grid">
 <div class="tile"><b class="tag">Amplitude spectrum</b><p>\(|X(f)|\) versus frequency \(f\). It shows the strength of each frequency component.</p></div>
 <div class="tile"><b class="tag">Phase spectrum</b><p>\(\angle X(f)\) versus frequency \(f\). It shows the phase associated with each component.</p></div>
-</div><p>The spectrum is generally complex-valued. An amplitude spectrum may also be displayed on a decibel scale.</p></div>
+</div><p>The spectrum is generally complex-valued. An amplitude spectrum may also be displayed on a decibel scale as \(10\log_{10}|X(f)|\).</p></div>
 <div class="ft-demo" id="ftExplorer">
-<h3>Interactive 1.1: Explore the Fourier transform</h3>
-<p class="ft-readout">Choose a signal and vary its parameter. The numerical Fourier transform is evaluated from the defining integral.</p>
-<div class="ft-controls">
-<label>Signal <select id="ftSignal"><option value="rect">Rectangular pulse</option><option value="exp">Causal exponential</option><option value="odd">Windowed odd signal</option></select></label>
-<label>Width / time constant <input id="ftTau" type="range" min="0.25" max="1.5" step="0.05" value="0.6"><b id="ftTauVal">0.60</b></label>
+  <h3>Interactive 1.1: Explore the Fourier transform</h3>
+  <p class="ft-readout">Choose a signal and vary its parameter. The numerical Fourier transform is evaluated from the defining integral.</p>
+  <div class="ft-controls">
+  <label>Signal 
+    <select id="ftSignal">
+    <option value="rect">Rectangular pulse</option>
+    <option value="exp">Causal exponential</option>
+    <option value="odd">Windowed odd signal</option>
+    </select>
+  </label>
+  <label>Width / time constant <input id="ftTau" type="range" min="0.25" max="1.5" step="0.05" value="0.6"><b id="ftTauVal">0.60</b></label>
+  </div>
+  <div class="ft-panel"><b>Time-domain signal \(x(t)\)</b><canvas id="ftTime" class="ft-canvas" width="900" height="210"></canvas></div>
+  <div class="ft-two">
+    <div class="ft-panel"><b>Magnitude spectrum \(|X(f)|\)</b><canvas id="ftMag" class="ft-canvas" width="600" height="235"></canvas></div>
+    <div class="ft-panel"><b>Phase spectrum \(\angle X(f)\)</b><canvas id="ftPhase" class="ft-canvas" width="600" height="235"></canvas></div>
+  </div>
+  <p class="ft-readout" id="ftReadout"></p>
 </div>
-<div class="ft-panel"><b>Time-domain signal \(x(t)\)</b><canvas id="ftTime" class="ft-canvas" width="900" height="210"></canvas></div>
-<div class="ft-two">
-<div class="ft-panel"><b>Magnitude spectrum \(|X(f)|\)</b><canvas id="ftMag" class="ft-canvas" width="600" height="235"></canvas></div>
-<div class="ft-panel"><b>Phase spectrum \(\angle X(f)\)</b><canvas id="ftPhase" class="ft-canvas" width="600" height="235"></canvas></div>
-</div><p class="ft-readout" id="ftReadout"></p>
-</div>
+
 <div class="card"><h3>Examples: rectangular and odd signals</h3>
 <p>For a rectangular pulse of duration \(\tau\),</p>
 <div class="eq">\[x(t)=\Pi\!\left(\frac{t}{\tau}\right)\quad\longleftrightarrow\quad X(f)=\tau\,\operatorname{sinc}(f\tau).\]</div>
@@ -755,8 +764,18 @@ function numericFT(signal,f){let N=1000,t0=-5,t1=5,dt=(t1-t0)/N,re=0,im=0;for(le
 // 1.1 Numerical Fourier-transform explorer
 function updateFT(){let type=$('ftSignal').value,tau=+$('ftTau').value;$('ftTauVal').textContent=tau.toFixed(2);let sig=t=>{if(type==='rect')return Math.abs(t)<=tau/2?1:0;if(type==='exp')return t>=0?Math.exp(-t/tau):0;return Math.abs(t)<=tau/2?Math.sin(TAU*t):0;};
  let c=$('ftTime'),m=plot(c.getContext('2d'),c.width,c.height,-3,3,-1.2,1.2,.5,.5,'t (s)','x(t)');m.xmin=-3;m.xmax=3;curve(c.getContext('2d'),c.width,c.height,m,sig,'#55c8f2');
- let freqs=Array.from({length:161},(_,i)=>-8+i*.1),spec=freqs.map(f=>numericFT(sig,f));
- for(let [id,mode] of [['ftMag','mag'],['ftPhase','phase']]){let can=$(id),ctx=can.getContext('2d'),vals=spec.map(s=>mode==='mag'?s.mag:s.phase),max=mode==='mag'?Math.max(.1,...vals)*1.12:PI*1.1,lo=mode==='mag'?0:-max,hi=max,mm=plot(ctx,can.width,can.height,-8,8,lo,hi,2,mode==='mag'?max/4:PI/2,'f (Hz)',mode==='mag'?'|X(f)|':'phase');mm.xmin=-8;mm.xmax=8;ctx.strokeStyle=mode==='mag'?'#55c8f2':'#ff6b78';ctx.lineWidth=2;ctx.beginPath();freqs.forEach((f,i)=>{let y=vals[i];if(mode==='phase'&&spec[i].mag<.015)return;let x=mm.X(f),py=mm.Y(y);if(i===0)ctx.moveTo(x,py);else ctx.lineTo(x,py);});ctx.stroke();}
+ let freqs=Array.from({length:161},(_,i)=>-8+i*.1),
+    spec=freqs.map(f=>{
+      let s=numericFT(sig,f);
+
+      // For a rectangular pulse, map -π to +π.
+      if(type==='rect' && Math.abs(s.phase + PI) < 0.01){
+        s.phase = PI;
+      }
+
+      return s;
+    });
+     for(let [id,mode] of [['ftMag','mag'],['ftPhase','phase']]){let can=$(id),ctx=can.getContext('2d'),vals=spec.map(s=>mode==='mag'?s.mag:s.phase),max=mode==='mag'?Math.max(.1,...vals)*1.12:PI*1.1,lo=mode==='mag'?0:-max,hi=max,mm=plot(ctx,can.width,can.height,-8,8,lo,hi,2,mode==='mag'?max/4:PI/2,'f (Hz)',mode==='mag'?'|X(f)|':'phase');mm.xmin=-8;mm.xmax=8;ctx.strokeStyle=mode==='mag'?'#55c8f2':'#ff6b78';ctx.lineWidth=2;ctx.beginPath();freqs.forEach((f,i)=>{let y=vals[i];if(mode==='phase'&&spec[i].mag<.015)return;let x=mm.X(f),py=mm.Y(y);if(i===0)ctx.moveTo(x,py);else ctx.lineTo(x,py);});ctx.stroke();}
  $('ftReadout').textContent=type==='rect'?`A centered rectangular pulse of width τ = ${tau.toFixed(2)} has a real, even sinc-shaped transform.`:type==='exp'?`The causal exponential has X(f) = τ/(1 + j2πτf): a lowpass-like magnitude and a negative phase for positive frequencies.`:`The windowed sine is real and odd, so its Fourier transform is imaginary and odd.`;
 }
 $('ftSignal').addEventListener('change',updateFT);$('ftTau').addEventListener('input',updateFT);updateFT();
