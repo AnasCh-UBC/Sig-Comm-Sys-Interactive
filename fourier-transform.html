@@ -948,14 +948,14 @@ function updateShift(){
         let z=PI*f/a,
             sinc=Math.abs(z)<1e-9?1:Math.sin(z)/z,
             magnitude=Math.abs(sinc/a),
-            phase=-2*PI*f*t0 + (sinc<0 ? PI : 0);
+            phase=-2*PI*f*t0 + (sinc<1e-2 ? PI : 0);
 
         return {magnitude,phase};
       });
 
   // Wrap phase into [-π, π]
   let phaseValues=spec.map(s=>{
-    let wrapped=((s.phase+PI)%(2*PI)+2*PI)%(2*PI)-PI;
+    let wrapped=((s.phase+PI)%(2*PI))-PI;
     return Math.abs(wrapped+PI)<1e-8?PI:wrapped;
   });
 
