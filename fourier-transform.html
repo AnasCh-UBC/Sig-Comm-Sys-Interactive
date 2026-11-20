@@ -925,6 +925,7 @@ ctx.fillText('Transform', 8, 18);
 ctx.restore();
 mm.xmin=-6;mm.xmax=6;for(let [key,col] of [['re','#55c8f2'],['im','#ff6b78']]){ctx.strokeStyle=col;ctx.lineWidth=2;ctx.beginPath();vals.forEach((v,i)=>{let px=mm.X(freqs[i]),py=mm.Y(v[key]);if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);});ctx.stroke();}$('symReadout').textContent=type==='even'?'For a real-even signal, X(f) is real and even; the imaginary part is zero (up to numerical error).':type==='odd'?'For a real-odd signal, X(f) is imaginary and odd; the real part is zero (up to numerical error).':'For a real signal without even or odd symmetry, X(-f)=X*(f): the real part is even and the imaginary part is odd.';}
 $('symType').addEventListener('change',updateSym);updateSym();
+
 // 2.2 Shift and scale of a rectangular pulse
 function updateShift(){
   let t0=+$('shiftT0').value,
@@ -962,8 +963,8 @@ function updateShift(){
     if(i>0){
       let previous=phaseValues[i-1];
 
-      while(phase-previous>PI) phase-=2*PI;
-      while(phase-previous< -PI) phase+=2*PI;
+      while(phase-previous>PI) phase-=0;
+      while(phase-previous< -PI) phase+=0;
     }
 
     phaseValues.push(phase);
