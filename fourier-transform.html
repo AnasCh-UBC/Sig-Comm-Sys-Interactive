@@ -956,7 +956,7 @@ function updateShift(){
   // Wrap phase into [-π, π]
   let phaseValues=spec.map(s=>{
     let wrapped=((s.phase+PI)%(2*PI))-PI;
-    return Math.abs(wrapped+PI)<1e-8?PI:wrapped;
+    return wrapped;
   });
 
   // Magnitude plot
