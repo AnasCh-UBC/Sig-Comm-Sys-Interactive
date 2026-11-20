@@ -948,15 +948,25 @@ function updateShift(){
         let z=PI*f/a,
             sinc=Math.abs(z)<1e-9?1:Math.sin(z)/z,
             magnitude=Math.abs(sinc/a),
-            phase=-2*PI*f*t0 + (sinc<1e-2 ? PI : 0);
+            phase=-2*PI*f*t0 + (sinc<0 ? PI : 0);
 
         return {magnitude,phase};
       });
 
-  // Wrap phase into [-π, π]
-  let phaseValues=spec.map(s=>{
-    let wrapped=((s.phase+PI)%(2*PI))-PI;
-    return wrapped;
+  // Unwrap phase by adding/subtracting 2π to maintain continuity
+  let phaseValues=[];
+
+  spec.forEach((s,i)=>{
+    let phase=s.phase;
+
+    if(i>0){
+      let previous=phaseValues[i-1];
+
+      while(phase-previous>PI) phase-=2*PI;
+      while(phase-previous< -PI) phase+=2*PI;
+    }
+
+    phaseValues.push(phase);
   });
 
   // Magnitude plot
@@ -982,11 +992,23 @@ function updateShift(){
   magCtx.stroke();
   magCtx.restore();
 
-  // Phase plot: keep the wrapped phase in [-π, π] and show wraparound
-  // only when the trace crosses one of the two phase limits.
+  // Unwrapped phase plot
   let phaseCanvas=$('shiftPhase'),
       phaseCtx=phaseCanvas.getContext('2d'),
-      pm=plot(phaseCtx,phaseCanvas.width,phaseCanvas.height,-8,8,-PI,PI,2,PI/2,'f (Hz)','∠X(f)');
+      phaseMin=Math.min(...phaseValues),
+      phaseMax=Math.max(...phaseValues),
+      phasePad=Math.max(.5,(phaseMax-phaseMin)*.1),
+      yMin=phaseMin-phasePad,
+      yMax=phaseMax+phasePad,
+      pm=plot(
+        phaseCtx,
+        phaseCanvas.width,
+        phaseCanvas.height,
+        -8,8,
+        yMin,yMax,
+        2,(yMax-yMin)/4,
+        'f (Hz)','∠X(f)'
+      );
 
   pm.xmin=-8;
   pm.xmax=8;
@@ -998,33 +1020,14 @@ function updateShift(){
   phaseCtx.lineWidth=2;
   phaseCtx.beginPath();
 
-  // Split a segment only at a ±π wrap. Interpolate the crossing so the
-  // trace reaches one edge and resumes at the opposite edge.
-  let previous=null;
-  spec.forEach((s,i)=>{
-    let point={x:pm.X(freqs[i]), y:phaseValues[i]};
-    if(previous){
-      let delta=point.y-previous.y;
-      if(delta>PI){
-        let fraction=(PI-previous.y)/delta;
-        let xCross=previous.x+fraction*(point.x-previous.x);
-        phaseCtx.lineTo(xCross,pm.Y(PI));
-        phaseCtx.moveTo(xCross,pm.Y(-PI));
-        phaseCtx.lineTo(point.x,pm.Y(point.y));
-      }else if(delta< -PI){
-        let fraction=(-PI-previous.y)/delta;
-        let xCross=previous.x+fraction*(point.x-previous.x);
-        phaseCtx.lineTo(xCross,pm.Y(-PI));
-        phaseCtx.moveTo(xCross,pm.Y(PI));
-        phaseCtx.lineTo(point.x,pm.Y(point.y));
-      }else{
-        phaseCtx.lineTo(point.x,pm.Y(point.y));
-      }
-    }else{
-      phaseCtx.moveTo(point.x,pm.Y(point.y));
-    }
-    previous=point;
+  phaseValues.forEach((phase,i)=>{
+    let px=pm.X(freqs[i]),
+        py=pm.Y(phase);
+
+    if(i===0)phaseCtx.moveTo(px,py);
+    else phaseCtx.lineTo(px,py);
   });
+
   phaseCtx.stroke();
   phaseCtx.restore();
 
