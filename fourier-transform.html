@@ -659,8 +659,23 @@ header{align-items:center}
   \[X(f)=\frac{\sin\!\left((2\pi f-1)\tau/2\right)}{j(2\pi f-1)}-\frac{\sin\!\left((2\pi f+1)\tau/2\right)}{j(2\pi f+1)}.\]
 </div>
 
-
 <div class="eq"><b>Important observation:</b> A short-duration or impulsive signal generally has a broad frequency spectrum. The extreme case is \(\delta(t)\), whose transform is constant at all frequencies.</div>
+
+
+
+<p>The Fourier transform of a signal \(x(t)\) allows us to define the signal's bandwidth.</p>
+<div class="card"><h3>Bandwidth</h3>
+  <div class="eq">
+    The <b>bandwidth</b> \(B\) of a signal \(x(t)\) is the width of the smallest frequency interval \([f_L,f_H]\) outside which \(|X(f)|=0\), 
+    i.e., \(B = f_H-f_L.\)
+  </div>
+  <div class="eq">
+    A <b>baseband signal</b> is a signal with \(f_L=0\). Its bandwidth is \(B=f_H\).
+  </div>
+  <p class="sub">In practical systems, spectra may not be strictly zero outside a finite interval. 
+    Bandwidth is then defined using an agreed threshold on \(|X(f)|\). In particular, the interval \([f_L,f_H]\) is defined as the 
+    interval of frequencies outside which \(|X(f)|\lt \text{threshold}.\)</p>
+</div>
 
 
 
@@ -778,10 +793,10 @@ Then, we have the following properties.
       <p class="sub">Integration in the time domain is division by \(j2\pi f\) in the frequency domain plus a pulse at \(f=0\).</p>
     </div>
   </div>
-  <p class="sub">These properties help in obtaining the Fourier transform of signals that would be more difficult to derive directly, 
-    and simplify the analysis of LTI systems. 
-  </p>
 </div>
+<p class="small">These properties help in obtaining the Fourier transform of signals that would be more difficult to derive directly, 
+  and simplify the analysis of LTI systems. 
+</p>
 
 
 
@@ -802,21 +817,6 @@ Then, we have the following properties.
   
 
 
-
-
-<p>The Fourier transform of a signal \(x(t)\) allows us to define the signals bandwidth.</p>
-<div class="card"><h3>Bandwidth</h3>
-  <div class="eq">
-    The <b>bandwidth</b> \(B\) of a signal \(x(t)\) is the width of the smallest frequency interval \([f_L,f_H]\) outside which \(|X(f)|=0\), 
-    i.e., \(B = f_H-f_L.\)
-  </div>
-  <div class="eq">
-    A <b>baseband signal</b> is a signal with \(f_L=0\). Its bandwidth is \(B=f_H\).
-  </div>
-  <p class="sub">In practical systems, spectra may not be strictly zero outside a finite interval. 
-    Bandwidth is then defined using an agreed threshold on \(|X(f)|\). In particular, the interval \([f_L,f_H]\) is defined as the 
-    interval of frequencies outside which \(|X(f)|\lt \text{threshold}.\)</p>
-</div>
 
 
 
