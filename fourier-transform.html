@@ -699,17 +699,8 @@ Then, we have the following properties.
 </div>
 
 
-<div class="card"><h3>Signal operations properties</h3>
+<div class="card"><h3>Time/frequency scaling and shifting</h3>
   <div class="grid">
-    <div class="tile"><h3>Linearity</h3>
-      <p>The Fourier transform of \(a_1x_1(t)+a_2x_2(t)\) is \(a_1X_1(f)+a_2X_2(f).\)</p>
-      <p class="sub">Weighted sum in time \(\to\) weigthed sum frequency</p>
-    </div>
-    <div class="tile"><h3>Duality</h3>
-      <p>The Fourier transform of \(X(t)\) is \(x(-f)\), 
-      and the Fourier transform of \(X(-t)\) is \(x(f)\).</p>
-      <p class="sub">Symmetry relation between the time and frequency domains</p>
-    </div>
     <div class="tile"><h3>Time shifting</h3>
       <p>The Fourier transform of a delayed signal \(x(t-t_0)\) is \(X(f)e^{-j2\pi ft_0}\).</p>
       <p class="sub">Delay in time is phase shift in frequency.</p>
@@ -718,30 +709,11 @@ Then, we have the following properties.
       <p>The Fourier transform of \(x(at)\) is \(\frac{1}{|a|}X(\frac{f}{a})\).</p>
       <p class="sub">Time scaling leads to frequency and amplitude scaling in the frequency domain </p> 
     </div>
-    <div class="tile"><h3>Convolution</h3>
-      <p>The Fourier transform of \(x_1(t)\circledast x_2(t)\) is \(X_1(f)X_2(f).\)</p>
-      <p class="sub">Convolution in the time domain is multiplication in the frequency domain</p>
-    </div>
-    <div class="tile"><h3>Modulation</h3>
+    <div class="tile"><h3>Frequency shifting (modulation)</h3>
       <p>The Fourier transform of \(x(t) e^{j2\pi f_0t}\) is \(X(f-f_0)\).</p>  
       <p class="sub">Modulating \(x(t)\) (multiplying it by a complex sinusoid) shifts its spectrum.</p>  
     </div>
-    <div class="tile"><h3>Time differentiation</h3>
-      <p>The Fourier transform of \(\frac{d^n x(t)}{dt^n}\) is \((j2\pi f)^nX(f)\).</p>
-      <p class="sub">Differentiation in the time domain is multiplication by \(j2\pi f\) in the frequency domain.</p>
-    </div>
-    <div class="tile"><h3>Frequency differentiation</h3>
-      <p>The Fourier transform of \(\left(\frac{2\pi t}{j}\right)^n x(t)\) is \(\frac{d^nX(f)}{df^n}.\)</p>
-      <p class="sub">Differentiation in the frequency domain is multiplication by \(\frac{2\pi t}{j}\) in the time domain.</p>
-    </div>
-    <div class="tile"><h3>Integration</h3>
-      <p>The Fourier transform of \(\int_{-\infty}^t x(\tau)d\tau\) is \(\frac{X(f)}{j2\pi f}+\frac{X(0)\delta(f)}{2}.\)</p>
-      <p class="sub">Integration in the time domain is division by \(j2\pi f\) in the frequency domain plus a pulse at \(f=0\).</p>
-    </div>
   </div>
-  <p class="sub">These properties help in obtaining the Fourier transform of signals that would be more difficult to derive directly, 
-    and simplify the analysis of LTI systems. 
-  </p>
 </div>
 
 <div class="ft-demo" id="shiftScaleDemo">
@@ -778,6 +750,41 @@ Then, we have the following properties.
   <p class="ft-readout" id="shiftReadout"></p>
 </div>
   
+
+<div class="card"><h3>Signal operations properties</h3>
+  <div class="grid">
+    <div class="tile"><h3>Linearity</h3>
+      <p>The Fourier transform of \(a_1x_1(t)+a_2x_2(t)\) is \(a_1X_1(f)+a_2X_2(f).\)</p>
+      <p class="sub">Weighted sum in time \(\to\) weigthed sum frequency</p>
+    </div>
+    <div class="tile"><h3>Duality</h3>
+      <p>The Fourier transform of \(X(t)\) is \(x(-f)\), 
+      and the Fourier transform of \(X(-t)\) is \(x(f)\).</p>
+      <p class="sub">Symmetry relation between the time and frequency domains</p>
+    </div>
+    <div class="tile"><h3>Convolution</h3>
+      <p>The Fourier transform of \(x_1(t)\circledast x_2(t)\) is \(X_1(f)X_2(f).\)</p>
+      <p class="sub">Convolution in the time domain is multiplication in the frequency domain</p>
+    </div>
+    <div class="tile"><h3>Time differentiation</h3>
+      <p>The Fourier transform of \(\frac{d^n x(t)}{dt^n}\) is \((j2\pi f)^nX(f)\).</p>
+      <p class="sub">Differentiation in the time domain is multiplication by \(j2\pi f\) in the frequency domain.</p>
+    </div>
+    <div class="tile"><h3>Frequency differentiation</h3>
+      <p>The Fourier transform of \(\left(\frac{2\pi t}{j}\right)^n x(t)\) is \(\frac{d^nX(f)}{df^n}.\)</p>
+      <p class="sub">Differentiation in the frequency domain is multiplication by \(\frac{2\pi t}{j}\) in the time domain.</p>
+    </div>
+    <div class="tile"><h3>Integration</h3>
+      <p>The Fourier transform of \(\int_{-\infty}^t x(\tau)d\tau\) is \(\frac{X(f)}{j2\pi f}+\frac{X(0)\delta(f)}{2}.\)</p>
+      <p class="sub">Integration in the time domain is division by \(j2\pi f\) in the frequency domain plus a pulse at \(f=0\).</p>
+    </div>
+  </div>
+  <p class="sub">These properties help in obtaining the Fourier transform of signals that would be more difficult to derive directly, 
+    and simplify the analysis of LTI systems. 
+  </p>
+</div>
+
+
 
 <div class="card"><h3>Parseval's relation</h3>
     <p>The Fourier transform satisfies \(\int_{-\infty}^{\infty}x_1(t)x_2^*(t)\,dt=\int_{-\infty}^{\infty}X_1(f)X_2^*(f)\,df.\)</p>
