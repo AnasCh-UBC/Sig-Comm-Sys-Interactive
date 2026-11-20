@@ -762,8 +762,17 @@ Then, we have the following properties.
       <canvas id="shiftTime" class="ft-canvas" width="600" height="220"></canvas>
     </div>
     <div class="ft-panel">
-      <b>Frequency-domain: real and imaginary parts</b>
-      <canvas id="shiftFreq" class="ft-canvas" width="600" height="220"></canvas>
+      <b>Frequency domain: magnitude and phase</b>
+      <div class="ft-two">
+        <div>
+          <small>Magnitude</small>
+          <canvas id="shiftFreq" class="ft-canvas" width="600" height="180"></canvas>
+        </div>
+        <div>
+          <small>Phase</small>
+          <canvas id="shiftPhase" class="ft-canvas" width="600" height="180"></canvas>
+        </div>
+      </div>
     </div>
   </div>
   <p class="ft-readout" id="shiftReadout"></p>
@@ -772,7 +781,7 @@ Then, we have the following properties.
 
 <div class="card"><h3>Parseval's relation</h3>
     <p>The Fourier transform satisfies \(\int_{-\infty}^{\infty}x_1(t)x_2^*(t)\,dt=\int_{-\infty}^{\infty}X_1(f)X_2^*(f)\,df.\)</p>
-    <p>If \(x_1(t)=\x_2(t)=x(t)\) we obtain the signal energy \[E_x=\int_{-\infty}^{\infty}|x(t)|^2dt=\int_{-\infty}^{\infty}|X(f)|^2df.\]
+    <p>If \(x_1(t)=x_2(t)=x(t)\) we obtain the signal energy \[E_x=\int_{-\infty}^{\infty}|x(t)|^2dt=\int_{-\infty}^{\infty}|X(f)|^2df.\]
     </p>
     <p class="sub">Energy can be calcuated by integrating the square-magnitued in the time domain or the frequency domain.</p>
 </div>
