@@ -679,11 +679,11 @@ Then, we have the following properties.
     <div class="tile"><h3>Real signals</h3>
       <p>If \(x(t)\) is real-valued, then \(|X(f)|\) has Hermitian symmetry: \(X(-f)=X^*(f).\)</p>
     </div>
-    <div class="tile"><h3>Real and even</h3>
-      <p></p>If \(x(t)\) is real and even, then \(X(f)\) is real and even: \(X(f)\in\mathbb{R}\) and \(X(-f)=-X(f)\).</p>
+    <div class="tile"><h3>Real even signals</h3>
+      <p>If \(x(t)\) is real and even, then \(X(f)\) is real and even: \(X(f)\in\mathbb{R}\) and \(X(-f)=-X(f)\).</p>
     </div>
-    <div class="tile"><h3>Real and odd</h3>
-      <p></p>If \(x(t)\) is real and odd, then \(X(f)\) is imaginary and odd: \(X(f)\in\mathbb{C}\) and \(X(-f)=-X(f)\).</p>
+    <div class="tile"><h3>Real odd signals</h3>
+      <p>If \(x(t)\) is real and odd, then \(X(f)\) is imaginary and odd: \(X(f)\in\mathbb{C}\) and \(X(-f)=-X(f)\).</p>
     </div>
   </div>
   <p class="sub">For real-valued \(x(t)\), it Fourier transform satisfies \(|X(-f)|=|X(f)|\) (even magnitude) and 
@@ -701,26 +701,33 @@ Then, we have the following properties.
 <div class="card">
   <div class="grid">
     <div class="tile"><h3>Linearity</h3>
-      The Fourier transform is linear: The Fourier transform of \(a_1x_1(t)+a_2x_2(t)\) is \(a_1X_1(f)+a_2X_2(f).\)
+      <p>The Fourier transform is linear: The Fourier transform of \(a_1x_1(t)+a_2x_2(t)\) is \(a_1X_1(f)+a_2X_2(f).\)</p>
     </div>
     <div class="tile"><h3>Duality</h3>
-      If the Fourier transform of \(x(t)\) is \(X(f)\), then the Fourier transform of \(X(t)\) is \(x(-f)\), 
-      and the Fourier transform of \(X(-t)\) is \(x(f)\).
+      <p>If the Fourier transform of \(x(t)\) is \(X(f)\), then the Fourier transform of \(X(t)\) is \(x(-f)\), 
+      and the Fourier transform of \(X(-t)\) is \(x(f)\).</p>
     </div>
     <div class="tile"><h3>Time shifting</h3>
-      Delaying \(x(t)\) leads to a phase shift in \(X(f)\): The Fourier transform of \(x(t-t_0)\) is \(X(f)e^{-j2\pi ft_0}\).
+      <p>Delaying \(x(t)\) leads to a phase shift in \(X(f)\): The Fourier transform of \(x(t-t_0)\) is \(X(f)e^{-j2\pi ft_0}\).</p>
     </div>
     <div class="tile"><h3>Time scaling</h3>
-      Time scaling \(x(t)\) leads to amplitude and frequency scaling in \(X(f)\): 
-      The Fourier transform of \(x(at)\) is \(\frac{1}{|a|}X(\frac{f}{a})\).
+      <p>Time scaling \(x(t)\) leads to amplitude and frequency scaling in \(X(f)\): 
+      The Fourier transform of \(x(at)\) is \(\frac{1}{|a|}X(\frac{f}{a})\).</p>
     </div>
     <div class="tile"><h3>Convolution</h3>
-      Convolution in the time domain corresponds to multiplication in the frequency domain:
-      The Fourier transform of \(x_1(t)\circledast x_2(t)\) is \(X_1(f)X_2(f)\)
+      <p>Convolution in the time domain corresponds to multiplication in the frequency domain:
+      The Fourier transform of \(x_1(t)\circledast x_2(t)\) is \(X_1(f)X_2(f).\)</p>
     </div>
     <div class="tile"><h3>Modulation</h3>
-      Multiplying \(x(t)\) by a complex sinusoid shifts its spectrum: The Fourier transform of 
-      \(x(t) e^{j2\pi f_0t}\) is \(X(f-f_0)\).  
+      <p>Multiplying \(x(t)\) by a complex sinusoid shifts its spectrum: The Fourier transform of 
+      \(x(t) e^{j2\pi f_0t}\) is \(X(f-f_0)\).</p>  
+    </div>
+    <div class="tile"><h3>Differentiation</h3>
+      <p>The Fourier transform of \(frac{d^n x(t)}{dt^n}\) is \((j2\pi f)^nX(f)\) and 
+        the Fourier transform of \(t^n x(t)\) is \(\left(\frac{j}{2\pi}\right)^n\frac{d^nX(f)}{df^n}.\)</p>
+    </div>
+    <div class="tile"><h3>Integration</h3>
+      <p>The Fourier transform of \(\int_{-\infty}^t x(\tau)d\tau\) is \(\frac{X(f)}{j2\pi f}+\frac{1}{2}X(0)\delta(f).\)</p>
     </div>
   </div>
 </div>
@@ -731,11 +738,7 @@ Then, we have the following properties.
   <p>For \(y(t)=x(t)\), the total signal energy is equal in the time and frequency domains:</p>
   <div class="eq">\[E_x=\int_{-\infty}^{\infty}|x(t)|^2dt=\int_{-\infty}^{\infty}|X(f)|^2df.\]</div>
   <p>The autocorrelation is \(R_x(\tau)=\int_{-\infty}^{\infty}x(t)x^*(t-\tau)dt\), and its Fourier transform is \(|X(f)|^2\), the energy spectral density.</p></div>
-  <div class="card"><h3>Differentiation and integration</h3>
-  <div class="eq">\[\frac{d^n x(t)}{dt^n}\longleftrightarrow(j2\pi f)^nX(f),\qquad t^n x(t)\longleftrightarrow\left(\frac{j}{2\pi}\right)^n\frac{d^nX(f)}{df^n}.\]</div>
-  <p>Time differentiation corresponds to multiplication by \(j2\pi f\). Multiplication by time corresponds to differentiation in frequency.</p>
-  <div class="eq">\[\int_{-\infty}^t x(\tau)d\tau\longleftrightarrow\frac{X(f)}{j2\pi f}+\frac{1}{2}X(0)\delta(f).\]</div>
-  </div>
+  
 
 
 
