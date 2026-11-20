@@ -947,14 +947,14 @@ function updateShift(){
       spec=freqs.map(f=>{
         let z=PI*f/a,
             sinc=Math.abs(z)<1e-9?1:Math.sin(z)/z,
-            amplitude=Math.abs(sinc/a)>1e-2?(sinc/a):1e-2,
+            amplitude=sinc/a,
             angle=-2*PI*f*t0;
 
         // Calculate the complex Fourier transform directly
-        let re=amplitude*Math.cos(angle),
-            im=amplitude*Math.sin(angle),
-            magnitude=Math.hypot(re,im),
-            rawPhase=Math.atan2(im,re);
+        let //re=amplitude*Math.cos(angle),
+            //im=amplitude*Math.sin(angle),
+            magnitude=Math.abs(amplitude),
+            rawPhase=angle + (amplitude>1e-2?0:PI);
 
         return {magnitude,rawPhase};
       });
