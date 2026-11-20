@@ -671,20 +671,57 @@ header{align-items:center}
   -------------------------------------------------------------------------
 -->
 <h2 id="properties"><small>2</small>Properties of the Fourier transform</h2>
-<div class="card"><h3>Real-valued signals</h3>
-  <p>If \(x(t)\) is real-valued, then its transform has Hermitian symmetry:</p>
-  <div class="eq">\[X(-f)=X^*(f).\]</div>
-  <p class="sub"> Thus, it has even magnitude \(|X(-f)|=|X(f)|\), and odd phase \(\angle X(-f)=-\angle X(f)\) where the phase is defined.</p>
-  For real-valued symmetric signals:
+Let \(x(t), x_1(t), x_2(t)\) be signals whose Fourier transforms are \(X(f), X_1(f), X_2(f)\), respectively. 
+Then, we have the following properties.
+
+<div class="card">
   <div class="grid">
+    <div class="tile"><h3>Real-valued signals</h3>
+      If \(x(t)\) is real-valued, then \(|X(f)|\) has Hermitian symmetry: \(X(-f)=X^*(f).\) 
+      Thus, |X(f)| has even magnitude: \(|X(-f)|=|X(f)|\); and odd phase \(\angle X(-f)=-\angle X(f)\) where the phase is defined.
+    </div>
     <div class="tile"><h3>Real and even</h3>
-      Its transform is real and even: \(X(f)\in\mathbb{R}\) and \(X(-f)=-X(f)\). 
+      If \(x(t)\) is real and even, then \(X(f)\) is real and even: \(X(f)\in\mathbb{R}\) and \(X(-f)=-X(f)\). 
     </div>
     <div class="tile"><h3>Real and odd</h3>
-      Its transform is imaginary and odd: \(X(f)\in\mathbb{C}\) and \(X(-f)=-X(f)\).
-    </div>  
+      If \(x(t)\) is real and odd, then \(X(f)\) is imaginary and odd: \(X(f)\in\mathbb{C}\) and \(X(-f)=-X(f)\).
+    </div>
+    <div class="tile"><h3>Linearity</h3>
+      The Fourier transform is linear: \(\mathcal{F}\{a_1x_1(t)+a_2x_2(t)\}=a_1X_1(f)+a_2X_2(f).\)
+    </div>
+    <div class="tile"><h3>Duality</h3>
+      If the Fourier transform of \(x(t)\) is \(X(f)\), then the Fourier transform of \(X(t)\) is \(x(-f)\), 
+      and the Fourier transform of \(X(-t)\) is \(x(f)\).
+    </div>
+    <div class="tile"><h3>Time shifting</h3>
+      Delaying \(x(t)\) leads to a phase shift in \(X(f)\): The Fourier transform of \(x(t-t_0)\) is \(X(f)e^{-j2\pi ft_0}\).
+    </div>
+    <div class="tile"><h3>Time scaling</h3>
+      Time scaling \(x(t)\) leads to amplitude and frequency scaling in \(X(f)\): 
+      The Fourier transform of \(x(at)\) is \(\frac{1}{|a|}X(\frac{f}{a})\).
+    </div>
+    <div class="tile"><h3>Convolution</h3>
+      Convolution in the time domain corresponds to multiplication in the frequency domain:
+      The Fourier transform of \(x_1(t)\circledast x_2(t)\) is \(X_1(f)X_2(f)\)
+    </div>
+    <div class="tile"><h3>Modulation</h3>
+      Multiplying \(x(t)\) by a complex sinusoid shifts its spectrum: The Fourier transform of 
+      \(x(t) e^{j2\pi f_0t}\) is \(X(f-f_0)\).  
+    </div>
   </div>
 </div>
+
+
+  <div class="card"><h3>Parseval’s relation and autocorrelation</h3>
+  <div class="eq">\[\int_{-\infty}^{\infty}x(t)y^*(t)\,dt=\int_{-\infty}^{\infty}X(f)Y^*(f)\,df.\]</div>
+  <p>For \(y(t)=x(t)\), the total signal energy is equal in the time and frequency domains:</p>
+  <div class="eq">\[E_x=\int_{-\infty}^{\infty}|x(t)|^2dt=\int_{-\infty}^{\infty}|X(f)|^2df.\]</div>
+  <p>The autocorrelation is \(R_x(\tau)=\int_{-\infty}^{\infty}x(t)x^*(t-\tau)dt\), and its Fourier transform is \(|X(f)|^2\), the energy spectral density.</p></div>
+  <div class="card"><h3>Differentiation and integration</h3>
+  <div class="eq">\[\frac{d^n x(t)}{dt^n}\longleftrightarrow(j2\pi f)^nX(f),\qquad t^n x(t)\longleftrightarrow\left(\frac{j}{2\pi}\right)^n\frac{d^nX(f)}{df^n}.\]</div>
+  <p>Time differentiation corresponds to multiplication by \(j2\pi f\). Multiplication by time corresponds to differentiation in frequency.</p>
+  <div class="eq">\[\int_{-\infty}^t x(\tau)d\tau\longleftrightarrow\frac{X(f)}{j2\pi f}+\frac{1}{2}X(0)\delta(f).\]</div>
+  </div>
 
 <div class="ft-demo" id="symmetryDemo">
   <h3>Interactive 2.1: Symmetry of Fourier transforms</h3>
@@ -693,6 +730,7 @@ header{align-items:center}
   <div class="legend-row"><span><i class="legend-dot" style="background:#55c8f2"></i>Real part</span><span><i class="legend-dot" style="background:#ff6b78"></i>Imaginary part</span></div>
   <p class="ft-readout" id="symReadout"></p>
 </div>
+
 
 <p>The Fourier transform of a signal \(x(t)\) allows us to define the signals bandwidth.</p>
 <div class="card"><h3>Bandwidth</h3>
@@ -707,24 +745,15 @@ header{align-items:center}
     Bandwidth is then defined using an agreed threshold on \(|X(f)|\). In particular, the interval \([f_L,f_H]\) is defined as the 
     interval of frequencies outside which \(|X(f)|\lt \text{threshold}.\)</p>
 </div>
+
+
 <div class="ft-demo" id="shiftScaleDemo">
 <h3>Interactive 2.2: Time shifting and time scaling</h3>
 <div class="ft-controls"><label>Time shift \(t_0\) <input id="shiftT0" type="range" min="-1.5" max="1.5" step="0.1" value="0.5"><b id="shiftT0Val">0.5</b></label><label>Scale \(a\) <input id="scaleA" type="range" min="0.5" max="2.5" step="0.1" value="1"><b id="scaleAVal">1.0</b></label></div>
 <div class="ft-two"><div class="ft-panel"><b>Time domain: \(x(a(t-t_0))\)</b><canvas id="shiftTime" class="ft-canvas" width="600" height="220"></canvas></div><div class="ft-panel"><b>Frequency-domain magnitude</b><canvas id="shiftFreq" class="ft-canvas" width="600" height="220"></canvas></div></div>
 <p class="ft-readout" id="shiftReadout"></p></div>
-<div class="card"><h3>Convolution and modulation</h3>
-<div class="eq">\[x(t)*y(t)\longleftrightarrow X(f)Y(f)\]</div><p>Convolution in time corresponds to multiplication in frequency. This is especially useful for analyzing LTI systems.</p>
-<div class="eq">\[e^{j2\pi f_0t}x(t)\longleftrightarrow X(f-f_0)\]</div><p>Multiplying a signal by a complex sinusoid shifts its spectrum. This is called modulation or frequency shifting.</p></div>
-<div class="card"><h3>Parseval’s relation and autocorrelation</h3>
-<div class="eq">\[\int_{-\infty}^{\infty}x(t)y^*(t)\,dt=\int_{-\infty}^{\infty}X(f)Y^*(f)\,df.\]</div>
-<p>For \(y(t)=x(t)\), the total signal energy is equal in the time and frequency domains:</p>
-<div class="eq">\[E_x=\int_{-\infty}^{\infty}|x(t)|^2dt=\int_{-\infty}^{\infty}|X(f)|^2df.\]</div>
-<p>The autocorrelation is \(R_x(\tau)=\int_{-\infty}^{\infty}x(t)x^*(t-\tau)dt\), and its Fourier transform is \(|X(f)|^2\), the energy spectral density.</p></div>
-<div class="card"><h3>Differentiation and integration</h3>
-<div class="eq">\[\frac{d^n x(t)}{dt^n}\longleftrightarrow(j2\pi f)^nX(f),\qquad t^n x(t)\longleftrightarrow\left(\frac{j}{2\pi}\right)^n\frac{d^nX(f)}{df^n}.\]</div>
-<p>Time differentiation corresponds to multiplication by \(j2\pi f\). Multiplication by time corresponds to differentiation in frequency.</p>
-<div class="eq">\[\int_{-\infty}^t x(\tau)d\tau\longleftrightarrow\frac{X(f)}{j2\pi f}+\frac{1}{2}X(0)\delta(f).\]</div>
-</div>
+
+
 
 <h2 id="pairs"><small>3</small>Fourier transform pairs and relations</h2>
 <p class="sub">These pairs and properties are useful reference tools for deriving transforms without evaluating the integral from scratch every time.</p>
