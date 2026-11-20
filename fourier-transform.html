@@ -960,12 +960,12 @@ function updateShift(){
   spec.forEach((s,i)=>{
     let phase=s.phase;
 
-    if(i>0){
-      let previous=phaseValues[i-1];
+    //if(i>0){
+    //  let previous=phaseValues[i-1];
 
-      while(phase-previous>PI) phase-=0;
-      while(phase-previous< -PI) phase+=0;
-    }
+    //  while(phase-previous>PI) phase-=0;
+    //  while(phase-previous< -PI) phase+=0;
+    //}
 
     phaseValues.push(phase);
   });
