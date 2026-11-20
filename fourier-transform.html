@@ -662,12 +662,30 @@ header{align-items:center}
 
 <div class="eq"><b>Important observation:</b> A short-duration or impulsive signal generally has a broad frequency spectrum. The extreme case is \(\delta(t)\), whose transform is constant at all frequencies.</div>
 
+
+
+
+<!--
+  -------------------------------------------------------------------------
+  ------------------ PROPERTIES -------------------------------------------
+  -------------------------------------------------------------------------
+-->
 <h2 id="properties"><small>2</small>Properties of the Fourier transform</h2>
-<div class="card"><h3>Fourier transform of real-valued signals</h3>
-<p>If \(x(t)\) is real-valued, then its transform has Hermitian symmetry:</p>
-<div class="eq">\[X(-f)=X^*(f).\]</div>
-<div class="grid"><div class="tile"><b class="tag">Even magnitude</b><p>\(|X(-f)|=|X(f)|\).</p></div><div class="tile"><b class="tag">Odd phase</b><p>\(\angle X(-f)=-\angle X(f)\), where the phase is defined.</p></div></div>
-<p>If the signal is also even, its transform is real and even. If the signal is real and odd, its transform is imaginary and odd.</p></div>
+<div class="card"><h3>Real-valued signals</h3>
+  <p>If \(x(t)\) is real-valued, then its transform has Hermitian symmetry:</p>
+  <div class="eq">\[X(-f)=X^*(f).\]</div>
+  <p class="sub"> Thus, it has even magnitude \(|X(-f)|=|X(f)|\), and odd phase \(\angle X(-f)=-\angle X(f)\) where the phase is defined.</p>
+  For real-valued symmetric signals:
+  <div class="grid">
+    <div class="tile"><b>Real and even</b>
+      Its transform is real and even. 
+    </div>
+    <div class="tile"><b>Real and odd</b>
+      Its transform is imaginary and odd.
+    </div>  
+  </div>
+</div>
+
 <div class="ft-demo" id="symmetryDemo">
 <h3>Interactive 2.1: Symmetry of Fourier transforms</h3>
 <div class="ft-controls"><label>Signal symmetry <select id="symType"><option value="even">Real and even</option><option value="odd">Real and odd</option><option value="general">Real, neither even nor odd</option></select></label></div>
