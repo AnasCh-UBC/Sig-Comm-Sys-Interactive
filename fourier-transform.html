@@ -687,13 +687,26 @@ header{align-items:center}
 </div>
 
 <div class="ft-demo" id="symmetryDemo">
-<h3>Interactive 2.1: Symmetry of Fourier transforms</h3>
-<div class="ft-controls"><label>Signal symmetry <select id="symType"><option value="even">Real and even</option><option value="odd">Real and odd</option><option value="general">Real, neither even nor odd</option></select></label></div>
-<div class="ft-two"><div class="ft-panel"><b>Signal \(x(t)\)</b><canvas id="symTime" class="ft-canvas" width="600" height="220"></canvas></div><div class="ft-panel"><b>Transform components</b><canvas id="symFreq" class="ft-canvas" width="600" height="220"></canvas></div></div>
-<div class="legend-row"><span><i class="legend-dot" style="background:#55c8f2"></i>Real part</span><span><i class="legend-dot" style="background:#ff6b78"></i>Imaginary part</span></div>
-<p class="ft-readout" id="symReadout"></p></div>
-<div class="card"><h3>Bandwidth</h3><p>The bandwidth is the width of the smallest frequency interval \([f_L,f_H]\) outside which the amplitude spectrum is zero:</p>
-<div class="eq">\[B=f_H-f_L.\]</div><p>For a baseband signal, \(f_L=0\), so its bandwidth is \(B=f_H\). In practical systems, spectra may not be strictly zero outside a finite interval; bandwidth is then defined using an agreed threshold.</p></div>
+  <h3>Interactive 2.1: Symmetry of Fourier transforms</h3>
+  <div class="ft-controls"><label>Signal symmetry <select id="symType"><option value="even">Real and even</option><option value="odd">Real and odd</option><option value="general">Real, neither even nor odd</option></select></label></div>
+  <div class="ft-two"><div class="ft-panel"><b>Signal \(x(t)\)</b><canvas id="symTime" class="ft-canvas" width="600" height="220"></canvas></div><div class="ft-panel"><b>Transform components</b><canvas id="symFreq" class="ft-canvas" width="600" height="220"></canvas></div></div>
+  <div class="legend-row"><span><i class="legend-dot" style="background:#55c8f2"></i>Real part</span><span><i class="legend-dot" style="background:#ff6b78"></i>Imaginary part</span></div>
+  <p class="ft-readout" id="symReadout"></p>
+</div>
+
+<p>The Fourier transform of a signal \(x(t)\) allows us to define the signals bandwidth.</p>
+<div class="card"><h3>Bandwidth</h3>
+  <div class="eq">
+    The <b>bandwidth</b> \(B\) of \(x(t)\) is the width of the smallest frequency interval \([f_L,f_H]\) outside which \(|X(f)|=0\), 
+    i.e., \(B = f_H-f_L.\)
+  </div>
+  <div class="eq">
+    A <b>baseband signal</b> is a signal with \(f_L=0\). Its bandwidth is \(B=f_H\).
+  </div>
+  <p class="sub">In practical systems, spectra may not be strictly zero outside a finite interval. 
+    Bandwidth is then defined using an agreed threshold on \(|X(f)|\). In particular, the interval \([f_L,f_H]\) is defined as the 
+    interval of frequencies outside which \(|X(f)|lt \text{threshold}.\)</p>
+</div>
 <div class="ft-demo" id="shiftScaleDemo">
 <h3>Interactive 2.2: Time shifting and time scaling</h3>
 <div class="ft-controls"><label>Time shift \(t_0\) <input id="shiftT0" type="range" min="-1.5" max="1.5" step="0.1" value="0.5"><b id="shiftT0Val">0.5</b></label><label>Scale \(a\) <input id="scaleA" type="range" min="0.5" max="2.5" step="0.1" value="1"><b id="scaleAVal">1.0</b></label></div>
