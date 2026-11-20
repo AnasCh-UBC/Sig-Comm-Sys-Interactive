@@ -674,22 +674,22 @@ header{align-items:center}
 Let \(x(t), x_1(t), x_2(t)\) be signals whose Fourier transforms are \(X(f), X_1(f), X_2(f)\), respectively. 
 Then, we have the following properties.
 
-<div class="card"><h3>Real signal properties</h3>
+<div class="card"><h3>Real-valued signal properties</h3>
   <div class="grid">
     <div class="tile">
       <p>If \(x(t)\) is <b>real</b>, then \(|X(f)|\) has Hermitian symmetry: \[X(-f)=X^*(f).\]</p>
     </div>
     <div class="tile">
-      <p>If \(x(t)\) is <b>real and even</b>, then \(X(f)\) is real and even: \[X(f)\in\mathbb{R},\ X(-f)=-X(f)\.]</p>
+      <p>If \(x(t)\) is <b>real and even</b>, then \(X(f)\) is real and even: \[X(f)\in\mathbb{R},\ X(-f)=-X(f).\]</p>
     </div>
     <div class="tile">
       <p>If \(x(t)\) is <b>real and odd</b>, then \(X(f)\) is imaginary and odd: \[X(f)\in\mathbb{C}, X(-f)=-X(f).\]</p>
     </div>
   </div>
-  <p class="sub">For real-valued \(x(t)\), it Fourier transform satisfies \(|X(-f)|=|X(f)|\) (even magnitude) and 
+  <p>For real-valued \(x(t)\), it Fourier transform satisfies \(|X(-f)|=|X(f)|\) (even magnitude) and 
     \(\angle X(-f)=-\angle X(f)\) (odd phase) where the phase is defined.</p>
+  <p class="sub">These properties are helpful for validating your calculated Fourier transform. </p>
 </div>
-<p class="sub">These properties are helpful for validating your calculated Fourier transform. </p>
 <div class="ft-demo" id="symmetryDemo">
   <h3>Interactive 2.1: Symmetry of Fourier transforms</h3>
   <div class="ft-controls"><label>Signal symmetry <select id="symType"><option value="even">Real and even</option><option value="odd">Real and odd</option><option value="general">Real, neither even nor odd</option></select></label></div>
@@ -702,35 +702,41 @@ Then, we have the following properties.
 <div class="card"><h3>Signal operations properties</h3>
   <div class="grid">
     <div class="tile"><h3>Linearity</h3>
-      <p>The Fourier transform is linear: The Fourier transform of \(a_1x_1(t)+a_2x_2(t)\) is \(a_1X_1(f)+a_2X_2(f).\)</p>
+      <p>The Fourier transform of \(a_1x_1(t)+a_2x_2(t)\) is \(a_1X_1(f)+a_2X_2(f).\)</p>
+      <p class="sub">Weighted sum in time \(\to\) weigthed sum frequency</p>
     </div>
     <div class="tile"><h3>Duality</h3>
-      <p>If the Fourier transform of \(x(t)\) is \(X(f)\), then the Fourier transform of \(X(t)\) is \(x(-f)\), 
+      <p>The Fourier transform of \(X(t)\) is \(x(-f)\), 
       and the Fourier transform of \(X(-t)\) is \(x(f)\).</p>
+      <p class="sub">Symmetry relation between the time and frequency domains</p>
     </div>
     <div class="tile"><h3>Time shifting</h3>
-      <p>Delaying \(x(t)\) leads to a phase shift in \(X(f)\): The Fourier transform of \(x(t-t_0)\) is \(X(f)e^{-j2\pi ft_0}\).</p>
+      <p>The Fourier transform of \(x(t-t_0)\) is \(X(f)e^{-j2\pi ft_0}\).</p>
+      <p class="sub">Delaying \(x(t)\) leads to a phase shift in \(X(f)\).</p>
     </div>
     <div class="tile"><h3>Time scaling</h3>
-      <p>Time scaling in \(x(t)\) leads to amplitude and frequency scaling in \(X(f)\): 
-      The Fourier transform of \(x(at)\) is \(\frac{1}{|a|}X(\frac{f}{a})\).</p>
+      <p>The Fourier transform of \(x(at)\) is \(\frac{1}{|a|}X(\frac{f}{a})\).</p>
+      <p class="sub">Time scaling leads to frequency and amplitude scaling in the frequency domain </p> 
     </div>
     <div class="tile"><h3>Convolution</h3>
-      <p>Convolution in the time domain corresponds to multiplication in the frequency domain:
-      The Fourier transform of \(x_1(t)\circledast x_2(t)\) is \(X_1(f)X_2(f).\)</p>
+      <p>The Fourier transform of \(x_1(t)\circledast x_2(t)\) is \(X_1(f)X_2(f).\)</p>
+      <p class="sub">Convolution in the time domain is multiplication in the frequency domain</p>
     </div>
     <div class="tile"><h3>Modulation</h3>
-      <p>Multiplying \(x(t)\) by a complex sinusoid shifts its spectrum: The Fourier transform of 
-      \(x(t) e^{j2\pi f_0t}\) is \(X(f-f_0)\).</p>  
+      <p>The Fourier transform of \(x(t) e^{j2\pi f_0t}\) is \(X(f-f_0)\).</p>  
+      <p class="sub">Modulating \(x(t)\) by a complex sinusoid shifts its spectrum.</p>  
     </div>
     <div class="tile"><h3>Time differentiation</h3>
       <p>The Fourier transform of \(\frac{d^n x(t)}{dt^n}\) is \((j2\pi f)^nX(f)\).</p>
+      <p class="sub">Differentiation in the time domain is multiplication by \(j2\pi f\) in the frequency domain.</p>
     </div>
     <div class="tile"><h3>Frequency differentiation</h3>
-      <p>The Fourier transform of \(t^n x(t)\) is \(\left(\frac{j}{2\pi}\right)^n\frac{d^nX(f)}{df^n}.\)</p>
+      <p>The Fourier transform of \(\left(\frac{2\pi t}{j}\right)^n x(t)\) is \(\frac{d^nX(f)}{df^n}.\)</p>
+      <p class="sub">Differentiation in the frequency domain is multiplication by \(\frac{2\pi t}{j}\) in the time domain.</p>
     </div>
     <div class="tile"><h3>Integration</h3>
       <p>The Fourier transform of \(\int_{-\infty}^t x(\tau)d\tau\) is \(\frac{X(f)}{j2\pi f}+\frac{1}{2}X(0)\delta(f).\)</p>
+      <p class="sub">Integration in the time domain is division by \(j2\pi f\) in the frequency domain plus a pulse at \(f=0\).</p>
     </div>
   </div>
 </div>
