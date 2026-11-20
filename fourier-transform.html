@@ -724,7 +724,7 @@ Then, we have the following properties.
     </div>
     <div class="tile"><h3>Modulation</h3>
       <p>The Fourier transform of \(x(t) e^{j2\pi f_0t}\) is \(X(f-f_0)\).</p>  
-      <p class="sub">Modulating \(x(t)\) by a complex sinusoid shifts its spectrum.</p>  
+      <p class="sub">Modulating \(x(t)\) (multiplying it by a complex sinusoid) shifts its spectrum.</p>  
     </div>
     <div class="tile"><h3>Time differentiation</h3>
       <p>The Fourier transform of \(\frac{d^n x(t)}{dt^n}\) is \((j2\pi f)^nX(f)\).</p>
@@ -735,7 +735,7 @@ Then, we have the following properties.
       <p class="sub">Differentiation in the frequency domain is multiplication by \(\frac{2\pi t}{j}\) in the time domain.</p>
     </div>
     <div class="tile"><h3>Integration</h3>
-      <p>The Fourier transform of \(\int_{-\infty}^t x(\tau)d\tau\) is \(\frac{X(f)}{j2\pi f}+\frac{1}{2}X(0)\delta(f).\)</p>
+      <p>The Fourier transform of \(\int_{-\infty}^t x(\tau)d\tau\) is \(\frac{X(f)}{j2\pi f}+\frac{X(0)}{2}\delta(f).\)</p>
       <p class="sub">Integration in the time domain is division by \(j2\pi f\) in the frequency domain plus a pulse at \(f=0\).</p>
     </div>
   </div>
