@@ -711,7 +711,7 @@ Then, we have the following properties.
       <p>Delaying \(x(t)\) leads to a phase shift in \(X(f)\): The Fourier transform of \(x(t-t_0)\) is \(X(f)e^{-j2\pi ft_0}\).</p>
     </div>
     <div class="tile"><h3>Time scaling</h3>
-      <p>Time scaling \(x(t)\) leads to amplitude and frequency scaling in \(X(f)\): 
+      <p>Time scaling in \(x(t)\) leads to amplitude and frequency scaling in \(X(f)\): 
       The Fourier transform of \(x(at)\) is \(\frac{1}{|a|}X(\frac{f}{a})\).</p>
     </div>
     <div class="tile"><h3>Convolution</h3>
@@ -722,22 +722,30 @@ Then, we have the following properties.
       <p>Multiplying \(x(t)\) by a complex sinusoid shifts its spectrum: The Fourier transform of 
       \(x(t) e^{j2\pi f_0t}\) is \(X(f-f_0)\).</p>  
     </div>
-    <div class="tile"><h3>Differentiation</h3>
-      <p>The Fourier transform of \(frac{d^n x(t)}{dt^n}\) is \((j2\pi f)^nX(f)\) and 
-        the Fourier transform of \(t^n x(t)\) is \(\left(\frac{j}{2\pi}\right)^n\frac{d^nX(f)}{df^n}.\)</p>
+    <div class="tile"><h3>Time differentiation</h3>
+      <p>The Fourier transform of \(\frac{d^n x(t)}{dt^n}\) is \((j2\pi f)^nX(f)\).</p>
+    </div>
+    <div class="tile"><h3>Frequency differentiation</h3>
+      <p>The Fourier transform of \(t^n x(t)\) is \(\left(\frac{j}{2\pi}\right)^n\frac{d^nX(f)}{df^n}.\)</p>
     </div>
     <div class="tile"><h3>Integration</h3>
       <p>The Fourier transform of \(\int_{-\infty}^t x(\tau)d\tau\) is \(\frac{X(f)}{j2\pi f}+\frac{1}{2}X(0)\delta(f).\)</p>
+    </div>
+    <div class="tile"><h3>Parseval's relation</h3>
+      <p>The Fourier transform satisfies \(\int_{-\infty}^{\infty}x_1(t)x_2^*(t)\,dt=\int_{-\infty}^{\infty}X_1(f)X_2^*(f)\,df.\)
+        Thus, the signal energy satisfies \(E_x=\int_{-\infty}^{\infty}|x(t)|^2dt=\int_{-\infty}^{\infty}|X(f)|^2df.\)
+      </p>
+    </div>
+    <div class="tile"><h3>Autocorrelation</h3>
+      <p>The autocorrelation of a signal \(R_x(\tau)=\int_{-\infty}^{\infty}x(t)x^*(t-\tau)dt\) has a Fourier transform 
+      \(\mathcal{F}\{R_x(\tau)\}\|X(f)|^2\) known as the energy spectral density.
+      </p>
     </div>
   </div>
 </div>
 
 
-  <div class="card"><h3>Parseval’s relation and autocorrelation</h3>
-  <div class="eq">\[\int_{-\infty}^{\infty}x(t)y^*(t)\,dt=\int_{-\infty}^{\infty}X(f)Y^*(f)\,df.\]</div>
-  <p>For \(y(t)=x(t)\), the total signal energy is equal in the time and frequency domains:</p>
-  <div class="eq">\[E_x=\int_{-\infty}^{\infty}|x(t)|^2dt=\int_{-\infty}^{\infty}|X(f)|^2df.\]</div>
-  <p>The autocorrelation is \(R_x(\tau)=\int_{-\infty}^{\infty}x(t)x^*(t-\tau)dt\), and its Fourier transform is \(|X(f)|^2\), the energy spectral density.</p></div>
+  
   
 
 
