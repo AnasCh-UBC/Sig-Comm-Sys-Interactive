@@ -709,9 +709,9 @@ Then, we have the following properties.
       <p>The Fourier transform of \(x(at)\) is \(\frac{1}{|a|}X(\frac{f}{a})\).</p>
       <p class="sub">Time scaling leads to frequency and amplitude scaling in the frequency domain </p> 
     </div>
-    <div class="tile"><h3>Frequency shifting (modulation)</h3>
+    <div class="tile"><h3>Modulation</h3>
       <p>The Fourier transform of \(x(t) e^{j2\pi f_0t}\) is \(X(f-f_0)\).</p>  
-      <p class="sub">Modulating \(x(t)\) (multiplying it by a complex sinusoid) shifts its spectrum.</p>  
+      <p class="sub">Modulating \(x(t)\) (multiplying it by a complex sinusoid) shifts its frequency.</p>  
     </div>
   </div>
 </div>
@@ -728,18 +728,17 @@ Then, we have the following properties.
       <b id="scaleAVal">1.0</b>
     </label>
   </div>
-  <div class="ft-two" style="grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto auto;align-items:stretch">
-    <div class="ft-panel" style="grid-row:span 2">
+  <div class="ft-two" style="grid-template-columns:repeat(2,minmax(0,1fr));align-items:start">
+    <div class="ft-panel">
       <b>Time domain: \(x(a(t-t_0))\)</b>
-      <canvas id="shiftTime" class="ft-canvas" width="600" height="380"></canvas>
+      <canvas id="shiftTime" class="ft-canvas" width="600" height="368"></canvas>
     </div>
     <div class="ft-panel">
-      <b>Frequency-domain magnitude</b>
-      <canvas id="shiftFreq" class="ft-canvas" width="600" height="180"></canvas>
-    </div>
-    <div class="ft-panel">
-      <b>Frequency-domain phase</b>
-      <canvas id="shiftPhase" class="ft-canvas" width="600" height="180"></canvas>
+      <b>Frequency domain: magnitude (top) and phase (bottom)</b>
+      <div style="display:grid;grid-template-columns:1fr;gap:8px">
+        <canvas id="shiftFreq" class="ft-canvas" width="600" height="180" aria-label="Frequency-domain magnitude spectrum"></canvas>
+        <canvas id="shiftPhase" class="ft-canvas" width="600" height="180" aria-label="Frequency-domain phase spectrum"></canvas>
+      </div>
     </div>
   </div>
   <p class="ft-readout" id="shiftReadout"></p>
@@ -979,7 +978,8 @@ function updateShift(){
   magCtx.stroke();
   magCtx.restore();
 
-  // Phase plot (phase is undefined at spectral zeros).
+  // Phase plot: keep the wrapped phase in [-π, π] and show wraparound
+  // only when the trace crosses one of the two phase limits.
   let phaseCanvas=$('shiftPhase'),
       phaseCtx=phaseCanvas.getContext('2d'),
       pm=plot(phaseCtx,phaseCanvas.width,phaseCanvas.height,-8,8,-PI,PI,2,PI/2,'f (Hz)','∠X(f)');
@@ -994,19 +994,32 @@ function updateShift(){
   phaseCtx.lineWidth=2;
   phaseCtx.beginPath();
 
-  let drawing=false;
+  // Split a segment only at a ±π wrap. Interpolate the crossing so the
+  // trace reaches one edge and resumes at the opposite edge.
+  let previous=null;
   spec.forEach((s,i)=>{
-    if(Math.abs(s.sinc)<0.015){
-      drawing=false;
-      return;
-    }
-    let px=pm.X(freqs[i]),py=pm.Y(s.phase);
-    if(!drawing){
-      phaseCtx.moveTo(px,py);
-      drawing=true;
+    let point={x:pm.X(freqs[i]), y:s.phase};
+    if(previous){
+      let delta=point.y-previous.y;
+      if(delta>PI){
+        let fraction=(PI-previous.y)/delta;
+        let xCross=previous.x+fraction*(point.x-previous.x);
+        phaseCtx.lineTo(xCross,pm.Y(PI));
+        phaseCtx.moveTo(xCross,pm.Y(-PI));
+        phaseCtx.lineTo(point.x,pm.Y(point.y));
+      }else if(delta< -PI){
+        let fraction=(-PI-previous.y)/delta;
+        let xCross=previous.x+fraction*(point.x-previous.x);
+        phaseCtx.lineTo(xCross,pm.Y(-PI));
+        phaseCtx.moveTo(xCross,pm.Y(PI));
+        phaseCtx.lineTo(point.x,pm.Y(point.y));
+      }else{
+        phaseCtx.lineTo(point.x,pm.Y(point.y));
+      }
     }else{
-      phaseCtx.lineTo(px,py);
+      phaseCtx.moveTo(point.x,pm.Y(point.y));
     }
+    previous=point;
   });
   phaseCtx.stroke();
   phaseCtx.restore();
@@ -1018,6 +1031,7 @@ function updateShift(){
 $('shiftT0').addEventListener('input',updateShift);
 $('scaleA').addEventListener('input',updateShift);
 updateShift();
+
 
 // 4.1 Ideal filter response
 function updateFilter(){let type=$('filterType').value,w1=+$('filterW1').value,w2=Math.max(+$('filterW2').value,w1+.5);$('filterW1Val').textContent=w1.toFixed(1)+' Hz';$('filterW2Val').textContent=w2.toFixed(1)+' Hz';let H=f=>{let q=Math.abs(f);return type==='low'?(q<=w1?1:0):type==='high'?(q>=w1?1:0):(q>=w1&&q<=w2?1:0);};let can=$('filterH'),ctx=can.getContext('2d'),m=plot(ctx,can.width,can.height,-15,15,-.1,1.2,5,.5,'f (Hz)','|H(f)|');m.xmin=-15;m.xmax=15;ctx.strokeStyle='#55c8f2';ctx.lineWidth=2.5;ctx.beginPath();for(let i=0;i<=600;i++){let f=-15+i*.05,x=m.X(f),y=m.Y(H(f));if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.stroke();let X=f=>Math.exp(-Math.pow((Math.abs(f)-5)/2.2,2))+0.65*Math.exp(-Math.pow((Math.abs(f)-10)/1.2,2)),can2=$('filterXY'),c2=can2.getContext('2d'),max=1.9,m2=plot(c2,can2.width,can2.height,-15,15,0,max,5,.5,'f (Hz)','Magnitude');m2.xmin=-15;m2.xmax=15;for(let [fn,col] of [[X,'#ff6b78'],[f=>X(f)*H(f),'#55c8f2']]){c2.strokeStyle=col;c2.lineWidth=2;c2.beginPath();for(let i=0;i<=600;i++){let f=-15+i*.05,x=m2.X(f),y=m2.Y(fn(f));if(i===0)c2.moveTo(x,y);else c2.lineTo(x,y);}c2.stroke();}$('filterReadout').textContent=`The ${type==='low'?'lowpass':type==='high'?'highpass':'bandpass'} filter passes the selected frequency region. The red curve is the example input spectrum; the cyan curve is the output spectrum |Y(f)| = |H(f)X(f)|.`;}
