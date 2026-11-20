@@ -674,21 +674,22 @@ header{align-items:center}
 Let \(x(t), x_1(t), x_2(t)\) be signals whose Fourier transforms are \(X(f), X_1(f), X_2(f)\), respectively. 
 Then, we have the following properties.
 
-<div class="card">
+<div class="card"><h3>Real signal properties</h3>
   <div class="grid">
-    <div class="tile"><h3>Real signals</h3>
+    <div class="tile">
       <p>If \(x(t)\) is real-valued, then \(|X(f)|\) has Hermitian symmetry: \(X(-f)=X^*(f).\)</p>
     </div>
-    <div class="tile"><h3>Real even signals</h3>
+    <div class="tile">
       <p>If \(x(t)\) is real and even, then \(X(f)\) is real and even: \(X(f)\in\mathbb{R}\) and \(X(-f)=-X(f)\).</p>
     </div>
-    <div class="tile"><h3>Real odd signals</h3>
+    <div class="tile">
       <p>If \(x(t)\) is real and odd, then \(X(f)\) is imaginary and odd: \(X(f)\in\mathbb{C}\) and \(X(-f)=-X(f)\).</p>
     </div>
   </div>
   <p class="sub">For real-valued \(x(t)\), it Fourier transform satisfies \(|X(-f)|=|X(f)|\) (even magnitude) and 
     \(\angle X(-f)=-\angle X(f)\) (odd phase) where the phase is defined.</p>
 </div>
+<p class="sub">These properties are helpful for validating your calculated Fourier transform. </p>
 <div class="ft-demo" id="symmetryDemo">
   <h3>Interactive 2.1: Symmetry of Fourier transforms</h3>
   <div class="ft-controls"><label>Signal symmetry <select id="symType"><option value="even">Real and even</option><option value="odd">Real and odd</option><option value="general">Real, neither even nor odd</option></select></label></div>
@@ -698,7 +699,7 @@ Then, we have the following properties.
 </div>
 
 
-<div class="card">
+<div class="card"><h3>Signal operations properties</h3>
   <div class="grid">
     <div class="tile"><h3>Linearity</h3>
       <p>The Fourier transform is linear: The Fourier transform of \(a_1x_1(t)+a_2x_2(t)\) is \(a_1X_1(f)+a_2X_2(f).\)</p>
@@ -731,19 +732,22 @@ Then, we have the following properties.
     <div class="tile"><h3>Integration</h3>
       <p>The Fourier transform of \(\int_{-\infty}^t x(\tau)d\tau\) is \(\frac{X(f)}{j2\pi f}+\frac{1}{2}X(0)\delta(f).\)</p>
     </div>
-    <div class="tile"><h3>Parseval's relation</h3>
-      <p>The Fourier transform satisfies \(\int_{-\infty}^{\infty}x_1(t)x_2^*(t)\,dt=\int_{-\infty}^{\infty}X_1(f)X_2^*(f)\,df.\)
-        Thus, the signal energy satisfies \(E_x=\int_{-\infty}^{\infty}|x(t)|^2dt=\int_{-\infty}^{\infty}|X(f)|^2df.\)
-      </p>
-    </div>
-    <div class="tile"><h3>Autocorrelation</h3>
-      <p>The autocorrelation of a signal \(R_x(\tau)=\int_{-\infty}^{\infty}x(t)x^*(t-\tau)dt\) has a Fourier transform 
-      \(\mathcal{F}\{R_x(\tau)\}\|X(f)|^2\) known as the energy spectral density.
-      </p>
-    </div>
   </div>
 </div>
 
+<div class="card"><h3>Parseval's relation</h3>
+  <div class="tile">
+    <p>The Fourier transform satisfies \(\int_{-\infty}^{\infty}x_1(t)x_2^*(t)\,dt=\int_{-\infty}^{\infty}X_1(f)X_2^*(f)\,df.\)
+      Thus, the signal energy satisfies \(E_x=\int_{-\infty}^{\infty}|x(t)|^2dt=\int_{-\infty}^{\infty}|X(f)|^2df.\)
+    </p>
+  </div>
+  <div class="tile"><h3>Autocorrelation</h3>
+    <p>The autocorrelation of a signal \(R_x(\tau)=\int_{-\infty}^{\infty}x(t)x^*(t-\tau)dt\) has a Fourier transform 
+    \(\mathcal{F}\{R_x(\tau)\}\|X(f)|^2\) known as the energy spectral density.
+    </p>
+  </div>
+</div>
+  
 
   
   
