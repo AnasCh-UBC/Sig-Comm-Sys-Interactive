@@ -911,7 +911,6 @@ ctx.restore();
 mm.xmin=-6;mm.xmax=6;for(let [key,col] of [['re','#55c8f2'],['im','#ff6b78']]){ctx.strokeStyle=col;ctx.lineWidth=2;ctx.beginPath();vals.forEach((v,i)=>{let px=mm.X(freqs[i]),py=mm.Y(v[key]);if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);});ctx.stroke();}$('symReadout').textContent=type==='even'?'For a real-even signal, X(f) is real and even; the imaginary part is zero (up to numerical error).':type==='odd'?'For a real-odd signal, X(f) is imaginary and odd; the real part is zero (up to numerical error).':'For a real signal without even or odd symmetry, X(-f)=X*(f): the real part is even and the imaginary part is odd.';}
 $('symType').addEventListener('change',updateSym);updateSym();
 // 2.2 Shift and scale of a rectangular pulse
-// 2.2 Shift and scale of a rectangular pulse
 function updateShift(){
   let t0=+$('shiftT0').value,
       a=+$('scaleA').value;
@@ -935,44 +934,41 @@ function updateShift(){
       spec=freqs.map(f=>{
         let z=PI*f/a;
         let sinc=Math.abs(z)<1e-9?1:Math.sin(z)/z;
-        let mag=sinc/a;
+        let mag=Math.abs(sinc/a);
         let phase=-2*PI*f*t0;
-        return {
-          re:mag*Math.cos(phase),
-          im:mag*Math.sin(phase)
-        };
+
+        // Account for negative values of the real sinc spectrum
+        if(sinc<0) phase+=PI;
+
+        // Wrap phase to [-π, π], mapping -π to +π
+        phase=((phase+PI)%(2*PI)+2*PI)%(2*PI)-PI;
+        if(Math.abs(phase+PI)<1e-8) phase=PI;
+
+        return {mag,phase};
       });
 
-  let max=Math.max(.1,...spec.map(s=>Math.max(Math.abs(s.re),Math.abs(s.im))))*1.2,
-      mm=plot(ctx,can.width,can.height,-8,8,-max,max,2,max/2,'f (Hz)','Transform');
+  // Magnitude plot
+  let max=Math.max(.1,...spec.map(s=>s.mag))*1.15,
+      mm=plot(ctx,can.width,can.height,-8,8,0,max,2,max/4,'f (Hz)','|X(f)|');
 
   mm.xmin=-8;
   mm.xmax=8;
 
-  // Real and imaginary components
-  for(let [key,col] of [['re','#55c8f2'],['im','#ff6b78']]){
-    ctx.strokeStyle=col;
-    ctx.lineWidth=2;
-    ctx.beginPath();
+  ctx.strokeStyle='#55c8f2';
+  ctx.lineWidth=2;
+  ctx.beginPath();
+  spec.forEach((s,i)=>{
+    let px=mm.X(freqs[i]),
+        py=mm.Y(s.mag);
+    if(i===0)ctx.moveTo(px,py);
+    else ctx.lineTo(px,py);
+  });
+  ctx.stroke();
 
-    spec.forEach((s,i)=>{
-      let px=mm.X(freqs[i]),
-          py=mm.Y(s[key]);
-
-      if(i===0)ctx.moveTo(px,py);
-      else ctx.lineTo(px,py);
-    });
-
-    ctx.stroke();
-  }
-
-  $('shiftReadout').textContent=
-    `Time scaling by a = ${a.toFixed(1)} changes the spectral width by the reciprocal factor 1/a. The delay t₀ = ${t0.toFixed(1)} s changes the phase of the transform, affecting its real and imaginary parts.`;
-}
-
-$('shiftT0').addEventListener('input',updateShift);
-$('scaleA').addEventListener('input',updateShift);
-updateShift();
+  // Phase plot
+  let phaseCanvas=document.createElement('canvas');
+  // Use the same canvas, clearing and redrawing in the next step
+  // (See the two-panel HTML change below.)
 // 4.1 Ideal filter response
 function updateFilter(){let type=$('filterType').value,w1=+$('filterW1').value,w2=Math.max(+$('filterW2').value,w1+.5);$('filterW1Val').textContent=w1.toFixed(1)+' Hz';$('filterW2Val').textContent=w2.toFixed(1)+' Hz';let H=f=>{let q=Math.abs(f);return type==='low'?(q<=w1?1:0):type==='high'?(q>=w1?1:0):(q>=w1&&q<=w2?1:0);};let can=$('filterH'),ctx=can.getContext('2d'),m=plot(ctx,can.width,can.height,-15,15,-.1,1.2,5,.5,'f (Hz)','|H(f)|');m.xmin=-15;m.xmax=15;ctx.strokeStyle='#55c8f2';ctx.lineWidth=2.5;ctx.beginPath();for(let i=0;i<=600;i++){let f=-15+i*.05,x=m.X(f),y=m.Y(H(f));if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.stroke();let X=f=>Math.exp(-Math.pow((Math.abs(f)-5)/2.2,2))+0.65*Math.exp(-Math.pow((Math.abs(f)-10)/1.2,2)),can2=$('filterXY'),c2=can2.getContext('2d'),max=1.9,m2=plot(c2,can2.width,can2.height,-15,15,0,max,5,.5,'f (Hz)','Magnitude');m2.xmin=-15;m2.xmax=15;for(let [fn,col] of [[X,'#ff6b78'],[f=>X(f)*H(f),'#55c8f2']]){c2.strokeStyle=col;c2.lineWidth=2;c2.beginPath();for(let i=0;i<=600;i++){let f=-15+i*.05,x=m2.X(f),y=m2.Y(fn(f));if(i===0)c2.moveTo(x,y);else c2.lineTo(x,y);}c2.stroke();}$('filterReadout').textContent=`The ${type==='low'?'lowpass':type==='high'?'highpass':'bandpass'} filter passes the selected frequency region. The red curve is the example input spectrum; the cyan curve is the output spectrum |Y(f)| = |H(f)X(f)|.`;}
 $('filterType').addEventListener('change',updateFilter);$('filterW1').addEventListener('input',updateFilter);$('filterW2').addEventListener('input',updateFilter);updateFilter();
