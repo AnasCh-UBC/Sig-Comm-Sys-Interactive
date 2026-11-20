@@ -942,52 +942,92 @@ function updateShift(){
       spec=freqs.map(f=>{
         let z=PI*f/a,
             sinc=Math.abs(z)<1e-9?1:Math.sin(z)/z,
-            magnitude=Math.abs(sinc/a),
-            rawPhase=-2*PI*f*t0 + (sinc<0 ? PI : 0);
-        return {magnitude,rawPhase,sinc};
+            amplitude=sinc/a,
+            angle=-2*PI*f*t0;
+
+        // Calculate the complex Fourier transform directly
+        let re=amplitude*Math.cos(angle),
+            im=amplitude*Math.sin(angle),
+            magnitude=Math.hypot(re,im),
+            rawPhase=Math.atan2(im,re);
+
+        return {magnitude,rawPhase};
       });
 
-  // Phase is undefined at spectral nulls. Unwrap reliable samples first,
-  // then interpolate through low-magnitude regions to suppress numerical
-  // fluctuations caused by sign changes near sinc zeros.
+  // Unwrap phase using reliable samples, then interpolate
+  // through spectral nulls where phase is undefined.
   let phaseThreshold=Math.max(...spec.map(s=>s.magnitude))*0.025,
       reliable=[];
-  spec.forEach((s,i)=>{if(s.magnitude>=phaseThreshold) reliable.push(i);});
+
+  spec.forEach((s,i)=>{
+    if(s.magnitude>=phaseThreshold) reliable.push(i);
+  });
 
   let unwrapped=new Array(spec.length);
+
   if(reliable.length){
     let first=reliable[0];
     unwrapped[first]=spec[first].rawPhase;
+
+    // Unwrap reliable phase samples
     for(let k=1;k<reliable.length;k++){
-      let i=reliable[k],prev=reliable[k-1],v=spec[i].rawPhase;
+      let i=reliable[k],
+          prev=reliable[k-1],
+          v=spec[i].rawPhase;
+
       while(v-unwrapped[prev]>PI) v-=2*PI;
       while(v-unwrapped[prev]<-PI) v+=2*PI;
+
       unwrapped[i]=v;
     }
 
-    // Interpolate between reliable samples on either side of each null.
+    // Interpolate through low-magnitude regions
     for(let k=0;k<reliable.length-1;k++){
-      let left=reliable[k],right=reliable[k+1];
+      let left=reliable[k],
+          right=reliable[k+1];
+
       for(let i=left+1;i<right;i++){
-        let q=(freqs[i]-freqs[left])/(freqs[right]-freqs[left]);
-        unwrapped[i]=unwrapped[left]+q*(unwrapped[right]-unwrapped[left]);
+        let q=(freqs[i]-freqs[left])/
+              (freqs[right]-freqs[left]);
+
+        unwrapped[i]=unwrapped[left]+
+          q*(unwrapped[right]-unwrapped[left]);
       }
     }
 
-    // Extrapolate smoothly if the plotted range starts or ends near a null.
+    // Extrapolate at the two ends if necessary
     if(reliable.length>1){
-      let first2=reliable[1],last=reliable[reliable.length-1],last2=reliable[reliable.length-2];
-      let leftSlope=(unwrapped[first2]-unwrapped[first])/(freqs[first2]-freqs[first]);
-      for(let i=first-1;i>=0;i--) unwrapped[i]=unwrapped[first]+leftSlope*(freqs[i]-freqs[first]);
-      let rightSlope=(unwrapped[last]-unwrapped[last2])/(freqs[last]-freqs[last2]);
-      for(let i=last+1;i<spec.length;i++) unwrapped[i]=unwrapped[last]+rightSlope*(freqs[i]-freqs[last]);
+      let first2=reliable[1],
+          last=reliable[reliable.length-1],
+          last2=reliable[reliable.length-2];
+
+      let leftSlope=(unwrapped[first2]-unwrapped[first])/
+                    (freqs[first2]-freqs[first]);
+
+      for(let i=first-1;i>=0;i--){
+        unwrapped[i]=unwrapped[first]+
+          leftSlope*(freqs[i]-freqs[first]);
+      }
+
+      let rightSlope=(unwrapped[last]-unwrapped[last2])/
+                     (freqs[last]-freqs[last2]);
+
+      for(let i=last+1;i<spec.length;i++){
+        unwrapped[i]=unwrapped[last]+
+          rightSlope*(freqs[i]-freqs[last]);
+      }
     }else{
-      for(let i=0;i<spec.length;i++) if(unwrapped[i]===undefined) unwrapped[i]=unwrapped[first];
+      for(let i=0;i<spec.length;i++){
+        if(unwrapped[i]===undefined){
+          unwrapped[i]=unwrapped[first];
+        }
+      }
     }
   }else{
     unwrapped.fill(0);
   }
 
+  // Wrap phase into [-π, π], representing -π as +π
   let phaseValues=unwrapped.map(v=>{
     let wrapped=((v+PI)%(2*PI)+2*PI)%(2*PI)-PI;
     return Math.abs(wrapped+PI)<1e-8?PI:wrapped;
