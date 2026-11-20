@@ -677,13 +677,13 @@ Then, we have the following properties.
 <div class="card"><h3>Real-valued signal properties</h3>
   <div class="grid">
     <div class="tile">
-      <p>If \(x(t)\) is <b>real</b>, then \(|X(f)|\) has Hermitian symmetry: \[X(-f)=X^*(f).\]</p>
+      <p>If \(x(t)\) is <b>real</b>, then \(|X(f)|\) is Hermitian symmetric: \[X(-f)=X^*(f).\]</p>
     </div>
     <div class="tile">
-      <p>If \(x(t)\) is <b>real and even</b>, then \(X(f)\) is real and even: \[X(f)\in\mathbb{R},\ X(-f)=-X(f).\]</p>
+      <p>If \(x(t)\) is <b>real and even</b>, then \(X(f)\) is real and even: \[X(-f)=-X(f).\]</p>
     </div>
     <div class="tile">
-      <p>If \(x(t)\) is <b>real and odd</b>, then \(X(f)\) is imaginary and odd: \[X(f)\in\mathbb{C}, X(-f)=-X(f).\]</p>
+      <p>If \(x(t)\) is <b>real and odd</b>, then \(X(f)\) is imaginary and odd: \[X(-f)=-X(f).\]</p>
     </div>
   </div>
   <p>For real-valued \(x(t)\), it Fourier transform satisfies \(|X(-f)|=|X(f)|\) (even magnitude) and 
@@ -711,8 +711,8 @@ Then, we have the following properties.
       <p class="sub">Symmetry relation between the time and frequency domains</p>
     </div>
     <div class="tile"><h3>Time shifting</h3>
-      <p>The Fourier transform of \(x(t-t_0)\) is \(X(f)e^{-j2\pi ft_0}\).</p>
-      <p class="sub">Delaying \(x(t)\) leads to a phase shift in \(X(f)\).</p>
+      <p>The Fourier transform of a delayed signal \(x(t-t_0)\) is \(X(f)e^{-j2\pi ft_0}\).</p>
+      <p class="sub">Delay in time is phase shift in frequency.</p>
     </div>
     <div class="tile"><h3>Time scaling</h3>
       <p>The Fourier transform of \(x(at)\) is \(\frac{1}{|a|}X(\frac{f}{a})\).</p>
