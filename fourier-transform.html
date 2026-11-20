@@ -943,17 +943,55 @@ function updateShift(){
         let z=PI*f/a,
             sinc=Math.abs(z)<1e-9?1:Math.sin(z)/z,
             magnitude=Math.abs(sinc/a),
-            phase=-2*PI*f*t0;
-
-        // A negative sinc value contributes an additional phase of π.
-        if(sinc<0) phase+=PI;
-
-        // Wrap phase to [-π, π], representing -π as +π.
-        phase=((phase+PI)%(2*PI)+2*PI)%(2*PI)-PI;
-        if(Math.abs(phase+PI)<1e-8) phase=PI;
-
-        return {magnitude,phase,sinc};
+            rawPhase=-2*PI*f*t0 + (sinc<0 ? PI : 0);
+        return {magnitude,rawPhase,sinc};
       });
+
+  // Phase is undefined at spectral nulls. Unwrap reliable samples first,
+  // then interpolate through low-magnitude regions to suppress numerical
+  // fluctuations caused by sign changes near sinc zeros.
+  let phaseThreshold=Math.max(...spec.map(s=>s.magnitude))*0.025,
+      reliable=[];
+  spec.forEach((s,i)=>{if(s.magnitude>=phaseThreshold) reliable.push(i);});
+
+  let unwrapped=new Array(spec.length);
+  if(reliable.length){
+    let first=reliable[0];
+    unwrapped[first]=spec[first].rawPhase;
+    for(let k=1;k<reliable.length;k++){
+      let i=reliable[k],prev=reliable[k-1],v=spec[i].rawPhase;
+      while(v-unwrapped[prev]>PI) v-=2*PI;
+      while(v-unwrapped[prev]<-PI) v+=2*PI;
+      unwrapped[i]=v;
+    }
+
+    // Interpolate between reliable samples on either side of each null.
+    for(let k=0;k<reliable.length-1;k++){
+      let left=reliable[k],right=reliable[k+1];
+      for(let i=left+1;i<right;i++){
+        let q=(freqs[i]-freqs[left])/(freqs[right]-freqs[left]);
+        unwrapped[i]=unwrapped[left]+q*(unwrapped[right]-unwrapped[left]);
+      }
+    }
+
+    // Extrapolate smoothly if the plotted range starts or ends near a null.
+    if(reliable.length>1){
+      let first2=reliable[1],last=reliable[reliable.length-1],last2=reliable[reliable.length-2];
+      let leftSlope=(unwrapped[first2]-unwrapped[first])/(freqs[first2]-freqs[first]);
+      for(let i=first-1;i>=0;i--) unwrapped[i]=unwrapped[first]+leftSlope*(freqs[i]-freqs[first]);
+      let rightSlope=(unwrapped[last]-unwrapped[last2])/(freqs[last]-freqs[last2]);
+      for(let i=last+1;i<spec.length;i++) unwrapped[i]=unwrapped[last]+rightSlope*(freqs[i]-freqs[last]);
+    }else{
+      for(let i=0;i<spec.length;i++) if(unwrapped[i]===undefined) unwrapped[i]=unwrapped[first];
+    }
+  }else{
+    unwrapped.fill(0);
+  }
+
+  let phaseValues=unwrapped.map(v=>{
+    let wrapped=((v+PI)%(2*PI)+2*PI)%(2*PI)-PI;
+    return Math.abs(wrapped+PI)<1e-8?PI:wrapped;
+  });
 
   // Magnitude plot
   let magCanvas=$('shiftFreq'),
@@ -998,7 +1036,7 @@ function updateShift(){
   // trace reaches one edge and resumes at the opposite edge.
   let previous=null;
   spec.forEach((s,i)=>{
-    let point={x:pm.X(freqs[i]), y:s.phase};
+    let point={x:pm.X(freqs[i]), y:phaseValues[i]};
     if(previous){
       let delta=point.y-previous.y;
       if(delta>PI){
