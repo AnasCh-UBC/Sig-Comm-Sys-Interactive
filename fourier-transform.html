@@ -554,7 +554,7 @@ header{align-items:center}
 .pair-table td:first-child{width:38%}
 .legend-row{display:flex;gap:14px;flex-wrap:wrap;font-size:.82rem;color:var(--mut);margin:7px 0}
 .legend-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
-@media(max-width:650px){.ft-two{grid-template-columns:1fr}.ft-controls label{width:100%;justify-content:space-between}.ft-controls input[type=range]{width:45%}.pair-table{font-size:.78rem}.pair-table th,.pair-table td{padding:6px}}
+@media(max-width:650px){.ft-two{grid-template-columns:1fr}#shiftScaleDemo .ft-panel:first-child{grid-row:auto}.ft-controls label{width:100%;justify-content:space-between}.ft-controls input[type=range]{width:45%}.pair-table{font-size:.78rem}.pair-table th,.pair-table td{padding:6px}}
 </style>
 <script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]},svg:{fontCache:'global'}};</script><script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 </head>
@@ -728,23 +728,18 @@ Then, we have the following properties.
       <b id="scaleAVal">1.0</b>
     </label>
   </div>
-  <div class="ft-two">
-    <div class="ft-panel">
+  <div class="ft-two" style="grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto auto;align-items:stretch">
+    <div class="ft-panel" style="grid-row:span 2">
       <b>Time domain: \(x(a(t-t_0))\)</b>
-      <canvas id="shiftTime" class="ft-canvas" width="600" height="220"></canvas>
+      <canvas id="shiftTime" class="ft-canvas" width="600" height="380"></canvas>
     </div>
     <div class="ft-panel">
-      <b>Frequency domain: magnitude and phase</b>
-      <div>
-        <div>
-          <small>Magnitude</small>
-          <canvas id="shiftFreq" class="ft-canvas" width="600" height="180"></canvas>
-        </div>
-        <div>
-          <small>Phase</small>
-          <canvas id="shiftPhase" class="ft-canvas" width="600" height="180"></canvas>
-        </div>
-      </div>
+      <b>Frequency-domain magnitude</b>
+      <canvas id="shiftFreq" class="ft-canvas" width="600" height="180"></canvas>
+    </div>
+    <div class="ft-panel">
+      <b>Frequency-domain phase</b>
+      <canvas id="shiftPhase" class="ft-canvas" width="600" height="180"></canvas>
     </div>
   </div>
   <p class="ft-readout" id="shiftReadout"></p>
