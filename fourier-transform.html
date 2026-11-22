@@ -647,14 +647,14 @@ header{align-items:center}
 </div>
 
 <div class="grid">
-  <div class="callout"><h3>Exercise: Rectangular pulse</h3>
+  <div class="callout"><h3>Practice 1.1: Rectangular pulse</h3>
     Show that for a rectangular pulse \(x(t)=\Pi\left(\frac{t}{\tau}\right)\), the Fourier transform is \(X(f)=\tau\,\operatorname{sinc}(f\tau).\)
   </div>
-  <div class="callout"><h3>Exercise: Unit pulse</h3>
+  <div class="callout"><h3>Practice 1.2: Unit impulse</h3>
     Show that for \(x(t)=\delta(t)\), \(X(f)=1\); and that for \(x(t)=1\), \(X(f)=\delta(f)\).
   </div>    
 </div>
-<div class="callout"><h3>Exercise: Sine-pulse</h3>
+<div class="callout"><h3>Practice 1.3: Sine-pulse</h3>
   Show that for the real-odd signal \(x(t)=\sin(t)\Pi\left(\frac{t}{\tau}\right)\), the Fourier transform is 
   \[X(f)=\frac{\sin\!\left((2\pi f-1)\tau/2\right)}{j(2\pi f-1)}-\frac{\sin\!\left((2\pi f+1)\tau/2\right)}{j(2\pi f+1)}.\]
 </div>
@@ -705,6 +705,12 @@ Then, we have the following properties.
     \(\angle X(-f)=-\angle X(f)\) (odd phase) where the phase is defined.</p>
   <p class="sub">These properties are helpful for validating your calculated Fourier transform. </p>
 </div>
+<div class="card"><h3>Examples</h3> 
+  The signal in practice 1.1 is real and even, and its spectrum is real and even. 
+  The signal in practice 1.3 is real and odd, and its spectrum is purely imaginary and odd. 
+  <p class="sub">Check the demo below for more examples.</p>
+</div>
+
 <div class="ft-demo" id="symmetryDemo">
   <h3>Interactive 2.1: Symmetry of Fourier transforms</h3>
   <div class="ft-controls"><label>Signal symmetry <select id="symType"><option value="even">Real and even</option><option value="odd">Real and odd</option><option value="general">Real, neither even nor odd</option></select></label></div>
@@ -923,7 +929,24 @@ ctx.textAlign = 'left';
 ctx.textBaseline = 'middle';
 ctx.fillText('Transform', 8, 18);
 ctx.restore();
-mm.xmin=-6;mm.xmax=6;for(let [key,col] of [['re','#55c8f2'],['im','#ff6b78']]){ctx.strokeStyle=col;ctx.lineWidth=2;ctx.beginPath();vals.forEach((v,i)=>{let px=mm.X(freqs[i]),py=mm.Y(v[key]);if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);});ctx.stroke();}$('symReadout').textContent=type==='even'?'For a real-even signal, X(f) is real and even; the imaginary part is zero (up to numerical error).':type==='odd'?'For a real-odd signal, X(f) is imaginary and odd; the real part is zero (up to numerical error).':'For a real signal without even or odd symmetry, X(-f)=X*(f): the real part is even and the imaginary part is odd.';}
+mm.xmin=-6;mm.xmax=6;for(let [key,col] of [['re','#55c8f2'],['im','#ff6b78']]){ctx.strokeStyle=col;ctx.lineWidth=2;ctx.beginPath();vals.forEach((v,i)=>{let px=mm.X(freqs[i]),py=mm.Y(v[key]);if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);});ctx.stroke();}
+let equation =
+  type === 'even'
+    ? 'x(t) = e^{-t²}'
+    : type === 'odd'
+      ? 'x(t) = t e^{-t²}'
+      : 'x(t) = { e^{-t²},  t ≥ 0;  0.45 e^{-t²},  t < 0 }';
+
+let description =
+  type === 'even'
+    ? 'Real and even: X(f) is real and even; its imaginary part is zero (up to numerical error).'
+    : type === 'odd'
+      ? 'Real and odd: X(f) is imaginary and odd; its real part is zero (up to numerical error).'
+      : 'Real, but neither even nor odd: the real part of X(f) is even and the imaginary part is odd.';
+
+$('symReadout').innerHTML =
+  `<strong>${equation}</strong><br>${description}`;
+}
 $('symType').addEventListener('change',updateSym);updateSym();
 
 // 2.2 Shift and scale of a rectangular pulse
