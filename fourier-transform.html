@@ -759,7 +759,7 @@ Then, we have the following properties.
 
   <div class="ft-two" style="grid-template-columns:repeat(2,minmax(0,1fr));align-items:start">
     <div class="ft-panel">
-      <b>Time domain: real and imaginary parts</b>
+      <b>Time domain: real (blue) and imaginary (red) parts</b>
       <canvas id="shiftTime" class="ft-canvas" width="600" height="368"></canvas>
     </div>
 
@@ -1064,12 +1064,12 @@ function updateShift(){
       return;
     }
 
-    if(previousPhase !== null){
-      while(phase-previousPhase > PI) phase -= 2*PI;
-      while(phase-previousPhase < -PI) phase += 2*PI;
-    }
+    //if(previousPhase !== null){
+    //  while(phase-previousPhase > PI) phase -= 2*PI;
+    //  while(phase-previousPhase < -PI) phase += 2*PI;
+    //}
 
-    phaseValues.push(phase);
+    phaseValues.push(((phase+PI)%(2*PI))-PI);
     previousPhase = phase;
   });
 
