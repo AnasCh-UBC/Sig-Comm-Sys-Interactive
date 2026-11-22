@@ -738,30 +738,42 @@ Then, we have the following properties.
 </div>
 
 <div class="ft-demo" id="shiftScaleDemo">
-  <h3>Interactive 2.2: Time shifting and time scaling</h3>
+  <h3>Interactive 2.2: Time shifting, scaling, and modulation</h3>
+
   <div class="ft-controls">
-    <label>Time shift \(t_0\) 
+    <label>Time shift \(t_0\)
       <input id="shiftT0" type="range" min="-1.5" max="1.5" step="0.1" value="0.5">
       <b id="shiftT0Val">0.5</b>
     </label>
-    <label>Scale \(a\) 
+
+    <label>Scale \(a\)
       <input id="scaleA" type="range" min="0.5" max="2.5" step="0.1" value="1">
       <b id="scaleAVal">1.0</b>
     </label>
+
+    <label>Modulation frequency \(f_0\) (Hz)
+      <input id="modFreq" type="range" min="-4" max="4" step="0.1" value="0">
+      <b id="modFreqVal">0.0</b>
+    </label>
   </div>
+
   <div class="ft-two" style="grid-template-columns:repeat(2,minmax(0,1fr));align-items:start">
     <div class="ft-panel">
-      <b>Time domain: \(x(a(t-t_0))\)</b>
+      <b>Time domain: real and imaginary parts</b>
       <canvas id="shiftTime" class="ft-canvas" width="600" height="368"></canvas>
     </div>
+
     <div class="ft-panel">
       <b>Frequency domain: magnitude (top) and phase (bottom)</b>
       <div style="display:grid;grid-template-columns:1fr;gap:8px">
-        <canvas id="shiftFreq" class="ft-canvas" width="600" height="180" aria-label="Frequency-domain magnitude spectrum"></canvas>
-        <canvas id="shiftPhase" class="ft-canvas" width="600" height="180" aria-label="Frequency-domain phase spectrum"></canvas>
+        <canvas id="shiftFreq" class="ft-canvas" width="600" height="180"
+          aria-label="Frequency-domain magnitude spectrum"></canvas>
+        <canvas id="shiftPhase" class="ft-canvas" width="600" height="180"
+          aria-label="Frequency-domain phase spectrum"></canvas>
       </div>
     </div>
   </div>
+
   <p class="ft-readout" id="shiftReadout"></p>
 </div>
   
@@ -784,9 +796,9 @@ Then, we have the following properties.
   </div>
 </div>
 <div class="card"><h3>Examples</h3>
-<p>The Fourier transform of \(\Pi(t)+\frac{1}{2}\delta(t)\) is \(\sinc(f)+\frac{1}{2}\) (using linearity).</p>
-<p>Since the Fourier transform of \(\Pi(t)\) is \(\sinc(f)\), the Fourier transform of \(\sinc(t)\) is \(\Pi(f)\) (using duality).</p>
-<p>Since \(\Lambda(t)=\Pi(t)\circledast\Pi(t)\), the Fourier transform of \(\Lambda(t)\) is \(\sinc^2(f)\) (using the convolution property).</p>
+<p>The Fourier transform of \(\Pi(t)+\frac{1}{2}\delta(t)\) is \(\text{sinc}(f)+\frac{1}{2}\) (using linearity).</p>
+<p>Since the Fourier transform of \(\Pi(t)\) is \(\text{sinc}(f)\), the Fourier transform of \(\text{sinc}(t)\) is \(\Pi(f)\) (using duality).</p>
+<p>Since \(\Lambda(t)=\Pi(t)\circledast\Pi(t)\), the Fourier transform of \(\Lambda(t)\) is \(\text{sinc}^2(f)\) (using the convolution property).</p>
 </div>
 
 <div class="card"><h3>Differentiation and integration</h3>
@@ -807,7 +819,7 @@ Then, we have the following properties.
 </div>
 <div class="card"><h3>Examples</h3>
 <p>The signal \[x(t)=\begin{cases}-1,& -1\leq t\lt 0,\\ 1,& 0\leq t\lt 1,\\0,& \text{otherwise}\end{cases}\] is the 
-  time derivative of \(\Lambda(t)\). Therefore, its Fourier transform is \(j2\pi \sinc^2(f)\) (by the time-differntiation property).
+  time derivative of \(\Lambda(t)\). Therefore, its Fourier transform is \(j2\pi \text{sinc}^2(f)\) (by the time-differntiation property).
 </p>
 </div>
 
@@ -946,7 +958,7 @@ let equation =
     ? 'x(t) = exp(-t²)'
     : type === 'odd'
       ? 'x(t) = t exp(-t²)'
-      : 'x(t) = (1-0.55u(t)) exp(-t²)';
+      : 'x(t) = (0.45+0.55u(t)) exp(-t²)';
 
 let description =
   type === 'even'
@@ -960,121 +972,203 @@ $('symReadout').innerHTML =
 }
 $('symType').addEventListener('change',updateSym);updateSym();
 
-// 2.2 Shift and scale of a rectangular pulse
+// 2.2 Time shifting, scaling, and complex exponential modulation
 function updateShift(){
-  let t0=+$('shiftT0').value,
-      a=+$('scaleA').value;
 
-  $('shiftT0Val').textContent=t0.toFixed(1);
-  $('scaleAVal').textContent=a.toFixed(1);
+  let t0 = +$('shiftT0').value,
+      a = +$('scaleA').value,
+      f0 = +$('modFreq').value;
 
-  // Time-domain signal
-  let sig=t=>Math.abs(a*(t-t0))<=.5?1:0,
-      c=$('shiftTime'),
-      m=plot(c.getContext('2d'),c.width,c.height,-3,3,-.15,1.25,.5,.5,'t','x(t)');
+  $('shiftT0Val').textContent = t0.toFixed(1);
+  $('scaleAVal').textContent = a.toFixed(1);
+  $('modFreqVal').textContent = f0.toFixed(1);
 
-  m.xmin=-3;
-  m.xmax=3;
-  curve(c.getContext('2d'),c.width,c.height,m,sig,'#55c8f2');
+  // Original rectangular pulse
+  let pulse = t => Math.abs(a*(t-t0)) <= .5 ? 1 : 0;
 
-  // Fourier transform of the shifted and scaled rectangular pulse
-  let freqs=Array.from({length:161},(_,i)=>-8+i*.1),
-      spec=freqs.map(f=>{
-        let z=PI*f/a,
-            sinc=Math.abs(z)<1e-9?1:Math.sin(z)/z,
-            magnitude=Math.abs(sinc/a),
-            phase=-2*PI*f*t0 + (sinc<0 ? PI : 0);
+  // Complex-modulated signal:
+  // x_m(t) = x(a(t-t0)) exp(j2πf0t)
 
-        return {magnitude,phase};
-      });
+  let realSignal = t => pulse(t)*Math.cos(2*PI*f0*t),
+      imagSignal = t => pulse(t)*Math.sin(2*PI*f0*t);
 
-  // Unwrap phase by adding/subtracting 2π to maintain continuity
-  let phaseValues=[];
+  // Time-domain plot
 
-  spec.forEach((s,i)=>{
-    let phase=s.phase;
+  let c = $('shiftTime'),
+      ctx = c.getContext('2d'),
+      m = plot(ctx,c.width,c.height,-3,3,-1.25,1.25,.5,.5,'t','x_m(t)');
 
-    //if(i>0){
-      //let previous=phaseValues[i-1];
+  m.xmin = -3;
+  m.xmax = 3;
 
-      //while(phase-previous>PI) phase-=2*PI;
-      //while(phase-previous< -PI) phase+=2*PI;
+  curve(ctx,c.width,c.height,m,realSignal,'#55c8f2');
+  curve(ctx,c.width,c.height,m,imagSignal,'#ff6b78');
 
-    //}
 
-    phaseValues.push(phase%(2*PI)-PI);
+  // Original Fourier transform:
+  // X(f) = (1/a) sinc(f/a) exp(-j2πft0)
+
+  function originalFT(f){
+
+    let z = PI*f/a,
+        sinc = Math.abs(z)<1e-9 ? 1 : Math.sin(z)/z,
+        amplitude = sinc/a,
+        angle = -2*PI*f*t0;
+
+    return {
+      re: amplitude*Math.cos(angle),
+      im: amplitude*Math.sin(angle)
+    };
+  }
+
+
+  // Modulation property:
+  // x(t) exp(j2πf0t) <-> X(f-f0)
+
+  let freqs = Array.from(
+    {length:321},
+    (_,i) => -8+i*.05
+  );
+
+  let spec = freqs.map(f => {
+
+    let X = originalFT(f-f0);
+
+    return {
+      re: X.re,
+      im: X.im,
+      magnitude: Math.sqrt(X.re*X.re+X.im*X.im),
+      phase: Math.atan2(X.im,X.re)
+    };
   });
 
-  // Magnitude plot
-  let magCanvas=$('shiftFreq'),
-      magCtx=magCanvas.getContext('2d'),
-      max=Math.max(.1,...spec.map(s=>s.magnitude))*1.15,
-      mm=plot(magCtx,magCanvas.width,magCanvas.height,-8,8,0,max,2,max/4,'f (Hz)','|X(f)|');
 
-  mm.xmin=-8;
-  mm.xmax=8;
+  // Phase values
+
+  let phaseValues = [],
+      maxMagnitude = Math.max(...spec.map(s=>s.magnitude)),
+      threshold = maxMagnitude*1e-4,
+      previousPhase = null;
+
+  spec.forEach(s => {
+
+    let phase = s.phase;
+
+    if(s.magnitude < threshold){
+      phaseValues.push(previousPhase === null ? 0 : previousPhase);
+      return;
+    }
+
+    if(previousPhase !== null){
+      while(phase-previousPhase > PI) phase -= 2*PI;
+      while(phase-previousPhase < -PI) phase += 2*PI;
+    }
+
+    phaseValues.push(phase);
+    previousPhase = phase;
+  });
+
+
+  // Magnitude spectrum
+
+  let magCanvas = $('shiftFreq'),
+      magCtx = magCanvas.getContext('2d'),
+      max = Math.max(.1,...spec.map(s=>s.magnitude))*1.15,
+
+      mm = plot(
+        magCtx,magCanvas.width,magCanvas.height,
+        -8,8,0,max,2,max/4,
+        'f (Hz)','|X_m(f)|'
+      );
+
+  mm.xmin = -8;
+  mm.xmax = 8;
+
   magCtx.save();
   magCtx.beginPath();
-  magCtx.rect(mm.L,mm.T,magCanvas.width-mm.L-mm.R,magCanvas.height-mm.T-mm.B);
+  magCtx.rect(mm.L,mm.T,
+    magCanvas.width-mm.L-mm.R,
+    magCanvas.height-mm.T-mm.B);
   magCtx.clip();
-  magCtx.strokeStyle='#55c8f2';
-  magCtx.lineWidth=2;
+
+  magCtx.strokeStyle = '#55c8f2';
+  magCtx.lineWidth = 2;
   magCtx.beginPath();
+
   spec.forEach((s,i)=>{
-    let px=mm.X(freqs[i]),py=mm.Y(s.magnitude);
-    if(i===0)magCtx.moveTo(px,py);
+    let px = mm.X(freqs[i]),
+        py = mm.Y(s.magnitude);
+
+    if(i===0) magCtx.moveTo(px,py);
     else magCtx.lineTo(px,py);
   });
+
   magCtx.stroke();
   magCtx.restore();
 
-  // Unwrapped phase plot
-  let phaseCanvas=$('shiftPhase'),
-      phaseCtx=phaseCanvas.getContext('2d'),
-      phaseMin=Math.min(...phaseValues),
-      phaseMax=Math.max(...phaseValues),
-      phasePad=Math.max(.5,(phaseMax-phaseMin)*.1),
-      yMin=phaseMin-phasePad,
-      yMax=phaseMax+phasePad,
-      pm=plot(
-        phaseCtx,
-        phaseCanvas.width,
-        phaseCanvas.height,
-        -8,8,
-        yMin,yMax,
-        2,(yMax-yMin)/4,
-        'f (Hz)','∠X(f)'
+
+  // Phase spectrum
+
+  let phaseCanvas = $('shiftPhase'),
+      phaseCtx = phaseCanvas.getContext('2d'),
+      phaseMin = Math.min(...phaseValues),
+      phaseMax = Math.max(...phaseValues),
+      phasePad = Math.max(.5,(phaseMax-phaseMin)*.1),
+      yMin = phaseMin-phasePad,
+      yMax = phaseMax+phasePad,
+
+      pm = plot(
+        phaseCtx,phaseCanvas.width,phaseCanvas.height,
+        -8,8,yMin,yMax,2,(yMax-yMin)/4,
+        'f (Hz)','∠X_m(f)'
       );
 
-  pm.xmin=-8;
-  pm.xmax=8;
+  pm.xmin = -8;
+  pm.xmax = 8;
+
   phaseCtx.save();
   phaseCtx.beginPath();
-  phaseCtx.rect(pm.L,pm.T,phaseCanvas.width-pm.L-pm.R,phaseCanvas.height-pm.T-pm.B);
+  phaseCtx.rect(pm.L,pm.T,
+    phaseCanvas.width-pm.L-pm.R,
+    phaseCanvas.height-pm.T-pm.B);
   phaseCtx.clip();
-  phaseCtx.strokeStyle='#ff6b78';
-  phaseCtx.lineWidth=2;
+
+  phaseCtx.strokeStyle = '#ff6b78';
+  phaseCtx.lineWidth = 2;
   phaseCtx.beginPath();
 
   phaseValues.forEach((phase,i)=>{
-    let px=pm.X(freqs[i]),
-        py=pm.Y(phase);
+    let px = pm.X(freqs[i]),
+        py = pm.Y(phase);
 
-    if(i===0)phaseCtx.moveTo(px,py);
+    if(i===0) phaseCtx.moveTo(px,py);
     else phaseCtx.lineTo(px,py);
   });
 
   phaseCtx.stroke();
   phaseCtx.restore();
 
-  $('shiftReadout').textContent=
-    `Time scaling by a = ${a.toFixed(1)} changes the spectral width by the reciprocal factor 1/a. The delay t₀ = ${t0.toFixed(1)} s changes the phase spectrum, while leaving the magnitude spectrum unchanged.`;
-}
 
-$('shiftT0').addEventListener('input',updateShift);
-$('scaleA').addEventListener('input',updateShift);
-updateShift();
+  // Readout
 
+  let equation = f0 === 0
+    ? 'x_m(t) = x(a(t − t₀))'
+    : `x_m(t) = x(a(t − t₀)) e^{j2π(${f0.toFixed(1)})t}`;
+
+  let explanation = f0 === 0
+    ? 'With f₀ = 0 Hz, there is no modulation. The original shifted and scaled pulse is displayed.'
+    : `Complex exponential modulation shifts the spectrum by f₀ = ${f0.toFixed(1)} Hz. The spectrum is X(f − f₀), with no change in its shape or magnitude.`;
+
+  $('shiftReadout').innerHTML =
+    `<strong>${equation}</strong><br>${explanation}`;
+  }
+
+
+  $('shiftT0').addEventListener('input',updateShift);
+  $('scaleA').addEventListener('input',updateShift);
+  $('modFreq').addEventListener('input',updateShift);
+
+  updateShift();
 
 // 4.1 Ideal filter response
 function updateFilter(){let type=$('filterType').value,w1=+$('filterW1').value,w2=Math.max(+$('filterW2').value,w1+.5);$('filterW1Val').textContent=w1.toFixed(1)+' Hz';$('filterW2Val').textContent=w2.toFixed(1)+' Hz';let H=f=>{let q=Math.abs(f);return type==='low'?(q<=w1?1:0):type==='high'?(q>=w1?1:0):(q>=w1&&q<=w2?1:0);};let can=$('filterH'),ctx=can.getContext('2d'),m=plot(ctx,can.width,can.height,-15,15,-.1,1.2,5,.5,'f (Hz)','|H(f)|');m.xmin=-15;m.xmax=15;ctx.strokeStyle='#55c8f2';ctx.lineWidth=2.5;ctx.beginPath();for(let i=0;i<=600;i++){let f=-15+i*.05,x=m.X(f),y=m.Y(H(f));if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.stroke();let X=f=>Math.exp(-Math.pow((Math.abs(f)-5)/2.2,2))+0.65*Math.exp(-Math.pow((Math.abs(f)-10)/1.2,2)),can2=$('filterXY'),c2=can2.getContext('2d'),max=1.9,m2=plot(c2,can2.width,can2.height,-15,15,0,max,5,.5,'f (Hz)','Magnitude');m2.xmin=-15;m2.xmax=15;for(let [fn,col] of [[X,'#ff6b78'],[f=>X(f)*H(f),'#55c8f2']]){c2.strokeStyle=col;c2.lineWidth=2;c2.beginPath();for(let i=0;i<=600;i++){let f=-15+i*.05,x=m2.X(f),y=m2.Y(fn(f));if(i===0)c2.moveTo(x,y);else c2.lineTo(x,y);}c2.stroke();}$('filterReadout').textContent=`The ${type==='low'?'lowpass':type==='high'?'highpass':'bandpass'} filter passes the selected frequency region. The red curve is the example input spectrum; the cyan curve is the output spectrum |Y(f)| = |H(f)X(f)|.`;}
