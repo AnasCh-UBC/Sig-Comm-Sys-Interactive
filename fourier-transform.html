@@ -783,7 +783,7 @@ Then, we have the following properties.
     </div>
   </div>
 </div>
-<div><h3>Examples:</h3>
+<div class="card"><h3>Examples</h3>
 <p>The Fourier transform of \(\Pi(t)+\frac{1}{2}\delta(t)\) is \(\sinc(f)+\frac{1}{2}\) (using linearity).</p>
 <p>Since the Fourier transform of \(\Pi(t)\) is \(\sinc(f)\), the Fourier transform of \(\sinc(t)\) is \(\Pi(f)\) (using duality).</p>
 <p>Since \(\Lambda(t)=\Pi(t)\circledast\Pi(t)\), the Fourier transform of \(\Lambda(t)\) is \(\sinc^2(f)\) (using the convolution property).</p>
@@ -805,6 +805,12 @@ Then, we have the following properties.
     </div>
   </div>
 </div>
+<div class="card"><h3>Examples</h3>
+<p>The signal \[x(t)=\begin{cases}-1,& -1\leq t\lt 0,\\ 1,& 0\leq t\lt 1,\\0,& \text{otherwise}\end{cases}\] is the 
+  time derivative of \(\Lambda(t)\). Therefore, its Fourier transform is \(j2\pi \sinc^2(f)\) (by the time-differntiation property).
+</p>
+</div>
+
 <p class="small">These properties help in obtaining the Fourier transform of signals that would be more difficult to derive directly, 
   and simplify the analysis of LTI systems. 
 </p>
