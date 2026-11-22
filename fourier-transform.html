@@ -1030,7 +1030,7 @@ function updateShift(){
 
   let c = $('shiftTime'),
       ctx = c.getContext('2d'),
-      m = plot(ctx,c.width,c.height,-3,3,-1.25,1.25,.5,.5,'t','x_m(t)');
+      m = plot(ctx,c.width,c.height,-3,3,-1.25,1.25,.5,.5,'t','x(t)');
 
   m.xmin = -3;
   m.xmax = 3;
@@ -1112,7 +1112,7 @@ function updateShift(){
       mm = plot(
         magCtx,magCanvas.width,magCanvas.height,
         -8,8,0,max,2,max/4,
-        'f (Hz)','|X_m(f)|'
+        'f (Hz)','|X(f)|'
       );
 
   mm.xmin = -8;
@@ -1154,7 +1154,7 @@ function updateShift(){
       pm = plot(
         phaseCtx,phaseCanvas.width,phaseCanvas.height,
         -8,8,yMin,yMax,2,(yMax-yMin)/4,
-        'f (Hz)','∠X_m(f)'
+        'f (Hz)','∠X(f)'
       );
 
   pm.xmin = -8;
@@ -1405,36 +1405,23 @@ function updateExamples(){
     timeImpulse=.5;
 
     reasoning=`
-      <p><b>Step 1: Identify the individual signals.</b></p>
-      <p>The signal is a sum of two components:
+      <p><b>Step 1: Identify the individual signals.</b> 
+        The signal is a sum of two components:
       \\(\\Pi(t)\\) and \\(\\frac12\\delta(t)\\).</p>
 
-      <p><b>Step 2: Use the known Fourier transform pairs.</b></p>
-      <p>
-      \\[
-      \\Pi(t)\\longleftrightarrow\\operatorname{sinc}(f)
-      \\]
-      \\[
-      \\delta(t)\\longleftrightarrow 1
-      \\]
+      <p><b>Step 2: Use the known Fourier transform pairs.</b> \\(
+      \\Pi(t)\\longrightarrow\\operatorname{sinc}(f)\\) and \\(
+      \\delta(t)\\longrightarrow 1\\)
       </p>
 
-      <p><b>Step 3: Apply linearity.</b></p>
-      <p>The Fourier transform of a sum is the sum of the individual transforms, and constants are preserved.</p>
-
-      <p>
-      \\[
-      X(f)=\\operatorname{sinc}(f)+\\frac12
-      \\]
+      <p><b>Step 3: Apply linearity.</b> The Fourier transform of a sum is the sum of the individual transforms, and constants are preserved.</p>
       </p>
     `;
 
     result=`
-      \\[
-      \\boxed{\\Pi(t)+\\frac12\\delta(t)
-      \\longleftrightarrow
-      \\operatorname{sinc}(f)+\\frac12}
-      \\]
+      \\(
+      X(f)=\\operatorname{sinc}(f)+\\frac12
+      \\)
     `;
   }
 
@@ -1448,32 +1435,23 @@ function updateExamples(){
     freqRange=[-2,2,-.2,1.3];
 
     reasoning=`
-      <p><b>Step 1: Start with a known transform pair.</b></p>
-      <p>
-      \\[
+      <p><b>Step 1: Start with a known transform pair.</b> 
+      \\(
       \\Pi(t)\\longleftrightarrow\\operatorname{sinc}(f)
-      \\]
+      \\)
       </p>
 
-      <p><b>Step 2: Apply the duality property.</b></p>
-      <p>If \\(x(t)\\longleftrightarrow X(f)\\), then
-      \\(X(t)\\longleftrightarrow x(-f)\\).</p>
+      <p><b>Step 2: Apply the duality property.</b> 
+        If \\(x(t)\\longrightarrow X(f)\\), then
+      \\(X(t)\\longrightarrow x(-f)\\).</p>
 
-      <p><b>Step 3: Apply it to this pair.</b></p>
-      <p>Since the rectangular pulse is even, \\(\\Pi(-f)=\\Pi(f)\\).</p>
-
-      <p>
-      \\[
-      \\operatorname{sinc}(t)\\longleftrightarrow\\Pi(f)
-      \\]
-      </p>
+      <p><b>Step 3: Apply it to this pair.</b> Since the rectangular pulse is even, \\(\\Pi(-f)=\\Pi(f)\\).</p>
     `;
 
     result=`
-      \\[
-      \\boxed{\\operatorname{sinc}(t)
-      \\longleftrightarrow\\Pi(f)}
-      \\]
+      \\(
+      \\operatorname{sinc}(t)\\longrightarrow\\Pi(f)
+      \\)
     `;
   }
 
@@ -1487,35 +1465,25 @@ function updateExamples(){
     freqRange=[-4,4,-.2,1.3];
 
     reasoning=`
-      <p><b>Step 1: Express the triangular pulse as a convolution.</b></p>
-      <p>
-      \\[
+      <p><b>Step 1: Express the triangular pulse as a convolution.</b> \\(
       \\Lambda(t)=\\Pi(t)*\\Pi(t)
-      \\]
+      \\)
       </p>
 
-      <p><b>Step 2: Use the known transform pair.</b></p>
-      <p>
-      \\[
-      \\Pi(t)\\longleftrightarrow\\operatorname{sinc}(f)
-      \\]
+      <p><b>Step 2: Use the known transform pair.</b> 
+        \\(
+      \\Pi(t)\\longrightarrow\\operatorname{sinc}(f)
+      \\)
       </p>
 
-      <p><b>Step 3: Apply the convolution property.</b></p>
-      <p>Convolution in time corresponds to multiplication in frequency.</p>
-
-      <p>
-      \\[
-      X(f)=\\operatorname{sinc}(f)\\operatorname{sinc}(f)
-      \\]
-      </p>
+      <p><b>Step 3: Apply the convolution property.</b> 
+        Convolution in time corresponds to multiplication in frequency.</p>
     `;
 
     result=`
-      \\[
-      \\boxed{\\Lambda(t)
-      \\longleftrightarrow\\operatorname{sinc}^2(f)}
-      \\]
+    \\(
+      X(f)=\\operatorname{sinc}^2(f)
+      \\)
     `;
   }
 
