@@ -783,6 +783,11 @@ Then, we have the following properties.
     </div>
   </div>
 </div>
+<div><h3>Examples:</h3>
+<p>The Fourier transform of \(\Pi(t)+\frac{1}{2}\delta(t)\) is \(\sinc(f)+\frac{1}{2}\) (using linearity).</p>
+<p>Since the Fourier transform of \(\Pi(t)\) is \(\sinc(f)\), the Fourier transform of \(\sinc(t)\) is \(\Pi(f)\) (using duality).</p>
+<p>Since \(\Lambda(t)=\Pi(t)\circledast\Pi(t)\), the Fourier transform of \(\Lambda(t)\) is \(\sinc^2(f)\) (using the convolution property).</p>
+</div>
 
 <div class="card"><h3>Differentiation and integration</h3>
   <div class="grid">
@@ -932,10 +937,10 @@ ctx.restore();
 mm.xmin=-6;mm.xmax=6;for(let [key,col] of [['re','#55c8f2'],['im','#ff6b78']]){ctx.strokeStyle=col;ctx.lineWidth=2;ctx.beginPath();vals.forEach((v,i)=>{let px=mm.X(freqs[i]),py=mm.Y(v[key]);if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);});ctx.stroke();}
 let equation =
   type === 'even'
-    ? 'x(t) = e^{-t²}'
+    ? 'x(t) = exp(-t²)'
     : type === 'odd'
-      ? 'x(t) = t e^{-t²}'
-      : 'x(t) = { e^{-t²},  t ≥ 0;  0.45 e^{-t²},  t < 0 }';
+      ? 'x(t) = t exp(-t²)'
+      : 'x(t) = (1-0.55u(t)) exp(-t²)';
 
 let description =
   type === 'even'
