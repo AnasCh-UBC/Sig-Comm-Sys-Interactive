@@ -821,6 +821,11 @@ Then, we have the following properties.
 <p>The signal \[x(t)=\begin{cases}-1,& -1\leq t\lt 0,\\ 1,& 0\leq t\lt 1,\\0,& \text{otherwise}\end{cases}\] is the 
   time derivative of \(\Lambda(t)\). Therefore, its Fourier transform is \(j2\pi \text{sinc}^2(f)\) (by the time-differntiation property).
 </p>
+<p> The Fourier transform of \(x(t)=t\) is \(\frac{j}{2\pi}\frac{d}{df}\delta(f)\) (by the frequency-differentiation property)</p>
+<p>The signal \[x(t)=\begin{cases}0,& t\lt -\frac{1}{2},\\ t+\frac{1}{2},& -\frac{1}{2}\leq t t\leq \frac{1}{2},\\1,& \text{otherwise}\end{cases}\]
+  is the time-integral of \(\Pi(t)\). Therefore, its Fourier transform is 
+  \(\frac{\text{sinc}(f)}{j2\pi f}+\frac{1}{2}\delta(f)\) (by the time-integration property).
+</p>
 </div>
 
 <p class="small">These properties help in obtaining the Fourier transform of signals that would be more difficult to derive directly, 
