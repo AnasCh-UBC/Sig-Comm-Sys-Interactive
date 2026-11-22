@@ -751,7 +751,7 @@ Then, we have the following properties.
       <b id="scaleAVal">1.0</b>
     </label>
 
-    <label>Modulation frequency \(f_0\) (Hz)
+    <label>Modulation freq. \(f_0\)
       <input id="modFreq" type="range" min="-4" max="4" step="0.1" value="0">
       <b id="modFreqVal">0.0</b>
     </label>
@@ -795,10 +795,39 @@ Then, we have the following properties.
     </div>
   </div>
 </div>
-<div class="card"><h3>Examples</h3>
-<p>The Fourier transform of \(\Pi(t)+\frac{1}{2}\delta(t)\) is \(\text{sinc}(f)+\frac{1}{2}\) (using linearity).</p>
-<p>Since the Fourier transform of \(\Pi(t)\) is \(\text{sinc}(f)\), the Fourier transform of \(\text{sinc}(t)\) is \(\Pi(f)\) (using duality).</p>
-<p>Since \(\Lambda(t)=\Pi(t)\circledast\Pi(t)\), the Fourier transform of \(\Lambda(t)\) is \(\text{sinc}^2(f)\) (using the convolution property).</p>
+<div class="ft-demo" id="transformExamples">
+  <h3>Interactive: Applying Fourier transform properties</h3>
+
+  <div class="ft-controls">
+    <label>Select an example
+      <select id="exampleSignal">
+        <option value="linearity">Π(t) + ½δ(t)</option>
+        <option value="duality">sinc(t)</option>
+        <option value="convolution">Λ(t) = Π(t) * Π(t)</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="ft-two" style="grid-template-columns:repeat(2,minmax(0,1fr));align-items:start">
+
+    <div class="ft-panel">
+      <b>Time-domain signal</b>
+      <canvas id="exampleTime" class="ft-canvas" width="600" height="260"></canvas>
+    </div>
+
+    <div class="ft-panel">
+      <b>Fourier transform</b>
+      <canvas id="exampleFreq" class="ft-canvas" width="600" height="260"></canvas>
+    </div>
+
+  </div>
+
+  <div class="ft-panel" style="margin-top:12px">
+    <b>Reasoning</b>
+    <div id="exampleReasoning" class="ft-readout"></div>
+  </div>
+
+  <div class="ft-readout" id="exampleResult"></div>
 </div>
 
 <div class="card"><h3>Differentiation and integration</h3>
@@ -1157,12 +1186,13 @@ function updateShift(){
   // Readout
 
   let equation = f0 === 0
-    ? 'x_m(t) = x(a(t − t₀))'
-    : `x_m(t) = x(a(t − t₀)) e^{j2π(${f0.toFixed(1)})t}`;
+    ? 'x(t) = x(a(t − t₀))'
+    : `x(t) = x(a(t − t₀)) exp(j2π(${f0.toFixed(1)})t)`;
 
   let explanation = f0 === 0
     ? 'With f₀ = 0 Hz, there is no modulation. The original shifted and scaled pulse is displayed.'
-    : `Complex exponential modulation shifts the spectrum by f₀ = ${f0.toFixed(1)} Hz. The spectrum is X(f − f₀), with no change in its shape or magnitude.`;
+    : `Modulation by a complex sinusoid shifts the spectrum by f₀ = ${f0.toFixed(1)} Hz. 
+    The spectrum is X(f − f₀), with no change in its shape or magnitude.`;
 
   $('shiftReadout').innerHTML =
     `<strong>${equation}</strong><br>${explanation}`;
@@ -1184,4 +1214,343 @@ $('rcFreq').addEventListener('input',drawRC);drawRC();
 // Quiz behavior
  document.querySelectorAll('[data-quiz]').forEach(q=>{let fs=[...q.querySelectorAll('.quiz-question')],result=q.querySelector('.quiz-result');q.querySelector('[data-check]').addEventListener('click',()=>{let score=0,answered=0;fs.forEach(z=>{let a=z.querySelector('input:checked'),f=z.querySelector('.quiz-feedback');if(!a){f.textContent='Select an answer.';f.className='quiz-feedback incorrect';return;}answered++;let ok=a.value===z.dataset.answer;if(ok)score++;f.textContent=(ok?'Correct! ':'Not quite. ')+z.dataset.feedback;f.className='quiz-feedback '+(ok?'correct':'incorrect');});result.textContent=answered===fs.length?`Score: ${score}/${fs.length}`:`Answered ${answered}/${fs.length}`;});q.querySelector('[data-reset]').addEventListener('click',()=>{q.querySelectorAll('input').forEach(i=>i.checked=false);q.querySelectorAll('.quiz-feedback').forEach(f=>{f.textContent='';f.className='quiz-feedback';});result.textContent='';});});
 })();
+
+// Interactive Fourier transform examples
+
+(function(){
+
+const $ex = id => document.getElementById(id);
+
+const PI = Math.PI;
+
+
+// Signal definitions
+
+function rect(t){
+  return Math.abs(t) <= .5 ? 1 : 0;
+}
+
+function tri(t){
+  return Math.max(1-Math.abs(t),0);
+}
+
+function sinc(t){
+  if(Math.abs(t)<1e-10) return 1;
+  return Math.sin(PI*t)/(PI*t);
+}
+
+
+// Fourier transform definitions
+
+function sincF(f){
+  if(Math.abs(f)<1e-10) return 1;
+  return Math.sin(PI*f)/(PI*f);
+}
+
+
+// Draw a simple continuous curve
+
+function drawExamplePlot(canvas,fn,xMin,xMax,yMin,yMax,color,
+                         xLabel,yLabel,impulse){
+
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width;
+  const H = canvas.height;
+
+  ctx.clearRect(0,0,W,H);
+
+  const L=55,R=15,T=18,B=38;
+  const pw=W-L-R,ph=H-T-B;
+
+  const X=x=>L+(x-xMin)/(xMax-xMin)*pw;
+  const Y=y=>T+(yMax-y)/(yMax-yMin)*ph;
+
+  // Background
+  ctx.fillStyle='#111d2b';
+  ctx.fillRect(0,0,W,H);
+
+  // Grid
+  ctx.strokeStyle='#34485b';
+  ctx.lineWidth=1;
+
+  for(let i=0;i<=8;i++){
+    let x=L+i*pw/8;
+    ctx.beginPath();
+    ctx.moveTo(x,T);
+    ctx.lineTo(x,T+ph);
+    ctx.stroke();
+  }
+
+  for(let i=0;i<=4;i++){
+    let y=T+i*ph/4;
+    ctx.beginPath();
+    ctx.moveTo(L,y);
+    ctx.lineTo(L+pw,y);
+    ctx.stroke();
+  }
+
+  // Axes
+  ctx.strokeStyle='#eaf2f8';
+  ctx.lineWidth=1.2;
+
+  if(xMin<=0 && xMax>=0){
+    ctx.beginPath();
+    ctx.moveTo(X(0),T);
+    ctx.lineTo(X(0),T+ph);
+    ctx.stroke();
+  }
+
+  if(yMin<=0 && yMax>=0){
+    ctx.beginPath();
+    ctx.moveTo(L,Y(0));
+    ctx.lineTo(L+pw,Y(0));
+    ctx.stroke();
+  }
+
+  // Tick labels
+  ctx.fillStyle='#eaf2f8';
+  ctx.font='11px Arial';
+  ctx.textAlign='center';
+
+  for(let i=0;i<=4;i++){
+    let x=xMin+i*(xMax-xMin)/4;
+    ctx.fillText(x.toFixed(1),X(x),H-19);
+  }
+
+  ctx.textAlign='right';
+
+  for(let i=0;i<=4;i++){
+    let y=yMin+i*(yMax-yMin)/4;
+    ctx.fillText(y.toFixed(2),L-7,Y(y)+4);
+  }
+
+  // Signal curve
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(L,T,pw,ph);
+  ctx.clip();
+
+  ctx.strokeStyle=color;
+  ctx.lineWidth=2.4;
+  ctx.beginPath();
+
+  const N=1200;
+
+  for(let i=0;i<=N;i++){
+    let x=xMin+(xMax-xMin)*i/N;
+    let y=fn(x);
+
+    if(i===0) ctx.moveTo(X(x),Y(y));
+    else ctx.lineTo(X(x),Y(y));
+  }
+
+  ctx.stroke();
+
+  // Impulse marker
+  if(impulse){
+    let x=X(0);
+    ctx.strokeStyle='#ffb454';
+    ctx.lineWidth=3;
+    ctx.beginPath();
+    ctx.moveTo(x,Y(0));
+    ctx.lineTo(x,Y(impulse));
+    ctx.stroke();
+
+    ctx.fillStyle='#ffb454';
+    ctx.beginPath();
+    ctx.arc(x,Y(impulse),4,0,2*Math.PI);
+    ctx.fill();
+  }
+
+  ctx.restore();
+
+  // Axis labels
+  ctx.fillStyle='#eaf2f8';
+  ctx.font='12px Arial';
+  ctx.textAlign='center';
+  ctx.fillText(xLabel,L+pw/2,H-3);
+
+  ctx.save();
+  ctx.translate(14,T+ph/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillText(yLabel,0,0);
+  ctx.restore();
+}
+
+
+// Update selected example
+
+function updateExamples(){
+
+  let type=$ex('exampleSignal').value;
+
+  let timeCanvas=$ex('exampleTime');
+  let freqCanvas=$ex('exampleFreq');
+
+  let timeFn, freqFn;
+  let timeRange, freqRange;
+  let timeImpulse=null;
+
+  let reasoning='';
+  let result='';
+
+
+  if(type==='linearity'){
+
+    timeFn=t=>rect(t);
+    freqFn=f=>sincF(f)+.5;
+
+    timeRange=[-2,2,-.2,1.3];
+    freqRange=[-4,4,-.5,1.8];
+    timeImpulse=.5;
+
+    reasoning=`
+      <p><b>Step 1: Identify the individual signals.</b></p>
+      <p>The signal is a sum of two components:
+      \\(\\Pi(t)\\) and \\(\\frac12\\delta(t)\\).</p>
+
+      <p><b>Step 2: Use the known Fourier transform pairs.</b></p>
+      <p>
+      \\[
+      \\Pi(t)\\longleftrightarrow\\operatorname{sinc}(f)
+      \\]
+      \\[
+      \\delta(t)\\longleftrightarrow 1
+      \\]
+      </p>
+
+      <p><b>Step 3: Apply linearity.</b></p>
+      <p>The Fourier transform of a sum is the sum of the individual transforms, and constants are preserved.</p>
+
+      <p>
+      \\[
+      X(f)=\\operatorname{sinc}(f)+\\frac12
+      \\]
+      </p>
+    `;
+
+    result=`
+      \\[
+      \\boxed{\\Pi(t)+\\frac12\\delta(t)
+      \\longleftrightarrow
+      \\operatorname{sinc}(f)+\\frac12}
+      \\]
+    `;
+  }
+
+
+  else if(type==='duality'){
+
+    timeFn=t=>sinc(t);
+    freqFn=f=>rect(f);
+
+    timeRange=[-5,5,-.3,1.2];
+    freqRange=[-2,2,-.2,1.3];
+
+    reasoning=`
+      <p><b>Step 1: Start with a known transform pair.</b></p>
+      <p>
+      \\[
+      \\Pi(t)\\longleftrightarrow\\operatorname{sinc}(f)
+      \\]
+      </p>
+
+      <p><b>Step 2: Apply the duality property.</b></p>
+      <p>If \\(x(t)\\longleftrightarrow X(f)\\), then
+      \\(X(t)\\longleftrightarrow x(-f)\\).</p>
+
+      <p><b>Step 3: Apply it to this pair.</b></p>
+      <p>Since the rectangular pulse is even, \\(\\Pi(-f)=\\Pi(f)\\).</p>
+
+      <p>
+      \\[
+      \\operatorname{sinc}(t)\\longleftrightarrow\\Pi(f)
+      \\]
+      </p>
+    `;
+
+    result=`
+      \\[
+      \\boxed{\\operatorname{sinc}(t)
+      \\longleftrightarrow\\Pi(f)}
+      \\]
+    `;
+  }
+
+
+  else if(type==='convolution'){
+
+    timeFn=t=>tri(t);
+    freqFn=f=>sincF(f)*sincF(f);
+
+    timeRange=[-2,2,-.2,1.3];
+    freqRange=[-4,4,-.2,1.3];
+
+    reasoning=`
+      <p><b>Step 1: Express the triangular pulse as a convolution.</b></p>
+      <p>
+      \\[
+      \\Lambda(t)=\\Pi(t)*\\Pi(t)
+      \\]
+      </p>
+
+      <p><b>Step 2: Use the known transform pair.</b></p>
+      <p>
+      \\[
+      \\Pi(t)\\longleftrightarrow\\operatorname{sinc}(f)
+      \\]
+      </p>
+
+      <p><b>Step 3: Apply the convolution property.</b></p>
+      <p>Convolution in time corresponds to multiplication in frequency.</p>
+
+      <p>
+      \\[
+      X(f)=\\operatorname{sinc}(f)\\operatorname{sinc}(f)
+      \\]
+      </p>
+    `;
+
+    result=`
+      \\[
+      \\boxed{\\Lambda(t)
+      \\longleftrightarrow\\operatorname{sinc}^2(f)}
+      \\]
+    `;
+  }
+
+
+  // Draw time-domain and frequency-domain signals
+
+  drawExamplePlot(
+    timeCanvas,timeFn,
+    ...timeRange,
+    '#55c8f2','t','x(t)',timeImpulse
+  );
+
+  drawExamplePlot(
+    freqCanvas,freqFn,
+    ...freqRange,
+    '#ffb454','f (Hz)','X(f)',null
+  );
+
+  $ex('exampleReasoning').innerHTML=reasoning;
+  $ex('exampleResult').innerHTML=result;
+
+  // Render MathJax if available
+  if(window.MathJax && window.MathJax.typesetPromise){
+    MathJax.typesetPromise([
+      $ex('exampleReasoning'),
+      $ex('exampleResult')
+    ]);
+  }
+}
+
+
+$ex('exampleSignal').addEventListener('change',updateExamples);
+
+updateExamples();
+
+})();
+
 </script></body></html>
