@@ -796,7 +796,7 @@ Then, we have the following properties.
   </div>
 </div>
 <div class="ft-demo" id="transformExamples">
-  <h3>Interactive: Applying Fourier transform properties</h3>
+  <h3>Interactive: Applying linearity, duality, and convolution properties</h3>
 
   <div class="ft-controls">
     <label>Select an example
@@ -1437,7 +1437,7 @@ function updateExamples(){
     reasoning=`
       <p><b>Step 1: Start with a known transform pair.</b> 
       \\(
-      \\Pi(t)\\longleftrightarrow\\operatorname{sinc}(f)
+      \\Pi(t)\\longrightarrow\\operatorname{sinc}(f)
       \\)
       </p>
 
@@ -1445,7 +1445,8 @@ function updateExamples(){
         If \\(x(t)\\longrightarrow X(f)\\), then
       \\(X(t)\\longrightarrow x(-f)\\).</p>
 
-      <p><b>Step 3: Apply it to this pair.</b> Since the rectangular pulse is even, \\(\\Pi(-f)=\\Pi(f)\\).</p>
+      <p><b>Step 3: Apply it to this pair.</b> This implies that Fourier transform of \\(\\operatorname{sinc}(t)\\) is 
+      \\(\\Pi(-f)=\\Pi(f)\\).</p>
     `;
 
     result=`
@@ -1466,7 +1467,7 @@ function updateExamples(){
 
     reasoning=`
       <p><b>Step 1: Express the triangular pulse as a convolution.</b> \\(
-      \\Lambda(t)=\\Pi(t)*\\Pi(t)
+      \\Lambda(t)=\\Pi(t)\\circledast\\Pi(t)
       \\)
       </p>
 
