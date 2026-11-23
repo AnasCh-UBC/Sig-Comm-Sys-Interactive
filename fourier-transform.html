@@ -794,6 +794,8 @@ Then, we have the following properties.
       <p class="sub">Convolution in the time domain is multiplication in the frequency domain</p>
     </div>
   </div>
+  <p class="sub"><b>Note:</b> A similar convolution property holds for frequency domain convolution. 
+    The Fourier transform of \(x_1(t)x_2(t)\) is \(X_1(f)\circledast X_2(f)\).</p>
 </div>
 <div class="ft-demo" id="transformExamples">
   <h3>Interactive: Applying linearity, duality, and convolution properties</h3>
@@ -924,21 +926,24 @@ Then, we have the following properties.
 <tr><td>\(\Pi(t)\)</td><td>\(\operatorname{sinc}(f)\)</td></tr><tr><td>\(\operatorname{sinc}(t)\)</td><td>\(\Pi(f)\)</td></tr>
 <tr><td>\(\Lambda(t)\)</td><td>\(\operatorname{sinc}^2(f)\)</td></tr><tr><td>\(\operatorname{sinc}^2(t)\)</td><td>\(\Lambda(f)\)</td></tr>
 <tr><td>\(e^{-\alpha t}u(t),\;\alpha>0\)</td><td>\(\frac{1}{\alpha+j2\pi f}\)</td></tr>
-<tr><td>\(te^{-\alpha t}u(t)\)</td><td>\(\frac{1}{(\alpha+j2\pi f)^2}\)</td></tr>
+<tr><td>\(te^{-\alpha t}u(t),\;\alpha>0\)</td><td>\(\frac{1}{(\alpha+j2\pi f)^2}\)</td></tr>
 <tr><td>\(e^{-\alpha|t|}\)</td><td>\(\frac{2\alpha}{\alpha^2+(2\pi f)^2}\)</td></tr>
 <tr><td>\(e^{-\pi t^2}\)</td><td>\(e^{-\pi f^2}\)</td></tr>
-<tr><td>\(\operatorname{sign}(t)\)</td><td>\(\frac{1}{j\pi f}\) (principal value)</td></tr>
-<tr><td>\(1/t\)</td><td>\(-j\pi\operatorname{sign}(f)\) (principal value)</td></tr>
-<tr><td>\(u(t)\)</td><td>\(\frac12\delta(f)+\frac{1}{j2\pi f}\) (principal value)</td></tr>
-<tr><td>\(\sum_n\delta(t-nT_0)\)</td><td>\(\frac1{T_0}\sum_n\delta(f-n/T_0)\)</td></tr>
+<tr><td>\(\operatorname{sign}(t)\)</td><td>\(\frac{1}{j\pi f}\)</td></tr>
+<tr><td>\(1/t\)</td><td>\(-j\pi\operatorname{sign}(f)\)</td></tr>
+<tr><td>\(u(t)\)</td><td>\(\frac12\delta(f)+\frac{1}{j2\pi f}\)</td></tr>
+<tr><td>\(\sum_{n=-\infty}^{\infty}\delta(t-nT_0)\)</td><td>\(\frac1{T_0}\sum_{n=-\infty}^{\infty}\delta(f-n/T_0)\)</td></tr>
 </tbody></table></div>
-<p class="sub">The impulse and step transforms are understood in the generalized-function (distribution) sense.</p></div>
-<div class="card"><h3>Useful transform relations</h3><div style="overflow-x:auto"><table class="pair-table"><thead><tr><th>Time domain</th><th>Frequency domain</th></tr></thead><tbody>
-<tr><td>\(a x_1(t)+b x_2(t)\)</td><td>\(aX_1(f)+bX_2(f)\)</td></tr><tr><td>\(X(t)\)</td><td>\(x(-f)\) (duality)</td></tr>
-<tr><td>\(x(at)\)</td><td>\(\frac1{|a|}X(f/a)\)</td></tr><tr><td>\(x(t-t_0)\)</td><td>\(e^{-j2\pi ft_0}X(f)\)</td></tr>
-<tr><td>\(e^{j2\pi f_0t}x(t)\)</td><td>\(X(f-f_0)\)</td></tr><tr><td>\(x(t)*y(t)\)</td><td>\(X(f)Y(f)\)</td></tr>
-<tr><td>\(x(t)y(t)\)</td><td>\(X(f)*Y(f)\)</td></tr><tr><td>\(\frac{d^n x}{dt^n}\)</td><td>\((j2\pi f)^nX(f)\)</td></tr>
-<tr><td>\(t^n x(t)\)</td><td>\((j/2\pi)^n d^nX/df^n\)</td></tr><tr><td>\(\int_{-\infty}^{t}x(\tau)d\tau\)</td><td>\(X(f)/(j2\pi f)+X(0)\delta(f)/2\)</td></tr>
+<p class="sub">The impulse and step transforms are understood in the generalized-function (distribution) sense.</p>
+</div>
+
+<div class="card"><h3>Summary of useful transform relations</h3><div style="overflow-x:auto"><table class="pair-table"><thead><tr><th>Time domain</th><th>Frequency domain</th></tr></thead><tbody>
+<tr><td>\(a x_1(t)+b x_2(t)\)</td><td>\(aX_1(f)+bX_2(f)\) (linearity)</td></tr><tr><td>\(X(t)\)</td><td>\(x(-f)\) (duality)</td></tr>
+<tr><td>\(x(at)\)</td><td>\(\frac1{|a|}X(\frac{f}{a})\) (time-scaling)</td></tr><tr><td>\(x(t-t_0)\)</td><td>\(e^{-j2\pi ft_0}X(f)\) (time-shifting)</td></tr>
+<tr><td>\(e^{j2\pi f_0t}x(t)\)</td><td>\(X(f-f_0)\) (modulation/frequency-shifting)</td></tr><tr><td>\(x_1(t)\circledast x_2(t)\)</td><td>\(X_1(f)X_2(f)\) (time-convolution)</td></tr>
+<tr><td>\(x_1(t)x_2(t)\)</td><td>\(X_1(f)\circledast X_2(f)\) (time-multiplication)</td></tr><tr><td>\(\frac{d^n x}{dt^n}\)</td><td>\((j2\pi f)^nX(f)\) (time-differentiation)</td></tr>
+<tr><td>\(t^n x(t)\)</td><td>\((\frac{j}{2\pi})^n \frac{d^n}{df^n}X(f)\) (frequency-differentiation)</td></tr>
+<tr><td>\(\int_{-\infty}^{t}x(\tau)d\tau\)</td><td>\(\frac{X(f)}{j2\pi f}+\frac{X(0)\delta(f)}{2}\) (time-integration)</td></tr>
 </tbody></table></div></div>
 
 <h2 id="lti"><small>4</small>Fourier transform and LTI systems</h2>
