@@ -970,11 +970,11 @@ Then, we have the following properties.
 
 <div class="ft-demo" id="filterDemo">
   <h3>Interactive 4.1: Ideal lowpass, highpass, and bandpass filters</h3>
-  <p class="sub">The red curve is an example input magnitude spectrum; 
-    the cyan curve is the output magnitude spectrum |Y(f)| = |H(f)X(f)| 
-    corresponding to the selected filter and its parameters.</p>
+  <p class="sub">Left: Filter magnitude spectrum</p>
+  <p class="sub"> Right: Example input magnitude spectrum |X(f)| and its corresponding output magnitude spectrum |Y(f)| = |H(f)X(f)| 
+                  for the selected filter and its parameters.</p>
   <div class="ft-controls"><label>Filter type <select id="filterType"><option value="low">Lowpass</option><option value="high">Highpass</option><option value="band">Bandpass</option></select></label><label>Lower cutoff \(W_1\) <input id="filterW1" type="range" min="1" max="10" step="0.5" value="4"><b id="filterW1Val">4.0 Hz</b></label><label>Upper cutoff \(W_2\) <input id="filterW2" type="range" min="2" max="15" step="0.5" value="8"><b id="filterW2Val">8.0 Hz</b></label></div>
-  <div class="ft-two"><div class="ft-panel"><b>Magnitude response \(|H(f)|\)</b><canvas id="filterH" class="ft-canvas" width="600" height="230"></canvas></div><div class="ft-panel"><b>Input and output spectra</b><canvas id="filterXY" class="ft-canvas" width="600" height="230"></canvas></div></div>
+  <div class="ft-two"><div class="ft-panel"><b>Magnitude response \(|H(f)|\)</b><canvas id="filterH" class="ft-canvas" width="600" height="230"></canvas></div><div class="ft-panel"><b>Input (red) and output (cyan) spectra</b><canvas id="filterXY" class="ft-canvas" width="600" height="230"></canvas></div></div>
   <p class="ft-readout" id="filterReadout"></p>
 </div>
 
