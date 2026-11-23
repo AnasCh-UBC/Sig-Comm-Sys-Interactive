@@ -1760,45 +1760,21 @@ function updateDiffExamples(){
     freqLabel='Im{X(f)}';
 
     reasoning=`
-      <p><b>Step 1: Recognize the signal.</b></p>
-      <p>The triangular pulse is</p>
-      \\[
-      \\Lambda(t)=
-      \\begin{cases}
-      1-|t|,& |t|\\leq1\\\\
-      0,&\\text{otherwise}
-      \\end{cases}
-      \\]
-      Its derivative is +1 on the left and -1 on the right.</p>
+      <p><b>Step 1: Recognize the signal.</b> The signal \\x(t)\\) is 1 for \\(-1\\leq t\\leq 0\\), -1 for \\(0\\lt t\\leq 1\\) and 0 elsewhere.</p>
 
-      <p><b>Step 2: Compare with the selected signal.</b></p>
-      <p>The selected signal has the opposite signs. Therefore,</p>
-      \\[
-      x(t)=-\\frac{d}{dt}\\Lambda(t)
-      \\]
+      <p><b>Step 2: Compare with a known signal.</b> The triangular pulse \\(\\Lambda(t)\\) is \\(1+t\\) for \\(-1\leq t\\leq0\\)
+        \\(1-t\\) for \\(0\\lt t\leq 1\\), and 0 elsewhere. Thus, \\(x(t)=\\frac{d}{dt}\\Lambda(t)\\)</p>
 
-      <p><b>Step 3: Use the known transform pair.</b></p>
-      \\[
-      \\Lambda(t)\\longleftrightarrow\\operatorname{sinc}^2(f)
-      \\]
-
-      <p><b>Step 4: Apply the time-differentiation property.</b></p>
-      \\[
-      \\frac{dx(t)}{dt}\\longleftrightarrow j2\\pi fX(f)
-      \\]
-      <p>Since the selected signal is the negative derivative, its transform is</p>
-      \\[
-      X(f)=-j2\\pi f\\operatorname{sinc}^2(f)
-      \\]
-      <p>The transform is purely imaginary and odd, so the plot shows its imaginary part.</p>
+      <p><b>Step 3: Apply the time-differentiation property.</b> 
+        \\(\\Lambda(t)\\longrightarrow\\operatorname{sinc}^2(f)\\) implies that 
+        \\(\\frac{d}{dt}x(t)\\longrightarrow j2\\pi fX(f)=j2\\pi f \\operatorname{sinc}^2(f)\\).
+      </p>
     `;
 
     result=`
-      \\[
-      \\boxed{
+      \\(
       X(f)=-j2\\pi f\\operatorname{sinc}^2(f)
-      }
-      \\]
+      \\)
     `;
   }
 
