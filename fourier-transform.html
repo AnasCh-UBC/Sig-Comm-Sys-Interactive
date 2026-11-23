@@ -1720,7 +1720,7 @@ function drawPlot(canvas,fn,xMin,xMax,yMin,yMax,color,
     ctx.fillStyle = '#55c8f2';
     ctx.font = 'bold 13px Arial';
     ctx.textAlign = 'left';
-    ctx.fillText('Re{X(f)}: ' + options.impulse,x+7,T+15);
+    ctx.fillText('Re{X(f)} ' + options.impulse,x+7,T+15);
   }
 
   // Derivative of impulse marker
@@ -1829,7 +1829,7 @@ function updateDiffExamples(){
     timeRange=[-3,3,-3.5,3.5];
     freqRange=[-2,2,-1,1];
 
-    freqLabel='Im{X(f)}     ';
+    freqLabel='Im{X(f)}     .';
 
     freqOptions={
       derivativeImpulse:"δ′(f)",
