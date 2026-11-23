@@ -705,7 +705,7 @@ Then, we have the following properties.
     \(\angle X(-f)=-\angle X(f)\) (odd phase) where the phase is defined.</p>
   <p class="sub">These properties are helpful for validating your calculated Fourier transform. </p>
 </div>
-<div class="card"><h3>Examples</h3> 
+<div class="callout"><h3>Examples</h3> 
   The signal in practice 1.1 is real and even, and its spectrum is real and even. 
   The signal in practice 1.3 is real and odd, and its spectrum is purely imaginary and odd. 
   <p class="sub">Check the demo below for more examples.</p>
@@ -895,7 +895,7 @@ Then, we have the following properties.
     </p>
     <p class="sub">Energy can be calcuated by integrating the square-magnitued in the time domain or the frequency domain.</p>
 </div>
-<div class="card"><h3>Example</h3>
+<div class="callout"><h3>Example</h3>
   <p>The energy of \(x(t)=\text{sinc}^2(t)\) is \(E_x=\int_{-\infty}^{\infty}\text{sinc}^4(t)dt\).</p>
   <p>Instead of solving this integral, we can use Parseval's relation: 
     Knowing that \(X(f)=\Lambda(f)\), it follows that \(E_x=\int_{-\infty}^{\infty}\Lambda^2(f)df=\frac{2}{3}\).</p>
@@ -959,7 +959,7 @@ Then, we have the following properties.
   <p>Frequency-domain analysis often simplifies system analysis: convolution becomes multiplication, and each frequency component is scaled and phase-shifted by \(H(f)\).</p>
 </div>
 
-<div class="card" id="sincLTIExample"><h3>Example</h3>
+<div class="callout" id="sincLTIExample"><h3>Example</h3>
   <p>Consider an LTI system with input \(x(t)=\operatorname{sinc}(at)\) and impulse response \(h(t)=\operatorname{sinc}(bt)\), where \(a,b>0\).</p>
   <p>Using frequency domain analysis, we can show that its output is \[
     y(t)=
