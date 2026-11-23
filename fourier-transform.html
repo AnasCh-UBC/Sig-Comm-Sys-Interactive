@@ -954,18 +954,35 @@ Then, we have the following properties.
 
 <h2 id="lti"><small>4</small>Fourier transform and LTI systems</h2>
 <div class="card"><h3>Transmission through an LTI system</h3>
-<p>For an LTI system with impulse response \(h(t)\), input \(x(t)\), and output \(y(t)=h(t)*x(t)\), the convolution property gives</p>
+<p>For an LTI system with impulse response \(h(t)\), input \(x(t)\), and output \(y(t)=h(t)\circledast x(t)\), the convolution property gives</p>
 <div class="eq">\[Y(f)=H(f)X(f).\]</div>
 <p>Frequency-domain analysis often simplifies system analysis: convolution becomes multiplication, and each frequency component is scaled and phase-shifted by \(H(f)\).</p></div>
+
+<div class="card"><h3>Ideal filters</h3>
+  <p>An ideal filter is a system that passes some part of \(X(f)\) and blocks other parts.</p> 
+  <div class="grid">
+    <div class="tile"><b class="tag">Lowpass (LPF)</b><p>Passes \(|f|\le W\), rejects frequencies above \(W\).</p></div>
+    <div class="tile"><b class="tag">Highpass (HPF)</b><p>Rejects \(|f|\le W\), passes frequencies above \(W\).</p></div>
+    <div class="tile"><b class="tag">Bandpass (BPF)</b><p>Passes \(W_1\le|f|\le W_2\), rejects frequencies outside the band.</p></div>
+  </div>
+  <p class="sub">A filter may also have a linear phase term \(e^{-j2\pi ft_d}\) in its passband and still be considered ideal: it delays the signal by \(t_d\).</p>
+</div>
+
 <div class="ft-demo" id="filterDemo">
-<h3>Interactive 4.1: Ideal lowpass, highpass, and bandpass filters</h3>
-<div class="ft-controls"><label>Filter type <select id="filterType"><option value="low">Lowpass</option><option value="high">Highpass</option><option value="band">Bandpass</option></select></label><label>Cutoff \(W_1\) <input id="filterW1" type="range" min="1" max="10" step="0.5" value="4"><b id="filterW1Val">4.0 Hz</b></label><label>Upper cutoff \(W_2\) <input id="filterW2" type="range" min="2" max="15" step="0.5" value="8"><b id="filterW2Val">8.0 Hz</b></label></div>
-<div class="ft-two"><div class="ft-panel"><b>Magnitude response \(|H(f)|\)</b><canvas id="filterH" class="ft-canvas" width="600" height="230"></canvas></div><div class="ft-panel"><b>Input and output spectra</b><canvas id="filterXY" class="ft-canvas" width="600" height="230"></canvas></div></div>
-<p class="ft-readout" id="filterReadout"></p></div>
-<div class="card"><h3>Ideal and nonideal filters</h3>
-<div class="grid"><div class="tile"><b class="tag">Lowpass (LPF)</b><p>Passes \(|f|\le W\), rejects frequencies above \(W\).</p></div><div class="tile"><b class="tag">Highpass (HPF)</b><p>Rejects \(|f|<W\), passes frequencies above \(W\).</p></div><div class="tile"><b class="tag">Bandpass (BPF)</b><p>Passes \(W_1\le|f|\le W_2\), rejects frequencies outside the band.</p></div></div>
-<p>A filter may also have a linear phase term \(e^{-j2\pi ft_d}\) in its passband and still be considered ideal: it delays the signal by \(t_d\).</p>
-<p>A nonideal filter has a frequency response that varies within its passband. Its 3-dB cutoff frequency is where the power gain is half its maximum, equivalently where the magnitude is \(1/\sqrt2\) of its maximum.</p></div>
+  <h3>Interactive 4.1: Ideal lowpass, highpass, and bandpass filters</h3>
+  <div class="ft-controls"><label>Filter type <select id="filterType"><option value="low">Lowpass</option><option value="high">Highpass</option><option value="band">Bandpass</option></select></label><label>Cutoff \(W_1\) <input id="filterW1" type="range" min="1" max="10" step="0.5" value="4"><b id="filterW1Val">4.0 Hz</b></label><label>Upper cutoff \(W_2\) <input id="filterW2" type="range" min="2" max="15" step="0.5" value="8"><b id="filterW2Val">8.0 Hz</b></label></div>
+  <div class="ft-two"><div class="ft-panel"><b>Magnitude response \(|H(f)|\)</b><canvas id="filterH" class="ft-canvas" width="600" height="230"></canvas></div><div class="ft-panel"><b>Input and output spectra</b><canvas id="filterXY" class="ft-canvas" width="600" height="230"></canvas></div></div>
+  <p class="ft-readout" id="filterReadout"></p>
+</div>
+
+<div class="card"> <h3>Nonideal filters</h3>
+  <p>A nonideal filter is a system which scales \(X(f)\) differently depending on \(f\). 
+  It attenuates \(X(f)\) more severely outside its passband.</p>
+  <p>Its 3-dB cutoff frequency is where the power gain is half its maximum, 
+  equivalently where the magnitude is \(1/\sqrt2\) of its maximum.</p>
+  <p class="sub">Practial filters are nonideal.</p>
+</div>
+
 <div class="ft-demo" id="rcDemo">
 <h3>Interactive 4.2: RC lowpass filter</h3>
 <p>Consider a series resistor and shunt capacitor, with output measured across the capacitor. For \(R=C=1\),</p>
@@ -1857,8 +1874,8 @@ function updateDiffExamples(){
     freqLabel = 'X(f)';
 
     freqOptions = {
-      impulse: "½δ(f)",
-      annotation: "Orange: Im{X(f)} = −sinc(f)/(2πf)  |  Cyan: Re{X(f)} = ½δ(f)"
+      impulse: " ",
+      annotation: "Im{X(f)}"
     };
 
     reasoning=`
