@@ -959,20 +959,18 @@ Then, we have the following properties.
   <p>Frequency-domain analysis often simplifies system analysis: convolution becomes multiplication, and each frequency component is scaled and phase-shifted by \(H(f)\).</p>
 </div>
 
-<div class="card" id="sincLTIExample">
-  <h3>Example</h3>
-
-  <p>
-    Consider an LTI system with input
-    \(x(t)=\operatorname{sinc}(at)\) and impulse response
-    \(h(t)=\operatorname{sinc}(bt)\), where \(a,b>0\).
+<div class="card" id="sincLTIExample"><h3>Example</h3>
+  <p>Consider an LTI system with input \(x(t)=\operatorname{sinc}(at)\) and impulse response \(h(t)=\operatorname{sinc}(bt)\), where \(a,b>0\).</p>
+  <p>Using frequency domain analysis, we can show that its output is \[
+    y(t)=
+    \begin{cases}
+    \dfrac{1}{b}\operatorname{sinc}(at),
+      & \text{if } a\leq b,\\
+    \dfrac{1}{a}\operatorname{sinc}(bt),
+      & \text{if } b\lt a.
+    \end{cases}
+    \]
   </p>
-
-  <p>
-    Instead of calculating the output
-    \(y(t)=x(t)\circledast h(t)\), let us use frequency-domain analysis:
-  </p>
-
   <button class="toggle-derivation" type="button"
           onclick="toggleDerivation('sincLTIDerivation',this)">
     Show derivation
@@ -980,25 +978,21 @@ Then, we have the following properties.
 
   <div class="eq" id="sincLTIDerivation" style="display:none;">
     <p>
+      Instead of calculating the output \(y(t)=x(t)\circledast h(t)\), let us use frequency-domain analysis. 
       From the convolution property:
-      \[
+      \(
       x(t)\circledast h(t)\longleftrightarrow X(f)H(f).
-      \]
+      \)
       Also,
-      \[
-      X(f)=\frac{1}{a}\Pi\left(\frac{f}{a}\right),
-      \qquad
-      H(f)=\frac{1}{b}\Pi\left(\frac{f}{b}\right).
-      \]
+      \(
+      X(f)=\frac{1}{a}\Pi\left(\frac{f}{a}\right)\), \(H(f)=\frac{1}{b}\Pi\left(\frac{f}{b}\right).\)
     </p>
-
     <p>
       Then,
-      \[
+      \(
       Y(f)=X(f)H(f)
       =\frac{1}{ab}\Pi\left(\frac{f}{\min\{a,b\}}\right).
-      \]
-      Hence,
+      \) Hence,
       \[
       y(t)=
       \begin{cases}
