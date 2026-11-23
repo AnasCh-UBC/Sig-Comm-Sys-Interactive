@@ -1745,14 +1745,14 @@ function updateDiffExamples(){
     //         0 otherwise
 
     timeFn=t=>{
-      if(t>=-1 && t<0) return -1;
-      if(t>=0 && t<1) return 1;
+      if(t>=-1 && t<0) return 1;
+      if(t>=0 && t<1) return -1;
       return 0;
     };
 
     // X(f) = -j 2π f sinc²(f)
     // Plot imaginary part
-    freqFn=f=>-2*PI*f*sinc(f)*sinc(f);
+    freqFn=f=>2*PI*f*sinc(f)*sinc(f);
 
     timeRange=[-2,2,-1.4,1.4];
     freqRange=[-4,4,-2.5,2.5];
