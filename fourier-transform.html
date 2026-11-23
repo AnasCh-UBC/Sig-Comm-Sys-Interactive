@@ -852,7 +852,7 @@ Then, we have the following properties.
   <div class="ft-controls">
     <label>Select an example
       <select id="diffExample">
-        <option value="derivative">Derivative of a triangular pulse</option>
+        <option value="derivative">+1/-1 pulse</option>
         <option value="ramp">Fourier transform of x(t) = t</option>
         <option value="integral">Integral of a rectangular pulse</option>
       </select>
@@ -1760,14 +1760,14 @@ function updateDiffExamples(){
     freqLabel='Im{X(f)}';
 
     reasoning=`
-      <p><b>Step 1: Recognize the signal.</b> The signal \\x(t)\\) is 1 for \\(-1\\leq t\\leq 0\\), -1 for \\(0\\lt t\\leq 1\\) and 0 elsewhere.</p>
+      <p><b>Step 1: Recognize the signal.</b> The signal \\(x(t)\\) is 1 for \\(-1\\leq t\\leq 0\\), -1 for \\(0\\lt t\\leq 1\\) and 0 elsewhere.</p>
 
-      <p><b>Step 2: Compare with a known signal.</b> The triangular pulse \\(\\Lambda(t)\\) is \\(1+t\\) for \\(-1\leq t\\leq0\\)
+      <p><b>Step 2: Compare with a known signal.</b> The triangular pulse \\(\\Lambda(t)\\) is \\(1+t\\) for \\(-1\\leq t\\leq0\\)
         \\(1-t\\) for \\(0\\lt t\leq 1\\), and 0 elsewhere. Thus, \\(x(t)=\\frac{d}{dt}\\Lambda(t)\\)</p>
 
       <p><b>Step 3: Apply the time-differentiation property.</b> 
         \\(\\Lambda(t)\\longrightarrow\\operatorname{sinc}^2(f)\\) implies that 
-        \\(\\frac{d}{dt}x(t)\\longrightarrow j2\\pi fX(f)=j2\\pi f \\operatorname{sinc}^2(f)\\).
+        \\(\\frac{d}{dt}\\Lambda(t)\\longrightarrow j2\\pi f \\operatorname{sinc}^2(f)\\).
       </p>
     `;
 
