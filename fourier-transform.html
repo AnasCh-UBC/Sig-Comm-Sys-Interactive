@@ -954,9 +954,24 @@ Then, we have the following properties.
 
 <h2 id="lti"><small>4</small>Fourier transform and LTI systems</h2>
 <div class="card"><h3>Transmission through an LTI system</h3>
-<p>For an LTI system with impulse response \(h(t)\), input \(x(t)\), and output \(y(t)=h(t)\circledast x(t)\), the convolution property gives</p>
-<div class="eq">\[Y(f)=H(f)X(f).\]</div>
-<p>Frequency-domain analysis often simplifies system analysis: convolution becomes multiplication, and each frequency component is scaled and phase-shifted by \(H(f)\).</p></div>
+  <p>For an LTI system with impulse response \(h(t)\), input \(x(t)\), and output \(y(t)=h(t)\circledast x(t)\), the convolution property gives</p>
+  <div class="eq">\[Y(f)=H(f)X(f).\]</div>
+  <p>Frequency-domain analysis often simplifies system analysis: convolution becomes multiplication, and each frequency component is scaled and phase-shifted by \(H(f)\).</p>
+</div>
+
+<div class="card"><h3>Example</h3>
+  <p>Consider an LTI system with input \(x(t)=\operatorname{sinc}(at)\) and impulse response \(h(t)=\operatorname{sinc}(bt)\), where \(a,b>0\).</p>
+  <p>Instead of calculating the output \(y(t)=x(t)\circledast h(t)\), let us use frequency-domain analysis:</p>
+  <div class="eq">
+    <p>From the convolution property: \(x(t)\circledast h(t)\longrightarrow X(f)H(f)\). Also, \(X(f)=\frac{1}{a}\Pi(\frac{f}{a})\) 
+      and \(H(f)=\frac{1}{b}\Pi(\frac{1}{b})\).</p>
+    <p>Then \(Y(f)=X(f)H(f)=\frac{1}{ab}\Pi(\frac{f}{\min\{a,b\}})\). Hence,  
+      \[y(t)=\begin{cases}\dfrac{1}{b}\operatorname{sinc}(at),& \text{if } a\leq b,\\[8pt]
+      \dfrac{1}{a}\operatorname{sinc}(bt),& \text{if } b\lt a.
+    \end{cases}
+    \]
+  </div>
+</div>
 
 <div class="card"><h3>Ideal filters</h3>
   <p>An ideal filter is a system that passes some part of \(X(f)\) and blocks other parts.</p> 
