@@ -893,9 +893,15 @@ Then, we have the following properties.
     </p>
     <p class="sub">Energy can be calcuated by integrating the square-magnitued in the time domain or the frequency domain.</p>
 </div>
+<div class="card"><h3>Example</h3>
+ <p>The energy of \(x(t)=\text{sinc}^2(t)\) is \(E_x=\int_{-\infty}^{\infty}\text{sinc}^4(t)dt\). 
+  Instead of solving this integral, we can use Parseval's relation. 
+  Knowing that \(X(f)=\Lambda(f)\), it follows that \(E_x=\int_{-\infty}^{\infty}\Lambda^2(f)df=\frac{2}{3}\).</p>
+  <p class="sub">This integral is easier to solve!</p>
+</div>
 <div class="card"><h3>Autocorrelation</h3>
     <p>The autocorrelation of a signal \(R_x(\tau)=\int_{-\infty}^{\infty}x(t)x^*(t-\tau)dt\) has a Fourier transform 
-    \(\mathcal{F}\{R_x(\tau)\}=|X(f)|^2\) known as the energy spectral density.
+    \(\mathcal{F}\{R_x(\tau)\}=|X(f)|^2\) known as the energy spectral density (energy per Hz).
     </p>
 </div>
   
@@ -1470,7 +1476,7 @@ function updateExamples(){
       \\(X(t)\\longrightarrow x(-f)\\).</p>
 
       <p><b>Step 3: Apply it to this pair.</b> This implies that Fourier transform of \\(\\operatorname{sinc}(t)\\) is 
-      \\(\\Pi(-f)\\) which equals \\(\\Pi(f)\\) since \\(\Pi(f)\\) is even.</p>
+      \\(\\Pi(-f)\\) which equals \\(\\Pi(f)\\) since \\(\\Pi(f)\\) is even.</p>
     `;
 
     result=`
