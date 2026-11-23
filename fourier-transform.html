@@ -965,12 +965,15 @@ Then, we have the following properties.
     <div class="tile"><b class="tag">Highpass (HPF)</b><p>Rejects \(|f|\le W\), passes frequencies above \(W\).</p></div>
     <div class="tile"><b class="tag">Bandpass (BPF)</b><p>Passes \(W_1\le|f|\le W_2\), rejects frequencies outside the band.</p></div>
   </div>
-  <p class="sub">A filter may also have a linear phase term \(e^{-j2\pi ft_d}\) in its passband and still be considered ideal: it delays the signal by \(t_d\).</p>
+  <p class="sub">A filter may have a linear phase term \(e^{-j2\pi ft_d}\) in its passband and still be considered ideal: it delays the signal by \(t_d\).</p>
 </div>
 
 <div class="ft-demo" id="filterDemo">
   <h3>Interactive 4.1: Ideal lowpass, highpass, and bandpass filters</h3>
-  <div class="ft-controls"><label>Filter type <select id="filterType"><option value="low">Lowpass</option><option value="high">Highpass</option><option value="band">Bandpass</option></select></label><label>Cutoff \(W_1\) <input id="filterW1" type="range" min="1" max="10" step="0.5" value="4"><b id="filterW1Val">4.0 Hz</b></label><label>Upper cutoff \(W_2\) <input id="filterW2" type="range" min="2" max="15" step="0.5" value="8"><b id="filterW2Val">8.0 Hz</b></label></div>
+  <p class="sub">The red curve is an example input magnitude spectrum; 
+    the cyan curve is the output magnitude spectrum |Y(f)| = |H(f)X(f)| 
+    corresponding to the selected filter and its parameters.</p>
+  <div class="ft-controls"><label>Filter type <select id="filterType"><option value="low">Lowpass</option><option value="high">Highpass</option><option value="band">Bandpass</option></select></label><label>Lower cutoff \(W_1\) <input id="filterW1" type="range" min="1" max="10" step="0.5" value="4"><b id="filterW1Val">4.0 Hz</b></label><label>Upper cutoff \(W_2\) <input id="filterW2" type="range" min="2" max="15" step="0.5" value="8"><b id="filterW2Val">8.0 Hz</b></label></div>
   <div class="ft-two"><div class="ft-panel"><b>Magnitude response \(|H(f)|\)</b><canvas id="filterH" class="ft-canvas" width="600" height="230"></canvas></div><div class="ft-panel"><b>Input and output spectra</b><canvas id="filterXY" class="ft-canvas" width="600" height="230"></canvas></div></div>
   <p class="ft-readout" id="filterReadout"></p>
 </div>
@@ -1264,7 +1267,7 @@ function updateShift(){
   updateShift();
 
 // 4.1 Ideal filter response
-function updateFilter(){let type=$('filterType').value,w1=+$('filterW1').value,w2=Math.max(+$('filterW2').value,w1+.5);$('filterW1Val').textContent=w1.toFixed(1)+' Hz';$('filterW2Val').textContent=w2.toFixed(1)+' Hz';let H=f=>{let q=Math.abs(f);return type==='low'?(q<=w1?1:0):type==='high'?(q>=w1?1:0):(q>=w1&&q<=w2?1:0);};let can=$('filterH'),ctx=can.getContext('2d'),m=plot(ctx,can.width,can.height,-15,15,-.1,1.2,5,.5,'f (Hz)','|H(f)|');m.xmin=-15;m.xmax=15;ctx.strokeStyle='#55c8f2';ctx.lineWidth=2.5;ctx.beginPath();for(let i=0;i<=600;i++){let f=-15+i*.05,x=m.X(f),y=m.Y(H(f));if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.stroke();let X=f=>Math.exp(-Math.pow((Math.abs(f)-5)/2.2,2))+0.65*Math.exp(-Math.pow((Math.abs(f)-10)/1.2,2)),can2=$('filterXY'),c2=can2.getContext('2d'),max=1.9,m2=plot(c2,can2.width,can2.height,-15,15,0,max,5,.5,'f (Hz)','Magnitude');m2.xmin=-15;m2.xmax=15;for(let [fn,col] of [[X,'#ff6b78'],[f=>X(f)*H(f),'#55c8f2']]){c2.strokeStyle=col;c2.lineWidth=2;c2.beginPath();for(let i=0;i<=600;i++){let f=-15+i*.05,x=m2.X(f),y=m2.Y(fn(f));if(i===0)c2.moveTo(x,y);else c2.lineTo(x,y);}c2.stroke();}$('filterReadout').textContent=`The ${type==='low'?'lowpass':type==='high'?'highpass':'bandpass'} filter passes the selected frequency region. The red curve is the example input spectrum; the cyan curve is the output spectrum |Y(f)| = |H(f)X(f)|.`;}
+function updateFilter(){let type=$('filterType').value,w1=+$('filterW1').value,w2=Math.max(+$('filterW2').value,w1+.5);$('filterW1Val').textContent=w1.toFixed(1)+' Hz';$('filterW2Val').textContent=w2.toFixed(1)+' Hz';let H=f=>{let q=Math.abs(f);return type==='low'?(q<=w1?1:0):type==='high'?(q>=w1?1:0):(q>=w1&&q<=w2?1:0);};let can=$('filterH'),ctx=can.getContext('2d'),m=plot(ctx,can.width,can.height,-15,15,-.1,1.2,5,.5,'f (Hz)','|H(f)|');m.xmin=-15;m.xmax=15;ctx.strokeStyle='#55c8f2';ctx.lineWidth=2.5;ctx.beginPath();for(let i=0;i<=600;i++){let f=-15+i*.05,x=m.X(f),y=m.Y(H(f));if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}ctx.stroke();let X=f=>Math.exp(-Math.pow((Math.abs(f)-5)/2.2,2))+0.65*Math.exp(-Math.pow((Math.abs(f)-10)/1.2,2)),can2=$('filterXY'),c2=can2.getContext('2d'),max=1.9,m2=plot(c2,can2.width,can2.height,-15,15,0,max,5,.5,'f (Hz)','Magnitude');m2.xmin=-15;m2.xmax=15;for(let [fn,col] of [[X,'#ff6b78'],[f=>X(f)*H(f),'#55c8f2']]){c2.strokeStyle=col;c2.lineWidth=2;c2.beginPath();for(let i=0;i<=600;i++){let f=-15+i*.05,x=m2.X(f),y=m2.Y(fn(f));if(i===0)c2.moveTo(x,y);else c2.lineTo(x,y);}c2.stroke();}$('filterReadout').textContent=`The ${type==='low'?'lowpass':type==='high'?'highpass':'bandpass'} filter passes the selected frequency region.`;}
 $('filterType').addEventListener('change',updateFilter);$('filterW1').addEventListener('input',updateFilter);$('filterW2').addEventListener('input',updateFilter);updateFilter();
 // 4.2 RC lowpass circuit
 function drawRC(){let f=+$('rcFreq').value,omega=TAU*f,mag=1/Math.hypot(1,omega),phase=-Math.atan(omega);$('rcFreqVal').textContent=f.toFixed(2)+' Hz';let x=t=>5*Math.cos(omega*t),y=t=>5*mag*Math.cos(omega*t+phase),c=$('rcTime'),ctx=c.getContext('2d'),m=plot(ctx,c.width,c.height,-2,2,-6,6,1,2,'t (s)','Voltage');m.xmin=-2;m.xmax=2;curve(ctx,c.width,c.height,m,x,'#ff6b78',[6,4]);curve(ctx,c.width,c.height,m,y,'#55c8f2');let r=$('rcResponse'),cr=r.getContext('2d'),mr=plot(cr,r.width,r.height,0,3,0,1.1,.5,.25,'f (Hz)','|H(f)|');mr.xmin=0;mr.xmax=3;curve(cr,r.width,r.height,mr,g=>1/Math.hypot(1,TAU*g),'#55c8f2');$('rcReadout').textContent=`At f₀ = ${f.toFixed(2)} Hz, |H(f₀)| = ${mag.toFixed(3)} and ∠H(f₀) = ${(phase*180/PI).toFixed(1)}°. The output is ${ (5*mag).toFixed(2)} cos(2π·${f.toFixed(2)}t ${(phase<0?'−':'+')} ${Math.abs(phase).toFixed(2)}). The 3-dB cutoff is f_c = 1/(2πRC) ≈ 0.159 Hz for R = C = 1.`;}
@@ -1821,7 +1824,7 @@ function updateDiffExamples(){
     timeRange=[-3,3,-3.5,3.5];
     freqRange=[-2,2,-1,1];
 
-    freqLabel='Im{X(f)}';
+    freqLabel='Im{X(f)}     ';
 
     freqOptions={
       derivativeImpulse:"δ′(f)",
