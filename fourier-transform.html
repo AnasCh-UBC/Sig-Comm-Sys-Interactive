@@ -937,13 +937,19 @@ Then, we have the following properties.
 <p class="sub">The impulse and step transforms are understood in the generalized-function (distribution) sense.</p>
 </div>
 
-<div class="card"><h3>Summary of useful transform relations</h3><div style="overflow-x:auto"><table class="pair-table"><thead><tr><th>Time domain</th><th>Frequency domain</th></tr></thead><tbody>
-<tr><td>\(a x_1(t)+b x_2(t)\)</td><td>\(aX_1(f)+bX_2(f)\) (linearity)</td></tr><tr><td>\(X(t)\)</td><td>\(x(-f)\) (duality)</td></tr>
-<tr><td>\(x(at)\)</td><td>\(\frac1{|a|}X(\frac{f}{a})\) (time-scaling)</td></tr><tr><td>\(x(t-t_0)\)</td><td>\(e^{-j2\pi ft_0}X(f)\) (time-shifting)</td></tr>
-<tr><td>\(e^{j2\pi f_0t}x(t)\)</td><td>\(X(f-f_0)\) (modulation/frequency-shifting)</td></tr><tr><td>\(x_1(t)\circledast x_2(t)\)</td><td>\(X_1(f)X_2(f)\) (time-convolution)</td></tr>
-<tr><td>\(x_1(t)x_2(t)\)</td><td>\(X_1(f)\circledast X_2(f)\) (time-multiplication)</td></tr><tr><td>\(\frac{d^n x}{dt^n}\)</td><td>\((j2\pi f)^nX(f)\) (time-differentiation)</td></tr>
-<tr><td>\(t^n x(t)\)</td><td>\((\frac{j}{2\pi})^n \frac{d^n}{df^n}X(f)\) (frequency-differentiation)</td></tr>
-<tr><td>\(\int_{-\infty}^{t}x(\tau)d\tau\)</td><td>\(\frac{X(f)}{j2\pi f}+\frac{X(0)\delta(f)}{2}\) (time-integration)</td></tr>
+<div class="card"><h3>Summary of useful transform relations</h3>
+  <div style="overflow-x:auto">
+    <table class="pair-table"><thead><tr><th>Time domain</th><th>Frequency domain</th><th>Property</th></tr></thead><tbody>
+<tr><td>\(a x_1(t)+b x_2(t)\)</td><td>\(aX_1(f)+bX_2(f)\) </td><td>linearity</td></tr>
+<tr><td>\(X(t)\)</td><td>\(x(-f)\)</td><td>duality</td></tr>
+<tr><td>\(x(at)\)</td><td>\(\frac1{|a|}X(\frac{f}{a})\)</td><td>time-scaling</td></tr>
+<tr><td>\(x(t-t_0)\)</td><td>\(e^{-j2\pi ft_0}X(f)\)</td><td>time-shifting</td></tr>
+<tr><td>\(e^{j2\pi f_0t}x(t)\)</td><td>\(X(f-f_0)\)</td><td>modulation/frequency-shifting</td></tr>
+<tr><td>\(x_1(t)\circledast x_2(t)\)</td><td>\(X_1(f)X_2(f)\)</td><td>time-convolution</td></tr>
+<tr><td>\(x_1(t)x_2(t)\)</td><td>\(X_1(f)\circledast X_2(f)\)</td><td>time-multiplication</td></tr>
+<tr><td>\(\frac{d^n x}{dt^n}\)</td><td>\((j2\pi f)^nX(f)\)</td><td>time-differentiation</td></tr>
+<tr><td>\(t^n x(t)\)</td><td>\((\frac{j}{2\pi})^n \frac{d^n}{df^n}X(f)\)</td><td>frequency-differentiation</td></tr>
+<tr><td>\(\int_{-\infty}^{t}x(\tau)d\tau\)</td><td>\(\frac{X(f)}{j2\pi f}+\frac{X(0)\delta(f)}{2}\)</td><td>time-integration</td></tr>
 </tbody></table></div></div>
 
 <h2 id="lti"><small>4</small>Fourier transform and LTI systems</h2>
