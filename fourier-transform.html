@@ -1134,12 +1134,12 @@ function updateShift(){
       return;
     }
 
-    //if(previousPhase !== null){
-    //  while(phase-previousPhase > PI) phase -= 2*PI;
-    //  while(phase-previousPhase < -PI) phase += 2*PI;
-    //}
+    if(previousPhase !== null){
+      while(phase-previousPhase > PI) phase -= 2*PI;
+      while(phase-previousPhase < -PI) phase += 2*PI;
+    }
 
-    phaseValues.push(((phase+PI)%(2*PI))-PI);
+    phaseValues.push(phase);
     previousPhase = phase;
   });
 
@@ -1387,21 +1387,22 @@ function drawExamplePlot(canvas,fn,xMin,xMax,yMin,yMax,color,
 
   ctx.stroke();
 
-  // Real-part impulse marker (cyan)
-  if(options.impulse){
-    let x = X(0);
+  // Optional impulse marker (used for the 1/2 delta(t) term).
+  // The marker is illustrative; a delta impulse is not an ordinary finite-height curve.
+  if(impulse !== null && impulse !== undefined){
+    const x = X(0);
 
-    ctx.strokeStyle = '#55c8f2';
+    ctx.strokeStyle = '#ffb454';
     ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.moveTo(x,Y(0));
     ctx.lineTo(x,T+8);
     ctx.stroke();
 
-    ctx.fillStyle = '#55c8f2';
+    ctx.fillStyle = '#ffb454';
     ctx.font = 'bold 13px Arial';
     ctx.textAlign = 'left';
-    ctx.fillText('Re{X(f)}: ' + options.impulse,x+7,T+15);
+    ctx.fillText('Impulse: ½δ(t)',x+7,T+15);
   }
 
   ctx.restore();
@@ -1680,18 +1681,18 @@ function drawPlot(canvas,fn,xMin,xMax,yMin,yMax,color,
 
   ctx.stroke();
 
-  // Real-part impulse marker
+  // Real-part impulse marker (cyan); the continuous imaginary part is orange.
   if(options.impulse){
-    let x = X(0);
+    const x = X(0);
 
-    ctx.strokeStyle = '#ffb454';
+    ctx.strokeStyle = '#55c8f2';
     ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.moveTo(x,Y(0));
     ctx.lineTo(x,T+8);
     ctx.stroke();
 
-    ctx.fillStyle = '#ffb454';
+    ctx.fillStyle = '#55c8f2';
     ctx.font = 'bold 13px Arial';
     ctx.textAlign = 'left';
     ctx.fillText('Re{X(f)}: ' + options.impulse,x+7,T+15);
@@ -1857,7 +1858,7 @@ function updateDiffExamples(){
 
     freqOptions = {
       impulse: "½δ(f)",
-      annotation: "Orange: Im{X(f)} = −sinc(f)/(2πf)   |   Cyan: Re{X(f)} = ½δ(f)"
+      annotation: "Orange: Im{X(f)} = −sinc(f)/(2πf)  |  Cyan: Re{X(f)} = ½δ(f)"
     };
 
     reasoning=`
