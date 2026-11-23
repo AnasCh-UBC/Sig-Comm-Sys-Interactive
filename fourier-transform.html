@@ -1773,7 +1773,7 @@ function updateDiffExamples(){
 
     result=`
       \\(
-      X(f)=-j2\\pi f\\operatorname{sinc}^2(f)
+      X(f)=j2\\pi f\\operatorname{sinc}^2(f)
       \\)
     `;
   }
@@ -1799,39 +1799,22 @@ function updateDiffExamples(){
     };
 
     reasoning=`
-      <p><b>Step 1: Start with a known transform pair.</b></p>
-      \\[
-      1\\longleftrightarrow\\delta(f)
-      \\]
+      <p><b>Step 1: Recognize the signal.</b> The signal is \\(x(t)=t\\).</p>
 
-      <p><b>Step 2: Apply the frequency-differentiation property.</b></p>
-      <p>Multiplication by time corresponds to differentiation with respect to frequency:</p>
-      \\[
-      tx(t)\\longleftrightarrow
-      -\\frac{1}{j2\\pi}\\frac{dX(f)}{df}
-      \\]
+      <p><b>Step 2: Relate to a known signal.</b>
+        We can write \\(x(t)=t\\times 1\\). This helps since we know that transform \\(1\\longrightarrow\\delta(f)\\), 
+        and since multiplication by time corresponds to differentiation with respect to frequency.</p>
 
-      <p><b>Step 3: Apply it to the constant signal.</b></p>
-      <p>For \\(x(t)=1\\), its transform is \\(X(f)=\\delta(f)\\). Therefore,</p>
-      \\[
-      t\\longleftrightarrow
-      -\\frac{1}{j2\\pi}\\frac{d}{df}\\delta(f)
-      \\]
-
-      <p>Since \\(-1/j=j\\), this becomes</p>
-      \\[
-      X(f)=\\frac{j}{2\\pi}\\delta'(f)
-      \\]
-      <p>This is a generalized function (distribution), not an ordinary plotted curve.</p>
+      <p><b>Step 3: Apply the frequency-differentiation property.</b> 
+      \\(1\\longrightarrow\\delta(f)\\). Therefore,
+      \\(t\\times 1\\longrightarrow \\frac{j}{2\\pi}\\frac{d}{df}\\delta(f)\\)
+      </p>
     `;
 
     result=`
-      \\[
-      \\boxed{
-      t\\longleftrightarrow
-      \\frac{j}{2\\pi}\\delta'(f)
-      }
-      \\]
+      \\(
+      X(f)=\\frac{j}{2\\pi}\\frac{d}{df}\\delta(f)
+      \\)
     `;
   }
 
@@ -1866,44 +1849,25 @@ function updateDiffExamples(){
     };
 
     reasoning=`
-      <p><b>Step 1: Recognize the signal as an integral.</b></p>
-      <p>The selected signal is the accumulated area under a rectangular pulse:</p>
-      \\[
-      x(t)=\\int_{-\\infty}^{t}\\Pi(\\tau)\\,d\\tau
-      \\]
+      <p><b>Step 1: Recognize the signal.</b>
+      The signal is \\(x(t)=0\\) for \\(t<-\\frac{1}{2}\\), \\(x(t)=t+\\frac{1}{2}\\) for \\(-\\frac{1}{2}\\leq t\\leq \\frac{1}{2}\\),
+       and \\(x(t)=1\\) otherwise.</p>
+      
+      <p><b>Step 2: Relate to a known signal.</b>
+       This signal is the accumulated area under a rectangular pulse: 
+       \\(x(t)=\\int_{-\\infty}^{t}\\Pi(\\tau)\\,d\\tau\\). This helps since we know that 
+       \\(\\Pi(t)\\longrightarrow\\operatorname{sinc}(f)\\)</p>
 
-      <p><b>Step 2: Use the known transform pair.</b></p>
-      \\[
-      \\Pi(t)\\longleftrightarrow\\operatorname{sinc}(f)
-      \\]
-
-      <p><b>Step 3: Apply the time-integration property.</b></p>
-      \\[
-      x(t)=\\int_{-\\infty}^{t}g(\\tau)d\\tau
-      \\]
-      \\[
-      X(f)=\\frac{G(f)}{j2\\pi f}
-      +\\frac{G(0)}{2}\\delta(f)
-      \\]
-
-      <p><b>Step 4: Substitute the rectangular-pulse transform.</b></p>
-      <p>Since \\(G(0)=\\operatorname{sinc}(0)=1\\),</p>
-      \\[
-      X(f)=\\frac{\\operatorname{sinc}(f)}{j2\\pi f}
-      +\\frac12\\delta(f)
-      \\]
-
-      <p>The regular part is purely imaginary. The impulse at zero frequency is shown separately.</p>
+      <p><b>Step 3: Apply the time-integration property.</b> \\(x(t)=\\int_{-\\infty}^{t}\\Pi(\\tau)d\\tau\\) implies that 
+        \\(X(f)=\\frac{\\operatorname{sinc}}{j2\\pi f}+\\frac{\\operatorname{sinc}(0)}{2}\\delta(f)\\)</p>
     `;
 
     result=`
-      \\[
-      \\boxed{
+      \\(
       X(f)=
       \\frac{\\operatorname{sinc}(f)}{j2\\pi f}
       +\\frac12\\delta(f)
-      }
-      \\]
+      \\)
     `;
   }
 
