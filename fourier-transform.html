@@ -1023,15 +1023,15 @@ Then, we have the following properties.
         <text x="82" y="101" text-anchor="start"
           fill="#55d9ff" font-size="14" font-weight="bold">Input</text>
         <text x="82" y="118" text-anchor="start"
-          fill="#a9bacb" font-size="12">Voltage source</text>
+          fill="#000000" font-size="12">Voltage source</text>
 
         <!-- Source ground / return wire -->
         <path d="M48 130 V165 H375 V130"
-          fill="none" stroke="#dce8f2" stroke-width="2.3"/>
+          fill="none" stroke="#000000" stroke-width="2.3"/>
 
         <!-- Top input wire -->
         <path d="M48 80 V35 H105"
-          fill="none" stroke="#dce8f2" stroke-width="2.3"/>
+          fill="none" stroke="#000000" stroke-width="2.3"/>
 
         <!-- Resistor -->
         <path d="M105 35 L115 35 L123 20 L137 50 L151 20
@@ -1041,10 +1041,10 @@ Then, we have the following properties.
         <text x="165" y="70" text-anchor="middle"
           fill="#ffbd59" font-size="14">R</text>
         <text x="165" y="87" text-anchor="middle"
-          fill="#a9bacb" font-size="12">Resistor</text>
+          fill="#000000" font-size="12">Resistor</text>
         <!-- Output wire and node -->
         <path d="M225 35 H375 V80"
-          fill="none" stroke="#dce8f2" stroke-width="2.3"/>
+          fill="none" stroke="#000000" stroke-width="2.3"/>
         <circle cx="225" cy="35" r="4" fill="#55d9ff"/>
 
         <!-- Capacitor -->
@@ -1054,7 +1054,7 @@ Then, we have the following properties.
           stroke-linecap="round"/>
         <text x="405" y="104" fill="#55d9ff" font-size="14">C</text>
         <text x="405" y="121" text-anchor="middle"
-          fill="#a9bacb" font-size="12">Capacitor</text>
+          fill="#000000" font-size="12">Capacitor</text>
 
         <!-- Output voltage -->
         <path d="M375 35 H415" stroke="#55d9ff" stroke-width="2"
@@ -1064,11 +1064,11 @@ Then, we have the following properties.
 
         <!-- Ground -->
         <path d="M359 165 H391 M365 172 H385 M371 179 H379"
-          stroke="#dce8f2" stroke-width="2" fill="none"/>
+          stroke="#000000" stroke-width="2" fill="none"/>
 
 
         <text x="220" y="185" text-anchor="middle"
-          fill="#a9bacb" font-size="12">RC circuit</text>
+          fill="#000000" font-size="12">RC circuit</text>
       </svg>
     </div>
   </div>
@@ -1961,7 +1961,7 @@ function updateDiffExamples(){
 
     freqOptions = {
       impulse: " ",
-      annotation: "Im{X(f)}      ."
+      annotation: "Im{X(f)}               ."
     };
 
     reasoning=`
