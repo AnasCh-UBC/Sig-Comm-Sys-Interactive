@@ -689,10 +689,18 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       <p><b>Modulation</b> impresses information on a carrier signal by varying its amplitude, phase, or frequency.</p>
     </div>
   -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;align-items:stretch;">
+    <div class="card">
+      <h3>Data types and modulation</h3>
+      <p><b>Analog data:</b> Speech, music, video, and other continuously varying information.</p>
+      <p><b>Digital data:</b> Text (ASCII), digital audio and video, files, and other information represented digitally.</p>
+      <p><b>Modulation:</b> Impressing an information signal on a carrier by varying its amplitude, phase, or frequency.</p>
+    </div>
+  
     <div class="card">
       <h3>From data to communication</h3>
-      <div style="width:100%; overflow:hidden; border-radius:12px;">
-        <svg class="dg" viewBox="0 0 900 570" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="dgT dgD" width="100%" height="auto">
+      <div style="width:100%;overflow:hidden;border-radius:12px;">
+        <svg class="dg" viewBox="0 0 900 370" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="dgT dgD" width="100%" height="auto" style="display:block;max-width:100%;">
         <title id="dgT">From data to communication</title>
         <desc id="dgD">Analog data is converted to digital data by sampling and analog-to-digital conversion. Analog data is sent with analog modulation as analog communication; digital data is sent with digital modulation as digital communication.</desc>
         <style>.dg text{font-family:system-ui,-apple-system,'Segoe UI',sans-serif}@media (prefers-reduced-motion:reduce){.dg .dg-dot{display:none}}</style>
@@ -724,15 +732,11 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
         <circle class="dg-dot" r="4.5" fill="#fff"><animateMotion dur="2s" repeatCount="indefinite" path="M705 150V228"/></circle><path d="M705 240l-9-17h18z" fill="#7a93ff" filter="url(#dgGlow)"/>
         <g fill="#7dd3fc" font-size="17" text-anchor="middle"><text x="445" y="46">Sampling +</text><text x="445" y="68">analog-to-digital conversion</text></g>
         <g fill="#7dd3fc" font-size="17"><text x="213" y="190">analog</text><text x="213" y="212">modulation</text><text x="723" y="190">digital</text><text x="723" y="212">modulation</text></g>
-        <rect x="70" y="378" width="760" height="176" rx="14" fill="rgba(6,18,48,.7)" stroke="rgba(56,189,248,.35)" stroke-width="1.5"/>
-        <g font-size="18" fill="#cfe6ff">
-        <circle cx="98" cy="420" r="6" fill="#38bdf8" filter="url(#dgGlow)"/><text x="116" y="426"><tspan font-weight="700" fill="#38bdf8">Analog data: </tspan>Speech, music, video, etc.</text>
-        <circle cx="98" cy="462" r="6" fill="#7a93ff" filter="url(#dgGlow)"/><text x="116" y="468"><tspan font-weight="700" fill="#7a93ff">Digital data: </tspan>Text (ASCII), digital audio/video, files, etc.</text>
-        <circle cx="98" cy="504" r="6" fill="#fff" filter="url(#dgGlow)"/><text x="116" y="510"><tspan font-weight="700" fill="#fff">Modulation: </tspan>Impressing a signal on the amplitude, phase, or</text><text x="116" y="534">frequency of a carrier.</text>
-        </g>
         </svg>
       </div>
     </div>
+  </div>
+  
 
     <div class="card">
       <h3>Why modulate?</h3>
