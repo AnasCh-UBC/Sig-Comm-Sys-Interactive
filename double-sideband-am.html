@@ -829,11 +829,24 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       <p class="sub">If the message bandwidth is \(W\), the modulated signal occupies two sidebands and has total bandwidth \(2W\).</p>
     </div>
 
+    <div class="callout"><h3>Example: Single-tone message</h3>
+      <p>For \(m(t)=a\cos(2\pi f_mt)\), using the product-to-sum identity:</p>
+      \[
+      \begin{aligned}
+        x(t)&=aA_c\cos(2\pi f_mt)\cos(2\pi f_ct)\\
+        &=\frac{aA_c}{2}\left[
+        \cos(2\pi(f_c-f_m)t)+
+        \cos(2\pi(f_c+f_m)t)\right].
+      \end{aligned}
+      \]
+      <p>In the frequency domain:</p>
+      \[X(f)=\frac{aA_c}{4}\left(\delta(f_c-f_m)+\delta(-f_c+f_m)+\delta(f_c+f_m)+\delta(-f_c-f_m)+\right).\]
+    </div>
+    <p class="sub"> See the following interactive demo, where \(m(t)=\cos(2\pi f_m t)\). Change the parameters of 
+      the message and the carrier and observe the changes in the modulated signal.</p>
     <div class="wd">
       <div class="cap">Interactive 2.1</div>
       <h3>DSB-SC modulation in the time and frequency domains</h3>
-      <p class="sub">Change the parameters of \(m(t)=\cos(2\pi f_m t)\) and \(c(t)=A_c\cos(2\pi f_c t)\). 
-        The modulated signal is the product of the two.</p>
       <div class="demo-controls">
         <label>Message frequency \(f_m\)
           <input id="dsbFm" type="range" min="0.5" max="3" step="0.1" value="1.2">
@@ -872,29 +885,43 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       <p class="demo-note">Upper sidebands (USB) at \(f=\pm(f_c+f_m)\); Lower sidebands (LSB) at \(f=\pm(f_c-f_m)\).</p>
     </div>
 
-    <div class="card"><h3>Observe</h3>
-      The spectrum has:
-      <ul>
-        <li><b>Upper sideband (USB):</b> Frequency components above the positive carrier frequency, \(|f|>f_c\)</li>
-        <li><b>Lower sideband (LSB):</b> Frequency components below the positive carrier frequency, \(|f|\lt f_c\).</li>
-        <li><b>Suppressed carrier:</b> No carrier impulses at \(f=\pm f_c\).</li>
-      </ul>
-      <p class="sub">This is why this modulation scheme is called <b>double-sideband</b> <b>suppressed-carrier</b> AM.</p>
+    <b>Observe:</b> The spectrum \(X(f)\) has
+    <ul>
+      <li><b>Upper sideband (USB):</b> Frequency components above the positive carrier frequency, \(|f|>f_c\)</li>
+      <li><b>Lower sideband (LSB):</b> Frequency components below the positive carrier frequency, \(|f|\lt f_c\).</li>
+      <li><b>Suppressed carrier:</b> No carrier impulses at \(f=\pm f_c\).</li>
+    </ul>
+    <p class="sub">This is why this modulation scheme is called <b>double-sideband</b> <b>suppressed-carrier</b> AM.</p>
+
+    <div class="callout"><h3>Exercise</h3>
+      <p>Express \(x(t)\) and \(X(f)\) when \(m(t)=a\sin(2\pi f_m t)\).</p>
+      <button class="toggle-btn"
+          onclick="toggleDerivation('dsbSinSolution',this)">Show solution</button>
+      <div id="dsbSinSolution" style="display:none;">
+        <p>Substituting the message signal into the DSB-SC equation:</p>
+        \[
+        x(t)
+        =A_c a\sin(2\pi f_m t)\cos(2\pi f_c t).
+        \]
+        <p>Using the identity \(\sin A\cos B=\frac{1}{2}\left[\sin(A+B)+\sin(A-B)\), we obtain</p>
+        \[
+        x(t)=\frac{aA_c}{2}\left(\sin(2\pi(f_c+f_m)t)-\sin(2\pi(f_c-f_m)t)\right).\]
+        <p>Recall the Fourier transform pair: \(\sin(2\pi f_0t)\longrightarrow \frac{1}{2j}(\delta(f-f_0)-\delta(f+f_0))\).
+          Applying this pair to the two sinusoidal components gives</p>
+        \[
+        X(f)=\frac{aA_c}{4j}\left(
+        \delta(f-f_c-f_m)
+        -\delta(f+f_c+f_m)
+        -\delta(f-f_c+f_m)
+        +\delta(f+f_c-f_m)
+        \right).
+        \]
+        <p class="sub">The spectrum consists of four impulses located at \(f=\pm(f_c+f_m)\) and \(f=\pm(f_c-f_m)\). 
+          These correspond to the upper and lower sidebands, respectively. There are no impulses at the carrier frequencies \(f=\pm f_c\), since this is a suppressed-carrier modulation scheme.</p>
+      </div>
     </div>
 
-    <div class="card">
-      <h3>Single-tone message example</h3>
-      <p>For \(m(t)=a\cos(2\pi f_mt)\), with \(f_m\ll f_c\), use the product-to-sum identity:</p>
-      \[
-      \begin{aligned}
-        x(t)&=aA_c\cos(2\pi f_mt)\cos(2\pi f_ct)\\
-        &=\frac{aA_c}{2}\left[
-        \cos(2\pi(f_c-f_m)t)+
-        \cos(2\pi(f_c+f_m)t)\right].
-      \end{aligned}
-      \]
-      <p>The spectrum consists of impulses at the two sideband frequencies around each of \(+f_c\) and \(-f_c\). For a sine message, the same four frequencies appear, with the corresponding phase signs.</p>
-    </div>
+    
 
     <div class="eq">
       <b>Power of DSB-SC AM</b>
