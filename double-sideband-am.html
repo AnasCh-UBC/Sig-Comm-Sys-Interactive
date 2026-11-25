@@ -642,10 +642,12 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       <div class="eq"> Modulation is the process of changing properties of a sinusoidal carrier signal as a function of a 
         data signal to enable transmitting data through a medium.</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;align-items:stretch;">
-        <div class="card">
+        <div class="tile">
           <b>Data can be analog or digital:</b>
-          <p><b>Analog data:</b> Speech, music, video, and other continuously varying information.</p>
-          <p><b>Digital data:</b> Text (ASCII), digital audio and video, files, and other information represented digitally.</p>
+          <ul>
+            <li><b>Analog data:</b> Speech, music, video, and other continuously varying information.</li>
+            <li><b>Digital data:</b> Text (ASCII), digital audio and video, files, and other information represented digitally.</li>
+          </ul>
         </div>
       
         <div class="card">
@@ -690,23 +692,71 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     </div>
 
     <div class="card"><h3>Why modulate?</h3>
-      Message signals are normally lowpass signals:
-      <div class="tile">
+      <p class="sub">Message signals are normally lowpass signals.</p>
+      <div class="eq">
           <b>Lowpass (baseband) signals</b> are signals whose energy is concentrated around \(f=0\), 
           with negligible energy beyond some bandwidth \(W\).
       </div>
-      <div class="eq"> <b>Regulations and medium</b>
-        Regulations specify a frequency band available for a communication system (see the <a href="https://ised-isde.canada.ca/site/spectrum-management-telecommunications/en/spectrum-allocation/canadian-table-frequency-allocations-sf10759">Canadian Table of Frequency Allocations</a>). 
-        Also, a communication medium (channel), such as a wire, antenna, etc., have a bandpass filter behaviour.
+      <p class="sub">But communication signals must be bandpass signals.</p>
+      <div class="eq">
+        <b>Bandpass signals</b> are signals whose energy is concentrated in a band of frequencies 
+        \([W_1,W_2]\) away from \(f=0\), with negligible energy outside this band.
       </div>
-      Thus, a baseband data signal must be converted to a bandpass signal for transmission:
-      <div class="tile">
-          <b>Bandpass signals</b> are signals whose energy is concentrated in a band of frequencies 
-          \([f_c-\frac{W}{2},f_c+\frac{W}{2}]\) away from \(f=0\), with negligible energy outside this band.
-      </div>
-      <p class="sub">Here, \(f_c\) is called the <b>carrier frequency</b>.</p>
+      <p>Thus, a baseband data signal must be converted to a bandpass signal for transmission.</p>
     </div>
-    
+
+
+    <div class="card"> <h3>Why must communication signals be bandpass?</b> 
+        <p>Regulations specify what frequencies can be used by a communication system (see the <a href="https://ised-isde.canada.ca/site/spectrum-management-telecommunications/en/spectrum-allocation/canadian-table-frequency-allocations-sf10759">Canadian Table of Frequency Allocations</a>).</p> 
+        <div class="card">
+          <h3>Examples of radio-frequency allocations in Canada</h3>
+        
+          <p>
+            Different communication systems operate in designated portions
+            of the radio-frequency spectrum. The following are three familiar
+            examples in Canada:
+          </p>
+        
+          <table>
+            <thead>
+              <tr>
+                <th>System</th>
+                <th>Frequency range</th>
+                <th>Modulation / transmission</th>
+                <th>Application</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>AM radio</b></td>
+                <td>535–1705 kHz</td>
+                <td>Amplitude modulation (AM)</td>
+                <td>AM radio broadcasting</td>
+              </tr>
+              <tr>
+                <td><b>FM radio</b></td>
+                <td>88–108 MHz</td>
+                <td>Frequency modulation (FM)</td>
+                <td>FM radio broadcasting</td>
+              </tr>
+              <tr>
+                <td><b>Wi-Fi</b></td>
+                <td>2400–2483.5 MHz</td>
+                <td>Digital modulation</td>
+                <td>Wireless local-area networks (2.4 GHz band)</td>
+              </tr>
+            </tbody>
+          </table>
+        
+          <p class="note">
+            These are examples of frequency bands used by common communication
+            systems. The exact frequencies available to individual stations
+            or devices depend on channel assignments and applicable regulations.
+          </p>
+        </div>
+        <p class="sub">Also, a communication medium (channel), such as a wire, antenna, etc., have a bandpass filter behaviour.</p>
+    </div>
+      
     <div class="card"><h3>How to modulate?</h3>
       Consider a baseband message signal \(m(t)\) with bandwidth \(W\) Hz, and a high-frequency carrier \(c(t)=\cos(2\pi f_ct)\).
       <div class="eq"> 
