@@ -728,44 +728,43 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
 
 
     <div class="card"> <h3>Why must communication signals be bandpass?</h3> 
-        <p>Regulations specify what frequencies can be used by a communication system. 
-          Here are some examples from the 
-          <a href="https://ised-isde.canada.ca/site/spectrum-management-telecommunications/en/spectrum-allocation/canadian-table-frequency-allocations-sf10759">Canadian Table of Frequency Allocations</a>.
-        </p> 
-          <table>
-            <thead>
-              <tr>
-                <th>System</th>
-                <th>Frequency range</th>
-                <th>Modulation / transmission</th>
-                <th>Application</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><b>AM radio</b></td>
-                <td>535–1705 kHz</td>
-                <td>Amplitude modulation (AM)</td>
-                <td>AM radio broadcasting</td>
-              </tr>
-              <tr>
-                <td><b>FM radio</b></td>
-                <td>88–108 MHz</td>
-                <td>Frequency modulation (FM)</td>
-                <td>FM radio broadcasting</td>
-              </tr>
-              <tr>
-                <td><b>Wi-Fi</b></td>
-                <td>2400–2483.5 MHz</td>
-                <td>Digital modulation</td>
-                <td>Wireless local-area networks (2.4 GHz band)</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p>Also, a communication medium (channel), such as a wire, antenna, etc., have a bandpass filter behaviour.</p>
+      <p>Regulations specify what frequencies can be used by a communication system. 
+        Here are some examples from the 
+        <a href="https://ised-isde.canada.ca/site/spectrum-management-telecommunications/en/spectrum-allocation/canadian-table-frequency-allocations-sf10759">Canadian Table of Frequency Allocations</a>.
+      </p> 
+      <table>
+        <thead>
+          <tr>
+            <th>System</th>
+            <th>Frequency range</th>
+            <th>Modulation / transmission</th>
+            <th>Application</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>AM radio</b></td>
+            <td>535–1705 kHz</td>
+            <td>Amplitude modulation (AM)</td>
+            <td>AM radio broadcasting</td>
+          </tr>
+          <tr>
+            <td><b>FM radio</b></td>
+            <td>88–108 MHz</td>
+            <td>Frequency modulation (FM)</td>
+            <td>FM radio broadcasting</td>
+          </tr>
+          <tr>
+            <td><b>Wi-Fi</b></td>
+            <td>2400–2483.5 MHz</td>
+            <td>Digital modulation</td>
+            <td>Wireless local-area networks (2.4 GHz band)</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>Also, a communication medium (channel), such as a wire, antenna, etc., have a bandpass filter behaviour.</p>
     </div>
-      
+              
     <div class="card"><h3>How to modulate?</h3>
       Consider a baseband message signal \(m(t)\) with bandwidth \(W\) Hz, and a high-frequency carrier \(c(t)=\cos(2\pi f_ct)\).
       <div class="eq"> 
@@ -777,8 +776,8 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       </div>
     </div>
 
-    <div class="callout">
-      <b>Amplitude modulation:</b> the message signal is impressed on the amplitude of the carrier. This lecture focuses on two forms: double-sideband suppressed-carrier (DSB-SC) AM and conventional double-sideband (DSB) AM.
+    <div class="callout"><h3>This lecture focuses on AM</h3>
+      The message signal is impressed on the amplitude of the carrier. This lecture focuses on two forms: double-sideband suppressed-carrier (DSB-SC) AM and conventional double-sideband (DSB) AM.
     </div>
   </section>
 
