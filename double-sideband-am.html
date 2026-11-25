@@ -1055,13 +1055,9 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       </div>
     </div>
 
-    <div class="card">
-      <b>Why phase synchronization matters?</b>
-      <p>If \(\phi=\pi/2\), the recovered signal vanishes. At \(\phi=\pi/4\), its power is reduced by a factor of \(\cos^2(\pi/4)=1/2\). A coherent or synchronous demodulator aims for \(\phi=0\).</div>
-      <div class="eq">
-        To synchronize the LO with the transmitter carrier, we can add a <b>pilot tone</b> to the transmitted signal.
-      </div>
-    </div>
+    <b>Why phase synchronization matters?</b>
+    <p>If \(\phi=\pi/2\), the recovered signal vanishes. At \(\phi=\pi/4\), its power is reduced by a factor of \(\cos^2(\pi/4)=1/2\). A coherent or synchronous demodulator aims for \(\phi=0\).</p>
+    <p class="sub">See the following demo.</p>
 
 
     <div class="wd">
@@ -1095,7 +1091,9 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       <div class="demo-readout" id="demodReadout"></div>
     </div>
 
-    
+    <div class="eq">
+      To synchronize the LO with the transmitter carrier, we can add a <b>pilot tone</b> to the transmitted signal.
+    </div>
     <div class="card">
       <h3>Adding a pilot tone</h3>
       <p>One way to help the receiver synchronize its local oscillator is to add a small pilot tone at the carrier frequency to the transmitted signal:</p>
