@@ -697,6 +697,67 @@ header{align-items:center}
     font-size:0.9rem;
     font-weight:500;
   }
+
+  /* Apply the diagram styling to every modulator/demodulator SVG,
+     including diagrams placed outside .mod-demod-grid. */
+  .mod,
+  .demod {
+    --dFg:var(--fg,#1b1f2a);
+    --dAcc:var(--acc,#0b3d91);
+  }
+
+  @media(prefers-color-scheme:dark) {
+    .mod,
+    .demod {
+      --dFg:var(--fg,#e8eaf0);
+      --dAcc:var(--acc,#7fa8ff);
+    }
+  }
+
+  .mod .ln,
+  .demod .ln {
+    stroke:var(--dAcc);
+    stroke-width:2;
+    fill:none;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+
+  .mod .hd,
+  .demod .hd {
+    fill:var(--dAcc);
+  }
+
+  .mod .node,
+  .demod .node {
+    fill:#c7d6ee;
+    stroke:var(--dAcc);
+    stroke-width:2;
+  }
+
+  .mod .lbl,
+  .demod .lbl,
+  .mod .block-label,
+  .demod .block-label {
+    color:var(--dFg);
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+  }
+
+  .mod .lbl,
+  .demod .lbl {
+    font-size:19px;
+    white-space:nowrap;
+  }
+
+  .mod .block-label,
+  .demod .block-label {
+    font-size:14px;
+    line-height:1.25;
+  }
 </style>
 <script>
 window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, svg: { fontCache: 'global' } };
@@ -1081,7 +1142,6 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
                 fill:none;
                 stroke:var(--mAcc);
                 stroke-width:2.2;
-                rx:5;
               }
             </style>
         
