@@ -1447,12 +1447,82 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
 
     <div class="card">
       <h3>Conventional AM signal</h3> 
-      In general, conventional AM is defined by the signal
-      \[
-        x(t)=A_c(1+a\,m_n(t))\cos(2\pi f_ct),
-      \]
-      where \(m_n(t)=\frac{m(t)}{\max_t|m(t)|}\) is the normalized message signal so that \(|m_n(t)|\leq1\), 
-      and \(a\in(0,1)\) is the modulation index. 
+      <div class="grid">
+        <div class="tile">
+          In general, conventional AM is defined by the signal
+          \[
+            x(t)=A_c(1+a\,m_n(t))\cos(2\pi f_ct),
+          \]
+          where \(m_n(t)=\frac{m(t)}{\max_t|m(t)|}\) is the normalized message signal so that \(|m_n(t)|\leq1\), 
+          and \(a\in(0,1)\) is the modulation index. 
+        </div>
+        <div class="tile">
+          <svg class="mod" viewBox="0 0 540 220"
+               xmlns="http://www.w3.org/2000/svg"
+               role="img" aria-label="Conventional AM modulator block diagram"
+               style="display:block;width:100%;max-width:540px;height:auto;margin:0 auto;">
+        
+            <defs>
+              <marker id="amArrow" viewBox="0 0 10 8"
+                      refX="8.5" refY="4" markerWidth="7" markerHeight="6"
+                      orient="auto">
+                <path class="hd" d="M0 0.8L9 4L0 7.2L2.2 4Z"/>
+              </marker>
+            </defs>
+        
+            <!-- Message input -->
+            <foreignObject x="0" y="39" width="92" height="38">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
+                \(a m_n(t)\)
+              </div>
+            </foreignObject>
+        
+            <!-- Message path -->
+            <path class="ln" d="M92 58H174" marker-end="url(#amArrow)"/>
+        
+            <!-- Multiplier -->
+            <circle class="node" cx="192" cy="58" r="16"/>
+            <path class="ln" d="M181 47L203 69M203 47L181 69"/>
+        
+            <!-- Multiplier to adder -->
+            <path class="ln" d="M208 58H318" marker-end="url(#amArrow)"/>
+        
+            <!-- Adder -->
+            <circle class="node" cx="334" cy="58" r="16"/>
+            <path class="ln" d="M324 58H344M334 48V68"/>
+        
+            <!-- Output -->
+            <path class="ln" d="M350 58H448" marker-end="url(#amArrow)"/>
+            <foreignObject x="450" y="39" width="85" height="38">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
+                \(x(t)\)
+              </div>
+            </foreignObject>
+        
+            <!-- Carrier input -->
+            <foreignObject x="105" y="165" width="175" height="42">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
+                \(A_c\cos(2\pi f_ct)\)
+              </div>
+            </foreignObject>
+        
+            <!-- Carrier to multiplier -->
+            <path class="ln" d="M192 164V76" marker-end="url(#amArrow)"/>
+        
+            <!-- Carrier feed-forward branch to adder -->
+            <path class="ln" d="M280 186H334V76"
+                  marker-end="url(#amArrow)"/>
+        
+          </svg>
+        
+          <p style="text-align:center;margin:8px 0 0;font-size:0.9em;">
+            **Conventional AM modulator**
+            \[
+            x(t)=A_c[1+a\,m_n(t)]\cos(2\pi f_ct)
+            \]
+          </p>
+        </div>
+      </div>
       <p class="sub">The normalization and \(a\lt 1\) ensure that \(A_c(1+a\,m_n(t))\geq0\), which allows envelope detection.
     </div>
 
@@ -1467,26 +1537,19 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       <p class="sub">Conventional AM contains a carrier component in addition to both sidebands. If the message bandwidth is \(W\), the total AM bandwidth is \(2W\).</p>
     </div>
 
-    <div class="eq">
-      <b>Power of conventional AM</b>
+    <div class="card">
+      <h3>Power of conventional AM</h3>
       <p>Assuming the normalized message has zero average, the total power is</p>
       \[
-        P=\frac{A_c^2}{2}a^2P_{m_n}+\frac{A_c^2}{2},
+        P_x=\frac{A_c^2}{2}a^2P_{m_n}+\frac{A_c^2}{2},
       \]
       where \(P_{m_n}\) is the average power of \(m_n(t)\). The first term is the information-bearing sideband power, while the second term is the carrier power.
-      <div class="two-col">
-        <div class="tile"><b>Information-bearing power</b>\[
-          P_{\mathrm{SB}}=\frac{A_c^2a^2}{2}P_{m_n}
-        \]</div>
-        <div class="tile"><b>Carrier power</b>\[
-          P_{\mathrm{carrier}}=\frac{A_c^2}{2}
-        \]</div>
-      </div>
-      <p>Usually, the information-bearing power is smaller than the carrier power. Conventional AM therefore uses power less efficiently than DSB-SC AM.</p>
+      <p class="sub">Usually, the information-bearing power is smaller than the carrier power. Conventional AM therefore uses power less efficiently than DSB-SC AM.</p>
     </div>
 
-    <div class="card">
-      <h3>Example: power of a two-tone message</h3>
+
+    <div class="callout">
+      <h3>Example: Power of a two-tone message</h3>
       <p>Consider \(m(t)=p\cos(2\pi f_1t)+q\sin(2\pi f_2t)\), with \(f_2=3f_1\), \(p=3\), \(q=1\), \(\max_t|m(t)|=3.7\), and modulation index \(a=0.85\).</p>
       <p>The normalized message is</p>
       \[
