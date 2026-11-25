@@ -785,86 +785,36 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
 
   <section id="dsbsc">
     <h2><small>2</small> Double-sideband suppressed-carrier (DSB-SC) AM</h2>
-    <div class="card">
+    
+    <div class="card"><h3>DSB-SC modulation</h3>
       <div class="grid">
-        <div class="eq"><b>DSB-SC modulation</b>
+        <div class="eq">
           <p>A DSB-SC signal is the product of the message \(m(t)\) and a carrier \(A_c\cos(2\pi f_ct)\)
             with amplitude \(A_c\) and frequency \(f_c\):</p>
           \[
             x(t)=A_c\,m(t)\cos(2\pi f_ct).
           \]
         </div>
-        <div style="
-          position:relative;
-          width:100%;
-          height:125px;
-          max-width:500px;
-          margin:0 auto;
-        ">
-
-          <!-- Arrows -->
-          <svg viewBox="0 0 500 125"
-              preserveAspectRatio="none"
-              style="position:absolute;inset:0;width:100%;height:100%;">
-
-            <defs>
-              <marker id="dsbArrow"
-                      markerWidth="8" markerHeight="8"
-                      refX="6" refY="3"
-                      orient="auto">
-                <path d="M0,0 L6,3 L0,6" fill="#263b50"/>
-              </marker>
-            </defs>
-
-            <!-- Message to multiplier -->
-            <path d="M105 38 H218"
-                  stroke="#263b50" stroke-width="2"
-                  fill="none" marker-end="url(#dsbArrow)"/>
-
-            <!-- Multiplier to output -->
-            <path d="M282 38 H395"
-                  stroke="#263b50" stroke-width="2"
-                  fill="none" marker-end="url(#dsbArrow)"/>
-
-            <!-- Carrier to multiplier -->
-            <path d="M250 105 V70"
-                  stroke="#263b50" stroke-width="2"
-                  fill="none" marker-end="url(#dsbArrow)"/>
+        <div class="tile">
+          <svg class="mod" viewBox="0 0 500 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="modT modD" style="display:block;width:100%;max-width:500px;height:auto;margin:0 auto">
+          <title id="modT">Product modulator</title>
+          <desc id="modD">The message m(t) and the carrier A_c cos(2 pi f_c t) are multiplied, producing the modulated signal x(t).</desc>
+          <style>
+          .mod{--mFg:var(--fg,#1b1f2a);--mAcc:var(--acc,#0b3d91)}
+          @media (prefers-color-scheme:dark){.mod{--mFg:var(--fg,#e8eaf0);--mAcc:var(--acc,#7fa8ff)}}
+          .mod text{fill:var(--mFg);font:22px Georgia,'Times New Roman',serif;text-anchor:middle}
+          .mod .i{font-style:italic}.mod .s{font-size:15px}
+          .mod .ln{stroke:var(--mAcc);stroke-width:2.2;fill:none;stroke-linecap:round}
+          .mod .hd{fill:var(--mAcc)}
+          </style>
+          <text x="55" y="75"><tspan class="i">m</tspan>(<tspan class="i">t</tspan>)</text>
+          <circle class="ln" cx="230" cy="68" r="20"/><path class="ln" d="M216 54L244 82M244 54L216 82"/>
+          <text x="430" y="75"><tspan class="i">x</tspan>(<tspan class="i">t</tspan>)</text>
+          <text x="230" y="168"><tspan class="i">A</tspan><tspan class="i s" dy="5">c</tspan><tspan dy="-5"> cos(2π</tspan><tspan class="i"> f</tspan><tspan class="i s" dy="5">c</tspan><tspan class="i" dy="-5"> t</tspan><tspan>)</tspan></text>
+          <path class="ln" d="M90 68H196"/><path class="hd" d="M208 68l-15-8v16z"/>
+          <path class="ln" d="M230 140V104"/><path class="hd" d="M230 92l-8 15h16z"/>
+          <path class="ln" d="M254 68H378"/><path class="hd" d="M390 68l-15-8v16z"/>
           </svg>
-
-          <!-- Mathematical labels -->
-          <div style="position:absolute;left:5%;top:21%;transform:translateY(-50%);">
-            \(m(t)\)
-          </div>
-
-          <div style="
-            position:absolute;
-            left:50%;top:30%;
-            transform:translate(-50%,-50%);
-            width:54px;height:54px;
-            border:2px solid #263b50;
-            border-radius:50%;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            background:transparent;
-            font-size:1.25em;
-          ">
-            \(\otimes\)
-          </div>
-
-          <div style="position:absolute;right:5%;top:21%;transform:translateY(-50%);">
-            \(x(t)\)
-          </div>
-
-          <div style="
-            position:absolute;
-            left:50%;bottom:0;
-            transform:translateX(-50%);
-            white-space:nowrap;
-          ">
-            \(A_c\cos(2\pi f_ct)\)
-          </div>
         </div>
       </div>
     </div>
