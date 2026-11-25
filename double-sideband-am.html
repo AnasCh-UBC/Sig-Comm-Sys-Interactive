@@ -1445,27 +1445,26 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       <div class="demo-readout" id="amReadout"></div>
     </div>
 
-    <div class="eq">
-      <b>Conventional AM signal:</b> In general, conventional AM is defined by the signal
+    <div class="card">
+      <h3>Conventional AM signal</h3> 
+      In general, conventional AM is defined by the signal
       \[
-        x(t)=A_c[1+a\,m_n(t)]\cos(2\pi f_ct),
+        x(t)=A_c(1+a\,m_n(t))\cos(2\pi f_ct),
       \]
       where \(m_n(t)=\frac{m(t)}{\max_t|m(t)|}\) is the normalized message signal so that \(|m_n(t)|\leq1\), 
       and \(a\in(0,1)\) is the modulation index. 
-      <p class="sub">The normalization and \(a\lt 1\) ensure that \(A_c[1+a\,m_n(t)]\geq0\), which allows envelope detection.
+      <p class="sub">The normalization and \(a\lt 1\) ensure that \(A_c(1+a\,m_n(t))\geq0\), which allows envelope detection.
     </div>
 
     
 
-    <div class="eq">
-      <b>Spectrum of conventional AM</b>
+    <div class="card">
+      <h3>Spectrum of conventional AM</h3>
+      If \(M_n(f)=\mathcal{F}\{m_n(t)\}\), then 
       \[
-      \begin{aligned}
-      X(f)={}&\frac{A_c}{2}\left[\delta(f-f_c)+\delta(f+f_c)\right]\\
-      &+\frac{A_ca}{2}\left[M_n(f-f_c)+M_n(f+f_c)\right],
-      \end{aligned}
+      X(f)=\frac{A_c}{2}\left(\delta(f-f_c)+\delta(f+f_c)\right)+\frac{A_ca}{2}\left(M_n(f-f_c)+M_n(f+f_c)\right),
       \]
-      where \(M_n(f)=\mathcal{F}\{m_n(t)\}\). Conventional AM contains a carrier component in addition to both sidebands. If the message bandwidth is \(W\), the total AM bandwidth is \(2W\).
+      <p class="sub">Conventional AM contains a carrier component in addition to both sidebands. If the message bandwidth is \(W\), the total AM bandwidth is \(2W\).</p>
     </div>
 
     <div class="eq">
