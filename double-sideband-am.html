@@ -1549,18 +1549,23 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
 
 
     <div class="callout">
-      <h3>Example: Power of a two-tone message</h3>
-      <p>Consider \(m(t)=p\cos(2\pi f_1t)+q\sin(2\pi f_2t)\), with \(f_2=3f_1\), \(p=3\), \(q=1\), \(\max_t|m(t)|=3.7\), and modulation index \(a=0.85\).</p>
-      <p>The normalized message is</p>
-      \[
-        m_n(t)=u\cos(2\pi f_1t)+v\sin(2\pi f_2t),
-        \quad u=0.81,\quad v=0.27.
-      \]
-      <p>Its average power is</p>
-      \[
-        P_{m_n}=\frac{u^2}{2}+\frac{v^2}{2}=0.36.
-      \]
-      <p>For \(A_c=1\), the information-bearing power is approximately \(0.13\), and the carrier power is \(0.5\).</p>
+      <h3>Exercise: Power of a two-tone message</h3>
+      <p>Consider \(m(t)=p\cos(2\pi f_1t)+q\sin(2\pi f_2t)\), with \(f_2=3f_1\), \(p=3\), \(q=1\), \(\max_t|m(t)|=3.7\), and modulation index \(a=0.85\). Determine \(m_n(t)\), its power, 
+        and the powers of the information-bearing and the carrier parts of \(x(t)\).</p>
+      <button class="toggle-btn"
+          onclick="toggleDerivation('dsbSinSolution',this)">Show solution</button>
+      <div id="dsbSinSolution" style="display:none;">
+        <p>The normalized message is</p>
+        \[
+          m_n(t)=u\cos(2\pi f_1t)+v\sin(2\pi f_2t),
+          \quad u=0.81,\quad v=0.27.
+        \]
+        <p>Its average power is</p>
+        \[
+          P_{m_n}=\frac{u^2}{2}+\frac{v^2}{2}=0.36.
+        \]
+        <p>For \(A_c=1\), the information-bearing power is approximately \(0.13\), and the carrier power is \(0.5\).</p>
+      </div>
     </div>
 
     <div class="wd">
