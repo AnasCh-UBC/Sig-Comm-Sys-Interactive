@@ -894,7 +894,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     </ul>
     <p class="sub">This is why this modulation scheme is called <b>double-sideband</b> <b>suppressed-carrier</b> AM.</p>
 
-    <div class="callout"><h4>Exercise</h4>
+    <div class="callout"><h3>Exercise</h3>
       <p>Express \(x(t)\) and \(X(f)\) when \(m(t)=a\sin(2\pi f_m t)\).</p>
       <button class="toggle-btn"
           onclick="toggleDerivation('dsbSinSolution',this)">Show solution</button>
@@ -941,19 +941,19 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     <h2><small>3</small> Double-sideband suppressed-carrier (DSB-SC) AM - Demodulation</h2>
     <p class="sub">How does the receiver recover \(m(t)\) from \(x(t)\)?</p>
 
-    <div class="eq">
+    <div class="card">
       <b>Demodulation</b>
       <p>Suppose the receiver has a <b>local oscillator (LO)</b> signal \(\cos(2\pi f_ct+\phi)\) with phase-shift \(\phi\)
         from the carrier due to a lack of synchronization between the transmitter and the receiver.</p>
       <div class="grid">
         <div class="tile">
           <ul>
-            <li>The receiver multiplies \(x(t)\) by \(\cos(2\pi f_ct+\phi)\) to obtain:</p>
+            <li>The receiver multiplies \(x(t)\cos(2\pi f_ct+\phi)\) to obtain:
               \[
-                x(t)\cos(2\pi f_ct+\phi)=\frac{A_c}{2}m(t)\cos\phi
+                \frac{A_c}{2}m(t)\cos\phi
                 +\frac{A_c}{2}m(t)\cos(4\pi f_ct+\phi).
               \]</li>
-              <li>Then it applies a LPF with cutoff frequency equal (or slightly larger) than the bandwidht of \(m(t)\) to removes the high-frequency term, leaving</p>
+              <li>Then it applies a LPF with cutoff frequency equal to the bandwidth of \(m(t)\), leaving
               \[
                 \hat m(t)=\frac{A_c}{2}m(t)\cos\phi.
               \]</li>
@@ -1019,8 +1019,8 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
             <path class="ln" d="M176 56L204 84M204 56L176 84"/>
         
             <!-- Low-pass filter -->
-            <rect class="blk" x="315" y="43" width="115" height="54"/>
-            <foreignObject x="315" y="43" width="115" height="54">
+            <rect class="blk" x="315" y="43" width="85" height="54"/>
+            <foreignObject x="315" y="43" width="85" height="54">
               <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
                 LPF
               </div>
@@ -1038,10 +1038,10 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
             <path class="hd" d="M168 70l-15-8v16z"/>
         
             <path class="ln" d="M211 70H315"/>
-            <path class="hd" d="M327 70l-15-8v16z"/>
-        
-            <path class="ln" d="M410 70H470"/>
-            <path class="hd" d="M482 70l-15-8v16z"/>
+            <path class="hd" d="M315 70l-12-7v14z"/>
+
+            <path class="ln" d="M400 70H470"/>
+            <path class="hd" d="M482 70l-12-8v16z"/>
         
             <!-- Local oscillator -->
             <foreignObject x="65" y="145" width="250" height="44">
