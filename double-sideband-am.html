@@ -942,22 +942,11 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     <p class="sub">How does the receiver recover \(m(t)\) from \(x(t)\)?</p>
 
     <div class="card">
-      <b>Demodulation</b>
-      <p>Suppose the receiver has a <b>local oscillator (LO)</b> signal \(\cos(2\pi f_ct+\phi)\) with phase-shift \(\phi\)
-        from the carrier due to a lack of synchronization between the transmitter and the receiver.</p>
+      <h3>Demodulation</h3>
       <div class="grid">
         <div class="tile">
-          <ul>
-            <li>The receiver multiplies \(x(t)\cos(2\pi f_ct+\phi)\) to obtain:
-              \[
-                \frac{A_c}{2}m(t)\cos\phi
-                +\frac{A_c}{2}m(t)\cos(4\pi f_ct+\phi).
-              \]</li>
-              <li>Then it applies a LPF with cutoff frequency equal to the bandwidth of \(m(t)\), leaving
-              \[
-                \hat m(t)=\frac{A_c}{2}m(t)\cos\phi.
-              \]</li>
-          </ul>
+          <p>Suppose the receiver has a <b>local oscillator (LO)</b> signal \(\cos(2\pi f_ct+\phi)\) with phase-shift \(\phi\)
+            from the carrier due to a lack of synchronization between the transmitter and the receiver. It demodulates as follows:</p>
         </div>
         <div class="tile">
           <svg class="demod" viewBox="0 0 600 210"
@@ -1056,6 +1045,10 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
           </svg>
         </div>
       </div>
+      <ul>
+        <li>Multiplies \(x(t)\) by the Lo to obtain: \(\frac{A_c}{2}m(t)\cos\phi+\frac{A_c}{2}m(t)\cos(4\pi f_ct+\phi).\)</li>
+        <li>Applies a LPF with cutoff frequency equal to the bandwidth of \(m(t)\), leaving \(\hat m(t)=\frac{A_c}{2}m(t)\cos\phi\).</li>
+      </ul>
       <p>This recovers a scaled version of \(m(t)\).</p>
     </div>
 
