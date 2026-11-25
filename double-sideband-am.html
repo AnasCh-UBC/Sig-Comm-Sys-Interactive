@@ -820,12 +820,13 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     </div>
 
     <div class="card"><h3>Spectrum of DSB-SC AM</h3>
-      <p>Using the Fourier-transform modulation property:</p>
-      \[
-        X(f)=\mathcal{F}\{x(t)\}
-        =\frac{A_c}{2}\left(M(f-f_c)+M(f+f_c)\right),
-      \]
-      where \(M(f)=\mathcal{F}\{m(t)\}\).
+      <div class="eq">
+        Let \(M(f)=\mathcal{F}\{m(t)\}\). Using the Fourier-transform modulation property:
+        \[
+          X(f)=\mathcal{F}\{x(t)\}
+          =\frac{A_c}{2}\left(M(f-f_c)+M(f+f_c)\right),
+        \]
+      </div>
       <p class="sub">If the message bandwidth is \(W\), the modulated signal occupies two sidebands and has total bandwidth \(2W\).</p>
     </div>
 
