@@ -1446,15 +1446,13 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     </div>
 
     <div class="eq">
-      <b>Conventional AM signal</b>
+      <b>Conventional AM signal:</b> In general, conventional AM is defined by the signal
       \[
         x(t)=A_c[1+a\,m_n(t)]\cos(2\pi f_ct),
       \]
-      where
-      \[
-        m_n(t)=\frac{m(t)}{\max_t|m(t)|},\qquad |m_n(t)|\leq1,
-      \]
-      and \(a\in(0,1)\) is the modulation index. The normalization and \(a<1\) ensure that \(A_c[1+a\,m_n(t)]\geq0\), which allows envelope detection.
+      where \(m_n(t)=\frac{m(t)}{\max_t|m(t)|}\) is the normalized message signal so that \(|m_n(t)|\leq1\), 
+      and \(a\in(0,1)\) is the modulation index. 
+      <p class="sub">The normalization and \(a\lt 1\) ensure that \(A_c[1+a\,m_n(t)]\geq0\), which allows envelope detection.
     </div>
 
     
