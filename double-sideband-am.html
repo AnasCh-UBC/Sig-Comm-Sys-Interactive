@@ -945,114 +945,118 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       <b>Demodulation</b>
       <p>Suppose the receiver has a <b>local oscillator (LO)</b> signal \(\cos(2\pi f_ct+\phi)\) with phase-shift \(\phi\)
         from the carrier due to a lack of synchronization between the transmitter and the receiver.</p>
-      <ul>
-        <li>The receiver multiplies \(x(t)\) by \(\cos(2\pi f_ct+\phi)\) to obtain:</p>
-          \[
-            x(t)\cos(2\pi f_ct+\phi)=\frac{A_c}{2}m(t)\cos\phi
-            +\frac{A_c}{2}m(t)\cos(4\pi f_ct+\phi).
-          \]</li>
-          <li>Then it applies a LPF with cutoff frequency equal (or slightly larger) than the bandwidht of \(m(t)\) to removes the high-frequency term, leaving</p>
-          \[
-            \hat m(t)=\frac{A_c}{2}m(t)\cos\phi.
-          \]</li>
-      </ul>
-      <p>This recovers a scaled version of \(m(t)\).</p>
-      <div class="tile">
-        <svg class="demod" viewBox="0 0 600 210"
-             xmlns="http://www.w3.org/2000/svg"
-             role="img" aria-labelledby="demodT demodD"
-             style="display:block;width:100%;max-width:600px;height:auto;margin:0 auto">
-      
-          <title id="demodT">Coherent DSB-SC demodulator</title>
-          <desc id="demodD">
-            The received DSB-SC signal is multiplied by a local oscillator
-            with phase shift phi, then passed through a low-pass filter
-            to recover the message signal.
-          </desc>
-      
-          <style>
-            .demod {
-              --mFg:var(--fg,#1b1f2a);
-              --mAcc:var(--acc,#0b3d91);
-            }
-            @media (prefers-color-scheme:dark) {
+      <div class="grid">
+        <div class="tile"></div>
+          <ul>
+            <li>The receiver multiplies \(x(t)\) by \(\cos(2\pi f_ct+\phi)\) to obtain:</p>
+              \[
+                x(t)\cos(2\pi f_ct+\phi)=\frac{A_c}{2}m(t)\cos\phi
+                +\frac{A_c}{2}m(t)\cos(4\pi f_ct+\phi).
+              \]</li>
+              <li>Then it applies a LPF with cutoff frequency equal (or slightly larger) than the bandwidht of \(m(t)\) to removes the high-frequency term, leaving</p>
+              \[
+                \hat m(t)=\frac{A_c}{2}m(t)\cos\phi.
+              \]</li>
+          </ul>
+        </div>
+        <div class="tile">
+          <svg class="demod" viewBox="0 0 600 210"
+              xmlns="http://www.w3.org/2000/svg"
+              role="img" aria-labelledby="demodT demodD"
+              style="display:block;width:100%;max-width:600px;height:auto;margin:0 auto">
+        
+            <title id="demodT">Coherent DSB-SC demodulator</title>
+            <desc id="demodD">
+              The received DSB-SC signal is multiplied by a local oscillator
+              with phase shift phi, then passed through a low-pass filter
+              to recover the message signal.
+            </desc>
+        
+            <style>
               .demod {
-                --mFg:var(--fg,#e8eaf0);
-                --mAcc:var(--acc,#7fa8ff);
+                --mFg:var(--fg,#1b1f2a);
+                --mAcc:var(--acc,#0b3d91);
               }
-            }
-            .demod .lbl {
-              color:var(--mFg);
-              font-size:20px;
-              height:100%;
-              display:flex;
-              align-items:center;
-              justify-content:center;
-              text-align:center;
-            }
-            .demod .ln {
-              stroke:var(--mAcc);
-              stroke-width:2.2;
-              fill:none;
-              stroke-linecap:round;
-            }
-            .demod .hd { fill:var(--mAcc); }
-            .demod .blk {
-              fill:none;
-              stroke:var(--mAcc);
-              stroke-width:2.2;
-              rx:5;
-            }
-          </style>
-      
-          <!-- Received signal -->
-          <foreignObject x="5" y="48" width="105" height="44">
-            <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
-              \(x(t)\)
-            </div>
-          </foreignObject>
-      
-          <!-- Multiplier -->
-          <circle class="ln" cx="190" cy="70" r="21"/>
-          <path class="ln" d="M176 56L204 84M204 56L176 84"/>
-      
-          <!-- Low-pass filter -->
-          <rect class="blk" x="315" y="43" width="115" height="54"/>
-          <foreignObject x="315" y="43" width="115" height="54">
-            <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
-              LPF
-            </div>
-          </foreignObject>
-      
-          <!-- Recovered message -->
-          <foreignObject x="470" y="48" width="125" height="44">
-            <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
-              \(\hat m(t)\)
-            </div>
-          </foreignObject>
-      
-          <!-- Signal path -->
-          <path class="ln" d="M105 70H156"/>
-          <path class="hd" d="M168 70l-15-8v16z"/>
-      
-          <path class="ln" d="M211 70H315"/>
-          <path class="hd" d="M327 70l-15-8v16z"/>
-      
-          <path class="ln" d="M430 70H470"/>
-          <path class="hd" d="M482 70l-15-8v16z"/>
-      
-          <!-- Local oscillator -->
-          <foreignObject x="65" y="145" width="250" height="44">
-            <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
-              \(A_c\cos(2\pi f_ct+\phi)\)
-            </div>
-          </foreignObject>
-      
-          <path class="ln" d="M190 145V103"/>
-          <path class="hd" d="M190 91l-8 15h16z"/>
-      
-        </svg>
+              @media (prefers-color-scheme:dark) {
+                .demod {
+                  --mFg:var(--fg,#e8eaf0);
+                  --mAcc:var(--acc,#7fa8ff);
+                }
+              }
+              .demod .lbl {
+                color:var(--mFg);
+                font-size:20px;
+                height:100%;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                text-align:center;
+              }
+              .demod .ln {
+                stroke:var(--mAcc);
+                stroke-width:2.2;
+                fill:none;
+                stroke-linecap:round;
+              }
+              .demod .hd { fill:var(--mAcc); }
+              .demod .blk {
+                fill:none;
+                stroke:var(--mAcc);
+                stroke-width:2.2;
+                rx:5;
+              }
+            </style>
+        
+            <!-- Received signal -->
+            <foreignObject x="5" y="48" width="105" height="44">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
+                \(x(t)\)
+              </div>
+            </foreignObject>
+        
+            <!-- Multiplier -->
+            <circle class="ln" cx="190" cy="70" r="21"/>
+            <path class="ln" d="M176 56L204 84M204 56L176 84"/>
+        
+            <!-- Low-pass filter -->
+            <rect class="blk" x="315" y="43" width="115" height="54"/>
+            <foreignObject x="315" y="43" width="115" height="54">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
+                LPF
+              </div>
+            </foreignObject>
+        
+            <!-- Recovered message -->
+            <foreignObject x="470" y="48" width="125" height="44">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
+                \(\hat m(t)\)
+              </div>
+            </foreignObject>
+        
+            <!-- Signal path -->
+            <path class="ln" d="M105 70H156"/>
+            <path class="hd" d="M168 70l-15-8v16z"/>
+        
+            <path class="ln" d="M211 70H315"/>
+            <path class="hd" d="M327 70l-15-8v16z"/>
+        
+            <path class="ln" d="M410 70H470"/>
+            <path class="hd" d="M482 70l-15-8v16z"/>
+        
+            <!-- Local oscillator -->
+            <foreignObject x="65" y="145" width="250" height="44">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
+                \(A_c\cos(2\pi f_ct+\phi)\)
+              </div>
+            </foreignObject>
+        
+            <path class="ln" d="M190 145V103"/>
+            <path class="hd" d="M190 91l-8 15h16z"/>
+        
+          </svg>
+        </div>
       </div>
+      <p>This recovers a scaled version of \(m(t)\).</p>
     </div>
 
     <b>Why phase synchronization matters?</b>
