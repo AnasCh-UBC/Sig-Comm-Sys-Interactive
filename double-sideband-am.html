@@ -794,44 +794,51 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
             x(t)=A_c\,m(t)\cos(2\pi f_ct).
           \]
         </div>
-        <div class="tile">
-          <div style="display:flex; align-items:center; justify-content:center; gap:10px; padding:12px 4px; flex-wrap:wrap;">
-        
-            <!-- Message signal -->
-            <div style="font-size:1.05em; color:#172b45;">
-              \(m(t)\)
-            </div>
-        
-            <!-- Arrow -->
-            <div style="color:#263b50; font-size:1.5em;">⟶</div>
-        
-            <!-- Multiplier -->
-            <div style="
-              width:42px;
-              height:42px;
-              border:2px solid #263b50;
-              border-radius:50%;
-              display:flex;
-              align-items:center;
-              justify-content:center;
-              color:#172b45;
-              font-size:1.6em;
-              background:#eef4f8;
-            ">×</div>
-        
-            <!-- Arrow -->
-            <div style="color:#263b50; font-size:1.5em;">⟶</div>
-        
-            <!-- Output signal -->
-            <div style="font-size:1.05em; color:#172b45;">
-              \(x(t)\)
-            </div>
-        
-          </div>
-        
-          <!-- Carrier input -->
-          <div style="display:flex; justify-content:center; align-items:center; gap:8px; margin-top:-5px; color:#263b50;">
-            <span style="font-size:1.3em;">↑</span>
+        <div style="
+          display:grid;
+          grid-template-columns: 1fr 28px 54px 28px 1fr;
+          grid-template-rows:auto auto;
+          align-items:center;
+          justify-items:center;
+          column-gap:4px;
+          row-gap:0;
+          padding:8px 4px;
+          color:#263b50;
+        ">
+
+          <!-- Main signal path -->
+          <div>\(m(t)\)</div>
+
+          <div style="font-size:1.5em;">⟶</div>
+
+          <div style="
+            width:42px;
+            height:42px;
+            border:2.5px solid #263b50;
+            border-radius:50%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:1.5em;
+            box-sizing:border-box;
+          ">×</div>
+
+          <div style="font-size:1.5em;">⟶</div>
+
+          <div>\(x(t)\)</div>
+
+          <!-- Carrier input, centered directly below multiplier -->
+          <div style="
+            grid-column:3;
+            grid-row:2;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            line-height:1.15;
+            margin-top:-2px;
+            white-space:nowrap;
+          ">
+            <span style="font-size:1.25em;">↑</span>
             <span>\(A_c\cos(2\pi f_ct)\)</span>
           </div>
         </div>
