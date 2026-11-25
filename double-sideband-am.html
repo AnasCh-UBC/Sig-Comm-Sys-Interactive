@@ -1736,7 +1736,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     const Y = y => T + (ymax-y)/(ymax-ymin)*ph;
     ctx.clearRect(0,0,W,H);
     ctx.fillStyle = '#101b2a'; ctx.fillRect(0,0,W,H);
-    ctx.font = '12px system-ui'; ctx.textAlign='center'; ctx.textBaseline='top';
+    ctx.font = '15px system-ui'; ctx.textAlign='center'; ctx.textBaseline='top';
     ctx.strokeStyle='rgba(180,205,225,.16)'; ctx.lineWidth=1;
     for(let i=0;i<=8;i++){
       const x=xmin+(xmax-xmin)*i/8, px=X(x);
@@ -1752,7 +1752,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     ctx.strokeStyle='#d5e4f0';ctx.lineWidth=1.2;
     if(ymin<=0&&ymax>=0){ctx.beginPath();ctx.moveTo(L,Y(0));ctx.lineTo(L+pw,Y(0));ctx.stroke();}
     if(xmin<=0&&xmax>=0){ctx.beginPath();ctx.moveTo(X(0),T);ctx.lineTo(X(0),T+ph);ctx.stroke();}
-    ctx.fillStyle='#eaf2f8';ctx.font='italic 15px Georgia';ctx.textAlign='right';ctx.textBaseline='bottom';
+    ctx.fillStyle='#eaf2f8';ctx.font='italic 17px Georgia';ctx.textAlign='right';ctx.textBaseline='bottom';
     ctx.fillText(xlabel,L+pw,H-2);
     ctx.save();ctx.translate(16,T+ph/2);ctx.rotate(-PI/2);ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText(ylabel,0,0);ctx.restore();
     return {ctx,W,H,L,R,T,B,pw,ph,X,Y,xmin,xmax,ymin,ymax};
@@ -1868,7 +1868,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       {fn:t=>-env(t),color:'#ffb454',width:2,dash:[7,5]},
       {fn:mn,color:'#62d99a',width:2.3,dash:[4,4]}
     ],[-1,1,-2.8,2.8],['t (s)','Amplitude']);
-    stems($('amSpectrum'),[-fc-3,fc+3,0,Math.max(.8,Ac*(1+a/2)*1.3)],[
+    stems($('amSpectrum'),[-fc-3,fc+3,0,2],[
       // Message spectrum
       {x:-fm,h:0.5,color:'#62d99a'},
       {x: fm,h:0.5,color:'#62d99a'},
