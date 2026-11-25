@@ -1093,10 +1093,220 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
 
     <div class="eq"><h3>Adding a pilot tone</h3>
       <p>To synchronize the LO with the transmitter carrier, we can add a <b>pilot tone</b> to the transmitted signal.</p>
-      \[x_{\mathrm{pilot}}(t)=A_cm(t)\cos(2\pi f_ct)+A_p\cos(2\pi f_ct).\]
+      \[x_(t)=A_cm(t)\cos(2\pi f_ct)+A_p\cos(2\pi f_ct).\]
+      <p clas="sub">Note: This is no longer a suppressed carrier form of AM!</p>
       <p>At the receiver, a narrowband BPF centered at \(f_c\) extracts the pilot tone for use as the LO.</p>
       <p class="sub"> The disadvantage is that some transmitted power is allocated to the pilot.</p>
     </div>
+    
+    <div class="card">
+      <div style="
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:16px;
+        align-items:start;
+      ">
+    
+        <!-- MODULATOR -->
+        <div class="tile">
+          <h4 style="text-align:center;">AM Modulator</h4>
+    
+          <svg viewBox="0 0 460 190" xmlns="http://www.w3.org/2000/svg"
+               style="display:block;width:100%;height:auto;"
+               role="img" aria-label="Conventional AM modulator">
+    
+            <defs>
+              <marker id="amModArrow" markerWidth="7" markerHeight="7"
+                      refX="6" refY="3" orient="auto">
+                <path d="M0 0 L6 3 L0 6" fill="#263b50"/>
+              </marker>
+            </defs>
+    
+            <style>
+              .amModLine {
+                fill:none;stroke:#263b50;stroke-width:1.8;
+                stroke-linecap:round;stroke-linejoin:round;
+                marker-end:url(#amModArrow);
+              }
+              .amModNode {
+                fill:#f5f8fc;stroke:#263b50;stroke-width:1.8;
+              }
+              .amModText {
+                color:#172b45;font-size:17px;
+                display:flex;align-items:center;justify-content:center;
+                height:100%;white-space:nowrap;
+              }
+            </style>
+    
+            <!-- Message input -->
+            <foreignObject x="0" y="48" width="65" height="35">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="amModText">
+                \(m(t)\)
+              </div>
+            </foreignObject>
+    
+            <!-- First multiplier -->
+            <circle class="amModNode" cx="115" cy="65" r="19"/>
+            <foreignObject x="96" y="46" width="38" height="38">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="amModText">
+                \(\otimes\)
+              </div>
+            </foreignObject>
+    
+            <!-- Adder -->
+            <circle class="amModNode" cx="290" cy="65" r="19"/>
+            <foreignObject x="271" y="46" width="38" height="38">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="amModText">
+                \(\oplus\)
+              </div>
+            </foreignObject>
+    
+            <!-- Output -->
+            <foreignObject x="385" y="48" width="75" height="35">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="amModText">
+                \(x(t)\)
+              </div>
+            </foreignObject>
+    
+            <!-- Carrier label -->
+            <foreignObject x="35" y="143" width="175" height="35">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="amModText">
+                \(A_c\cos(2\pi f_ct)\)
+              </div>
+            </foreignObject>
+    
+            <!-- Second multiplier -->
+            <circle class="amModNode" cx="225" cy="145" r="18"/>
+            <foreignObject x="207" y="127" width="36" height="36">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="amModText">
+                \(\otimes\)
+              </div>
+            </foreignObject>
+    
+            <!-- Gain label -->
+            <foreignObject x="320" y="127" width="105" height="35">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="amModText">
+                \(A_p/A_c\)
+              </div>
+            </foreignObject>
+    
+            <!-- Signal connections -->
+            <path class="amModLine" d="M65 65 H94"/>
+            <path class="amModLine" d="M134 65 H270"/>
+            <path class="amModLine" d="M309 65 H380"/>
+    
+            <!-- Carrier to first multiplier -->
+            <path class="amModLine" d="M115 143 V88"/>
+    
+            <!-- Carrier branch to second multiplier -->
+            <path class="amModLine" d="M115 125 V145 H206"/>
+    
+            <!-- Second multiplier to adder -->
+            <path class="amModLine" d="M243 145 H265 L278 82"/>
+    
+            <!-- Gain input -->
+            <path class="amModLine" d="M320 145 H245"/>
+    
+          </svg>
+        </div>
+    
+        <!-- DEMODULATOR -->
+        <div class="tile">
+          <h4 style="text-align:center;">AM Demodulator</h4>
+    
+          <svg viewBox="0 0 460 190" xmlns="http://www.w3.org/2000/svg"
+               style="display:block;width:100%;height:auto;"
+               role="img" aria-label="AM coherent demodulator">
+    
+            <defs>
+              <marker id="amDemodArrow" markerWidth="7" markerHeight="7"
+                      refX="6" refY="3" orient="auto">
+                <path d="M0 0 L6 3 L0 6" fill="#263b50"/>
+              </marker>
+            </defs>
+    
+            <style>
+              .amDemodLine {
+                fill:none;stroke:#263b50;stroke-width:1.8;
+                stroke-linecap:round;stroke-linejoin:round;
+                marker-end:url(#amDemodArrow);
+              }
+              .amDemodNode {
+                fill:#f5f8fc;stroke:#263b50;stroke-width:1.8;
+              }
+              .amDemodText {
+                color:#172b45;font-size:16px;
+                display:flex;align-items:center;justify-content:center;
+                height:100%;text-align:center;
+              }
+            </style>
+    
+            <!-- Received signal -->
+            <foreignObject x="0" y="48" width="65" height="35">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="amDemodText">
+                \(r(t)\)
+              </div>
+            </foreignObject>
+    
+            <!-- Multiplier -->
+            <circle class="amDemodNode" cx="170" cy="65" r="19"/>
+            <foreignObject x="151" y="46" width="38" height="38">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="amDemodText">
+                \(\otimes\)
+              </div>
+            </foreignObject>
+    
+            <!-- Intermediate signal -->
+            <foreignObject x="215" y="48" width="65" height="35">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="amDemodText">
+                \(y(t)\)
+              </div>
+            </foreignObject>
+    
+            <!-- LPF -->
+            <rect x="300" y="43" width="65" height="44"
+                  rx="4" class="amDemodNode"/>
+            <foreignObject x="300" y="43" width="65" height="44">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="amDemodText">
+                LPF
+              </div>
+            </foreignObject>
+    
+            <!-- Recovered message -->
+            <foreignObject x="375" y="48" width="85" height="35">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="amDemodText">
+                \(\hat m(t)\)
+              </div>
+            </foreignObject>
+    
+            <!-- Narrow BPF -->
+            <rect x="85" y="130" width="105" height="45"
+                  rx="4" class="amDemodNode"/>
+            <foreignObject x="85" y="130" width="105" height="45">
+              <div xmlns="http://www.w3.org/1999/xhtml"
+                   class="amDemodText" style="font-size:13px;line-height:1.2;">
+                Narrow BPF<br/>\((@f_c)\)
+              </div>
+            </foreignObject>
+    
+            <!-- Main signal path -->
+            <path class="amDemodLine" d="M65 65 H149"/>
+            <path class="amDemodLine" d="M189 65 H215"/>
+            <path class="amDemodLine" d="M280 65 H300"/>
+            <path class="amDemodLine" d="M365 65 H375"/>
+    
+            <!-- Received signal branch to BPF -->
+            <path class="amDemodLine" d="M40 83 V152 H85"/>
+    
+            <!-- BPF output to multiplier -->
+            <path class="amDemodLine" d="M190 152 H170 V85"/>
+    
+          </svg>
+        </div>
+    
+      </div>
+    </div>
+    
     <p class="sub">A phase-locked loop (PLL) can provide an alternative carrier-recovery method. We will learn about this later.</p>
   </section>
 
