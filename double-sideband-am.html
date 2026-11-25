@@ -1179,11 +1179,11 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       <div class="demo-readout" id="demodReadout"></div>
     </div>
 
-    <div class="eq"><h3>Adding a pilot tone</h3>
+    <div class="card"><h3>Adding a pilot tone</h3>
       <div class="grid">
         <div class="tile">
           <p>To synchronize the LO with the transmitter carrier, we can add a <b>pilot tone</b> to the transmitted signal.
-          \[x_(t)=A_cm(t)\cos(2\pi f_ct)+A_p\cos(2\pi f_ct).\]</p>
+          \[x(t)=A_cm(t)\cos(2\pi f_ct)+A_p\cos(2\pi f_ct).\]</p>
           <svg class="mod" viewBox="0 0 470 215"
                xmlns="http://www.w3.org/2000/svg"
                role="img" aria-label="AM modulator block diagram">
@@ -1263,90 +1263,70 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
             <path class="hd" d="M280 74 l-5 9 h10 z"/>
     
           </svg>
-    
-          <div class="caption">(a) Modulator</div>
         </div>
         <div class="tile">
-          <p>At the receiver, a narrowband BPF centered at \(f_c\) extracts the pilot tone for use as the LO.</p>
+          <p>At the receiver, a narrowband BPF centered at \(f_c\) extracts the pilot tone for use as the LO:
+            \[\text{LO: } \cos(2\pi f_ct).\]
+          </p>
           <svg class="demod" viewBox="0 0 470 215"
-               xmlns="http://www.w3.org/2000/svg"
-               role="img" aria-label="AM demodulator block diagram">
-    
-            <defs>
-              <marker id="demodArrow" markerWidth="8" markerHeight="8"
-                      refX="6" refY="3" orient="auto">
-                <path d="M0 0 L6 3 L0 6 Z" class="hd"/>
-              </marker>
-            </defs>
-    
-            <!-- Received signal -->
-            <foreignObject x="0" y="38" width="55" height="38">
-              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
-                \(r(t)\)
-              </div>
-            </foreignObject>
-    
-            <!-- Multiplier -->
-            <circle class="node" cx="192" cy="56" r="15"/>
-            <path class="ln" d="M181 45 L203 67 M203 45 L181 67"/>
-    
-            <!-- Intermediate signal -->
-            <foreignObject x="255" y="38" width="48" height="38">
-              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
-                \(y(t)\)
-              </div>
-            </foreignObject>
-    
-            <!-- LPF -->
-            <rect class="node" x="331" y="38" width="56" height="36" rx="4"/>
-            <foreignObject x="331" y="38" width="56" height="36">
-              <div xmlns="http://www.w3.org/1999/xhtml" class="block-label">
-                LPF
-              </div>
-            </foreignObject>
-    
-            <!-- Recovered message -->
-            <foreignObject x="405" y="38" width="65" height="38">
-              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
-                \(\hat m(t)\)
-              </div>
-            </foreignObject>
-    
-            <!-- Main signal path -->
-            <path class="ln" d="M55 56 H174"/>
-            <path class="hd" d="M174 56 l-9 -5 v10 z"/>
-    
-            <path class="ln" d="M207 56 H255"/>
-            <path class="hd" d="M255 56 l-9 -5 v10 z"/>
-    
-            <path class="ln" d="M303 56 H331"/>
-            <path class="hd" d="M331 56 l-9 -5 v10 z"/>
-    
-            <path class="ln" d="M387 56 H405"/>
-            <path class="hd" d="M405 56 l-9 -5 v10 z"/>
-    
-            <!-- Branch from received signal -->
-            <circle cx="74" cy="56" r="2.8" class="hd"/>
-            <path class="ln" d="M74 56 V142 H87"/>
-            <path class="hd" d="M87 142 l-9 -5 v10 z"/>
-    
-            <!-- Narrow bandpass filter -->
-            <rect class="node" x="87" y="117" width="84" height="50" rx="4"/>
-    
-            <foreignObject x="87" y="119" width="84" height="46">
-              <div xmlns="http://www.w3.org/1999/xhtml"
-                   class="block-label" style="font-size:13px;line-height:1.2;">
-                Narrow BPF<br/>(@ \(f_c\))
-              </div>
-            </foreignObject>
-    
-            <!-- BPF output to multiplier -->
-            <path class="ln" d="M171 142 H192 V74"/>
-            <path class="hd" d="M192 74 l-5 9 h10 z"/>
-    
-          </svg>
-    
-          <div class="caption">(b) Demodulator</div>
+            xmlns="http://www.w3.org/2000/svg"
+            role="img" aria-label="AM demodulator block diagram">
+
+          <!-- Received signal -->
+          <foreignObject x="0" y="38" width="55" height="38">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
+              \(r(t)\)
+            </div>
+          </foreignObject>
+
+          <!-- Multiplier -->
+          <circle class="node" cx="192" cy="56" r="15"/>
+          <path class="ln" d="M181 45 L203 67 M203 45 L181 67"/>
+
+          <!-- LPF moved to the intermediate signal position -->
+          <rect class="node" x="270" y="38" width="56" height="36" rx="4"/>
+          <foreignObject x="270" y="38" width="56" height="36">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="block-label">
+              LPF
+            </div>
+          </foreignObject>
+
+          <!-- Recovered message -->
+          <foreignObject x="365" y="38" width="100" height="38">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
+              \(\hat m(t)\)
+            </div>
+          </foreignObject>
+
+          <!-- Main signal path -->
+          <path class="ln" d="M55 56 H174"/>
+          <path class="hd" d="M174 56 l-9 -5 v10 z"/>
+
+          <path class="ln" d="M207 56 H270"/>
+          <path class="hd" d="M270 56 l-9 -5 v10 z"/>
+
+          <path class="ln" d="M326 56 H365"/>
+          <path class="hd" d="M365 56 l-9 -5 v10 z"/>
+
+          <!-- Branch from received signal -->
+          <circle cx="74" cy="56" r="2.8" class="hd"/>
+          <path class="ln" d="M74 56 V142 H87"/>
+          <path class="hd" d="M87 142 l-9 -5 v10 z"/>
+
+          <!-- Narrow bandpass filter -->
+          <rect class="node" x="87" y="117" width="84" height="50" rx="4"/>
+          <foreignObject x="87" y="119" width="84" height="46">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                class="block-label" style="font-size:13px;line-height:1.2;">
+              Narrow BPF<br/>(@ \(f_c\))
+            </div>
+          </foreignObject>
+
+          <!-- BPF output to multiplier -->
+          <path class="ln" d="M171 142 H192 V74"/>
+          <path class="hd" d="M192 74 l-5 9 h10 z"/>
+
+        </svg>
         </div>
       </div>
       <p class="sub">Note: This is no longer a suppressed carrier form of AM!</p>
