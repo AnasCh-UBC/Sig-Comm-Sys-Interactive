@@ -1072,8 +1072,8 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     </div>
 
     <div class="eq">
-      <b>Power of DSB-SC AM: </b> If \(P_m\) is the average power of the message signal, 
-      then the power of the modulated signal is
+      <b>Power of DSB-SC AM:</b> If \(P_m\) is the average power of \(m(t)\), 
+      then the power of \(x(t)\) is
       \[
         P_x=\frac{A_c^2}{2}P_m,
       \]
@@ -1532,12 +1532,13 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
 
     <div class="card">
       <h3>Power of conventional AM</h3>
-      <p>Assuming the normalized message has zero average, the total power is</p>
+      <p>If \(m_n(t)\) has zero average and has power \(P_{m_n}\), the total power of conventional AM is</p>
       \[
-        P_x=\frac{A_c^2}{2}a^2P_{m_n}+\frac{A_c^2}{2},
+        P_x=\frac{A_c^2}{2}a^2P_{m_n}+\frac{A_c^2}{2}.
       \]
-      where \(P_{m_n}\) is the average power of \(m_n(t)\). The first term is the information-bearing sideband power, while the second term is the carrier power.
-      <p class="sub">Usually, the information-bearing power is smaller than the carrier power. Conventional AM therefore uses power less efficiently than DSB-SC AM.</p>
+      The first term is the information-bearing sideband power, while the second term is the carrier power.
+      <p class="sub">Usually, the information-bearing power is smaller than the carrier power. 
+        Conventional AM therefore uses power less efficiently than DSB-SC AM.</p>
     </div>
 
 
