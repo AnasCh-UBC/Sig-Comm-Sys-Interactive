@@ -609,6 +609,94 @@ header{align-items:center}
   background: rgba(255, 255, 255, 0.02);
 }
 
+
+.mod-demod-grid {
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:14px;
+    align-items:start;
+  }
+
+  @media(max-width:820px) {
+    .mod-demod-grid {
+      grid-template-columns:1fr;
+    }
+  }
+
+  .mod-demod-grid .tile {
+    min-width:0;
+    padding:10px;
+    text-align:center;
+  }
+
+  .mod-demod-grid svg {
+    display:block;
+    width:100%;
+    max-width:470px;
+    height:auto;
+    margin:0 auto;
+  }
+
+  .mod-demod-grid .mod,
+  .mod-demod-grid .demod {
+    --dFg:var(--fg,#1b1f2a);
+    --dAcc:var(--acc,#0b3d91);
+  }
+
+  @media(prefers-color-scheme:dark) {
+    .mod-demod-grid .mod,
+    .mod-demod-grid .demod {
+      --dFg:var(--fg,#e8eaf0);
+      --dAcc:var(--acc,#7fa8ff);
+    }
+  }
+
+  .mod-demod-grid .ln {
+    stroke:var(--dAcc);
+    stroke-width:2;
+    fill:none;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+
+  .mod-demod-grid .hd {
+    fill:var(--dAcc);
+  }
+
+  .mod-demod-grid .node {
+    fill:var(--tile-bg,#ffffff);
+    stroke:var(--dAcc);
+    stroke-width:2;
+  }
+
+  .mod-demod-grid .lbl {
+    color:var(--dFg);
+    font-size:19px;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    white-space:nowrap;
+  }
+
+  .mod-demod-grid .block-label {
+    color:var(--dFg);
+    font-size:14px;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    line-height:1.25;
+  }
+
+  .mod-demod-grid .caption {
+    margin-top:5px;
+    color:var(--dFg);
+    font-size:0.9rem;
+    font-weight:500;
+  }
 </style>
 <script>
 window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, svg: { fontCache: 'global' } };
@@ -1100,208 +1188,179 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     </div>
     
     <div class="card">
-      <div style="
-        display:grid;
-        grid-template-columns:repeat(2,minmax(0,1fr));
-        gap:16px;
-        align-items:start;
-      ">
+      <h3>AM Modulator and Demodulator</h3>
     
-        <!-- MODULATOR -->
+      <div class="mod-demod-grid">
+    
+        <!-- ================= MODULATOR ================= -->
+    
         <div class="tile">
-          <h4 style="text-align:center;">AM Modulator</h4>
-    
-          <svg viewBox="0 0 460 190" xmlns="http://www.w3.org/2000/svg"
-               style="display:block;width:100%;height:auto;"
-               role="img" aria-label="Conventional AM modulator">
+          <svg class="mod" viewBox="0 0 470 215"
+               xmlns="http://www.w3.org/2000/svg"
+               role="img" aria-label="AM modulator block diagram">
     
             <defs>
-              <marker id="amModArrow" markerWidth="7" markerHeight="7"
+              <marker id="modArrow" markerWidth="8" markerHeight="8"
                       refX="6" refY="3" orient="auto">
-                <path d="M0 0 L6 3 L0 6" fill="#263b50"/>
+                <path d="M0 0 L6 3 L0 6 Z" class="hd"/>
               </marker>
             </defs>
     
-            <style>
-              .amModLine {
-                fill:none;stroke:#263b50;stroke-width:1.8;
-                stroke-linecap:round;stroke-linejoin:round;
-                marker-end:url(#amModArrow);
-              }
-              .amModNode {
-                fill:#f5f8fc;stroke:#263b50;stroke-width:1.8;
-              }
-              .amModText {
-                color:#172b45;font-size:17px;
-                display:flex;align-items:center;justify-content:center;
-                height:100%;white-space:nowrap;
-              }
-            </style>
-    
             <!-- Message input -->
-            <foreignObject x="0" y="48" width="65" height="35">
-              <div xmlns="http://www.w3.org/1999/xhtml" class="amModText">
+            <foreignObject x="0" y="38" width="65" height="38">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
                 \(m(t)\)
               </div>
             </foreignObject>
     
             <!-- First multiplier -->
-            <circle class="amModNode" cx="115" cy="65" r="19"/>
-            <foreignObject x="96" y="46" width="38" height="38">
-              <div xmlns="http://www.w3.org/1999/xhtml" class="amModText">
-                \(\otimes\)
-              </div>
-            </foreignObject>
+            <circle class="node" cx="150" cy="56" r="15"/>
+            <path class="ln" d="M139 45 L161 67 M161 45 L139 67"/>
     
             <!-- Adder -->
-            <circle class="amModNode" cx="290" cy="65" r="19"/>
-            <foreignObject x="271" y="46" width="38" height="38">
-              <div xmlns="http://www.w3.org/1999/xhtml" class="amModText">
-                \(\oplus\)
-              </div>
-            </foreignObject>
+            <circle class="node" cx="280" cy="56" r="15"/>
+            <path class="ln" d="M270 56 H290 M280 46 V66"/>
     
             <!-- Output -->
-            <foreignObject x="385" y="48" width="75" height="35">
-              <div xmlns="http://www.w3.org/1999/xhtml" class="amModText">
+            <foreignObject x="390" y="38" width="65" height="38">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
                 \(x(t)\)
               </div>
             </foreignObject>
     
-            <!-- Carrier label -->
-            <foreignObject x="35" y="143" width="175" height="35">
-              <div xmlns="http://www.w3.org/1999/xhtml" class="amModText">
+            <!-- Main signal path -->
+            <path class="ln" d="M65 56 H132"/>
+            <path class="hd" d="M132 56 l-9 -5 v10 z"/>
+    
+            <path class="ln" d="M165 56 H262"/>
+            <path class="hd" d="M262 56 l-9 -5 v10 z"/>
+    
+            <path class="ln" d="M295 56 H390"/>
+            <path class="hd" d="M390 56 l-9 -5 v10 z"/>
+    
+            <!-- Carrier input -->
+            <foreignObject x="35" y="177" width="230" height="34">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
                 \(A_c\cos(2\pi f_ct)\)
               </div>
             </foreignObject>
     
-            <!-- Second multiplier -->
-            <circle class="amModNode" cx="225" cy="145" r="18"/>
-            <foreignObject x="207" y="127" width="36" height="36">
-              <div xmlns="http://www.w3.org/1999/xhtml" class="amModText">
-                \(\otimes\)
-              </div>
-            </foreignObject>
+            <!-- Carrier branch to first multiplier -->
+            <path class="ln" d="M150 174 V72"/>
+            <path class="hd" d="M150 72 l-5 9 h10 z"/>
     
-            <!-- Gain label -->
-            <foreignObject x="320" y="127" width="105" height="35">
-              <div xmlns="http://www.w3.org/1999/xhtml" class="amModText">
-                \(A_p/A_c\)
-              </div>
-            </foreignObject>
-    
-            <!-- Signal connections -->
-            <path class="amModLine" d="M65 65 H94"/>
-            <path class="amModLine" d="M134 65 H270"/>
-            <path class="amModLine" d="M309 65 H380"/>
-    
-            <!-- Carrier to first multiplier -->
-            <path class="amModLine" d="M115 143 V88"/>
+            <circle cx="150" cy="158" r="2.8" class="hd"/>
     
             <!-- Carrier branch to second multiplier -->
-            <path class="amModLine" d="M115 125 V145 H206"/>
+            <path class="ln" d="M150 158 H280 V145"/>
+            <path class="hd" d="M280 145 l-5 9 h10 z"/>
     
-            <!-- Second multiplier to adder -->
-            <path class="amModLine" d="M243 145 H265 L278 82"/>
+            <!-- Second multiplier -->
+            <circle class="node" cx="280" cy="127" r="15"/>
+            <path class="ln" d="M269 116 L291 138 M291 116 L269 138"/>
     
             <!-- Gain input -->
-            <path class="amModLine" d="M320 145 H245"/>
+            <foreignObject x="365" y="109" width="90" height="36">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
+                \(\frac{A_p}{A_c}\)
+              </div>
+            </foreignObject>
+    
+            <path class="ln" d="M365 127 H297"/>
+            <path class="hd" d="M297 127 l9 -5 v10 z"/>
+    
+            <!-- Second multiplier output to adder -->
+            <path class="ln" d="M280 112 V74"/>
+            <path class="hd" d="M280 74 l-5 9 h10 z"/>
     
           </svg>
+    
+          <div class="caption">(a) Modulator</div>
         </div>
     
-        <!-- DEMODULATOR -->
-        <div class="tile">
-          <h4 style="text-align:center;">AM Demodulator</h4>
     
-          <svg viewBox="0 0 460 190" xmlns="http://www.w3.org/2000/svg"
-               style="display:block;width:100%;height:auto;"
-               role="img" aria-label="AM coherent demodulator">
+        <!-- ================= DEMODULATOR ================= -->
+    
+        <div class="tile">
+          <svg class="demod" viewBox="0 0 470 215"
+               xmlns="http://www.w3.org/2000/svg"
+               role="img" aria-label="AM demodulator block diagram">
     
             <defs>
-              <marker id="amDemodArrow" markerWidth="7" markerHeight="7"
+              <marker id="demodArrow" markerWidth="8" markerHeight="8"
                       refX="6" refY="3" orient="auto">
-                <path d="M0 0 L6 3 L0 6" fill="#263b50"/>
+                <path d="M0 0 L6 3 L0 6 Z" class="hd"/>
               </marker>
             </defs>
     
-            <style>
-              .amDemodLine {
-                fill:none;stroke:#263b50;stroke-width:1.8;
-                stroke-linecap:round;stroke-linejoin:round;
-                marker-end:url(#amDemodArrow);
-              }
-              .amDemodNode {
-                fill:#f5f8fc;stroke:#263b50;stroke-width:1.8;
-              }
-              .amDemodText {
-                color:#172b45;font-size:16px;
-                display:flex;align-items:center;justify-content:center;
-                height:100%;text-align:center;
-              }
-            </style>
-    
             <!-- Received signal -->
-            <foreignObject x="0" y="48" width="65" height="35">
-              <div xmlns="http://www.w3.org/1999/xhtml" class="amDemodText">
+            <foreignObject x="0" y="38" width="55" height="38">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
                 \(r(t)\)
               </div>
             </foreignObject>
     
             <!-- Multiplier -->
-            <circle class="amDemodNode" cx="170" cy="65" r="19"/>
-            <foreignObject x="151" y="46" width="38" height="38">
-              <div xmlns="http://www.w3.org/1999/xhtml" class="amDemodText">
-                \(\otimes\)
-              </div>
-            </foreignObject>
+            <circle class="node" cx="192" cy="56" r="15"/>
+            <path class="ln" d="M181 45 L203 67 M203 45 L181 67"/>
     
             <!-- Intermediate signal -->
-            <foreignObject x="215" y="48" width="65" height="35">
-              <div xmlns="http://www.w3.org/1999/xhtml" class="amDemodText">
+            <foreignObject x="255" y="38" width="48" height="38">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
                 \(y(t)\)
               </div>
             </foreignObject>
     
             <!-- LPF -->
-            <rect x="300" y="43" width="65" height="44"
-                  rx="4" class="amDemodNode"/>
-            <foreignObject x="300" y="43" width="65" height="44">
-              <div xmlns="http://www.w3.org/1999/xhtml" class="amDemodText">
+            <rect class="node" x="331" y="38" width="56" height="36" rx="4"/>
+            <foreignObject x="331" y="38" width="56" height="36">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="block-label">
                 LPF
               </div>
             </foreignObject>
     
             <!-- Recovered message -->
-            <foreignObject x="375" y="48" width="85" height="35">
-              <div xmlns="http://www.w3.org/1999/xhtml" class="amDemodText">
+            <foreignObject x="405" y="38" width="65" height="38">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
                 \(\hat m(t)\)
               </div>
             </foreignObject>
     
-            <!-- Narrow BPF -->
-            <rect x="85" y="130" width="105" height="45"
-                  rx="4" class="amDemodNode"/>
-            <foreignObject x="85" y="130" width="105" height="45">
+            <!-- Main signal path -->
+            <path class="ln" d="M55 56 H174"/>
+            <path class="hd" d="M174 56 l-9 -5 v10 z"/>
+    
+            <path class="ln" d="M207 56 H255"/>
+            <path class="hd" d="M255 56 l-9 -5 v10 z"/>
+    
+            <path class="ln" d="M303 56 H331"/>
+            <path class="hd" d="M331 56 l-9 -5 v10 z"/>
+    
+            <path class="ln" d="M387 56 H405"/>
+            <path class="hd" d="M405 56 l-9 -5 v10 z"/>
+    
+            <!-- Branch from received signal -->
+            <circle cx="74" cy="56" r="2.8" class="hd"/>
+            <path class="ln" d="M74 56 V142 H87"/>
+            <path class="hd" d="M87 142 l-9 -5 v10 z"/>
+    
+            <!-- Narrow bandpass filter -->
+            <rect class="node" x="87" y="117" width="84" height="50" rx="4"/>
+    
+            <foreignObject x="87" y="119" width="84" height="46">
               <div xmlns="http://www.w3.org/1999/xhtml"
-                   class="amDemodText" style="font-size:13px;line-height:1.2;">
-                Narrow BPF<br/>\((@f_c)\)
+                   class="block-label" style="font-size:13px;line-height:1.2;">
+                Narrow BPF<br/>(@ \(f_c\))
               </div>
             </foreignObject>
     
-            <!-- Main signal path -->
-            <path class="amDemodLine" d="M65 65 H149"/>
-            <path class="amDemodLine" d="M189 65 H215"/>
-            <path class="amDemodLine" d="M280 65 H300"/>
-            <path class="amDemodLine" d="M365 65 H375"/>
-    
-            <!-- Received signal branch to BPF -->
-            <path class="amDemodLine" d="M40 83 V152 H85"/>
-    
             <!-- BPF output to multiplier -->
-            <path class="amDemodLine" d="M190 152 H170 V85"/>
+            <path class="ln" d="M171 142 H192 V74"/>
+            <path class="hd" d="M192 74 l-5 9 h10 z"/>
     
           </svg>
+    
+          <div class="caption">(b) Demodulator</div>
         </div>
     
       </div>
