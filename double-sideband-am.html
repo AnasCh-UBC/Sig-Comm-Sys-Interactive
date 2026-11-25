@@ -800,7 +800,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       <li><b>1</b><a href="#modulation">Modulation in communication systems</a></li>
       <li><b>2</b><a href="#dsbsc_m">DSB-SC AM - Modulation</a></li>
       <li><b>3</b><a href="#dsbsc_d">DSB-SC AM - Demodulation</a></li>
-      <li><b>4</b><a href="#conventional">Conventional AM (DSB AM)</a></li>
+      <li><b>4</b><a href="#conventional">Conventional AM</a></li>
       <li><b>5</b><a href="#implementation">Implementation of modulation and demodulation</a></li>
       <li><b>6</b><a href="#self-check">Self-assessment</a></li>
     </ol>
@@ -1209,7 +1209,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
 
 
     <div class="wd">
-      <div class="cap">Interactive 6.2</div>
+      <div class="cap">Interactive 3.1</div>
       <h3>Coherent (synchronous) demodulation</h3>
       <p class="sub">Adjust the phase difference \(\phi\) between the transmitter carrier and receiver LO.</p>
       <div class="demo-controls">
@@ -1390,7 +1390,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
         </svg>
         </div>
       </div>
-      <p class="sub">Note: This is no longer a suppressed carrier form of AM!</p>
+      <p class="sub">Note: This is no longer a suppressed carrier form of AM! It is DSB AM.</p>
     </div>
     <p class="sub"> The disadvantage is that some transmitted power is allocated to the pilot.</p>
     <p class="sub">A phase-locked loop (PLL) can provide an alternative carrier-recovery method. We will learn about this later.</p>
@@ -1401,10 +1401,46 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
 
   
   <section id="conventional">
-    <h2><small>03</small> Conventional AM (DSB AM)</h2>
+    <h2><small>4</small> Conventional AM</h2>
+    
     <div class="card">
       <h3>From DSB-SC to conventional AM</h3>
-      <p>In DSB-SC, the message \(m(t)\) and its negative trace the envelope of the modulated waveform. By biasing (shifting) the message before modulation, the envelope can remain nonnegative, allowing the receiver to recover the message using an envelope detector.</p>
+      <p class="sub">In DSB-SC, the message \(m(t)\) and its negative \(-m(t)\) trace the upper envelope of the modulated waveform (see Interactive 2.1).</p> 
+      <p> By using \(1+a m(t)\) instead of \(m(t)\) for modulation, the upper envelope becomes defined by \(m(t)\) only without dependence on \(-m(t)\). 
+        This allows the receiver to recover the message using an envelope detector.</p>
+    </div>
+    <p class="sub">Explore this effect in the following demo.</p>
+    
+    <div class="wd">
+      <div class="cap">Interactive 4.1</div>
+      <h3>Conventional AM</h3>
+      <p class="sub">
+        Here \(m(t)=\cos(2\pi f_mt)\). Adjust \(a\) to see when the envelope of \((1+a m(t))\cos(2\pi f_c t)\) does not cross zero.</p>
+      <div class="demo-controls">
+        <label>\(a\)
+          <input id="amIndex" type="range" min="0" max="1.5" step="0.05" value="1.5">
+          <output id="amIndexVal">1.50</output>
+        </label>
+      </div>
+      <div class="demo-grid">
+        <div class="demo-panel">
+          <h4>Time-domain signals</h4>
+          <canvas id="amTime" width="860" height="260"></canvas>
+          <div class="demo-legend">
+            <span><i style="background:#55c8f2"></i>Modulated signal</span>
+            <span><i style="background:#ffb454"></i>Envelope bounds</span>
+          </div>
+        </div>
+        <div class="demo-panel">
+          <h4>Spectra</h4>
+          <canvas id="amSpectrum" width="860" height="260"></canvas>
+          <div class="demo-legend">
+            <span><i style="background:#ffb454"></i>Carrier</span>
+            <span><i style="background:#55c8f2"></i>Sidebands</span>
+          </div>
+        </div>
+      </div>
+      <div class="demo-readout" id="amReadout"></div>
     </div>
 
     <div class="eq">
@@ -1419,36 +1455,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       and \(a\in(0,1)\) is the modulation index. The normalization and \(a<1\) ensure that \(A_c[1+a\,m_n(t)]\geq0\), which allows envelope detection.
     </div>
 
-    <div class="wd">
-      <div class="cap">Interactive 6.3</div>
-      <h3>Modulation index and overmodulation</h3>
-      <p>Adjust the modulation index \(a\). For this demonstration, \(m_n(t)=\cos(2\pi f_mt)\). When \(a\leq1\), the envelope does not cross zero. When \(a>1\), overmodulation occurs.</p>
-      <div class="demo-controls">
-        <label>Modulation index \(a\)
-          <input id="amIndex" type="range" min="0" max="1.5" step="0.05" value="0.6">
-          <output id="amIndexVal">0.60</output>
-        </label>
-      </div>
-      <div class="demo-grid">
-        <div class="demo-panel">
-          <h4>Conventional AM waveform and envelope</h4>
-          <canvas id="amTime" width="860" height="260"></canvas>
-          <div class="demo-legend">
-            <span><i style="background:#55c8f2"></i>AM signal</span>
-            <span><i style="background:#ffb454"></i>Envelope bounds</span>
-          </div>
-        </div>
-        <div class="demo-panel">
-          <h4>Carrier and sideband spectrum</h4>
-          <canvas id="amSpectrum" width="860" height="260"></canvas>
-          <div class="demo-legend">
-            <span><i style="background:#ffb454"></i>Carrier</span>
-            <span><i style="background:#55c8f2"></i>Sidebands</span>
-          </div>
-        </div>
-      </div>
-      <div class="demo-readout" id="amReadout"></div>
-    </div>
+    
 
     <div class="eq">
       <b>Spectrum of conventional AM</b>
@@ -1864,7 +1871,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       {x:fc-fm,h:Ac*a/4,color:'#55c8f2'},{x:fc+fm,h:Ac*a/4,color:'#55c8f2'},
       {x:fc,h:Ac/2,color:'#ffb454'}
     ]);
-    $('amReadout').innerHTML=a<=1?`<b>No overmodulation:</b> 1 + a mₙ(t) ≥ ${(1-a).toFixed(2)}. The envelope remains nonnegative, so an envelope detector can recover the message.`:`<b>Overmodulation:</b> the factor 1 + a mₙ(t) reaches ${(1-a).toFixed(2)}. The envelope crosses zero and no longer directly follows the message; simple envelope detection becomes distorted.`;
+    $('amReadout').innerHTML=a<=1?`1 + a m(t) = ${(1-a).toFixed(2)} ≥ 0. The envelope remains nonnegative, so an envelope detector can recover the message.`:`1 + a m(t) reaches ${(1-a).toFixed(2)}. The envelope crosses zero and no longer directly follows the message; simple envelope detection becomes distorted.`;
   }
   $('amIndex').addEventListener('input',updateAm);updateAm();
 
