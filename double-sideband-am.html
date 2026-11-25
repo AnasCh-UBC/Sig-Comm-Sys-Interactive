@@ -588,6 +588,27 @@ header{align-items:center}
 .key-points .tile{background:var(--card)}
 @media(max-width:700px){.demo-grid,.key-points{grid-template-columns:1fr}.demo-controls label{width:100%;justify-content:space-between}.demo-controls input[type=range]{width:45%}}
 
+.card table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.card th,
+.card td {
+  border: 1px solid rgba(100, 180, 255, 0.35);
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.card th {
+  background: rgba(56, 130, 220, 0.18);
+  color: #7dd3fc;
+}
+
+.card td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
 </style>
 <script>
 window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, svg: { fontCache: 'global' } };
@@ -707,16 +728,10 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
 
 
     <div class="card"> <h3>Why must communication signals be bandpass?</h3> 
-        <p>Regulations specify what frequencies can be used by a communication system (see the <a href="https://ised-isde.canada.ca/site/spectrum-management-telecommunications/en/spectrum-allocation/canadian-table-frequency-allocations-sf10759">Canadian Table of Frequency Allocations</a>).</p> 
-        <div class="card">
-          <h3>Examples of radio-frequency allocations in Canada</h3>
-        
-          <p>
-            Different communication systems operate in designated portions
-            of the radio-frequency spectrum. The following are three familiar
-            examples in Canada:
-          </p>
-        
+        <p>Regulations specify what frequencies can be used by a communication system. 
+          Here are some examples from the 
+          <a href="https://ised-isde.canada.ca/site/spectrum-management-telecommunications/en/spectrum-allocation/canadian-table-frequency-allocations-sf10759">Canadian Table of Frequency Allocations</a>.
+        </p> 
           <table>
             <thead>
               <tr>
@@ -747,14 +762,8 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
               </tr>
             </tbody>
           </table>
-        
-          <p class="note">
-            These are examples of frequency bands used by common communication
-            systems. The exact frequencies available to individual stations
-            or devices depend on channel assignments and applicable regulations.
-          </p>
         </div>
-        <p class="sub">Also, a communication medium (channel), such as a wire, antenna, etc., have a bandpass filter behaviour.</p>
+        <p>Also, a communication medium (channel), such as a wire, antenna, etc., have a bandpass filter behaviour.</p>
     </div>
       
     <div class="card"><h3>How to modulate?</h3>
