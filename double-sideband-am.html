@@ -781,30 +781,92 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     </div>
   </section>
 
+
+
   <section id="dsbsc">
-    <h2><small>02</small> Double-sideband suppressed-carrier (DSB-SC) AM</h2>
-    <div class="eq">
-      <b>DSB-SC modulation</b>
-      <p>A DSB-SC signal is the product of the message and carrier:</p>
-      \[
-        x(t)=A_c\,m(t)\cos(2\pi f_ct).
-      \]
-      <p>Here, \(A_c\cos(2\pi f_ct)\) is the carrier, with amplitude \(A_c\) and frequency \(f_c\).</p>
+    <h2><small>2</small> Double-sideband suppressed-carrier (DSB-SC) AM</h2>
+    <div class="card">
+      <div class="grid">
+        <div class="eq"><b>DSB-SC modulation</b>
+          <p>A DSB-SC signal is the product of the message \(m(t)\) and a carrier \(A_c\cos(2\pi f_ct)\)
+            with amplitude \(A_c\) and frequency \(f_c\):</p>
+          \[
+            x(t)=A_c\,m(t)\cos(2\pi f_ct).
+          \]
+        </div>
+        <div class="diagram" style="
+          background: linear-gradient(135deg,#050d20,#0b1b38);
+          border: 1px solid rgba(56,189,248,.4);
+          border-radius: 12px;
+          padding: 14px 18px;
+          overflow: hidden;
+        ">
+          <svg viewBox="0 0 760 150"
+              role="img"
+              aria-label="DSB-SC modulator block diagram"
+              style="display:block;width:100%;height:auto">
+
+            <defs>
+              <marker id="arrDsbBlue" markerWidth="8" markerHeight="8"
+                      refX="6" refY="3" orient="auto">
+                <path d="M0 0 L6 3 L0 6"
+                      fill="none" stroke="#55c8f2"
+                      stroke-width="1.3"/>
+              </marker>
+
+              <filter id="dsbGlow">
+                <feGaussianBlur stdDeviation="2" result="blur"/>
+                <feMerge>
+                  <feMergeNode in="blur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+
+            <!-- Message input -->
+            <text x="42" y="69" fill="#e5f4ff"
+                  font-size="22" font-style="italic">m(t)</text>
+
+            <path d="M105 62 H300"
+                  stroke="#55c8f2" stroke-width="2.5"
+                  fill="none" marker-end="url(#arrDsbBlue)"
+                  filter="url(#dsbGlow)"/>
+
+            <!-- Multiplier -->
+            <circle cx="340" cy="62" r="27"
+                    fill="#102b50" stroke="#55c8f2"
+                    stroke-width="2.5"/>
+
+            <text x="340" y="71" text-anchor="middle"
+                  fill="#ffffff" font-size="31"
+                  font-weight="400">×</text>
+
+            <!-- Output -->
+            <path d="M367 62 H570"
+                  stroke="#55c8f2" stroke-width="2.5"
+                  fill="none" marker-end="url(#arrDsbBlue)"
+                  filter="url(#dsbGlow)"/>
+
+            <text x="592" y="69" fill="#e5f4ff"
+                  font-size="22" font-style="italic">x(t)</text>
+
+            <!-- Carrier input -->
+            <path d="M340 132 V92"
+                  stroke="#55c8f2" stroke-width="2.5"
+                  fill="none" marker-end="url(#arrDsbBlue)"
+                  filter="url(#dsbGlow)"/>
+
+            <text x="340" y="148" text-anchor="middle"
+                  fill="#7dd3fc" font-size="17">
+              A<tspan baseline-shift="sub" font-size="12">c</tspan>
+              cos(2πf<tspan baseline-shift="sub" font-size="12">c</tspan>t)
+            </text>
+
+          </svg>
+        </div>
+      </div>
     </div>
 
-    <div class="diagram">
-      <svg viewBox="0 0 760 125" role="img" aria-label="DSB-SC modulator block diagram">
-        <defs><marker id="arrDsb" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#55c8f2" stroke-width="1.2"/></marker></defs>
-        <text x="45" y="52" font-size="20" font-style="italic">m(t)</text>
-        <path class="wire" d="M100 46 H300" marker-end="url(#arrDsb)"/>
-        <circle cx="340" cy="46" r="25" fill="none" stroke="#55c8f2" stroke-width="2"/>
-        <text x="340" y="54" text-anchor="middle" font-size="28">×</text>
-        <path class="wire" d="M365 46 H570" marker-end="url(#arrDsb)"/>
-        <text x="590" y="52" font-size="20" font-style="italic">x(t)</text>
-        <path class="wire" d="M340 110 V73" marker-end="url(#arrDsb)"/>
-        <text x="340" y="122" text-anchor="middle" font-size="17">A<tspan baseline-shift="sub" font-size="12">c</tspan> cos(2πf<tspan baseline-shift="sub" font-size="12">c</tspan>t)</text>
-      </svg>
-    </div>
 
     <div class="wd">
       <div class="cap">Interactive 6.1</div>
