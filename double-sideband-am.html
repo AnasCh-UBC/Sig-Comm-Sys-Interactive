@@ -664,9 +664,9 @@ header{align-items:center}
   }
 
   .mod-demod-grid .node {
-    fill:var(--tile-bg,#ffffff);
-    stroke:var(--dAcc);
-    stroke-width:2;
+  fill:#17243a;
+  stroke:var(--dAcc);
+  stroke-width:2;
   }
 
   .mod-demod-grid .lbl {
@@ -1180,11 +1180,10 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     </div>
 
     <div class="eq"><h3>Adding a pilot tone</h3>
-      <p>To synchronize the LO with the transmitter carrier, we can add a <b>pilot tone</b> to the transmitted signal.
-        \[x_(t)=A_cm(t)\cos(2\pi f_ct)+A_p\cos(2\pi f_ct).\]</p>
-      <p>At the receiver, a narrowband BPF centered at \(f_c\) extracts the pilot tone for use as the LO.</p>
       <div class="grid">
         <div class="tile">
+          <p>To synchronize the LO with the transmitter carrier, we can add a <b>pilot tone</b> to the transmitted signal.
+          \[x_(t)=A_cm(t)\cos(2\pi f_ct)+A_p\cos(2\pi f_ct).\]</p>
           <svg class="mod" viewBox="0 0 470 215"
                xmlns="http://www.w3.org/2000/svg"
                role="img" aria-label="AM modulator block diagram">
@@ -1268,6 +1267,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
           <div class="caption">(a) Modulator</div>
         </div>
         <div class="tile">
+          <p>At the receiver, a narrowband BPF centered at \(f_c\) extracts the pilot tone for use as the LO.</p>
           <svg class="demod" viewBox="0 0 470 215"
                xmlns="http://www.w3.org/2000/svg"
                role="img" aria-label="AM demodulator block diagram">
@@ -1349,7 +1349,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
           <div class="caption">(b) Demodulator</div>
         </div>
       </div>
-      <p clas="sub">Note: This is no longer a suppressed carrier form of AM!</p>
+      <p class="sub">Note: This is no longer a suppressed carrier form of AM!</p>
     </div>
     <p class="sub"> The disadvantage is that some transmitted power is allocated to the pilot.</p>
     <p class="sub">A phase-locked loop (PLL) can provide an alternative carrier-recovery method. We will learn about this later.</p>
