@@ -1180,20 +1180,11 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     </div>
 
     <div class="eq"><h3>Adding a pilot tone</h3>
-      <p>To synchronize the LO with the transmitter carrier, we can add a <b>pilot tone</b> to the transmitted signal.</p>
-      \[x_(t)=A_cm(t)\cos(2\pi f_ct)+A_p\cos(2\pi f_ct).\]
-      <p clas="sub">Note: This is no longer a suppressed carrier form of AM!</p>
-      <p>At the receiver, a narrowband BPF centered at \(f_c\) extracts the pilot tone for use as the LO.</p>
-      <p class="sub"> The disadvantage is that some transmitted power is allocated to the pilot.</p>
-    </div>
-    
-    <div class="card">
-      <h3>AM Modulator and Demodulator</h3>
-    
-      <div class="mod-demod-grid">
-    
-        <!-- ================= MODULATOR ================= -->
-    
+      <div class="grid">
+        <div class="tile">
+          To synchronize the LO with the transmitter carrier, we can add a <b>pilot tone</b> to the transmitted signal.
+          \[x_(t)=A_cm(t)\cos(2\pi f_ct)+A_p\cos(2\pi f_ct).\]
+        </div>
         <div class="tile">
           <svg class="mod" viewBox="0 0 470 215"
                xmlns="http://www.w3.org/2000/svg"
@@ -1277,10 +1268,11 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     
           <div class="caption">(a) Modulator</div>
         </div>
-    
-    
-        <!-- ================= DEMODULATOR ================= -->
-    
+      </div>
+      <div class="grid">
+        <div class="tile">
+          At the receiver, a narrowband BPF centered at \(f_c\) extracts the pilot tone for use as the LO.
+        </div>
         <div class="tile">
           <svg class="demod" viewBox="0 0 470 215"
                xmlns="http://www.w3.org/2000/svg"
@@ -1362,10 +1354,10 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     
           <div class="caption">(b) Demodulator</div>
         </div>
-    
       </div>
+      <p clas="sub">Note: This is no longer a suppressed carrier form of AM!</p>
     </div>
-    
+    <p class="sub"> The disadvantage is that some transmitted power is allocated to the pilot.</p>
     <p class="sub">A phase-locked loop (PLL) can provide an alternative carrier-recovery method. We will learn about this later.</p>
   </section>
 
