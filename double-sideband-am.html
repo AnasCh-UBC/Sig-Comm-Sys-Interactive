@@ -1427,6 +1427,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
           <h4>Time-domain signals</h4>
           <canvas id="amTime" width="860" height="260"></canvas>
           <div class="demo-legend">
+            <span><i style="background:#62d99a"></i>Message \(m(t)\)</span>
             <span><i style="background:#55c8f2"></i>Modulated signal</span>
             <span><i style="background:#ffb454"></i>Envelope bounds</span>
           </div>
@@ -1435,6 +1436,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
           <h4>Spectra</h4>
           <canvas id="amSpectrum" width="860" height="260"></canvas>
           <div class="demo-legend">
+            <span><i style="background:#62d99a"></i>Message \(M(f)\)</span>
             <span><i style="background:#ffb454"></i>Carrier</span>
             <span><i style="background:#55c8f2"></i>Sidebands</span>
           </div>
@@ -1863,15 +1865,25 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     curve($('amTime'),[
       {fn:x,color:'#55c8f2',width:1.7},
       {fn:env,color:'#ffb454',width:2,dash:[7,5]},
-      {fn:t=>-env(t),color:'#ffb454',width:2,dash:[7,5]}
+      {fn:t=>-env(t),color:'#ffb454',width:2,dash:[7,5]},
+      {fn:mn,color:'#62d99a',width:2.3,dash:[4,4]}
     ],[-1,1,-2.8,2.8],['t (s)','Amplitude']);
     stems($('amSpectrum'),[-fc-3,fc+3,0,Math.max(.8,Ac*(1+a/2)*1.3)],[
+      // Message spectrum
+      {x:-fm,h:0.5,color:'#62d99a'},
+      {x: fm,h:0.5,color:'#62d99a'},
+
+      // AM carrier
       {x:-fc,h:Ac/2,color:'#ffb454'},
-      {x:-fc-fm,h:Ac*a/4,color:'#55c8f2'},{x:-fc+fm,h:Ac*a/4,color:'#55c8f2'},
-      {x:fc-fm,h:Ac*a/4,color:'#55c8f2'},{x:fc+fm,h:Ac*a/4,color:'#55c8f2'},
-      {x:fc,h:Ac/2,color:'#ffb454'}
+      {x:fc,h:Ac/2,color:'#ffb454'},
+
+      // Sidebands
+      {x:-fc-fm,h:Ac*a/4,color:'#55c8f2'},
+      {x:-fc+fm,h:Ac*a/4,color:'#55c8f2'},
+      {x:fc-fm,h:Ac*a/4,color:'#55c8f2'},
+      {x:fc+fm,h:Ac*a/4,color:'#55c8f2'}
     ]);
-    $('amReadout').innerHTML=a<=1?`1 + a m(t) = ${(1-a).toFixed(2)} ≥ 0. The envelope remains nonnegative, so an envelope detector can recover the message.`:`1 + a m(t) reaches ${(1-a).toFixed(2)}. The envelope crosses zero and no longer directly follows the message; simple envelope detection becomes distorted.`;
+    $('amReadout').innerHTML=a<=1?`1 + a m(t) = ${(1-a).toFixed(2)} ≥ 0. The envelope remains nonnegative, so an envelope detector can recover the message.`:`1 + a m(t) reaches ${(1-a).toFixed(2)}. The envelope no longer follows the message; simple envelope detection becomes distorted.`;
   }
   $('amIndex').addEventListener('input',updateAm);updateAm();
 
