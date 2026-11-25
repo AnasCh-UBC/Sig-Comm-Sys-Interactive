@@ -794,64 +794,57 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
             x(t)=A_c\,m(t)\cos(2\pi f_ct).
           \]
         </div>
-        <div class="diagram" style="
-          background:#061329;
+        <div style="
+          background:#07172b;
           border:1px solid #2878ad;
-          border-radius:12px;
-          padding:14px 18px;
+          border-radius:10px;
+          padding:10px;
+          width:100%;
+          box-sizing:border-box;
         ">
-          <svg viewBox="0 0 760 155"
+          <svg viewBox="0 0 500 145"
               xmlns="http://www.w3.org/2000/svg"
               role="img"
               aria-label="DSB-SC modulator block diagram"
-              style="display:block;width:100%;height:auto">
+              style="display:block;width:100%;height:auto;">
 
             <!-- Message input -->
-            <text x="40" y="68" fill="#e5f4ff"
-                  font-size="22" font-style="italic">m(t)</text>
-
-            <path d="M105 60 H300"
-                  fill="none" stroke="#55c8f2"
-                  stroke-width="2.5"/>
-            <path d="M291 53 L301 60 L291 67"
-                  fill="none" stroke="#55c8f2"
-                  stroke-width="2.5" stroke-linecap="round"
-                  stroke-linejoin="round"/>
-
-            <!-- Multiplier -->
-            <circle cx="340" cy="60" r="27"
-                    fill="#102b50"
-                    stroke="#55c8f2" stroke-width="2.5"/>
-            <text x="340" y="70" text-anchor="middle"
-                  fill="#ffffff" font-size="31">×</text>
-
-            <!-- Output -->
-            <path d="M367 60 H570"
-                  fill="none" stroke="#55c8f2"
-                  stroke-width="2.5"/>
-            <path d="M561 53 L571 60 L561 67"
-                  fill="none" stroke="#55c8f2"
-                  stroke-width="2.5" stroke-linecap="round"
-                  stroke-linejoin="round"/>
-
-            <text x="590" y="68" fill="#e5f4ff"
-                  font-size="22" font-style="italic">x(t)</text>
-
-            <!-- Carrier input -->
-            <path d="M340 135 V88"
-                  fill="none" stroke="#55c8f2"
-                  stroke-width="2.5"/>
-            <path d="M333 98 L340 87 L347 98"
-                  fill="none" stroke="#55c8f2"
-                  stroke-width="2.5" stroke-linecap="round"
-                  stroke-linejoin="round"/>
-
-            <text x="340" y="153" text-anchor="middle"
-                  fill="#7dd3fc" font-size="17">
-              A<tspan baseline-shift="sub" font-size="12">c</tspan>
-              cos(2πf<tspan baseline-shift="sub" font-size="12">c</tspan>t)
+            <text x="12" y="53"
+                  style="fill:#ffffff;font-size:19px;font-style:italic;">
+              m(t)
             </text>
 
+            <path d="M65 47 H190"
+                  style="fill:none;stroke:#38bdf8;stroke-width:2.5;"/>
+            <path d="M181 40 L191 47 L181 54"
+                  style="fill:none;stroke:#38bdf8;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;"/>
+
+            <!-- Multiplier -->
+            <circle cx="220" cy="47" r="23"
+                    style="fill:#12365c;stroke:#38bdf8;stroke-width:2.5;"/>
+            <text x="220" y="55" text-anchor="middle"
+                  style="fill:#ffffff;font-size:27px;font-weight:bold;">×</text>
+
+            <!-- Output -->
+            <path d="M243 47 H390"
+                  style="fill:none;stroke:#38bdf8;stroke-width:2.5;"/>
+            <path d="M381 40 L391 47 L381 54"
+                  style="fill:none;stroke:#38bdf8;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;"/>
+
+            <text x="402" y="53"
+                  style="fill:#ffffff;font-size:19px;font-style:italic;">x(t)</text>
+
+            <!-- Carrier input -->
+            <path d="M220 125 V71"
+                  style="fill:none;stroke:#38bdf8;stroke-width:2.5;"/>
+            <path d="M213 80 L220 70 L227 80"
+                  style="fill:none;stroke:#38bdf8;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;"/>
+
+            <text x="220" y="141" text-anchor="middle"
+                  style="fill:#7dd3fc;font-size:15px;">
+              A<tspan baseline-shift="sub" font-size="10">c</tspan>
+              cos(2πf<tspan baseline-shift="sub" font-size="10">c</tspan>t)
+            </text>
           </svg>
         </div>
       </div>
@@ -859,9 +852,9 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
 
 
     <div class="wd">
-      <div class="cap">Interactive 6.1</div>
+      <div class="cap">Interactive 2.1</div>
       <h3>DSB-SC modulation in the time and frequency domains</h3>
-      <p>Change the message frequency and carrier frequency. The modulated signal is the product of the message and the carrier.</p>
+      <p class="sub">Change the message frequency and carrier frequency. The modulated signal is the product of the message and the carrier.</p>
       <div class="demo-controls">
         <label>Message frequency \(f_m\)
           <input id="dsbFm" type="range" min="0.5" max="3" step="0.1" value="1.2">
