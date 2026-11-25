@@ -955,7 +955,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
               role="img" aria-labelledby="demodT demodD"
               style="display:block;width:100%;max-width:600px;height:auto;margin:0 auto">
         
-            <title id="demodT">Coherent DSB-SC demodulator</title>
+            <title id="demodT">DSB-SC demodulator</title>
             <desc id="demodD">
               The received DSB-SC signal is multiplied by a local oscillator
               with phase shift phi, then passed through a low-pass filter
@@ -1053,15 +1053,17 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       <p>This recovers a scaled version of \(m(t)\).</p>
     </div>
 
-    <b>Why phase synchronization matters?</b>
-    <p>If \(\phi=\pi/2\), the recovered signal vanishes. At \(\phi=\pi/4\), its power is reduced by a factor of \(\cos^2(\pi/4)=1/2\). A coherent or synchronous demodulator aims for \(\phi=0\).</p>
+    <div class="card"><h3>Phase synchronization matters!</h3>
+      <p>If \(\phi=\pi/2\), the recovered signal vanishes. At \(\phi=\pi/4\), its power is reduced by a factor of \(\cos^2(\pi/4)=1/2\).</p>
+      <p>A <b>coherent demodulator</b> aims for \(\phi=0\).</p>
+    </div>
     <p class="sub">See the following demo.</p>
 
 
     <div class="wd">
       <div class="cap">Interactive 6.2</div>
       <h3>Coherent (synchronous) demodulation</h3>
-      <p>The receiver multiplies the received signal by a local oscillator and then lowpass filters the product. Adjust the phase difference \(\phi\) between the transmitter carrier and receiver oscillator.</p>
+      <p class="sub">Adjust the phase difference \(\phi\) between the transmitter carrier and receiver LO.</p>
       <div class="demo-controls">
         <label>LO phase difference \(\phi\)
           <input id="demodPhase" type="range" min="-180" max="180" step="5" value="0">
@@ -1081,27 +1083,27 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
           <h4>Multiplier output before and after LPF</h4>
           <canvas id="demodProduct" width="860" height="250"></canvas>
           <div class="demo-legend">
-            <span><i style="background:#ffb454"></i>Product \(y(t)\)</span>
-            <span><i style="background:#55c8f2"></i>LPF output</span>
+            <span><i style="background:#ffb454"></i>Before LPF</span>
+            <span><i style="background:#55c8f2"></i>After LPF</span>
           </div>
         </div>
       </div>
       <div class="demo-readout" id="demodReadout"></div>
     </div>
 
-    <div class="eq">
-      To synchronize the LO with the transmitter carrier, we can add a <b>pilot tone</b> to the transmitted signal.
+    <div class="eq"><h3>Adding a pilot tone</h3>
+      <p>To synchronize the LO with the transmitter carrier, we can add a <b>pilot tone</b> to the transmitted signal.</p>
+      \[x_{\mathrm{pilot}}(t)=A_cm(t)\cos(2\pi f_ct)+A_p\cos(2\pi f_ct).\]
+      <p>At the receiver, a narrowband BPF centered at \(f_c\) extracts the pilot tone for use as the LO.</p>
+      <p class="sub"> The disadvantage is that some transmitted power is allocated to the pilot.</p>
     </div>
-    <div class="card">
-      <h3>Adding a pilot tone</h3>
-      <p>One way to help the receiver synchronize its local oscillator is to add a small pilot tone at the carrier frequency to the transmitted signal:</p>
-      \[
-        x_{\mathrm{pilot}}(t)=A_cm(t)\cos(2\pi f_ct)+A_p\cos(2\pi f_ct).
-      \]
-      <p>At the receiver, a narrowband bandpass filter centered at \(f_c\) extracts the pilot tone for use as the local oscillator. The disadvantage is that some transmitted power is allocated to the pilot. A phase-locked loop (PLL) can provide an alternative carrier-recovery method.</p>
-    </div>
+    <p class="sub">A phase-locked loop (PLL) can provide an alternative carrier-recovery method. We will learn about this later.</p>
   </section>
 
+
+
+
+  
   <section id="conventional">
     <h2><small>03</small> Conventional AM (DSB AM)</h2>
     <div class="card">
@@ -1538,7 +1540,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     curve($('demodTime'),[
       {fn:m,color:'#62d99a',width:2,dash:[7,5]},
       {fn:rec,color:'#55c8f2',width:2.5}
-    ],[-1,1,-.8,.8],['t (s)','Amplitude']);
+    ],[-1,1,-1,1],['t (s)','Amplitude']);
     curve($('demodProduct'),[
       {fn:prod,color:'#ffb454',width:1.5},
       {fn:rec,color:'#55c8f2',width:2.5}
