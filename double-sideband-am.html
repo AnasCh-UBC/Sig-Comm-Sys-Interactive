@@ -829,11 +829,11 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       <p class="sub">If the message bandwidth is \(W\), the modulated signal occupies two sidebands and has total bandwidth \(2W\).</p>
     </div>
 
-
     <div class="wd">
       <div class="cap">Interactive 2.1</div>
       <h3>DSB-SC modulation in the time and frequency domains</h3>
-      <p class="sub">Change the message frequency and carrier frequency. The modulated signal is the product of the message and the carrier.</p>
+      <p class="sub">Change the parameters of \(m(t)=\cos(2\pi f_m t)\) and \(c(t)=A_c\cos(2\pi f_c t)\). 
+        The modulated signal is the product of the two.</p>
       <div class="demo-controls">
         <label>Message frequency \(f_m\)
           <input id="dsbFm" type="range" min="0.5" max="3" step="0.1" value="1.2">
@@ -862,22 +862,25 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
           <h4>Magnitude spectrum (message is a cosine)</h4>
           <canvas id="dsbSpectrum" width="860" height="250"></canvas>
           <div class="demo-legend">
-            <span><i style="background:#62d99a"></i>Message spectrum</span>
-            <span><i style="background:#ffb454"></i>Upper sideband (USB)</span>
-            <span><i style="background:#55c8f2"></i>Lower sideband (LSB)</span>
+            <span><i style="background:#62d99a"></i>Message</span>
+            <span><i style="background:#ffb454"></i>USB of \(X(f)\)</span>
+            <span><i style="background:#55c8f2"></i>LSB of \(X(f)\)</span>
           </div>
         </div>
       </div>
       <div class="demo-readout" id="dsbReadout"></div>
-      <p class="demo-note">The spectrum has sidebands at \(f=\pm(f_c-f_m)\) and \(f=\pm(f_c+f_m)\), with no carrier impulses at \(f=\pm f_c\).</p>
+      <p class="demo-note">Upper sidebands (USB) at \(f=\pm(f_c+f_m)\); Lower sidebands (LSB) at \(f=\pm(f_c-f_m)\).</p>
     </div>
 
-    
-    <div class="key-points">
-      <div class="tile"><b>Upper sideband (USB)</b><p>Frequency components above the positive carrier frequency, \(|f|>f_c\).</p></div>
-      <div class="tile"><b>Lower sideband (LSB)</b><p>Frequency components below the positive carrier frequency, \(|f|<f_c\).</p></div>
+    <div class="card"><h3>Observe</h3>
+      The spectrum has:
+      <ul>
+        <li><b>Upper sideband (USB):</b> Frequency components above the positive carrier frequency, \(|f|>f_c\)</li>
+        <li><b>Lower sideband (LSB):</b> Frequency components below the positive carrier frequency, \(|f|\lt f_c\).</li>
+        <li><b>Suppressed carrier:</b> No carrier impulses at \(f=\pm f_c\).</li>
+      </ul>
+      <p class="sub">This is why this modulation scheme is called <b>double-sideband</b> <b>suppressed-carrier</b> AM.</p>
     </div>
-    <p>It is called <b>double-sideband</b> because both sidebands are present, and <b>suppressed-carrier</b> because there is no carrier impulse at \(\pm f_c\).</p>
 
     <div class="card">
       <h3>Single-tone message example</h3>
