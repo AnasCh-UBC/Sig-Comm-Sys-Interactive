@@ -795,54 +795,88 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
           \]
         </div>
         <div style="
-          display:grid;
-          grid-template-columns: 1fr 28px 54px 28px 1fr;
-          grid-template-rows:auto auto;
-          align-items:center;
-          justify-items:center;
-          column-gap:4px;
-          row-gap:0;
-          padding:8px 4px;
-          color:#263b50;
+          position:relative;
+          width:100%;
+          height:125px;
+          max-width:500px;
+          margin:0 auto;
         ">
 
-          <!-- Main signal path -->
-          <div>\(m(t)\)</div>
+          <!-- Arrows -->
+          <svg viewBox="0 0 500 125"
+              preserveAspectRatio="none"
+              style="position:absolute;inset:0;width:100%;height:100%;">
 
-          <div style="font-size:1.5em;">⟶</div>
+            <defs>
+              <marker id="dsbArrow"
+                      markerWidth="8" markerHeight="8"
+                      refX="6" refY="3"
+                      orient="auto">
+                <path d="M0,0 L6,3 L0,6" fill="#263b50"/>
+              </marker>
+            </defs>
+
+            <!-- Message to multiplier -->
+            <path d="M105 38 H218"
+                  stroke="#263b50" stroke-width="2"
+                  fill="none" marker-end="url(#dsbArrow)"/>
+
+            <!-- Multiplier to output -->
+            <path d="M282 38 H395"
+                  stroke="#263b50" stroke-width="2"
+                  fill="none" marker-end="url(#dsbArrow)"/>
+
+            <!-- Carrier to multiplier -->
+            <path d="M250 105 V70"
+                  stroke="#263b50" stroke-width="2"
+                  fill="none" marker-end="url(#dsbArrow)"/>
+          </svg>
+
+          <!-- Mathematical labels -->
+          <div style="position:absolute;left:5%;top:21%;transform:translateY(-50%);">
+            \(m(t)\)
+          </div>
 
           <div style="
-            width:42px;
-            height:42px;
-            border:2.5px solid #263b50;
+            position:absolute;
+            left:50%;top:30%;
+            transform:translate(-50%,-50%);
+            width:54px;height:54px;
+            border:2px solid #263b50;
             border-radius:50%;
             display:flex;
             align-items:center;
             justify-content:center;
-            font-size:1.5em;
-            box-sizing:border-box;
-          ">×</div>
+            background:transparent;
+            font-size:1.25em;
+          ">
+            \(\otimes\)
+          </div>
 
-          <div style="font-size:1.5em;">⟶</div>
+          <div style="position:absolute;right:5%;top:21%;transform:translateY(-50%);">
+            \(x(t)\)
+          </div>
 
-          <div>\(x(t)\)</div>
-
-          <!-- Carrier input, centered directly below multiplier -->
           <div style="
-            grid-column:3;
-            grid-row:2;
-            display:flex;
-            flex-direction:column;
-            align-items:center;
-            line-height:1.15;
-            margin-top:-2px;
+            position:absolute;
+            left:50%;bottom:0;
+            transform:translateX(-50%);
             white-space:nowrap;
           ">
-            <span style="font-size:1.25em;">↑</span>
-            <span>\(A_c\cos(2\pi f_ct)\)</span>
+            \(A_c\cos(2\pi f_ct)\)
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="card"><h3>Spectrum of DSB-SC AM</h3>
+      <p>Using the Fourier-transform modulation property:</p>
+      \[
+        X(f)=\mathcal{F}\{x(t)\}
+        =\frac{A_c}{2}\left(M(f-f_c)+M(f+f_c)\right),
+      \]
+      where \(M(f)=\mathcal{F}\{m(t)\}\).
+      <p class="sub">If the message bandwidth is \(W\), the modulated signal occupies two sidebands and has total bandwidth \(2W\).</p>
     </div>
 
 
@@ -887,17 +921,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       <p class="demo-note">The spectrum has sidebands at \(f=\pm(f_c-f_m)\) and \(f=\pm(f_c+f_m)\), with no carrier impulses at \(f=\pm f_c\).</p>
     </div>
 
-    <div class="eq">
-      <b>Spectrum of DSB-SC AM</b>
-      <p>Using the Fourier-transform modulation property:</p>
-      \[
-        X(f)=\mathcal{F}\{x(t)\}
-        =\frac{A_c}{2}\left[M(f-f_c)+M(f+f_c)\right],
-      \]
-      where \(M(f)=\mathcal{F}\{m(t)\}\).
-      <p>If the message bandwidth is \(W\), the modulated signal occupies two sidebands and has total bandwidth \(2W\).</p>
-    </div>
-
+    
     <div class="key-points">
       <div class="tile"><b>Upper sideband (USB)</b><p>Frequency components above the positive carrier frequency, \(|f|>f_c\).</p></div>
       <div class="tile"><b>Lower sideband (LSB)</b><p>Frequency components below the positive carrier frequency, \(|f|<f_c\).</p></div>
