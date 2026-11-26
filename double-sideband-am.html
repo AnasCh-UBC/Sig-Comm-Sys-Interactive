@@ -2043,21 +2043,23 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
   });
 })();
 
+// Updated solution toggle
 function toggleDerivation(id, button) {
-  const derivation = document.getElementById(id);
+  const solution = document.getElementById(id);
+  if (!solution) return;
 
-  if (derivation.style.display === 'none') {
-    derivation.style.display = 'block';
-    button.textContent = 'Hide solution';
+  const opening = solution.style.display === 'none';
 
-    if (window.MathJax) {
-      MathJax.typesetPromise([derivation]);
-    }
-  } else {
-    derivation.style.display = 'none';
-    button.textContent = 'Show solution';
+  solution.style.display = opening ? 'block' : 'none';
+  button.textContent = opening ? 'Hide solution' : 'Show solution';
+
+  if (opening && id === 'convSketchSolution') {
+    requestAnimationFrame(() => {
+      drawConventionalAMSolution();
+    });
   }
 }
+
 
 function drawConventionalAMSolution() {
   const Ac = 1;
@@ -2069,8 +2071,13 @@ function drawConventionalAMSolution() {
   const envelope = t => Ac * (1 + a * message(t));
   const signal = t => envelope(t) * Math.cos(2 * PI * fc * t);
 
-  // Time-domain AM signal and its envelope
-  curve($('amSolutionTime'), [
+  const timeCanvas = $('amSolutionTime');
+  const spectrumCanvas = $('amSolutionSpectrum');
+
+  if (!timeCanvas || !spectrumCanvas) return;
+
+  // Time-domain AM signal and envelope
+  curve(timeCanvas, [
     { fn: signal, color: '#55c8f2', width: 1.7 },
     { fn: envelope, color: '#ffb454', width: 2, dash: [7, 5] },
     { fn: t => -envelope(t), color: '#ffb454', width: 2, dash: [7, 5] }
@@ -2079,7 +2086,7 @@ function drawConventionalAMSolution() {
   // Frequency-domain magnitude spectrum
   const sideband = Ac * a / 4;
 
-  stems($('amSolutionSpectrum'), [
+  stems(spectrumCanvas, [
     -1200, 1200, 0, 0.65
   ], [
     { x: -1100, h: sideband, color: '#55c8f2' },
@@ -2090,9 +2097,6 @@ function drawConventionalAMSolution() {
     { x: 1100,  h: sideband, color: '#55c8f2' }
   ]);
 }
-
-// Draw when the solution is displayed
-drawConventionalAMSolution();
 
 </script>
 
