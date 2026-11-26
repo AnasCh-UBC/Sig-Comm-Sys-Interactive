@@ -1561,55 +1561,55 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     </div>
     <div class="callout">
       <h3>Exercise: Conventional AM signal sketching</h3>
-      <p>Let \(m(t)=3\cos(2\pi (100)t)\), \(f_c=1000\), and \(A_c=1\). 
+      <p>Let \(m(t)=3\cos(2\pi (100)t)\), \(f_c=1000\), \(A_c=1\), and \(a=0.85\). 
         Plot the conventional AM signal \(x(t)\) and its spectrum \(X(f)\).</p>
       <button class="toggle-btn"
           onclick="toggleDerivation('convSketchSolution',this)">Show solution</button>
       <div id="convSketchSolution" style="display:none;">
-        <div class="tile">
-          <h3>Solution: Conventional AM</h3>
-        
-          <p><b>Step 1: Determine the modulated signal.</b></p>
-          <p>Given \(m(t)=3\cos(2\pi100t)\), \(f_c=1000\text{ Hz}\), and \(A_c=1\):</p>
-        
+        <p>
+          The normalized signal is
+          \[
+          m_n(t)=\frac{m(t)}{\max_t m(t)}
+                =\cos(2\pi(100)t),
+          \]
+          since the maximum of \(m(t)=3\cos(2\pi(100)t)\) is 3.
+        </p>
+      
+        <p>
+          The modulated signal is
           \[
           \begin{aligned}
-          x(t)&=A_c[1+m(t)]\cos(2\pi f_ct)\\
-              &=[1+3\cos(200\pi t)]\cos(2000\pi t).
+          x(t)&=A_c(1+a m_n(t))\cos(2\pi f_ct)\\
+              &=(1+0.85\cos(2\pi(100)t))
+                \cos(2\pi(1000)t).
           \end{aligned}
           \]
-        
-          <p>The modulation index is \(a=3\), so the signal is overmodulated.</p>
-        
-          <p><b>Step 2: Time-domain signal.</b></p>
-          <p>The dashed curves show the envelope boundaries. Notice that they cross because the modulation index is greater than one.</p>
-        
-          <canvas id="amSolutionTime" width="860" height="280"
-                  style="display:block;width:100%;height:auto;"></canvas>
-        
-          <p><b>Step 3: Frequency-domain spectrum.</b></p>
-          <p>Using the cosine Fourier transform pair,</p>
-        
+          The signal \(x(t)\) is plotted below.
+        </p>
+      
+        <canvas id="amSolutionTime" width="860" height="280"
+                style="display:block;width:100%;height:auto;"></canvas>
+      
+        <p>
+          In the frequency domain,
           \[
           \begin{aligned}
-          X(f)={}&\frac12[\delta(f-1000)+\delta(f+1000)]\\
-          &+\frac34[\delta(f-900)+\delta(f+900)]\\
-          &+\frac34[\delta(f-1100)+\delta(f+1100)].
+          X(f)={}&\frac12\left(\delta(f-1000)+\delta(f+1000)\right)\\
+          &+\frac{0.85}{4}\left(\delta(f-900)+\delta(f+900)\right)\\
+          &+\frac{0.85}{4}\left(\delta(f-1100)+\delta(f+1100)\right).
           \end{aligned}
           \]
-        
-          <canvas id="amSolutionSpectrum" width="860" height="280"
-                  style="display:block;width:100%;height:auto;"></canvas>
-        
-          <p><b>Interpretation:</b></p>
-          <ul>
-            <li>Carrier: \(f=\pm1000\text{ Hz}\), magnitude \(0.5\).</li>
-            <li>Lower sideband: \(f=\pm900\text{ Hz}\), magnitude \(0.75\).</li>
-            <li>Upper sideband: \(f=\pm1100\text{ Hz}\), magnitude \(0.75\).</li>
-          </ul>
-        
-          <p><b>Conclusion:</b> Since \(a=3>1\), the AM signal is overmodulated, and its envelope cannot be recovered correctly using a simple envelope detector.</p>
-        </div>
+          This is plotted next.
+        </p>
+      
+        <canvas id="amSolutionSpectrum" width="860" height="280"
+                style="display:block;width:100%;height:auto;"></canvas>
+      
+        <p class="sub">
+          Note the carrier at \(f=\pm1000\text{ Hz}\) with magnitude \(0.5\),
+          the lower sideband at \(f=\pm900\text{ Hz}\) with magnitude \(0.2125\),
+          and the upper sideband at \(f=\pm1100\text{ Hz}\) with magnitude \(0.2125\).
+        </p>
       </div>
     </div>
 
@@ -2071,35 +2071,41 @@ function toggleDerivation(id, button) {
   }
 }
 
-(function drawAmSolution() {
+function drawConventionalAMSolution() {
+  const Ac = 1;
+  const a = 0.85;
   const fm = 100;
   const fc = 1000;
-  const Ac = 1;
-  const a = 3;
 
   const message = t => Math.cos(2 * PI * fm * t);
   const envelope = t => Ac * (1 + a * message(t));
   const signal = t => envelope(t) * Math.cos(2 * PI * fc * t);
 
-  // Time-domain waveform and envelope boundaries
+  // Time-domain AM signal and its envelope
   curve($('amSolutionTime'), [
     { fn: signal, color: '#55c8f2', width: 1.7 },
     { fn: envelope, color: '#ffb454', width: 2, dash: [7, 5] },
     { fn: t => -envelope(t), color: '#ffb454', width: 2, dash: [7, 5] }
-  ], [0, 0.02, -4.5, 4.5], ['t (s)', 'Amplitude']);
+  ], [0, 0.02, -2.2, 2.2], ['t (s)', 'Amplitude']);
 
   // Frequency-domain magnitude spectrum
+  const sideband = Ac * a / 4;
+
   stems($('amSolutionSpectrum'), [
-    -1200, 1200, 0, 0.9
+    -1200, 1200, 0, 0.65
   ], [
-    { x: -1100, h: 0.75, color: '#55c8f2' },
-    { x: -1000, h: 0.50, color: '#ffb454' },
-    { x: -900,  h: 0.75, color: '#55c8f2' },
-    { x:  900,  h: 0.75, color: '#55c8f2' },
-    { x: 1000,  h: 0.50, color: '#ffb454' },
-    { x: 1100,  h: 0.75, color: '#55c8f2' }
+    { x: -1100, h: sideband, color: '#55c8f2' },
+    { x: -1000, h: Ac / 2, color: '#ffb454' },
+    { x: -900,  h: sideband, color: '#55c8f2' },
+    { x:  900,  h: sideband, color: '#55c8f2' },
+    { x: 1000,  h: Ac / 2, color: '#ffb454' },
+    { x: 1100,  h: sideband, color: '#55c8f2' }
   ]);
-})();
+}
+
+// Draw when the solution is displayed
+drawConventionalAMSolution();
+
 </script>
 
 </body>
