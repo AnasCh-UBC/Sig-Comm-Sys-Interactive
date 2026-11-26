@@ -1810,7 +1810,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
         <p>Then \[v_o(t)=a_1(m(t)+A_c\cos(2\pi f_ct)) + a_2(m^2(t)+A_c^2\cos^2(2\pi f_ct)+2m(t)A_c\cos(2\pi f_ct)).\]</p>
         <p>The terms \(m(t)\) and \(m^2(t)\) are baseband signals, and 
           the term \(A_c^2\cos^2(2\pi f_ct)\) has frequencies \(0\) and \(2f_c\).
-          The remaining terms \(A_c\cos(2\pi f_ct)\) and \(2m(t)A_c\cos(2\pi f_ct)\) are centered around \(f=f_c\)</p>
+          The remaining terms \(A_c\cos(2\pi f_ct)\) and \(2m(t)A_c\cos(2\pi f_ct)\) are centered around \(f=\pm f_c\)</p>
           
         <p>The bandpass filter selects the terms around \(f_c\), giving</p>
         \[
@@ -1859,7 +1859,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
             <foreignObject x="100" y="27" width="125" height="46">
               <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
                    style="font-size:15px;">
-                Conventional AM
+                Conventional AM Mod.
               </div>
             </foreignObject>
         
@@ -1886,7 +1886,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
             <foreignObject x="100" y="152" width="125" height="46">
               <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
                    style="font-size:15px;">
-                Conventional AM
+                Conventional AM Mod.
               </div>
             </foreignObject>
         
@@ -1932,22 +1932,13 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
             <foreignObject x="405" y="105" width="130" height="40">
               <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
                    style="font-size:15px;">
-                \(x(t)\)
-              </div>
-            </foreignObject>
-        
-            <!-- Output equation -->
-            <foreignObject x="365" y="218" width="170" height="30">
-              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
-                   style="font-size:13px;">
-                \(2A_cm(t)\cos(2\pi f_ct)\)
+                \(x(t)=2A_cm(t)\cos(2\pi f_ct)\)
               </div>
             </foreignObject>
         
           </svg>
         </div>
       </div>
-      \[x(t)=A_c[1+m(t)]\cos(2\pi f_ct)-A_c[1-m(t)]\cos(2\pi f_ct)=2A_cm(t)\cos(2\pi f_ct).\]
     </div>
 
     
