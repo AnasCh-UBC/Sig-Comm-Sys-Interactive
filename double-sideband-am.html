@@ -1601,16 +1601,29 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       </div>
     </div>
 
+
+    <div class="card"><h3>Conventional AM demodulator</h3>
+      An <b>envelope detector</b> is used to demodulate conventional AM. It consists of a rectifier and a LPF:
+      <ul>
+        <li>Rectifier: A nonlinear system whose output is \(\max\{0,i(t)\}\) (half-wave rectifier) or \(|i(t)|\) (full-wave rectifier), where \(i(t)\) is its input.</li>
+        <li>LPF: A low-pass filter with a cutoff frequency is between \(W\) (the bandwidth of \(m(t)\)) and \(f_c\).</li>
+      </ul>
+      <p>This demodulator does not require a LO, and thus no synchronization is required.</p>
+    </div>
+    <p class="sub"> Explore the effect of the cutoff frequency on envelope detection in the next demo.</p>
+
     <div class="wd">
       <div class="cap">Interactive 6.4</div>
-      <h3>Envelope detector: the effect of the RC time constant</h3>
-      <p>A simple envelope detector consists of a diode rectifier followed by an RC circuit. Change \(RC\) to see how quickly the capacitor discharges between carrier peaks.</p>
+      <h3>Envelope detector: the effect of the LPF cutoff frequency</h3>
+      <p>A simple envelope detector consists of a diode rectifier followed by an RC low-pass filter. Change the LPF cutoff frequency to see how quickly the capacitor discharges between carrier peaks.</p>
+    
       <div class="demo-controls">
-        <label>Time constant \(RC\)
-          <input id="envRC" type="range" min="0.003" max="0.8" step="0.003" value="0.08">
-          <output id="envRCVal">0.080 s</output>
+        <label>LPF cutoff frequency \(f_{\mathrm{LPF}}\)
+          <input id="envFc" type="range" min="0.2" max="20" step="0.2" value="2">
+          <output id="envFcVal">2.0 Hz</output>
         </label>
       </div>
+    
       <div class="demo-grid">
         <div class="demo-panel">
           <h4>AM signal and detector envelope</h4>
@@ -1629,6 +1642,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
           </div>
         </div>
       </div>
+
       <div class="demo-readout" id="envReadout"></div>
       <p class="demo-note">The detector is most useful when \(a<1\), so the envelope does not cross zero.</p>
     </div>
@@ -1987,40 +2001,62 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
 
   // Diode-capacitor envelope detector model
   function updateEnvelope(){
-    const RC=+$('envRC').value, Ac=1, a=.75, fc=30, fm=1;
-    $('envRCVal').textContent=RC.toFixed(3)+' s';
+    const fLPF=+$('envFc').value;
+    const RC=1/(2*PI*fLPF);
+    const Ac=1, a=.75, fc=30, fm=1;
+
+    $('envFcVal').textContent=fLPF.toFixed(1)+' Hz';
+
     const dt=1/(fc*150), t0=-.2, t1=2.2, N=Math.ceil((t1-t0)/dt);
     const times=[], sig=[], cap=[], msg=[], recovered=[];
     let vc=0;
+
     for(let i=0;i<=N;i++){
       const t=t0+i*dt, mn=Math.cos(2*PI*fm*t);
       const env=Ac*(1+a*mn), x=env*Math.cos(2*PI*fc*t);
       const rect=Math.abs(x);
+
       if(rect>vc) vc=rect;
-      else vc*=Math.exp(-dt/Math.max(RC,1e-5));
-      times.push(t);sig.push(x);cap.push(vc);msg.push(mn);
+      else vc*=Math.exp(-dt/RC);
+
+      times.push(t);
+      sig.push(x);
+      cap.push(vc);
+      msg.push(mn);
       recovered.push((vc/Ac-1)/a);
     }
-    const fn=(arr)=>t=>{
+
+    const fn=arr=>t=>{
       const k=Math.round((t-t0)/dt);
       return k<0||k>=arr.length?NaN:arr[k];
     };
+
     curve($('envTime'),[
       {fn:fn(sig),color:'#55c8f2',width:1.4},
       {fn:t=>Ac*(1+a*Math.cos(2*PI*fm*t)),color:'#62d99a',width:1.4,dash:[6,5]},
       {fn:fn(cap),color:'#ffb454',width:2.1}
     ],[t0,t1,-1.3,2.2],['t (s)','Voltage']);
+
     curve($('envMessage'),[
       {fn:t=>Math.cos(2*PI*fm*t),color:'#62d99a',width:2,dash:[7,5]},
       {fn:fn(recovered),color:'#ffb454',width:2}
     ],[t0,t1,-1.5,1.5],['t (s)','Normalized amplitude']);
-    const carrierPeriod=1/fc, msgPeriod=1/fm;
-    let quality=RC<carrierPeriod*.8?'Too small: the capacitor discharges noticeably between carrier peaks, producing ripple.':
-      RC>msgPeriod*.45?'Too large: the capacitor discharges too slowly and cannot follow the changing message envelope.':
-      'Reasonable range: the capacitor smooths carrier oscillations while following the slower message envelope.';
-    $('envReadout').innerHTML=`<b>RC = ${RC.toFixed(3)} s</b>; carrier period = ${(carrierPeriod).toFixed(3)} s; message period = ${msgPeriod.toFixed(2)} s. ${quality}`;
+
+    const carrierPeriod=1/fc;
+    const msgPeriod=1/fm;
+
+    let quality=RC<carrierPeriod*.8
+      ?'Cutoff too high: the capacitor discharges noticeably between carrier peaks, producing ripple.'
+      :RC>msgPeriod*.45
+        ?'Cutoff too low: the capacitor discharges too slowly and cannot follow the changing message envelope.'
+        :'Reasonable range: the capacitor smooths carrier oscillations while following the slower message envelope.';
+
+    $('envReadout').innerHTML=
+      `<b>LPF cutoff = ${fLPF.toFixed(1)} Hz</b>; equivalent RC = ${RC.toFixed(4)} s; carrier frequency = ${fc} Hz; message frequency = ${fm} Hz. ${quality}`;
   }
-  $('envRC').addEventListener('input',updateEnvelope);updateEnvelope();
+
+  $('envFc').addEventListener('input',updateEnvelope);
+  updateEnvelope();
 
   // Quiz
   $('gradeQuiz').addEventListener('click',()=>{
