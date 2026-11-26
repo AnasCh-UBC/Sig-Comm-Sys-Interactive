@@ -2044,9 +2044,9 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     const carrierPeriod=1/fc;
     const msgPeriod=1/fm;
 
-    let quality=RC<carrierPeriod*.8
+    let quality=RC<carrierPeriod*2.3
       ?'Cutoff too high: the capacitor discharges between carrier peaks, producing ripple.'
-      :RC>msgPeriod*.45
+      :RC>msgPeriod*.55
         ?'Cutoff too low: the capacitor discharges too slowly and cannot follow the message.'
         :'Reasonable range: the capacitor smooths carrier oscillations while following the message envelope.';
 
