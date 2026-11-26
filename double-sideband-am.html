@@ -1567,22 +1567,15 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
           onclick="toggleDerivation('convSketchSolution',this)">Show solution</button>
       <div id="convSketchSolution" style="display:none;">
         <p>
-          The normalized signal is
-          \[
-          m_n(t)=\frac{m(t)}{\max_t m(t)}
-                =\cos(2\pi(100)t),
-          \]
+          The normalized signal is \(m_n(t)=\frac{m(t)}{\max_t m(t)}
+                =\cos(2\pi(100)t),\) 
           since the maximum of \(m(t)=3\cos(2\pi(100)t)\) is 3.
         </p>
       
         <p>
           The modulated signal is
-          \[
-          \begin{aligned}
-          x(t)&=A_c(1+a m_n(t))\cos(2\pi f_ct)\\
-              &=(1+0.85\cos(2\pi(100)t))
+          \[x(t)=A_c(1+a m_n(t))\cos(2\pi f_ct)=(1+0.85\cos(2\pi(100)t))
                 \cos(2\pi(1000)t).
-          \end{aligned}
           \]
           The signal \(x(t)\) is plotted below.
         </p>
@@ -1593,11 +1586,9 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
         <p>
           In the frequency domain,
           \[
-          \begin{aligned}
-          X(f)={}&\frac12\left(\delta(f-1000)+\delta(f+1000)\right)\\
-          &+\frac{0.85}{4}\left(\delta(f-900)+\delta(f+900)\right)\\
-          &+\frac{0.85}{4}\left(\delta(f-1100)+\delta(f+1100)\right).
-          \end{aligned}
+          X(f)=\frac12\left(\delta(f-1000)+\delta(f+1000)\right)
+          +\frac{0.85}{4}\left(\delta(f-900)+\delta(f+900)\right)
+          +\frac{0.85}{4}\left(\delta(f-1100)+\delta(f+1100)\right).
           \]
           This is plotted next.
         </p>
