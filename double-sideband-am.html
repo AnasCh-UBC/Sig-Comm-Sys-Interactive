@@ -1665,7 +1665,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
         </div>
       </div>
       <ul>
-        <li>Rectifier: A nonlinear system whose output is \(\max\{0,i(t)\}\) (half-wave rectifier) or \(|i(t)|\) (full-wave rectifier), where \(i(t)\) is its input.</li>
+        <li>Rectifier: A nonlinear system whose output is \(\max\{0,x(t)\}\) (half-wave rectifier) or \(|x(t)|\) (full-wave rectifier).</li>
         <li>LPF: A low-pass filter with a cutoff frequency is between \(W\) (the bandwidth of \(m(t)\)) and \(f_c\).</li>
       </ul>
       <p class="sub">It does not require a LO, and thus requires no synchronization.</p>
@@ -1719,23 +1719,106 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       <p>Modulation generates new frequency components and therefore cannot be modeled as an LTI system. A nonlinear device, such as a diode, can generate the required modulated components.</p>
     </div>
 
-    <div class="eq">
-      <b>Power-law modulation</b>
-      <p>A power-law modulator adds the message and carrier, passes their sum through a nonlinear device, and then uses a bandpass filter centered at \(f_c\):</p>
-      \[
-        v_i(t)=m(t)+A_c\cos(2\pi f_ct),
-        \qquad v_o(t)=a_1v_i(t)+a_2v_i^2(t).
-      \]
-      <p>The bandpass filter selects the terms around \(f_c\), giving</p>
-      \[
-      \begin{aligned}
-        x(t)&=a_1A_c\cos(2\pi f_ct)+2a_2A_cm(t)\cos(2\pi f_ct)\\
-        &=a_1A_c\left[1+\frac{2a_2}{a_1}m(t)\right]\cos(2\pi f_ct).
-      \end{aligned}
-      \]
-      <p>If \(\frac{2a_2}{a_1}|m(t)|<1\), the result is a conventional AM signal.</p>
-    </div>
+    <div class="card"><h3>Power-law modulation</h3>
+      <div class="grid">
+        <div class="tile">
+          <p>A power-law modulator adds the message and carrier, passes their sum through a nonlinear device, and then uses a bandpass filter centered at \(f_c\):</p>
+        </div>
+        <div class="tile">
+          <svg class="mod" viewBox="0 0 540 220"
+               xmlns="http://www.w3.org/2000/svg"
+               role="img" aria-label="Power-law AM modulator block diagram"
+               style="display:block;width:100%;max-width:540px;height:auto;margin:0 auto;">
+        
+            <defs>
+              <marker id="powerArrow" viewBox="0 0 10 8"
+                      refX="8.5" refY="4" markerWidth="7" markerHeight="6"
+                      orient="auto">
+                <path class="hd" d="M0 0.8L9 4L0 7.2L2.2 4Z"/>
+              </marker>
+            </defs>
+        
+            <!-- Message input -->
+            <foreignObject x="0" y="39" width="65" height="38">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
+                \(m(t)\)
+              </div>
+            </foreignObject>
+        
+            <path class="ln" d="M65 58H105" marker-end="url(#powerArrow)"/>
+        
+            <!-- Adder -->
+            <circle class="node" cx="125" cy="58" r="16"/>
+            <path class="ln" d="M115 58H135M125 48V68"/>
+        
+            <!-- Adder to nonlinear device -->
+            <path class="ln" d="M141 58H180" marker-end="url(#powerArrow)"/>
+        
+            <!-- Nonlinear device -->
+            <rect class="node" x="180" y="32" width="130" height="52" rx="5"/>
+            <foreignObject x="180" y="32" width="130" height="52">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
+                   style="font-size:16px;">
+                Nonlinear device
+              </div>
+            </foreignObject>
+        
+            <!-- Nonlinear device to BPF -->
+            <path class="ln" d="M310 58H345" marker-end="url(#powerArrow)"/>
+        
+            <!-- Bandpass filter -->
+            <rect class="node" x="345" y="32" width="100" height="52" rx="5"/>
+            <foreignObject x="345" y="32" width="100" height="52">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
+                   style="font-size:16px;">
+                BPF @ \(f_c\)
+              </div>
+            </foreignObject>
+        
+            <!-- Output -->
+            <path class="ln" d="M445 58H485" marker-end="url(#powerArrow)"/>
+            <foreignObject x="485" y="39" width="55" height="38">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
+                \(x(t)\)
+              </div>
+            </foreignObject>
+        
+            <!-- Carrier input -->
+            <foreignObject x="65" y="150" width="120" height="38">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
+                   style="font-size:16px;">
+                \(A_c\cos(2\pi f_ct)\)
+              </div>
+            </foreignObject>
+        
+            <!-- Carrier connection -->
+            <path class="ln" d="M125 148V74" marker-end="url(#powerArrow)"/>
+        
+          </svg>
+        </div>
+      </div>
+      <button class="toggle-btn"
+          onclick="toggleDerivation('PowerLawDetails',this)">Show details</button>
+      <div id="PowerLawDetails" style="display:none;">
+        <p> Let the input to a nonlinear device be \(v_i(t)=m(t)+A_c\cos(2\pi f_ct)\), 
+          and the output of the nonlinear device be \(v_o(t)=a_1v_i(t)+a_2v_i^2(t)\).</p>
 
+        <p>Then \[v_o(t)=a_1(m(t)+A_c\cos(2\pi f_ct)) + a_2(m^2(t)+A_c^2\cos^2(2\pi f_ct)+2m(t)A_c\cos(2\pi f_ct)).\]</p>
+        <p>The terms \(m(t)\) and \(m^2(t)\) are baseband signals, and 
+          the term \(A_c^2\cos^2(2\pi f_ct)\) has frequencies \(0\) and \(2f_c\).
+          The remaining terms \(A_c\cos(2\pi f_ct)\) and \(2m(t)A_c\cos(2\pi f_ct)\) are centered around \(f=f_c\)</p>
+          
+        <p>The bandpass filter selects the terms around \(f_c\), giving</p>
+        \[
+        \begin{align}
+          x(t)&=a_1A_c\cos(2\pi f_ct)+2a_2A_cm(t)\cos(2\pi f_ct)\\
+              &=a_1A_c\left[1+\frac{2a_2}{a_1}m(t)\right]\cos(2\pi f_ct).
+        \end{aligned}
+        \]
+        <p>If \(\frac{2a_2}{a_1}|m(t)|\lt 1\), the result is a conventional AM signal.</p>
+      </div>
+    </div>
+    
     <div class="diagram">
       <svg viewBox="0 0 800 160" role="img" aria-label="Power-law AM modulator block diagram">
         <defs><marker id="arrPow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="#55c8f2" stroke-width="1.2"/></marker></defs>
