@@ -2041,62 +2041,38 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     document.querySelectorAll('#quiz .quiz-feedback').forEach(x=>{x.textContent='';x.className='quiz-feedback';});
     $('quizScore').textContent='';
   });
+
+  // Keep this toggle and its drawing routine inside the same scope as
+  // the local canvas helpers ($, curve, stems, and PI).
+  window.toggleDerivation = function(id, button) {
+    const solution = $(id);
+    if (!solution) return;
+
+    const opening = solution.style.display === 'none';
+    solution.style.display = opening ? 'block' : 'none';
+    button.textContent = opening ? 'Hide solution' : 'Show solution';
+
+    if (opening && id === 'convSketchSolution') {
+      requestAnimationFrame(() => {
+        curve($('amSolutionTime'), [
+          { fn: t => (1 + 0.85*Math.cos(2*PI*100*t))*Math.cos(2*PI*1000*t), color: '#55c8f2', width: 1.7 },
+          { fn: t => 1 + 0.85*Math.cos(2*PI*100*t), color: '#ffb454', width: 2, dash: [7, 5] },
+          { fn: t => -(1 + 0.85*Math.cos(2*PI*100*t)), color: '#ffb454', width: 2, dash: [7, 5] }
+        ], [0, 0.02, -2.2, 2.2], ['t (s)', 'Amplitude']);
+
+        const sideband = 0.85/4;
+        stems($('amSolutionSpectrum'), [-1200, 1200, 0, 0.65], [
+          { x: -1100, h: sideband, color: '#55c8f2' },
+          { x: -1000, h: 0.5, color: '#ffb454' },
+          { x: -900,  h: sideband, color: '#55c8f2' },
+          { x: 900,   h: sideband, color: '#55c8f2' },
+          { x: 1000,  h: 0.5, color: '#ffb454' },
+          { x: 1100,  h: sideband, color: '#55c8f2' }
+        ]);
+      });
+    }
+  };
 })();
-
-// Updated solution toggle
-function toggleDerivation(id, button) {
-  const solution = document.getElementById(id);
-  if (!solution) return;
-
-  const opening = solution.style.display === 'none';
-
-  solution.style.display = opening ? 'block' : 'none';
-  button.textContent = opening ? 'Hide solution' : 'Show solution';
-
-  if (opening && id === 'convSketchSolution') {
-    requestAnimationFrame(() => {
-      drawConventionalAMSolution();
-    });
-  }
-}
-
-
-function drawConventionalAMSolution() {
-  const Ac = 1;
-  const a = 0.85;
-  const fm = 100;
-  const fc = 1000;
-
-  const message = t => Math.cos(2 * PI * fm * t);
-  const envelope = t => Ac * (1 + a * message(t));
-  const signal = t => envelope(t) * Math.cos(2 * PI * fc * t);
-
-  const timeCanvas = $('amSolutionTime');
-  const spectrumCanvas = $('amSolutionSpectrum');
-
-  if (!timeCanvas || !spectrumCanvas) return;
-
-  // Time-domain AM signal and envelope
-  curve(timeCanvas, [
-    { fn: signal, color: '#55c8f2', width: 1.7 },
-    { fn: envelope, color: '#ffb454', width: 2, dash: [7, 5] },
-    { fn: t => -envelope(t), color: '#ffb454', width: 2, dash: [7, 5] }
-  ], [0, 0.02, -2.2, 2.2], ['t (s)', 'Amplitude']);
-
-  // Frequency-domain magnitude spectrum
-  const sideband = Ac * a / 4;
-
-  stems(spectrumCanvas, [
-    -1200, 1200, 0, 0.65
-  ], [
-    { x: -1100, h: sideband, color: '#55c8f2' },
-    { x: -1000, h: Ac / 2, color: '#ffb454' },
-    { x: -900,  h: sideband, color: '#55c8f2' },
-    { x:  900,  h: sideband, color: '#55c8f2' },
-    { x: 1000,  h: Ac / 2, color: '#ffb454' },
-    { x: 1100,  h: sideband, color: '#55c8f2' }
-  ]);
-}
 
 </script>
 
