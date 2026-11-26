@@ -1601,14 +1601,94 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       </div>
     </div>
 
-
     <div class="card"><h3>Conventional AM demodulator</h3>
-      An <b>envelope detector</b> is used to demodulate conventional AM. It consists of a rectifier and a LPF:
+      <div class="grid">
+        <div class="tile">
+          <p>An <b>envelope detector</b> is used to demodulate conventional AM. 
+          It does not require a LO, and thus requires no synchronization.</p> 
+          It consists of a rectifier and a LPF:      
+        </div>
+        <div class="tile">
+          <svg class="mod" viewBox="0 0 540 220"
+               xmlns="http://www.w3.org/2000/svg"
+               role="img" aria-label="Envelope detector block diagram"
+               style="display:block;width:100%;max-width:540px;height:auto;margin:0 auto;">
+        
+            <defs>
+              <marker id="envArrow" viewBox="0 0 10 8"
+                      refX="8.5" refY="4" markerWidth="7" markerHeight="6"
+                      orient="auto">
+                <path class="hd" d="M0 0.8L9 4L0 7.2L2.2 4Z"/>
+              </marker>
+            </defs>
+        
+            <!-- AM input -->
+            <foreignObject x="0" y="39" width="90" height="38">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
+                \(x(t)\)
+              </div>
+            </foreignObject>
+        
+            <!-- Input path -->
+            <path class="ln" d="M90 58H145" marker-end="url(#envArrow)"/>
+        
+            <!-- Rectifier block -->
+            <rect class="node" x="145" y="32" width="105" height="52" rx="5"/>
+            <foreignObject x="145" y="32" width="105" height="52">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
+                   style="font-size:17px;">
+                Rectifier
+              </div>
+            </foreignObject>
+        
+            <!-- Rectifier to LPF -->
+            <path class="ln" d="M250 58H310" marker-end="url(#envArrow)"/>
+        
+            <!-- LPF block -->
+            <rect class="node" x="310" y="32" width="85" height="52" rx="5"/>
+            <foreignObject x="310" y="32" width="85" height="52">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
+                   style="font-size:18px;">
+                LPF
+              </div>
+            </foreignObject>
+        
+            <!-- Output path -->
+            <path class="ln" d="M395 58H450" marker-end="url(#envArrow)"/>
+        
+            <!-- Recovered output -->
+            <foreignObject x="450" y="39" width="90" height="38">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
+                \(\hat m(t)\)
+              </div>
+            </foreignObject>
+        
+            <!-- Cutoff frequency annotation -->
+            <foreignObject x="290" y="112" width="125" height="42">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
+                   style="font-size:15px;">
+                \(f_{\mathrm{LPF}}\)
+              </div>
+            </foreignObject>
+        
+            <path class="ln" d="M352 112V86"/>
+        
+            <!-- Caption -->
+            <foreignObject x="70" y="172" width="400" height="38">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
+                   style="font-size:15px;">
+                Envelope detector
+              </div>
+            </foreignObject>
+        
+          </svg>
+        </div>
+      </div>
       <ul>
         <li>Rectifier: A nonlinear system whose output is \(\max\{0,i(t)\}\) (half-wave rectifier) or \(|i(t)|\) (full-wave rectifier), where \(i(t)\) is its input.</li>
         <li>LPF: A low-pass filter with a cutoff frequency is between \(W\) (the bandwidth of \(m(t)\)) and \(f_c\).</li>
       </ul>
-      <p>This demodulator does not require a LO, and thus no synchronization is required.</p>
+      <p></p>
     </div>
 
     <div class="wd">
