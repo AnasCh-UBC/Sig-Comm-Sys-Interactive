@@ -1716,13 +1716,16 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     <h2><small>5</small> Implementation of modulation and demodulation</h2>
     <div class="card">
       <h3>Why a nonlinear device?</h3>
-      <p>Modulation generates new frequency components and therefore cannot be modeled as an LTI system. A nonlinear device, such as a diode, can generate the required modulated components.</p>
+      <p>Modulation generates new frequency components and therefore cannot be modeled as an LTI system. 
+        A nonlinear device, such as a diode, can generate the required modulated components.</p>
     </div>
 
     <div class="card"><h3>Power-law modulation</h3>
       <div class="grid">
         <div class="tile">
-          <p>A power-law modulator adds the message and carrier, passes their sum through a nonlinear device, and then uses a bandpass filter centered at \(f_c\):</p>
+          <p>A power-law modulator adds the message and carrier, 
+            passes their sum through a nonlinear device, 
+            and then uses a bandpass filter centered at \(f_c\):</p>
         </div>
         <div class="tile">
           <svg class="mod" viewBox="0 0 540 180"
@@ -1801,7 +1804,8 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
           onclick="toggleDerivation('PowerLawDetails',this)">Show details</button>
       <div id="PowerLawDetails" style="display:none;">
         <p> Let the input to a nonlinear device be \(v_i(t)=m(t)+A_c\cos(2\pi f_ct)\), 
-          and the output of the nonlinear device be \(v_o(t)=a_1v_i(t)+a_2v_i^2(t)\).</p>
+          and the output of the nonlinear device be \(v_o(t)=a_1v_i(t)+a_2v_i^2(t)\). 
+          This is a <b>square-law device</b> because its ouput is a quadratic function of its input.</p>
 
         <p>Then \[v_o(t)=a_1(m(t)+A_c\cos(2\pi f_ct)) + a_2(m^2(t)+A_c^2\cos^2(2\pi f_ct)+2m(t)A_c\cos(2\pi f_ct)).\]</p>
         <p>The terms \(m(t)\) and \(m^2(t)\) are baseband signals, and 
@@ -1818,7 +1822,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
         <p>If \(\frac{2a_2}{a_1}|m(t)|\lt 1\), the result is a conventional AM signal.</p>
       </div>
     </div>
-
+    <p class="sub">The power-law modulator gives us a conventional AM signal. How to get a DSB-SC AM signal.</p>
     <div class="card">
       <h3>Balanced modulator</h3>
       <p>A balanced modulator consists of two conventional AM modulators, one driven by \(m(t)\) and the other by \(-m(t)\). Subtracting their outputs cancels the carrier:</p>
@@ -2176,9 +2180,9 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     const carrierPeriod=1/fc;
     const msgPeriod=1/fm;
 
-    let quality=RC<carrierPeriod*2.3
+    let quality=RC<carrierPeriod*2.5
       ?'Cutoff too high: the capacitor discharges between carrier peaks, producing ripple.'
-      :RC>msgPeriod*.2
+      :RC>msgPeriod*.15
         ?'Cutoff too low: the capacitor discharges too slowly and cannot follow the message.'
         :'Reasonable range: the capacitor smooths carrier oscillations while following the message envelope.';
 
