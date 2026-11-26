@@ -1647,8 +1647,13 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     </div>
   </section>
 
+
+
+
+
+
   <section id="implementation">
-    <h2><small>04</small> Implementation of modulation and demodulation</h2>
+    <h2><small>5</small> Implementation of modulation and demodulation</h2>
     <div class="card">
       <h3>Why a nonlinear device?</h3>
       <p>Modulation generates new frequency components and therefore cannot be modeled as an LTI system. A nonlinear device, such as a diode, can generate the required modulated components.</p>
@@ -2046,7 +2051,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
 
     let quality=RC<carrierPeriod*2.3
       ?'Cutoff too high: the capacitor discharges between carrier peaks, producing ripple.'
-      :RC>msgPeriod*.55
+      :RC>msgPeriod*.2
         ?'Cutoff too low: the capacitor discharges too slowly and cannot follow the message.'
         :'Reasonable range: the capacitor smooths carrier oscillations while following the message envelope.';
 
