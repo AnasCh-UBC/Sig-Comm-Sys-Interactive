@@ -1605,8 +1605,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       <div class="grid">
         <div class="tile">
           <p>An <b>envelope detector</b> is used to demodulate conventional AM. 
-          It does not require a LO, and thus requires no synchronization.</p> 
-          It consists of a rectifier and a LPF:      
+          It consists of a rectifier and a LPF:</p>
         </div>
         <div class="tile">
           <svg class="mod" viewBox="0 0 540 220"
@@ -1662,25 +1661,6 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
                 \(\hat m(t)\)
               </div>
             </foreignObject>
-        
-            <!-- Cutoff frequency annotation -->
-            <foreignObject x="290" y="112" width="125" height="42">
-              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
-                   style="font-size:15px;">
-                \(f_{\mathrm{LPF}}\)
-              </div>
-            </foreignObject>
-        
-            <path class="ln" d="M352 112V86"/>
-        
-            <!-- Caption -->
-            <foreignObject x="70" y="172" width="400" height="38">
-              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
-                   style="font-size:15px;">
-                Envelope detector
-              </div>
-            </foreignObject>
-        
           </svg>
         </div>
       </div>
@@ -1688,7 +1668,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
         <li>Rectifier: A nonlinear system whose output is \(\max\{0,i(t)\}\) (half-wave rectifier) or \(|i(t)|\) (full-wave rectifier), where \(i(t)\) is its input.</li>
         <li>LPF: A low-pass filter with a cutoff frequency is between \(W\) (the bandwidth of \(m(t)\)) and \(f_c\).</li>
       </ul>
-      <p></p>
+      <p class="sub">It does not require a LO, and thus requires no synchronization.</p>
     </div>
 
     <div class="wd">
