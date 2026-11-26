@@ -1822,18 +1822,131 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
         <p>If \(\frac{2a_2}{a_1}|m(t)|\lt 1\), the result is a conventional AM signal.</p>
       </div>
     </div>
-    <p class="sub">The power-law modulator gives us a conventional AM signal. How to get a DSB-SC AM signal.</p>
-    <div class="card">
-      <h3>Balanced modulator</h3>
-      <p>A balanced modulator consists of two conventional AM modulators, one driven by \(m(t)\) and the other by \(-m(t)\). Subtracting their outputs cancels the carrier:</p>
-      \[
-      \begin{aligned}
-        x(t)&=A_c[1+m(t)]\cos(2\pi f_ct)\\
-        &\quad-A_c[1-m(t)]\cos(2\pi f_ct)\\
-        &=2A_cm(t)\cos(2\pi f_ct).
-      \end{aligned}
-      \]
-      <p>The result is a DSB-SC signal.</p>
+
+
+    <p class="sub">The power-law modulator gives us a conventional AM signal. How to get a DSB-SC AM signal?</p>
+    <div class="card"><h3>Balanced modulator</h3>
+      <div class="grid">
+        <div class="tile">
+          <p>A balanced modulator consists of two conventional AM modulators, 
+            one driven by \(m(t)\) and the other by \(-m(t)\). 
+            Subtracting their outputs cancels the carrier leading to a DSB-SC signal.</p>
+        </div>
+        <div class="tile">
+          <svg class="mod" viewBox="0 0 540 250"
+               xmlns="http://www.w3.org/2000/svg"
+               role="img" aria-label="Balanced modulator block diagram"
+               style="display:block;width:100%;max-width:540px;height:auto;margin:0 auto;">
+        
+            <defs>
+              <marker id="balArrow" viewBox="0 0 10 8"
+                      refX="8.5" refY="4" markerWidth="7" markerHeight="6"
+                      orient="auto">
+                <path class="hd" d="M0 0.8L9 4L0 7.2L2.2 4Z"/>
+              </marker>
+            </defs>
+        
+            <!-- Upper message input -->
+            <foreignObject x="0" y="37" width="65" height="36">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
+                \(m(t)\)
+              </div>
+            </foreignObject>
+        
+            <path class="ln" d="M65 55H105" marker-end="url(#balArrow)"/>
+        
+            <!-- Upper conventional AM block -->
+            <rect class="node" x="105" y="30" width="145" height="50" rx="5"/>
+            <foreignObject x="105" y="30" width="145" height="50">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
+                   style="font-size:16px;">
+                Conventional AM
+              </div>
+            </foreignObject>
+        
+            <!-- Lower message input -->
+            <foreignObject x="0" y="157" width="65" height="36">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">
+                \(-m(t)\)
+              </div>
+            </foreignObject>
+        
+            <path class="ln" d="M65 175H105" marker-end="url(#balArrow)"/>
+        
+            <!-- Lower conventional AM block -->
+            <rect class="node" x="105" y="150" width="145" height="50" rx="5"/>
+            <foreignObject x="105" y="150" width="145" height="50">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
+                   style="font-size:16px;">
+                Conventional AM
+              </div>
+            </foreignObject>
+        
+            <!-- Shared carrier input -->
+            <foreignObject x="0" y="102" width="75" height="32">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
+                   style="font-size:15px;">
+                Carrier
+              </div>
+            </foreignObject>
+        
+            <path class="ln" d="M75 118H85V55H105"/>
+            <path class="ln" d="M85 118V175H105"/>
+        
+            <!-- Upper branch to subtractor -->
+            <path class="ln" d="M250 55H330L390 98"
+                  marker-end="url(#balArrow)"/>
+        
+            <!-- Lower branch to subtractor -->
+            <path class="ln" d="M250 175H330L390 138"
+                  marker-end="url(#balArrow)"/>
+        
+            <!-- Subtractor -->
+            <circle class="node" cx="410" cy="118" r="22"/>
+            <path class="ln" d="M400 118H420"/>
+            <foreignObject x="392" y="92" width="36" height="52">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
+                   style="font-size:17px;">
+                \(\Sigma\)
+              </div>
+            </foreignObject>
+        
+            <!-- Plus and minus indicators -->
+            <foreignObject x="365" y="76" width="24" height="24">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
+                   style="font-size:17px;">
+                \(+\)
+              </div>
+            </foreignObject>
+        
+            <foreignObject x="365" y="145" width="24" height="24">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
+                   style="font-size:17px;">
+                \(-\)
+              </div>
+            </foreignObject>
+        
+            <!-- Output -->
+            <path class="ln" d="M432 118H465" marker-end="url(#balArrow)"/>
+            <foreignObject x="465" y="92" width="75" height="52">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
+                   style="font-size:15px;">
+                \(x(t)\)
+              </div>
+            </foreignObject>
+        
+            <!-- Output equation -->
+            <foreignObject x="275" y="208" width="245" height="36">
+              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
+                   style="font-size:15px;">
+                \(2A_cm(t)\cos(2\pi f_ct)\)
+              </div>
+            </foreignObject>
+        
+          </svg>
+        </div>
+      </div>
+      \[x(t)=A_c[1+m(t)]\cos(2\pi f_ct)-A_c[1-m(t)]\cos(2\pi f_ct)=2A_cm(t)\cos(2\pi f_ct).\]
     </div>
 
     <div class="diagram">
