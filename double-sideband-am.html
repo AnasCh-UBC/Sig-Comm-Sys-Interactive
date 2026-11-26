@@ -1610,15 +1610,15 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       </ul>
       <p>This demodulator does not require a LO, and thus no synchronization is required.</p>
     </div>
-    <p class="sub"> Explore the effect of the cutoff frequency on envelope detection in the next demo.</p>
 
     <div class="wd">
-      <div class="cap">Interactive 6.4</div>
-      <h3>Envelope detector: the effect of the LPF cutoff frequency</h3>
-      <p>A simple envelope detector consists of a diode rectifier followed by an RC low-pass filter. Change the LPF cutoff frequency to see how quickly the capacitor discharges between carrier peaks.</p>
+      <div class="cap">Interactive 4.1</div>
+      <h3>Envelope detector: The effect of the LPF cutoff frequency</h3>
+      <p>A simple envelope detector consists of a diode (half-wave) rectifier followed by an RC LPF.</p>
+      <p class="sub"> Here, \(W=1\) Hz and \(f_c=30\) Hz. Change the cutoff frequency to the effect on the demodulated signal.</p>
     
       <div class="demo-controls">
-        <label>LPF cutoff frequency \(f_{\mathrm{LPF}}\)
+        <label>LPF cutoff frequency
           <input id="envFc" type="range" min="0.2" max="20" step="0.2" value="2">
           <output id="envFcVal">2.0 Hz</output>
         </label>
@@ -1626,11 +1626,11 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     
       <div class="demo-grid">
         <div class="demo-panel">
-          <h4>AM signal and detector envelope</h4>
+          <h4>AM signal and demodulated signal</h4>
           <canvas id="envTime" width="860" height="260"></canvas>
           <div class="demo-legend">
             <span><i style="background:#55c8f2"></i>AM signal</span>
-            <span><i style="background:#ffb454"></i>Capacitor voltage</span>
+            <span><i style="background:#ffb454"></i>Demodulated signal</span>
           </div>
         </div>
         <div class="demo-panel">
@@ -2046,13 +2046,13 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     const msgPeriod=1/fm;
 
     let quality=RC<carrierPeriod*.8
-      ?'Cutoff too high: the capacitor discharges noticeably between carrier peaks, producing ripple.'
+      ?'Cutoff too high: the capacitor discharges between carrier peaks, producing ripple.'
       :RC>msgPeriod*.45
-        ?'Cutoff too low: the capacitor discharges too slowly and cannot follow the changing message envelope.'
-        :'Reasonable range: the capacitor smooths carrier oscillations while following the slower message envelope.';
+        ?'Cutoff too low: the capacitor discharges too slowly and cannot follow the message.'
+        :'Reasonable range: the capacitor smooths carrier oscillations while following the message envelope.';
 
     $('envReadout').innerHTML=
-      `<b>LPF cutoff = ${fLPF.toFixed(1)} Hz</b>; equivalent RC = ${RC.toFixed(4)} s; carrier frequency = ${fc} Hz; message frequency = ${fm} Hz. ${quality}`;
+      `<b>${quality}`;
   }
 
   $('envFc').addEventListener('input',updateEnvelope);
