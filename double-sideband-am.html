@@ -2399,13 +2399,12 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
 
 
 
-    <div class="eq">
-      <b>General DSB-SC demodulator architecture</b>
-      <p>The receiver multiplies \(r(t)\) by a locally recovered carrier using a balanced modulator, then lowpass filters the result. Carrier recovery is essential:</p>
+    <div class="card"><h3>Coherent DSB-SC demodulator architecture</h3>
+      <p>A coherent DSB-SC AM demodulator multiplies \(x(t)\) by a LO using a balanced modulator, then lowpass filters the result.</p> 
+      <p>Carrier recovery is essential for this process:</p>
       <ul>
         <li>For a suppressed carrier, a phase-locked loop (PLL) can recover the carrier.</li>
         <li>When a carrier or pilot tone is present, a narrowband bandpass filter around \(f_c\) can extract it.</li>
-        <li>If a large carrier component is transmitted, an envelope detector can be used instead.</li>
       </ul>
     </div>
   </section>
@@ -2794,33 +2793,42 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
   let lastFrame = null;
   let animationId = null;
 
-  // Smooth asymmetric message signal with no flat sections:
-  // an early, distinct peak; a relatively fast fall; then a slow variation
-  // back toward the trough before the next cycle.
+  // Aperiodic, smoothly varying message with a distinct early peak.
+  // Random control points are generated once, so playback is repeatable
+  // but the waveform does not repeat over the simulation interval.
+  const messageKnotSpacing = 0.16;
+  const messageValues = (() => {
+    let seed = 24681357;
+    const random = () => {
+      seed = (1664525 * seed + 1013904223) >>> 0;
+      return 2 * (seed / 4294967296) - 1;
+    };
+
+    const count = Math.ceil(duration / messageKnotSpacing) + 2;
+    const values = Array.from({ length: count }, () => 0.72 * random());
+
+    // Shape the beginning: rise to a clear peak, followed by a fast drop.
+    values[0] = -0.25;
+    values[1] = 0.05;
+    values[2] = 0.95;
+    values[3] = -0.78;
+    values[4] = 0.22;
+    values[5] = -0.42;
+
+    return values;
+  })();
+
   function message(t) {
-    const phase = ((fm * t) % 1 + 1) % 1;
+    const position = Math.max(0, Math.min(
+      messageValues.length - 1,
+      t / messageKnotSpacing
+    ));
+    const i = Math.min(messageValues.length - 2, Math.floor(position));
+    const u = position - i;
 
-    // Raised-cosine interpolation gives smooth joins between segments.
-    const ease = u => 0.5 - 0.5 * Math.cos(PI * u);
-
-    const peakEnd = 0.18;
-    const fastFallEnd = 0.36;
-
-    if (phase < peakEnd) {
-      // Gradual rise from -1 to +1.
-      const u = phase / peakEnd;
-      return -1 + 2 * ease(u);
-    }
-
-    if (phase < fastFallEnd) {
-      // Relatively fast decrease from +1 to -0.5.
-      const u = (phase - peakEnd) / (fastFallEnd - peakEnd);
-      return 1 - 1.5 * ease(u);
-    }
-
-    // Continue changing slowly from -0.5 to -1 for the rest of the cycle.
-    const u = (phase - fastFallEnd) / (1 - fastFallEnd);
-    return -0.5 - 0.5 * ease(u);
+    // Smooth interpolation avoids abrupt corners while retaining randomness.
+    const s = u * u * (3 - 2 * u);
+    return messageValues[i] + (messageValues[i + 1] - messageValues[i]) * s;
   }
 
   function envelope(t) {
