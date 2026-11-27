@@ -961,24 +961,15 @@ header{align-items:center}
   font-size: 11px;
   font-family: system-ui,sans-serif;
 }
+/* Current paths display arrowheads only; all circuit wires remain black. */
 #envCircuit .env-charge,
 #envCircuit .env-discharge,
 #envCircuit .env-node-current {
   fill: none;
-  stroke: #111;
-  stroke-width: 2;
+  stroke: transparent;
+  stroke-width: 1.5;
   stroke-linecap: round;
   stroke-linejoin: round;
-}
-
-#envCircuit .env-discharge {
-  marker-end: none;
-}
-
-#envCircuit .env-charge.active,
-#envCircuit .env-discharge.active,
-#envCircuit .env-node-current.active {
-  stroke: #e58a16;
 }
 
 @media(max-width:700px) {
@@ -2291,8 +2282,8 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     
             <defs>
               <marker id="envCurrentArrow" viewBox="0 0 10 8"
-                      refX="8.5" refY="4" markerWidth="7"
-                      markerHeight="6" orient="auto">
+                      refX="8.5" refY="4" markerWidth="9"
+                      markerHeight="8" orient="auto">
                 <path d="M0 0.8L9 4L0 7.2L2.2 4Z"
                       fill="#ff3333"/>
               </marker>
@@ -2322,13 +2313,13 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
               Diode
             </text>
     
-            <!-- Output node -->
+            <!-- Output node and horizontal wire (drawn once) -->
             <circle cx="310" cy="115" r="4" class="env-node"/>
             <path d="M310 115H455" class="env-wire"/>
-            <path d="M310 115H455" class="env-wire"/>
 
-            <!-- Capacitor branch -->
-            <path d="M350 115V158" class="env-wire"/>
+            <!-- Capacitor branch with a small gap for the direction arrowhead -->
+            <path d="M350 115V122" class="env-wire"/>
+            <path d="M350 148V158" class="env-wire"/>
             <path d="M330 158H370M330 170H370" class="env-wire"/>
             <path d="M350 170V220" class="env-wire"/>
             <text x="380" y="160" class="env-svg-label">C</text>
@@ -2353,12 +2344,10 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
             <path d="M220 115H300" class="env-charge"
             marker-end="url(#envCurrentArrow)"/>
 
-            <!-- Capacitor charging: downward -->
-            <path d="M350 120V151" class="env-charge"
-            marker-end="url(#envCurrentArrow)"/>
-
-            <!-- Capacitor discharging: upward -->
-            <path d="M350 151V120" class="env-discharge"/>
+            <!-- Capacitor current: arrowhead only, with no colored shaft -->
+            <path d="M350 123V147" class="env-charge"
+                  marker-end="url(#envCurrentArrow)"/>
+            <path d="M350 147V123" class="env-discharge"/>
 
             <!-- Output node toward resistor -->
             <path d="M320 115H440" class="env-node-current"
@@ -3049,24 +3038,26 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     ctx.fill();
   }
 
-  // Update the circuit's current paths and labels.
+  // Update arrowheads only; all circuit wires remain black.
   function updateCircuit() {
     const p = sampleAt(time);
     const conducting = p.conducting;
     const arrow = 'url(#envCurrentArrow)';
 
-    // Charging arrows: input -> diode -> node
+    // Input -> diode -> output node, and downward into the capacitor,
+    // only while the diode conducts.
     root.querySelectorAll('.env-charge').forEach(el => {
-      el.setAttribute('marker-end', conducting ? arrow : 'none');
+      if (conducting) el.setAttribute('marker-end', arrow);
+      else el.removeAttribute('marker-end');
     });
 
-    // Capacitor current:
-    // Downward during charging, upward during discharging.
+    // Upward from the capacitor to the node only while discharging.
     root.querySelectorAll('.env-discharge').forEach(el => {
-      el.setAttribute('marker-end', conducting ? 'none' : arrow);
+      if (!conducting) el.setAttribute('marker-end', arrow);
+      else el.removeAttribute('marker-end');
     });
 
-    // Current from output node toward resistor is always rightward.
+    // From the output node toward the resistor in both states.
     root.querySelectorAll('.env-node-current').forEach(el => {
       el.setAttribute('marker-end', arrow);
     });
