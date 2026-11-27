@@ -760,134 +760,105 @@ header{align-items:center}
   }
 
 
-  .env-play-demo {
-  margin: 18px 0;
+  /* Playable envelope-detector demo: one unified interactive card */
+.env-play-demo {
+  margin: 16px 0;
+}
+
+.env-play-demo > h3 {
+  margin: 3px 0 5px;
+}
+
+.env-play-demo > p {
+  margin: 5px 0 10px;
+  color: var(--mut);
+  font-size: .9rem;
 }
 
 .env-play-controls {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 10px;
-  margin: 16px 0;
-  padding: 12px;
-  border: 1px solid rgba(85,200,242,.3);
-  border-radius: 9px;
-  background: rgba(85,200,242,.045);
+  gap: 7px;
+  margin: 9px 0 8px;
 }
 
 .env-play-controls button {
-  border: 1px solid #55c8f2;
-  color: #55c8f2;
-  background: rgba(85,200,242,.08);
+  border: 1px solid var(--acc);
+  color: var(--acc);
+  background: transparent;
   border-radius: 6px;
-  padding: 7px 13px;
+  padding: 4px 9px;
   cursor: pointer;
   font: inherit;
+  font-size: .78rem;
+  line-height: 1.35;
+}
+
+.env-play-controls button:first-child {
+  color: white;
+  background: var(--acc);
 }
 
 .env-play-controls button:hover {
-  background: rgba(85,200,242,.18);
+  filter: brightness(1.12);
 }
 
 .env-play-controls label {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 9px;
+  gap: 7px;
   margin-left: auto;
+  color: var(--mut);
+  font-size: .8rem;
 }
 
-.env-play-controls input {
-  width: 140px;
-  accent-color: #55c8f2;
+.env-play-controls input[type=range] {
+  width: 115px;
+  accent-color: var(--blue);
 }
 
 .env-play-controls output {
-  color: #ffb454;
-  min-width: 65px;
+  min-width: 52px;
+  color: var(--acc);
+  font-size: .78rem;
   font-variant-numeric: tabular-nums;
 }
 
 .env-play-status {
-  padding: 10px 13px;
-  margin-bottom: 14px;
-  border-left: 3px solid #55c8f2;
-  background: rgba(85,200,242,.07);
-  border-radius: 4px;
-  color: var(--fg);
-  min-height: 24px;
+  min-height: 1.35em;
+  margin: 5px 0 10px;
+  padding: 5px 8px;
+  border-left: 2px solid var(--acc);
+  border-radius: 3px;
+  background: color-mix(in srgb,var(--acc) 6%,var(--card));
+  color: var(--mut);
+  font-size: .78rem;
+  line-height: 1.4;
 }
 
 .env-play-grid {
   display: grid;
-  grid-template-columns: minmax(0, .9fr) minmax(0, 1.5fr);
-  gap: 14px;
+  grid-template-columns: minmax(0,.82fr) minmax(0,1.5fr);
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
 }
 
 .env-play-panel {
   min-width: 0;
-  padding: 12px;
-  border: 1px solid rgba(85,200,242,.3);
-  border-radius: 9px;
-  background: rgba(10,25,43,.45);
+  padding: 0;
+  border: 0;
+  background: transparent;
 }
 
 .env-play-panel h4 {
+  margin: 2px 0 7px;
   text-align: center;
-  margin: 2px 0 12px;
+  color: var(--acc);
+  font-size: .86rem;
 }
 
-#envPlayPlot {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 5px;
-}
-
-.env-play-legend,
-.env-circuit-legend {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px 14px;
-  margin-top: 10px;
-  font-size: .82em;
-}
-
-.env-play-legend span,
-.env-circuit-legend span {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.env-play-legend i,
-.env-circuit-legend i {
-  display: inline-block;
-  width: 17px;
-  height: 3px;
-  border-radius: 2px;
-}
-
-.env-legend-charge {
-  background: #ffb454;
-}
-
-.env-legend-discharge {
-  background: #62d99a;
-}
-
-.env-play-readout {
-  margin-top: 13px;
-  padding: 12px;
-  border: 1px solid rgba(85,200,242,.25);
-  border-radius: 7px;
-  background: rgba(85,200,242,.045);
-  line-height: 1.6;
-}
-
-/* Circuit diagram */
 #envCircuit {
   width: 100%;
   height: auto;
@@ -897,6 +868,56 @@ header{align-items:center}
   border-radius: 7px;
 }
 
+#envPlayPlot {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid rgba(85,200,242,.38);
+  border-radius: 7px;
+  background: #101b2a;
+}
+
+.env-play-legend,
+.env-circuit-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px 10px;
+  margin-top: 6px;
+  color: var(--mut);
+  font-size: .68rem;
+}
+
+.env-play-legend span,
+.env-circuit-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.env-play-legend i,
+.env-circuit-legend i {
+  display: inline-block;
+  width: 13px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.env-legend-charge { background: #ffb454; }
+.env-legend-discharge { background: #62d99a; }
+
+.env-play-readout {
+  margin-top: 8px;
+  padding: 6px 8px;
+  border-top: 1px solid var(--ln);
+  color: var(--mut);
+  font-size: .78rem;
+  line-height: 1.45;
+}
+
+.env-play-readout b { color: var(--acc); }
+
+/* Circuit linework remains black on the light-blue schematic background. */
 #envCircuit .env-wire {
   fill: none;
   stroke: #111827;
@@ -904,40 +925,28 @@ header{align-items:center}
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-
 #envCircuit .env-source-wave {
   fill: none;
   stroke: #111827;
   stroke-width: 1.8;
 }
-
-#envCircuit .env-node {
-  fill: #111827;
-}
-
+#envCircuit .env-node { fill: #111827; }
 #envCircuit .env-diode {
   fill: rgba(17,24,39,.08);
   stroke: #111827;
   stroke-width: 2;
 }
-
 #envCircuit .env-svg-label {
   fill: #111827;
   font-size: 14px;
   font-family: system-ui,sans-serif;
 }
-
-#envCircuit .env-svg-small {
-  fill: #111827;
-  font-size: 12px;
-}
-
+#envCircuit .env-svg-small { fill: #111827; font-size: 12px; }
 #envCircuit .env-svg-state {
   fill: #111827;
   font-size: 11px;
   font-family: system-ui,sans-serif;
 }
-
 #envCircuit .env-charge,
 #envCircuit .env-discharge {
   fill: none;
@@ -946,24 +955,17 @@ header{align-items:center}
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+#envCircuit .env-charge.active { stroke: #e58a16; }
+#envCircuit .env-discharge.active { stroke: #159447; }
 
-#envCircuit .env-charge.active {
-  stroke: #e58a16;
+@media(max-width:700px) {
+  .env-play-grid { grid-template-columns: 1fr; }
+  .env-play-panel:first-child { max-width: 430px; width: 100%; margin: 0 auto; }
+  .env-play-controls label { margin-left: 0; }
 }
-
-#envCircuit .env-discharge.active {
-  stroke: #159447;
-}
-
-@media(max-width:850px) {
-  .env-play-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .env-play-controls label {
-    margin-left: 0;
-    width: 100%;
-  }
+@media(max-width:480px) {
+  .env-play-controls label { width: 100%; justify-content: flex-start; }
+  .env-play-controls input[type=range] { flex: 1; min-width: 80px; }
 }
 
 </style>
@@ -2168,9 +2170,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
           </ul>
         </div>
         <div class="diagram">
-          <svg viewBox="0 0 490 235" role="img"
-            aria-label="Diode RC envelope detector circuit"
-            style="width:100%;max-width:340px;height:auto;display:block;margin:0 auto;">
+          <svg viewBox="0 0 490 235" role="img" aria-label="Diode RC envelope detector circuit" style="width:100%;max-width:490px;height:auto;display:block;margin:0 auto;">
             <style>
               .math-text { font-family: "STIX Two Text", "Times New Roman", Georgia, serif; font-size: 20px; fill: #0f172a; }
               .math-italic { font-style: italic; }
@@ -2236,10 +2236,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
         and its voltage traces the message signal.</p>
     </div>
 
-    <div class="card">
-      
-    </div>
-    <div class="env-play-demo" id="envPlayDemo">
+    <div class="wd env-play-demo" id="envPlayDemo">
       <div class="cap">Interactive 6.5</div>
       <h3>How an RC envelope detector works</h3>
     
