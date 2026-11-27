@@ -908,14 +908,28 @@ header{align-items:center}
 
 .env-play-readout {
   margin-top: 8px;
-  padding: 6px 8px;
+  padding: 8px;
   border-top: 1px solid var(--ln);
   color: var(--mut);
   font-size: .78rem;
   line-height: 1.45;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  overflow-x: auto;
 }
 
-.env-play-readout b { color: var(--acc); }
+.env-play-readout b {
+  color: var(--acc);
+}
+
+.env-play-readout .readout-sep {
+  color: var(--mut);
+  opacity: .6;
+}
 
 /* Circuit linework remains black on the light-blue schematic background. */
 #envCircuit .env-wire {
@@ -948,15 +962,20 @@ header{align-items:center}
   font-family: system-ui,sans-serif;
 }
 #envCircuit .env-charge,
-#envCircuit .env-discharge {
+#envCircuit .env-discharge,
+#envCircuit .env-node-current {
   fill: none;
   stroke: transparent;
   stroke-width: 4;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-#envCircuit .env-charge.active { stroke: #e58a16; }
-#envCircuit .env-discharge.active { stroke: #159447; }
+
+#envCircuit .env-charge.active,
+#envCircuit .env-discharge.active,
+#envCircuit .env-node-current.active {
+  stroke: #e58a16;
+}
 
 @media(max-width:700px) {
   .env-play-grid { grid-template-columns: 1fr; }
@@ -2271,7 +2290,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
                       refX="8.5" refY="4" markerWidth="7"
                       markerHeight="6" orient="auto">
                 <path d="M0 0.8L9 4L0 7.2L2.2 4Z"
-                      fill="#ffb454"/>
+                      fill="#e58a16"/>
               </marker>
             </defs>
     
@@ -2309,7 +2328,13 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
             <!-- Output node -->
             <circle cx="310" cy="115" r="4" class="env-node"/>
             <path d="M310 115H455" class="env-wire"/>
-    
+            <path d="M310 115H455" class="env-wire"/>
+
+            <!-- Current from output node toward resistor -->
+            <path d="M320 115H440"
+              class="env-node-current"
+              marker-end="url(#envCurrentArrow)"/>
+
             <!-- Capacitor branch -->
             <path d="M350 115V158" class="env-wire"/>
             <path d="M330 158H370M330 170H370" class="env-wire"/>
@@ -2326,11 +2351,6 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
                   class="env-wire"/>
             <path d="M455 193V220" class="env-wire"/>
             <text x="480" y="168" class="env-svg-label">R</text>
-    
-            <!-- Discharge current path -->
-            <path d="M455 120V137L445 145L465 153L445 161L465 169L445 177L465 185L455 193V213"
-                  class="env-discharge"
-                  marker-end="url(#envCurrentArrow)"/>
     
             <!-- Ground connections -->
             <path d="M310 220H455" class="env-wire"/>
@@ -3027,31 +3047,21 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     const p = sampleAt(time);
     const conducting = p.conducting;
 
-    // Activate the appropriate current paths.
+    // Charging path:
+    // Input -> diode -> output node -> capacitor
     root.querySelectorAll('.env-charge').forEach(el => {
       el.classList.toggle('active', conducting);
     });
 
+    // Discharging path:
+    // Capacitor -> output node
     root.querySelectorAll('.env-discharge').forEach(el => {
       el.classList.toggle('active', !conducting);
     });
 
-    // Show arrowheads only on the active paths.
-    // The SVG path geometry determines the arrow direction.
-    root.querySelectorAll('.env-charge[marker-end]').forEach(el => {
-      if (conducting) {
-        el.setAttribute('marker-end', 'url(#envChargeArrow)');
-      } else {
-        el.removeAttribute('marker-end');
-      }
-    });
-
-    root.querySelectorAll('.env-discharge[marker-end]').forEach(el => {
-      if (!conducting) {
-        el.setAttribute('marker-end', 'url(#envDischargeArrow)');
-      } else {
-        el.removeAttribute('marker-end');
-      }
+    // Current from output node toward the resistor
+    root.querySelectorAll('.env-node-current').forEach(el => {
+      el.classList.add('active');
     });
 
     $('envChargeLabel').textContent =
@@ -3061,22 +3071,25 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       conducting ? 'Discharge current: OFF' : 'Discharge current: ON';
 
     $('envPlayStatus').textContent = conducting
-      ? 'Diode ON: the input voltage is greater than the capacitor voltage. Current flows through the diode and charges the capacitor.'
-      : 'Diode OFF: the input voltage has fallen below the capacitor voltage. The capacitor discharges through the load resistor.';
+      ? 'Diode ON: current flows from the input through the diode to the output node, charging the capacitor. Current also flows toward the resistor.'
+      : 'Diode OFF: no current flows through the diode. The capacitor discharges upward to the output node, and current flows toward the resistor.';
   }
 
   function updateReadout() {
     const p = sampleAt(time);
     const RC = +$('envPlayRC').value;
 
-    $('envPlayReadout').innerHTML =
-      `<b>Simulation time:</b> ${time.toFixed(3)} s
-       &nbsp; | &nbsp; <b>RC:</b> ${RC.toFixed(3)} s
-       &nbsp; | &nbsp; <b>Capacitor voltage:</b> ${p.vc.toFixed(3)} V
-       <br>
-       <b>Input voltage:</b> ${p.x.toFixed(3)} V
-       &nbsp; | &nbsp;
-       <b>Diode:</b> ${p.conducting ? 'Conducting' : 'OFF'}`;
+    $('envPlayReadout').innerHTML = `
+      <span><b>Simulation time:</b> ${time.toFixed(3)} s</span>
+      <span class="readout-sep">|</span>
+      <span><b>RC:</b> ${RC.toFixed(3)} s</span>
+      <span class="readout-sep">|</span>
+      <span><b>Capacitor voltage:</b> ${p.vc.toFixed(3)} V</span>
+      <span class="readout-sep">|</span>
+      <span><b>Input voltage:</b> ${p.x.toFixed(3)} V</span>
+      <span class="readout-sep">|</span>
+      <span><b>Diode:</b> ${p.conducting ? 'Conducting' : 'OFF'}</span>
+    `;
   }
 
   function render() {
