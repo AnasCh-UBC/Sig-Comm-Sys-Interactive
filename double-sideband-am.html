@@ -2239,14 +2239,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     <div class="wd env-play-demo" id="envPlayDemo">
       <div class="cap">Interactive 6.5</div>
       <h3>How an RC envelope detector works</h3>
-    
-      <p>
-        Play the animation to observe how the diode rectifies the AM signal,
-        charging the capacitor near positive peaks. When the input voltage
-        falls below the capacitor voltage, the diode turns off and the
-        capacitor discharges through the resistor.
-      </p>
-    
+      
       <div class="env-play-controls">
         <button id="envPlay" type="button">▶ Play</button>
         <button id="envPause" type="button">Ⅱ Pause</button>
@@ -3034,12 +3027,31 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     const p = sampleAt(time);
     const conducting = p.conducting;
 
+    // Activate the appropriate current paths.
     root.querySelectorAll('.env-charge').forEach(el => {
       el.classList.toggle('active', conducting);
     });
 
     root.querySelectorAll('.env-discharge').forEach(el => {
       el.classList.toggle('active', !conducting);
+    });
+
+    // Show arrowheads only on the active paths.
+    // The SVG path geometry determines the arrow direction.
+    root.querySelectorAll('.env-charge[marker-end]').forEach(el => {
+      if (conducting) {
+        el.setAttribute('marker-end', 'url(#envChargeArrow)');
+      } else {
+        el.removeAttribute('marker-end');
+      }
+    });
+
+    root.querySelectorAll('.env-discharge[marker-end]').forEach(el => {
+      if (!conducting) {
+        el.setAttribute('marker-end', 'url(#envDischargeArrow)');
+      } else {
+        el.removeAttribute('marker-end');
+      }
     });
 
     $('envChargeLabel').textContent =
