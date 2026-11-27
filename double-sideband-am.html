@@ -1828,9 +1828,12 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     <div class="card"><h3>Balanced modulator</h3>
       <div class="grid">
         <div class="tile">
-          <p>A balanced modulator consists of two conventional AM modulators, 
-            one driven by \(m(t)\) and the other by \(-m(t)\). 
-            Subtracting their outputs cancels the carrier leading to a DSB-SC signal.</p>
+          <p>A balanced modulator consists of:</p>
+            <ul>
+              <li>a conventional AM modulator driven by \(m(t)\)</li>
+              <li>a conventional AM modulator driven by \(-m(t)\)</li>
+              <li>a subtractor circuit to subtract their outputs, which cancels the carrier and produces a DSB-SC signal.</li>
+            </ul> 
         </div>
         <div class="tile">
           <svg class="mod" viewBox="0 0 540 250"
