@@ -2165,11 +2165,12 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
           <ul>
             <li>When the input exceeds the capacitor voltage, the diode conducts and the capacitor charges.</li>
             <li>When the input falls below the capacitor voltage, the diode becomes reverse-biased and the capacitor discharges through R.</li>
-            <li>If the RC constant is large enough, the capacitor remains charged until the next peak, and its voltage traces the message signal.</li>
           </ul>
         </div>
         <div class="diagram">
-          <svg viewBox="0 0 490 235" role="img" aria-label="Diode RC envelope detector circuit" style="width:100%;max-width:490px;height:auto;display:block;margin:0 auto;">
+          <svg viewBox="0 0 490 235" role="img"
+            aria-label="Diode RC envelope detector circuit"
+            style="width:100%;max-width:340px;height:auto;display:block;margin:0 auto;">
             <style>
               .math-text { font-family: "STIX Two Text", "Times New Roman", Georgia, serif; font-size: 20px; fill: #0f172a; }
               .math-italic { font-style: italic; }
@@ -2231,8 +2232,13 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
           </svg>
         </div>
       </div>
+      <p>If the RC constant is large enough, the capacitor remains charged until the next peak, 
+        and its voltage traces the message signal.</p>
     </div>
 
+    <div class="card">
+      
+    </div>
     <div class="env-play-demo" id="envPlayDemo">
       <div class="cap">Interactive 6.5</div>
       <h3>How an RC envelope detector works</h3>
