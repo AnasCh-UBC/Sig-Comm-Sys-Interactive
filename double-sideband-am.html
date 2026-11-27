@@ -1864,13 +1864,14 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
             </foreignObject>
         
             <!-- Upper branch to summing junction -->
-            <path class="ln" d="M225 50H345V107"
-                  marker-end="url(#balancedArrow)"/>
+            <path class="ln" d="M225 50H325V107"
+            marker-end="url(#balancedArrow)"/>
+
             <foreignObject x="235" y="10" width="160" height="34">
-              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
-                   style="font-size:13px;">
-                \(A_c(1+m(t))\cos(2\pi f_ct)\)
-              </div>
+            <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
+            style="font-size:13px;">
+            \(A_c(1+m(t))\cos(2\pi f_ct)\)
+            </div>
             </foreignObject>
         
             <!-- Lower message input -->
@@ -1891,13 +1892,14 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
             </foreignObject>
         
             <!-- Lower branch to summing junction -->
-            <path class="ln" d="M225 175H345V143"
-                  marker-end="url(#balancedArrow)"/>
+            <path class="ln" d="M225 175H325V143"
+            marker-end="url(#balancedArrow)"/>
+
             <foreignObject x="235" y="190" width="160" height="34">
-              <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
-                   style="font-size:13px;">
-                \(A_c(1-m(t))\cos(2\pi f_ct)\)
-              </div>
+            <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
+            style="font-size:13px;">
+            \(A_c(1-m(t))\cos(2\pi f_ct)\)
+            </div>
             </foreignObject>
         
             <!-- Shared carrier input -->
@@ -1917,21 +1919,23 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
         
             <!-- Summing junction -->
             <circle class="node" cx="325" cy="125" r="18"/>
-            <path class="ln" d="M335 125H355M345 115V135"/>
+            <path class="ln" d="M315 125H335 M325 115V135"/>
         
             <!-- Plus and minus signs -->
-            <foreignObject x="365" y="83" width="25" height="28">
+            <foreignObject x="305" y="88" width="20" height="28">
               <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">\( + \)</div>
             </foreignObject>
-            <foreignObject x="365" y="143" width="25" height="28">
+
+            <foreignObject x="305" y="140" width="20" height="28">
               <div xmlns="http://www.w3.org/1999/xhtml" class="lbl">\( - \)</div>
             </foreignObject>
         
             <!-- Output -->
-            <path class="ln" d="M363 125H405" marker-end="url(#balancedArrow)"/>
-            <foreignObject x="395" y="105" width="150" height="40">
+            <path class="ln" d="M363 125H390" marker-end="url(#balancedArrow)"/>
+
+            <foreignObject x="402" y="105" width="138" height="40">
               <div xmlns="http://www.w3.org/1999/xhtml" class="lbl"
-                   style="font-size:15px;">
+                  style="font-size:15px; justify-content:flex-start;">
                 \(2A_cm(t)\cos(2\pi f_ct)\)
               </div>
             </foreignObject>
@@ -1943,7 +1947,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
 
     
     <div class="card">
-      <h3>Envelope detector circuit</h3>
+      <h3>A simple envelope detector circuit</h3>
       <p>An envelope detector uses a diode (rectifier) followed by a parallel \(RC\) network. During positive peaks, the diode conducts and the capacitor charges. When the input falls below the capacitor voltage, the diode becomes reverse-biased and the capacitor discharges through \(R\).</p>
       <div class="diagram">
         <svg viewBox="0 0 760 245" role="img" aria-label="Diode RC envelope detector circuit">
