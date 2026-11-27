@@ -2184,63 +2184,64 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
           </ul>
         </div>
         <div class="diagram">
-          <svg class="mod" viewBox="16 54 446 164"
-               role="img" aria-label="Diode RC envelope detector circuit">
+          <svg viewBox="0 0 520 265" role="img" aria-label="Diode RC envelope detector circuit">
         
-            <!-- Input port -->
-            <text x="44" y="144" text-anchor="middle" class="lbl">
-              \(r(t)\)
+            <!-- Input voltage source -->
+            <circle cx="55" cy="115" r="25" class="env-wire"/>
+            <path d="M39 115 Q47 99 55 115 T71 115" class="env-source-wave"/>
+            <text x="55" y="72" text-anchor="middle" class="env-svg-label">
+              AM input
             </text>
-            <text x="69" y="92" text-anchor="middle" class="lbl">+</text>
-            <text x="69" y="190" text-anchor="middle" class="lbl">−</text>
+            <foreignObject x="25" y="142" width="60" height="28">
+              <div xmlns="http://www.w3.org/1999/xhtml"
+                   class="env-svg-small"
+                   style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
+                \(r(t)\)
+              </div>
+            </foreignObject>
         
-            <!-- Main rails -->
-            <path class="ln" d="M90 96H124 M156 96H368"/>
-            <path class="ln" d="M90 186H368"/>
+            <!-- Input wire -->
+            <path d="M80 115H180" class="env-wire"/>
         
-            <!-- Open input terminals -->
-            <circle class="node" cx="86" cy="96" r="3.8"/>
-            <circle class="node" cx="86" cy="186" r="3.8"/>
-        
-            <!-- Series diode -->
-            <text x="140" y="71" text-anchor="middle" class="lbl">\(D\)</text>
-            <polygon points="124,82 124,110 156,96"
-                     fill="#102b40" stroke="#55c8f2" stroke-width="2"
-                     stroke-linejoin="round"/>
-            <path class="ln" d="M156 80V112"/>
-        
-            <!-- Parallel capacitor -->
-            <path class="ln" d="M224 96V136 M208 136H240 M208 146H240 M224 146V186"/>
-            <text x="199" y="145" text-anchor="end" class="lbl">\(C\)</text>
-            <circle class="node" cx="224" cy="96" r="2.8"/>
-            <circle class="node" cx="224" cy="186" r="2.8"/>
-        
-            <!-- Parallel resistor -->
-            <path class="ln" d="M310 96V117"/>
-            <polyline points="310,117 318.5,121 301.5,129 318.5,137
-                              301.5,145 318.5,153 301.5,161 310,165"
-                      fill="none" stroke="#55c8f2" stroke-width="2"
-                      stroke-linecap="round" stroke-linejoin="round"/>
-            <path class="ln" d="M310 165V186"/>
-            <text x="326" y="145" text-anchor="start" class="lbl">\(R\)</text>
-            <circle class="node" cx="310" cy="96" r="2.8"/>
-            <circle class="node" cx="310" cy="186" r="2.8"/>
-        
-            <!-- Ground reference -->
-            <circle class="node" cx="267" cy="186" r="2.5"/>
-            <path class="ln" d="M267 186V202 M256 202H278 M260 207.5H274 M263.5 213H270.5"/>
-        
-            <!-- Output port -->
-            <text x="383" y="92" text-anchor="middle" class="lbl">+</text>
-            <text x="383" y="190" text-anchor="middle" class="lbl">−</text>
-            <circle class="node" cx="368" cy="96" r="3.8"/>
-            <circle class="node" cx="368" cy="186" r="3.8"/>
-        
-            <text x="398" y="135" text-anchor="start" class="lbl">
-              \(v_{\mathrm{out}}(t)\)
+            <!-- Diode -->
+            <path d="M180 97L180 133L211 115Z" class="env-diode"/>
+            <path d="M215 96V134" class="env-wire"/>
+            <path d="M215 115H310" class="env-wire"/>
+            <text x="195" y="77" text-anchor="middle" class="env-svg-label">
+              Diode
             </text>
-            <text x="398" y="152" text-anchor="start" class="lbl"
-                  style="font-size:12px;">Envelope</text>
+        
+            <!-- Output node and horizontal wire -->
+            <circle cx="310" cy="115" r="4" class="env-node"/>
+            <path d="M310 115H455" class="env-wire"/>
+        
+            <!-- Output voltage label -->
+            <foreignObject x="265" y="75" width="90" height="32">
+              <div xmlns="http://www.w3.org/1999/xhtml"
+                   class="env-svg-label"
+                   style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
+                \(v_{\mathrm{out}}(t)\)
+              </div>
+            </foreignObject>
+        
+            <!-- Capacitor branch -->
+            <path d="M350 115V158" class="env-wire"/>
+            <path d="M330 158H370M330 170H370" class="env-wire"/>
+            <path d="M350 170V220" class="env-wire"/>
+            <text x="382" y="168" class="env-svg-label">C</text>
+        
+            <!-- Resistor branch -->
+            <path d="M455 115V137" class="env-wire"/>
+            <path d="M455 137L445 145L465 153L445 161L465 169L445 177L465 185L455 193"
+                  class="env-wire"/>
+            <path d="M455 193V220" class="env-wire"/>
+            <text x="480" y="168" class="env-svg-label">R</text>
+        
+            <!-- Ground connections -->
+            <path d="M55 140V220H455" class="env-wire"/>
+            <path d="M382 220V232M365 232H399M371 238H393M377 244H387"
+                  class="env-wire"/>
+        
           </svg>
         </div>
       </div>
@@ -2349,9 +2350,14 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
             marker-end="url(#envCurrentArrow)"/>
 
             <!-- Output label -->
-            <text x="310" y="94" text-anchor="middle" class="env-svg-label">
-              \(v_C(t)\)
-            </text>
+            <foreignObject x="270" y="78" width="80" height="32">
+              <div xmlns="http://www.w3.org/1999/xhtml"
+                   class="env-svg-label"
+                   style="width:100%; height:100%; display:flex;
+                          align-items:center; justify-content:center;">
+                \(v_C(t)\)
+              </div>
+            </foreignObject>
     
             <!-- Current indicators 
             <text id="envChargeLabel" x="190" y="265"
