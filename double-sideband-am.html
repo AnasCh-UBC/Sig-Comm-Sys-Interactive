@@ -758,6 +758,212 @@ header{align-items:center}
     font-size:14px;
     line-height:1.25;
   }
+
+
+  .env-play-demo {
+  margin: 18px 0;
+}
+
+.env-play-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 16px 0;
+  padding: 12px;
+  border: 1px solid rgba(85,200,242,.3);
+  border-radius: 9px;
+  background: rgba(85,200,242,.045);
+}
+
+.env-play-controls button {
+  border: 1px solid #55c8f2;
+  color: #55c8f2;
+  background: rgba(85,200,242,.08);
+  border-radius: 6px;
+  padding: 7px 13px;
+  cursor: pointer;
+  font: inherit;
+}
+
+.env-play-controls button:hover {
+  background: rgba(85,200,242,.18);
+}
+
+.env-play-controls label {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-left: auto;
+}
+
+.env-play-controls input {
+  width: 140px;
+  accent-color: #55c8f2;
+}
+
+.env-play-controls output {
+  color: #ffb454;
+  min-width: 65px;
+  font-variant-numeric: tabular-nums;
+}
+
+.env-play-status {
+  padding: 10px 13px;
+  margin-bottom: 14px;
+  border-left: 3px solid #55c8f2;
+  background: rgba(85,200,242,.07);
+  border-radius: 4px;
+  color: var(--fg);
+  min-height: 24px;
+}
+
+.env-play-grid {
+  display: grid;
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.5fr);
+  gap: 14px;
+}
+
+.env-play-panel {
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid rgba(85,200,242,.3);
+  border-radius: 9px;
+  background: rgba(10,25,43,.45);
+}
+
+.env-play-panel h4 {
+  text-align: center;
+  margin: 2px 0 12px;
+}
+
+#envPlayPlot {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+.env-play-legend,
+.env-circuit-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 14px;
+  margin-top: 10px;
+  font-size: .82em;
+}
+
+.env-play-legend span,
+.env-circuit-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.env-play-legend i,
+.env-circuit-legend i {
+  display: inline-block;
+  width: 17px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.env-legend-charge {
+  background: #ffb454;
+}
+
+.env-legend-discharge {
+  background: #62d99a;
+}
+
+.env-play-readout {
+  margin-top: 13px;
+  padding: 12px;
+  border: 1px solid rgba(85,200,242,.25);
+  border-radius: 7px;
+  background: rgba(85,200,242,.045);
+  line-height: 1.6;
+}
+
+/* Circuit diagram */
+#envCircuit {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+#envCircuit .env-wire {
+  fill: none;
+  stroke: #55c8f2;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#envCircuit .env-source-wave {
+  fill: none;
+  stroke: #55c8f2;
+  stroke-width: 1.8;
+}
+
+#envCircuit .env-node {
+  fill: #55c8f2;
+}
+
+#envCircuit .env-diode {
+  fill: rgba(85,200,242,.12);
+  stroke: #55c8f2;
+  stroke-width: 2;
+}
+
+#envCircuit .env-svg-label {
+  fill: var(--fg,#e8eaf0);
+  font-size: 14px;
+  font-family: system-ui,sans-serif;
+}
+
+#envCircuit .env-svg-small {
+  fill: var(--muted,#a9bdce);
+  font-size: 12px;
+}
+
+#envCircuit .env-svg-state {
+  fill: var(--muted,#a9bdce);
+  font-size: 11px;
+  font-family: system-ui,sans-serif;
+}
+
+#envCircuit .env-charge,
+#envCircuit .env-discharge {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#envCircuit .env-charge.active {
+  stroke: #ffb454;
+}
+
+#envCircuit .env-discharge.active {
+  stroke: #62d99a;
+}
+
+@media(max-width:850px) {
+  .env-play-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .env-play-controls label {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
 </style>
 <script>
 window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] }, svg: { fontCache: 'global' } };
@@ -1602,10 +1808,11 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     </div>
 
     <div class="card"><h3>Conventional AM demodulator</h3>
+      <p class="sub">A demodulator that does not require a LO, and thus requires no synchronization.</p>
       <div class="grid">
         <div class="tile">
           <p>An <b>envelope detector</b> is used to demodulate conventional AM. 
-          It consists of a rectifier and a LPF:</p>
+          It consists of:</p>
         </div>
         <div class="tile">
           <svg class="mod" viewBox="0 0 540 120"
@@ -1666,16 +1873,15 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       </div>
       <ul>
         <li>Rectifier: A nonlinear system whose output is \(\max\{0,x(t)\}\) (half-wave rectifier) or \(|x(t)|\) (full-wave rectifier).</li>
-        <li>LPF: A low-pass filter with a cutoff frequency is between \(W\) (the bandwidth of \(m(t)\)) and \(f_c\).</li>
+        <li>LPF: with a cutoff frequency above \(W\) (the message signal bandwidth) and below \(f_c\).</li>
       </ul>
-      <p class="sub">It does not require a LO, and thus requires no synchronization.</p>
+      <p>Note: The output is of the form \(1+bm(t)\). The constant term can be removed using a HPF.</p>
     </div>
 
     <div class="wd">
       <div class="cap">Interactive 4.1</div>
       <h3>Envelope detector: The effect of the LPF cutoff frequency</h3>
-      <p>A simple envelope detector consists of a diode (half-wave) rectifier followed by an RC LPF.</p>
-      <p class="sub"> Here, \(W=1\) Hz and \(f_c=30\) Hz. Change the cutoff frequency to the effect on the demodulated signal.</p>
+      <p class="sub"> Change the LPF cutoff frequency to see the effect on the demodulated signal. Here, \(W=1\) Hz and \(f_c=30\) Hz.</p>
     
       <div class="demo-controls">
         <label>LPF cutoff frequency
@@ -2025,6 +2231,166 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       </div>
     </div>
 
+    <div class="env-play-demo" id="envPlayDemo">
+      <div class="cap">Interactive 6.5</div>
+      <h3>How an RC envelope detector works</h3>
+    
+      <p>
+        Play the animation to observe how the diode rectifies the AM signal,
+        charging the capacitor near positive peaks. When the input voltage
+        falls below the capacitor voltage, the diode turns off and the
+        capacitor discharges through the resistor.
+      </p>
+    
+      <div class="env-play-controls">
+        <button id="envPlay" type="button">▶ Play</button>
+        <button id="envPause" type="button">Ⅱ Pause</button>
+        <button id="envReset" type="button">↺ Reset</button>
+    
+        <label>
+          Time constant \(RC\)
+          <input id="envPlayRC" type="range"
+                 min="0.015" max="0.8" step="0.005" value="0.15">
+          <output id="envPlayRCVal">0.150 s</output>
+        </label>
+      </div>
+    
+      <div class="env-play-status" id="envPlayStatus">
+        Press Play to start the demonstration.
+      </div>
+    
+      <div class="env-play-grid">
+    
+        <!-- Circuit diagram -->
+        <div class="env-play-panel">
+          <h4>RC envelope detector circuit</h4>
+    
+          <svg id="envCircuit" viewBox="0 0 520 285"
+               role="img" aria-label="Diode RC envelope detector circuit">
+    
+            <defs>
+              <marker id="envCurrentArrow" viewBox="0 0 10 8"
+                      refX="8.5" refY="4" markerWidth="7"
+                      markerHeight="6" orient="auto">
+                <path d="M0 0.8L9 4L0 7.2L2.2 4Z"
+                      fill="#ffb454"/>
+              </marker>
+            </defs>
+    
+            <!-- Input voltage source -->
+            <circle cx="55" cy="115" r="25" class="env-wire"/>
+            <path d="M39 115 Q47 99 55 115 T71 115"
+                  class="env-source-wave"/>
+            <text x="55" y="72" text-anchor="middle" class="env-svg-label">
+              AM input
+            </text>
+            <text x="55" y="158" text-anchor="middle" class="env-svg-small">
+              x(t)
+            </text>
+    
+            <!-- Input wire -->
+            <path d="M80 115H158" class="env-wire"/>
+            <path d="M80 115H158" class="env-charge"/>
+    
+            <!-- Diode -->
+            <path d="M158 115H180" class="env-wire"/>
+            <path d="M180 97L180 133L211 115Z"
+                  class="env-diode"/>
+            <path d="M215 96V134" class="env-wire"/>
+            <path d="M215 115H310" class="env-wire"/>
+            <text x="195" y="77" text-anchor="middle" class="env-svg-label">
+              Diode
+            </text>
+    
+            <!-- Charging current path -->
+            <path d="M100 115H150" class="env-charge"
+                  marker-end="url(#envCurrentArrow)"/>
+            <path d="M220 115H300" class="env-charge"
+                  marker-end="url(#envCurrentArrow)"/>
+    
+            <!-- Output node -->
+            <circle cx="310" cy="115" r="4" class="env-node"/>
+            <path d="M310 115H455" class="env-wire"/>
+    
+            <!-- Capacitor branch -->
+            <path d="M350 115V158" class="env-wire"/>
+            <path d="M330 158H370M330 170H370" class="env-wire"/>
+            <path d="M350 170V220" class="env-wire"/>
+            <text x="380" y="160" class="env-svg-label">C</text>
+    
+            <!-- Capacitor charging current -->
+            <path d="M350 120V151" class="env-charge"
+                  marker-end="url(#envCurrentArrow)"/>
+    
+            <!-- Resistor branch -->
+            <path d="M455 115V137" class="env-wire"/>
+            <path d="M455 137L445 145L465 153L445 161L465 169L445 177L465 185L455 193"
+                  class="env-wire"/>
+            <path d="M455 193V220" class="env-wire"/>
+            <text x="480" y="168" class="env-svg-label">R</text>
+    
+            <!-- Discharge current path -->
+            <path d="M455 120V137L445 145L465 153L445 161L465 169L445 177L465 185L455 193V213"
+                  class="env-discharge"
+                  marker-end="url(#envCurrentArrow)"/>
+    
+            <!-- Ground connections -->
+            <path d="M310 220H455" class="env-wire"/>
+            <path d="M382 220V232M365 232H399M371 238H393M377 244H387"
+                  class="env-wire"/>
+    
+            <!-- Output label -->
+            <text x="310" y="94" text-anchor="middle" class="env-svg-label">
+              vC(t)
+            </text>
+    
+            <!-- Current indicators -->
+            <text id="envChargeLabel" x="190" y="265"
+                  text-anchor="middle" class="env-svg-state">
+              Charging current: OFF
+            </text>
+            <text id="envDischargeLabel" x="410" y="265"
+                  text-anchor="middle" class="env-svg-state">
+              Discharge current: ON
+            </text>
+    
+          </svg>
+    
+          <div class="env-circuit-legend">
+            <span><i class="env-legend-charge"></i>Charging current</span>
+            <span><i class="env-legend-discharge"></i>Discharging current</span>
+          </div>
+        </div>
+    
+        <!-- Time-domain plot -->
+        <div class="env-play-panel">
+          <h4>AM signal and capacitor voltage</h4>
+          <canvas id="envPlayPlot" width="900" height="360"></canvas>
+    
+          <div class="env-play-legend">
+            <span><i style="background:#55c8f2"></i>AM signal</span>
+            <span><i style="background:#ffb454"></i>Capacitor voltage</span>
+            <span><i style="background:#62d99a"></i>Biased message envelope</span>
+            <span><i style="background:#facc15"></i>Positive half-cycle</span>
+          </div>
+        </div>
+    
+      </div>
+    
+      <div class="env-play-readout" id="envPlayReadout">
+        The circuit is ready.
+      </div>
+    
+      <p class="demo-note">
+        The diode conducts only when the instantaneous input voltage exceeds
+        the capacitor voltage. The capacitor then charges toward the input
+        voltage. Otherwise, the diode is off and the capacitor discharges
+        through the load resistor.
+      </p>
+    </div>
+
+
+
     <div class="callout">
       <b>Choosing the detector time constant:</b> the envelope detector is useful when \(a<1\) (no overmodulation). The discharge time must be long compared with a carrier period but short compared with the message variation:
       \[
@@ -2323,10 +2689,10 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     const msgPeriod=1/fm;
 
     let quality=RC<carrierPeriod*2.5
-      ?'Cutoff too high: the capacitor discharges between carrier peaks, producing ripple.'
+      ?'Cutoff too high: The LPF passes fast carrier signal variations, producing ripple.'
       :RC>msgPeriod*.15
-        ?'Cutoff too low: the capacitor discharges too slowly and cannot follow the message.'
-        :'Reasonable range: the capacitor smooths carrier oscillations while following the message envelope.';
+        ?'Cutoff too low: The LPF cannot follow the variations of the message signal.'
+        :'Reasonable range: The LPF smooths carrier oscillations while following the message envelope.';
 
     $('envReadout').innerHTML=
       `<b>${quality}`;
@@ -2399,6 +2765,375 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
 })();
 
 
+(() => {
+  const root = document.getElementById('envPlayDemo');
+  if (!root || root.dataset.initialized) return;
+  root.dataset.initialized = 'true';
+
+  const $ = id => root.querySelector('#' + id);
+  const PI = Math.PI;
+
+  const canvas = $('envPlayPlot');
+  const ctx = canvas.getContext('2d');
+
+  const duration = 4.0;
+  const fc = 8;
+  const fm = 0.55;
+  const Ac = 1;
+  const modulation = 0.75;
+
+  // Slow simulation playback: simulation seconds per real second.
+  const playbackSpeed = 0.22;
+
+  const dt = 1 / (fc * 180);
+  const N = Math.ceil(duration / dt);
+
+  let data = [];
+  let time = 0;
+  let playing = false;
+  let lastFrame = null;
+  let animationId = null;
+
+  // Smooth, irregular message signal.
+  function message(t) {
+    return (
+      0.55 * Math.sin(2 * PI * 0.55 * t) +
+      0.28 * Math.sin(2 * PI * 0.9 * t + 1.1) +
+      0.17 * Math.sin(2 * PI * 1.35 * t + 2.2)
+    );
+  }
+
+  function envelope(t) {
+    return Ac * (1 + modulation * message(t));
+  }
+
+  function amSignal(t) {
+    return envelope(t) * Math.cos(2 * PI * fc * t);
+  }
+
+  // Build the detector response for the selected RC.
+  function buildData() {
+    const RC = +$('envPlayRC').value;
+    data = [];
+
+    let vc = 0;
+
+    for (let i = 0; i <= N; i++) {
+      const t = i * dt;
+      const x = amSignal(t);
+
+      // Ideal diode: conduct when input exceeds capacitor voltage.
+      const conducting = x > vc;
+
+      if (conducting) {
+        vc = x;
+      } else {
+        vc *= Math.exp(-dt / RC);
+      }
+
+      data.push({
+        t,
+        x,
+        vc,
+        env: envelope(t),
+        conducting,
+        positive: Math.cos(2 * PI * fc * t) > 0
+      });
+    }
+  }
+
+  function sampleAt(t) {
+    const i = Math.min(N, Math.max(0, Math.floor(t / dt)));
+    return data[i];
+  }
+
+  // Draw the time-domain plot.
+  function drawPlot() {
+    const W = canvas.width;
+    const H = canvas.height;
+
+    const L = 65, R = 18, T = 22, B = 42;
+    const PW = W - L - R;
+    const PH = H - T - B;
+
+    const xmin = 0, xmax = duration;
+    const ymin = -1.25, ymax = 2.15;
+
+    const X = t => L + (t - xmin) / (xmax - xmin) * PW;
+    const Y = v => T + (ymax - v) / (ymax - ymin) * PH;
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#101b2a';
+    ctx.fillRect(0, 0, W, H);
+
+    // Grid and tick labels.
+    ctx.font = '13px system-ui';
+    ctx.fillStyle = '#a9bdce';
+    ctx.strokeStyle = 'rgba(180,205,225,.15)';
+    ctx.lineWidth = 1;
+
+    for (let i = 0; i <= 8; i++) {
+      const t = duration * i / 8;
+      const px = X(t);
+
+      ctx.beginPath();
+      ctx.moveTo(px, T);
+      ctx.lineTo(px, T + PH);
+      ctx.stroke();
+
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      ctx.fillText(t.toFixed(1), px, T + PH + 7);
+    }
+
+    for (let i = 0; i <= 4; i++) {
+      const v = ymin + (ymax - ymin) * i / 4;
+      const py = Y(v);
+
+      ctx.beginPath();
+      ctx.moveTo(L, py);
+      ctx.lineTo(L + PW, py);
+      ctx.stroke();
+
+      ctx.textAlign = 'right';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(v.toFixed(1), L - 8, py);
+    }
+
+    // Zero axis.
+    ctx.strokeStyle = '#d5e4f0';
+    ctx.beginPath();
+    ctx.moveTo(L, Y(0));
+    ctx.lineTo(L + PW, Y(0));
+    ctx.stroke();
+
+    // Axis labels.
+    ctx.fillStyle = '#eaf2f8';
+    ctx.font = 'italic 16px Georgia';
+    ctx.textAlign = 'right';
+    ctx.fillText('Time (s)', L + PW, H - 4);
+
+    ctx.save();
+    ctx.translate(17, T + PH / 2);
+    ctx.rotate(-PI / 2);
+    ctx.textAlign = 'center';
+    ctx.fillText('Voltage', 0, 0);
+    ctx.restore();
+
+    // Background: biased message envelope across the entire time range.
+    ctx.save();
+    ctx.setLineDash([7, 5]);
+    ctx.strokeStyle = '#62d99a';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+
+    for (let i = 0; i <= N; i += 5) {
+      const p = data[i];
+      const px = X(p.t), py = Y(p.env);
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+
+    ctx.stroke();
+    ctx.restore();
+
+    const lastIndex = Math.min(N, Math.floor(time / dt));
+
+    // Highlight the positive half-cycle currently being played.
+    if (lastIndex >= 0) {
+      const current = data[lastIndex];
+
+      if (current.positive) {
+        const cycleStart = Math.floor(time * fc) / fc;
+        const cycleEnd = Math.min(time, cycleStart + 0.5 / fc);
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(X(cycleStart), T, X(cycleEnd) - X(cycleStart), PH);
+        ctx.clip();
+
+        ctx.fillStyle = 'rgba(250,204,21,.09)';
+        ctx.fillRect(X(cycleStart), T, X(cycleEnd) - X(cycleStart), PH);
+        ctx.restore();
+      }
+    }
+
+    // AM waveform traced up to the current simulation time.
+    ctx.strokeStyle = '#55c8f2';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+
+    for (let i = 0; i <= lastIndex; i++) {
+      const p = data[i];
+      if (i === 0) ctx.moveTo(X(p.t), Y(p.x));
+      else ctx.lineTo(X(p.t), Y(p.x));
+    }
+    ctx.stroke();
+
+    // Highlight the positive half-cycle of the AM waveform.
+    ctx.strokeStyle = '#facc15';
+    ctx.lineWidth = 2.8;
+    ctx.beginPath();
+
+    let drawingPositive = false;
+
+    for (let i = 0; i <= lastIndex; i++) {
+      const p = data[i];
+
+      if (p.positive) {
+        if (!drawingPositive) {
+          ctx.moveTo(X(p.t), Y(p.x));
+          drawingPositive = true;
+        } else {
+          ctx.lineTo(X(p.t), Y(p.x));
+        }
+      } else {
+        drawingPositive = false;
+      }
+    }
+    ctx.stroke();
+
+    // Capacitor voltage trace.
+    ctx.strokeStyle = '#ffb454';
+    ctx.lineWidth = 2.6;
+    ctx.beginPath();
+
+    for (let i = 0; i <= lastIndex; i++) {
+      const p = data[i];
+      if (i === 0) ctx.moveTo(X(p.t), Y(p.vc));
+      else ctx.lineTo(X(p.t), Y(p.vc));
+    }
+    ctx.stroke();
+
+    // Current time marker.
+    const px = X(time);
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(px, T);
+    ctx.lineTo(px, T + PH);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Time marker dot on capacitor voltage.
+    const p = sampleAt(time);
+    ctx.fillStyle = '#ffb454';
+    ctx.beginPath();
+    ctx.arc(X(time), Y(p.vc), 4, 0, 2 * PI);
+    ctx.fill();
+  }
+
+  // Update the circuit's current paths and labels.
+  function updateCircuit() {
+    const p = sampleAt(time);
+    const conducting = p.conducting;
+
+    root.querySelectorAll('.env-charge').forEach(el => {
+      el.classList.toggle('active', conducting);
+    });
+
+    root.querySelectorAll('.env-discharge').forEach(el => {
+      el.classList.toggle('active', !conducting);
+    });
+
+    $('envChargeLabel').textContent =
+      conducting ? 'Charging current: ON' : 'Charging current: OFF';
+
+    $('envDischargeLabel').textContent =
+      conducting ? 'Discharge current: OFF' : 'Discharge current: ON';
+
+    $('envPlayStatus').textContent = conducting
+      ? 'Diode ON: the input voltage is greater than the capacitor voltage. Current flows through the diode and charges the capacitor.'
+      : 'Diode OFF: the input voltage has fallen below the capacitor voltage. The capacitor discharges through the load resistor.';
+  }
+
+  function updateReadout() {
+    const p = sampleAt(time);
+    const RC = +$('envPlayRC').value;
+
+    $('envPlayReadout').innerHTML =
+      `<b>Simulation time:</b> ${time.toFixed(3)} s
+       &nbsp; | &nbsp; <b>RC:</b> ${RC.toFixed(3)} s
+       &nbsp; | &nbsp; <b>Capacitor voltage:</b> ${p.vc.toFixed(3)} V
+       <br>
+       <b>Input voltage:</b> ${p.x.toFixed(3)} V
+       &nbsp; | &nbsp;
+       <b>Diode:</b> ${p.conducting ? 'Conducting' : 'OFF'}`;
+  }
+
+  function render() {
+    drawPlot();
+    updateCircuit();
+    updateReadout();
+  }
+
+  function stop() {
+    playing = false;
+    lastFrame = null;
+
+    if (animationId !== null) {
+      cancelAnimationFrame(animationId);
+      animationId = null;
+    }
+  }
+
+  function animate(timestamp) {
+    if (!playing) return;
+
+    if (lastFrame === null) lastFrame = timestamp;
+
+    const elapsed = Math.min((timestamp - lastFrame) / 1000, 0.05);
+    lastFrame = timestamp;
+
+    time += elapsed * playbackSpeed;
+
+    if (time >= duration) {
+      time = duration;
+      stop();
+    }
+
+    render();
+
+    if (playing) {
+      animationId = requestAnimationFrame(animate);
+    }
+  }
+
+  function play() {
+    if (time >= duration) time = 0;
+    if (playing) return;
+
+    playing = true;
+    lastFrame = null;
+    animationId = requestAnimationFrame(animate);
+  }
+
+  function pause() {
+    stop();
+  }
+
+  function reset() {
+    stop();
+    time = 0;
+    render();
+  }
+
+  $('envPlay').addEventListener('click', play);
+  $('envPause').addEventListener('click', pause);
+  $('envReset').addEventListener('click', reset);
+
+  $('envPlayRC').addEventListener('input', () => {
+    $('envPlayRCVal').textContent =
+      (+$('envPlayRC').value).toFixed(3) + ' s';
+
+    buildData();
+    render();
+  });
+
+  buildData();
+  render();
+})();
 
 </script>
 
