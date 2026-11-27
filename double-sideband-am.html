@@ -2183,66 +2183,64 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
             <li>When the input falls below the capacitor voltage, the diode becomes reverse-biased and the capacitor discharges through R.</li>
           </ul>
         </div>
-        <div class="diagram" style="min-width: 0; width: 100%;">
-          <svg viewBox="16 54 446 164" role="img" aria-label="Diode RC envelope detector circuit" style="width: 100%; max-width: 100%; min-width: 0; height: auto; display: block;">
-            <style>
-              .math-text { font-family: "STIX Two Text", "Times New Roman", Georgia, serif; font-size: 15px; fill: #0f172a; }
-              .math-italic { font-style: italic; }
-              .math-sub { font-size: 10.5px; font-style: italic; }
-              .schematic-label { font-family: system-ui, -apple-system, sans-serif; font-size: 11.5px; font-weight: 500; fill: #475569; }
-              .polarity-mark { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; fill: #475569; }
-            </style>
-          
-            <!-- Input Port: r(t) -->
-            <text x="44" y="144" text-anchor="middle" class="math-text"><tspan class="math-italic">r</tspan>(<tspan class="math-italic">t</tspan>)</text>
-            <text x="69" y="92" text-anchor="middle" class="polarity-mark">+</text>
-            <text x="69" y="190" text-anchor="middle" class="polarity-mark">&minus;</text>
-          
-            <!-- Main Rails -->
-            <line x1="90" y1="96" x2="124" y2="96" stroke="#1e293b" stroke-width="1.5" stroke-linecap="round" />
-            <line x1="156" y1="96" x2="364" y2="96" stroke="#1e293b" stroke-width="1.5" stroke-linecap="round" />
-            <line x1="90" y1="186" x2="364" y2="186" stroke="#1e293b" stroke-width="1.5" stroke-linecap="round" />
-          
-            <!-- Open Input Terminals -->
-            <circle cx="86" cy="96" r="3.8" fill="#ffffff" stroke="#1e293b" stroke-width="1.5" />
-            <circle cx="86" cy="186" r="3.8" fill="#ffffff" stroke="#1e293b" stroke-width="1.5" />
-          
-            <!-- Series Diode (D) -->
-            <text x="140" y="71" text-anchor="middle" class="math-text" style="font-size:14px;"><tspan class="math-italic">D</tspan></text>
-            <polygon points="124,82 124,110 156,96" fill="#1e293b" stroke="#1e293b" stroke-width="1.5" stroke-linejoin="round" />
-            <line x1="156" y1="80" x2="156" y2="112" stroke="#1e293b" stroke-width="2" stroke-linecap="round" />
-          
-            <!-- Parallel Capacitor (C) -->
-            <line x1="224" y1="96" x2="224" y2="136" stroke="#1e293b" stroke-width="1.5" />
-            <line x1="208" y1="136" x2="240" y2="136" stroke="#1e293b" stroke-width="1.9" stroke-linecap="round" />
-            <line x1="208" y1="146" x2="240" y2="146" stroke="#1e293b" stroke-width="1.9" stroke-linecap="round" />
-            <line x1="224" y1="146" x2="224" y2="186" stroke="#1e293b" stroke-width="1.5" />
-            <text x="199" y="145" text-anchor="end" class="math-text"><tspan class="math-italic">C</tspan></text>
-            <circle cx="224" cy="96" r="2.8" fill="#1e293b" />
-            <circle cx="224" cy="186" r="2.8" fill="#1e293b" />
-          
-            <!-- Parallel Resistor (R) -->
-            <line x1="310" y1="96" x2="310" y2="117" stroke="#1e293b" stroke-width="1.5" />
-            <polyline points="310,117 318.5,121 301.5,129 318.5,137 301.5,145 318.5,153 301.5,161 310,165" fill="none" stroke="#1e293b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            <line x1="310" y1="165" x2="310" y2="186" stroke="#1e293b" stroke-width="1.5" />
-            <text x="326" y="145" text-anchor="start" class="math-text"><tspan class="math-italic">R</tspan></text>
-            <circle cx="310" cy="96" r="2.8" fill="#1e293b" />
-            <circle cx="310" cy="186" r="2.8" fill="#1e293b" />
-          
-            <!-- Ground Reference Symbol -->
-            <circle cx="267" cy="186" r="2.5" fill="#1e293b" />
-            <line x1="267" y1="186" x2="267" y2="202" stroke="#1e293b" stroke-width="1.5" />
-            <line x1="256" y1="202" x2="278" y2="202" stroke="#1e293b" stroke-width="1.5" stroke-linecap="round" />
-            <line x1="260" y1="207.5" x2="274" y2="207.5" stroke="#1e293b" stroke-width="1.5" stroke-linecap="round" />
-            <line x1="263.5" y1="213" x2="270.5" y2="213" stroke="#1e293b" stroke-width="1.5" stroke-linecap="round" />
-          
-            <!-- Output Port: Envelope -->
-            <text x="383" y="92" text-anchor="middle" class="polarity-mark">+</text>
-            <text x="383" y="190" text-anchor="middle" class="polarity-mark">&minus;</text>
-            <circle cx="368" cy="96" r="3.8" fill="#ffffff" stroke="#1e293b" stroke-width="1.5" />
-            <circle cx="368" cy="186" r="3.8" fill="#ffffff" stroke="#1e293b" stroke-width="1.5" />
-            <text x="398" y="135" text-anchor="start" class="math-text"><tspan class="math-italic">v</tspan><tspan dy="3.5" class="math-sub">out</tspan><tspan dy="-3.5">(</tspan><tspan class="math-italic">t</tspan><tspan>)</tspan></text>
-            <text x="398" y="152" text-anchor="start" class="schematic-label">Envelope</text>
+        <div class="diagram">
+          <svg class="mod" viewBox="16 54 446 164"
+               role="img" aria-label="Diode RC envelope detector circuit">
+        
+            <!-- Input port -->
+            <text x="44" y="144" text-anchor="middle" class="lbl">
+              \(r(t)\)
+            </text>
+            <text x="69" y="92" text-anchor="middle" class="lbl">+</text>
+            <text x="69" y="190" text-anchor="middle" class="lbl">−</text>
+        
+            <!-- Main rails -->
+            <path class="ln" d="M90 96H124 M156 96H368"/>
+            <path class="ln" d="M90 186H368"/>
+        
+            <!-- Open input terminals -->
+            <circle class="node" cx="86" cy="96" r="3.8"/>
+            <circle class="node" cx="86" cy="186" r="3.8"/>
+        
+            <!-- Series diode -->
+            <text x="140" y="71" text-anchor="middle" class="lbl">\(D\)</text>
+            <polygon points="124,82 124,110 156,96"
+                     fill="#102b40" stroke="#55c8f2" stroke-width="2"
+                     stroke-linejoin="round"/>
+            <path class="ln" d="M156 80V112"/>
+        
+            <!-- Parallel capacitor -->
+            <path class="ln" d="M224 96V136 M208 136H240 M208 146H240 M224 146V186"/>
+            <text x="199" y="145" text-anchor="end" class="lbl">\(C\)</text>
+            <circle class="node" cx="224" cy="96" r="2.8"/>
+            <circle class="node" cx="224" cy="186" r="2.8"/>
+        
+            <!-- Parallel resistor -->
+            <path class="ln" d="M310 96V117"/>
+            <polyline points="310,117 318.5,121 301.5,129 318.5,137
+                              301.5,145 318.5,153 301.5,161 310,165"
+                      fill="none" stroke="#55c8f2" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+            <path class="ln" d="M310 165V186"/>
+            <text x="326" y="145" text-anchor="start" class="lbl">\(R\)</text>
+            <circle class="node" cx="310" cy="96" r="2.8"/>
+            <circle class="node" cx="310" cy="186" r="2.8"/>
+        
+            <!-- Ground reference -->
+            <circle class="node" cx="267" cy="186" r="2.5"/>
+            <path class="ln" d="M267 186V202 M256 202H278 M260 207.5H274 M263.5 213H270.5"/>
+        
+            <!-- Output port -->
+            <text x="383" y="92" text-anchor="middle" class="lbl">+</text>
+            <text x="383" y="190" text-anchor="middle" class="lbl">−</text>
+            <circle class="node" cx="368" cy="96" r="3.8"/>
+            <circle class="node" cx="368" cy="186" r="3.8"/>
+        
+            <text x="398" y="135" text-anchor="start" class="lbl">
+              \(v_{\mathrm{out}}(t)\)
+            </text>
+            <text x="398" y="152" text-anchor="start" class="lbl"
+                  style="font-size:12px;">Envelope</text>
           </svg>
         </div>
       </div>
@@ -2382,7 +2380,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
             <span><i style="background:#55c8f2"></i>AM signal</span>
             <span><i style="background:#ffb454"></i>Capacitor voltage</span>
             <span><i style="background:#62d99a"></i>Biased message envelope</span>
-            <span><i style="background:#facc15"></i>Positive half-cycle</span>
+            <span><i style="background:#c084fc"></i>Positive half-cycle</span>
           </div>
         </div>
     
@@ -2400,8 +2398,94 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
 
 
     <div class="card"><h3>Coherent DSB-SC demodulator architecture</h3>
-      <p>A coherent DSB-SC AM demodulator multiplies \(x(t)\) by a LO using a balanced modulator, then lowpass filters the result.</p> 
-      <p>Carrier recovery is essential for this process:</p>
+      <div class="grid">
+        <div class="tile">
+          <p>A coherent AM demodulator multiplies \(x(t)\) by a LO using a balanced modulator, then applies a LPF.</p> 
+          <p>Carrier recovery is essential for this process:</p>
+        </div>
+        <div class="tile">
+          <!-- Coherent Demodulator Block Diagram -->
+          <figure style="max-width:700px;margin:0 auto;padding:1.25rem;border:1px solid #e2e8f0;border-radius:12px;background:#ffffff;text-align:center;font-family:system-ui,-apple-system,sans-serif;">
+            <style>
+              .math-text { font-family: "STIX Two Text", "Times New Roman", Georgia, serif; font-size: 20px; fill: #0f172a; }
+              .math-italic { font-style: italic; }
+              .block-label { font-family: system-ui, -apple-system, sans-serif; font-size: 13.5px; font-weight: 500; fill: #0f172a; }
+            </style>
+            <svg id="coherent-demodulator-svg" viewBox="0 0 680 230" class="w-full h-auto max-w-[680px]" role="img" aria-label="Coherent Demodulator block diagram with balanced modulator and carrier recovery">
+                    <defs>
+                      <!-- Crisp textbook stealth arrowheads -->
+                      <marker id="arrow-default" viewBox="0 0 10 8" refX="8.5" refY="4" markerWidth="7.5" markerHeight="6" orient="auto">
+                        <path d="M 0 0.8 L 9 4 L 0 7.2 L 2.2 4 Z" fill="#1e293b"></path>
+                      </marker>
+                      <marker id="arrow-main" viewBox="0 0 10 8" refX="8.5" refY="4" markerWidth="7.5" markerHeight="6" orient="auto">
+                        <path d="M 0 0.8 L 9 4 L 0 7.2 L 2.2 4 Z" fill="#0284c7"></path>
+                      </marker>
+                      <marker id="arrow-carrier" viewBox="0 0 10 8" refX="8.5" refY="4" markerWidth="7.5" markerHeight="6" orient="auto">
+                        <path d="M 0 0.8 L 9 4 L 0 7.2 L 2.2 4 Z" fill="#d97706"></path>
+                      </marker>
+                    </defs>
+
+                    <!-- =====================================================================
+                        MAIN HORIZONTAL SIGNAL PATH (y = 66)
+                        ===================================================================== -->
+                    <!-- Input Node: r(t) at x = 48 -->
+                    <text x="48" y="72" text-anchor="middle" class="math-text sig-label path-main path-carrier">
+                      <tspan class="math-italic">r</tspan>(<tspan class="math-italic">t</tspan>)
+                    </text>
+
+                    <!-- Branch junction dot on r(t) line at x = 84, y = 66 -->
+                    <circle cx="84" cy="66" r="3" fill="#1e293b" class="sig-path sig-path-dot path-carrier"></circle>
+
+                    <!-- Horizontal arrow: r(t) -> balanced mod. (x = 216..336) -->
+                    <line x1="74" y1="66" x2="212.5" y2="66" stroke="#1e293b" stroke-width="1.65" marker-end="url(#arrow-default)" class="sig-path path-main"></line>
+
+                    <!-- Rectangular Block: balanced mod. centered at (276, 66) -->
+                    <g class="sig-node path-main path-carrier">
+                      <rect x="216" y="46" width="120" height="40" rx="4" fill="#ffffff" stroke="#1e293b" stroke-width="1.65"></rect>
+                      <text x="276" y="71" text-anchor="middle" class="block-label">balanced mod.</text>
+                    </g>
+
+                    <!-- Horizontal arrow: balanced mod. -> LPF (x = 460..524) -->
+                    <line x1="336" y1="66" x2="456.5" y2="66" stroke="#1e293b" stroke-width="1.65" marker-end="url(#arrow-default)" class="sig-path path-main"></line>
+
+                    <!-- Rectangular Block: LPF centered at (492, 66) -->
+                    <g class="sig-node path-main">
+                      <rect x="460" y="46" width="64" height="40" rx="4" fill="#ffffff" stroke="#1e293b" stroke-width="1.65"></rect>
+                      <text x="492" y="71" text-anchor="middle" class="block-label">LPF</text>
+                    </g>
+
+                    <!-- Horizontal arrow: LPF -> m(t) -->
+                    <line x1="524" y1="66" x2="594.5" y2="66" stroke="#1e293b" stroke-width="1.65" marker-end="url(#arrow-default)" class="sig-path path-main"></line>
+
+                    <!-- Output Node: m(t) at x = 624 -->
+                    <text x="624" y="72" text-anchor="middle" class="math-text sig-label path-main">
+                      <tspan class="math-italic">m</tspan>(<tspan class="math-italic">t</tspan>)
+                    </text>
+
+                    <!-- =====================================================================
+                        CARRIER RECOVERY BRANCH (below main path, y = 166)
+                        ===================================================================== -->
+                    <!-- Orthogonal branch down from r(t) line (x = 84, y = 66) into left side of carrier recovery (x = 112, y = 166) -->
+                    <polyline points="84,66 84,166 108.5,166" fill="none" stroke="#1e293b" stroke-width="1.65" stroke-linejoin="round" marker-end="url(#arrow-default)" class="sig-path path-carrier"></polyline>
+
+                    <!-- Rectangular Block: carrier recovery centered at (168, 166) -->
+                    <g class="sig-node path-carrier">
+                      <rect x="112" y="146" width="112" height="40" rx="4" fill="#ffffff" stroke="#1e293b" stroke-width="1.65"></rect>
+                      <text x="168" y="171" text-anchor="middle" class="block-label">carrier recovery</text>
+                    </g>
+
+                    <!-- Orthogonal path from right of carrier recovery (x = 224, y = 166) -> right to x = 276 -> straight up into bottom of balanced mod. -->
+                    <polyline points="224,166 276,166 276,89.5" fill="none" stroke="#1e293b" stroke-width="1.65" stroke-linejoin="round" marker-end="url(#arrow-default)" class="sig-path path-carrier"></polyline>
+                  </svg>
+            <figcaption style="margin-top:0.75rem;font-size:0.95rem;color:#334155;">
+              <strong style="color:#0f172a;">Figure 1.</strong> Coherent Demodulator: incoming signal
+              <span style="font-family:'STIX Two Text','Times New Roman',serif;color:#0f172a;"><i>r</i>(<i>t</i>)</span>
+              feeds both the <strong>balanced mod.</strong> and the <strong>carrier recovery</strong> branch, followed by an
+              <strong>LPF</strong> to recover <span style="font-family:'STIX Two Text','Times New Roman',serif;color:#0f172a;"><i>m</i>(<i>t</i>)</span>.
+            </figcaption>
+          </figure>
+        </div>
+      </div>
       <ul>
         <li>For a suppressed carrier, a phase-locked loop (PLL) can recover the carrier.</li>
         <li>When a carrier or pilot tone is present, a narrowband bandpass filter around \(f_c\) can extract it.</li>
@@ -2793,42 +2877,35 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
   let lastFrame = null;
   let animationId = null;
 
-  // Aperiodic, smoothly varying message with a distinct early peak.
-  // Random control points are generated once, so playback is repeatable
-  // but the waveform does not repeat over the simulation interval.
-  const messageKnotSpacing = 0.16;
-  const messageValues = (() => {
-    let seed = 24681357;
-    const random = () => {
-      seed = (1664525 * seed + 1013904223) >>> 0;
-      return 2 * (seed / 4294967296) - 1;
-    };
-
-    const count = Math.ceil(duration / messageKnotSpacing) + 2;
-    const values = Array.from({ length: count }, () => 0.72 * random());
-
-    // Shape the beginning: rise to a clear peak, followed by a fast drop.
-    values[0] = -0.25;
-    values[1] = 0.05;
-    values[2] = 0.95;
-    values[3] = -0.78;
-    values[4] = 0.22;
-    values[5] = -0.42;
-
-    return values;
-  })();
+  // Aperiodic message with three broad rises and three falls.
+  // The first peak occurs early and is followed by a relatively fast drop.
+  // Unequal knot spacing and amplitudes give the signal varied slopes.
+  const messageKnots = [
+    { t: 0.00, v: -0.30 },
+    { t: 0.42, v:  0.96 },  // first, distinct early peak
+    { t: 0.70, v: -0.76 },  // relatively fast decrease
+    { t: 1.62, v:  0.38 },  // second, slower increase
+    { t: 2.22, v: -0.48 },  // second decrease
+    { t: 3.08, v:  0.72 },  // third increase
+    { t: 3.68, v: -0.34 },  // third decrease
+    { t: 4.00, v: -0.12 }   // gentle final rise; no constant tail
+  ];
 
   function message(t) {
-    const position = Math.max(0, Math.min(
-      messageValues.length - 1,
-      t / messageKnotSpacing
-    ));
-    const i = Math.min(messageValues.length - 2, Math.floor(position));
-    const u = position - i;
+    const time = Math.max(0, Math.min(duration, t));
 
-    // Smooth interpolation avoids abrupt corners while retaining randomness.
-    const s = u * u * (3 - 2 * u);
-    return messageValues[i] + (messageValues[i + 1] - messageValues[i]) * s;
+    let i = 0;
+    while (i < messageKnots.length - 2 && time > messageKnots[i + 1].t) {
+      i++;
+    }
+
+    const a = messageKnots[i];
+    const b = messageKnots[i + 1];
+    const u = (time - a.t) / (b.t - a.t);
+
+    // Cosine easing gives a smooth transition with no flat intervals.
+    const s = 0.5 - 0.5 * Math.cos(PI * u);
+    return a.v + (b.v - a.v) * s;
   }
 
   function envelope(t) {
