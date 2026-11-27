@@ -965,10 +965,14 @@ header{align-items:center}
 #envCircuit .env-discharge,
 #envCircuit .env-node-current {
   fill: none;
-  stroke: transparent;
-  stroke-width: 4;
+  stroke: #111;
+  stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+#envCircuit .env-discharge {
+  marker-end: none;
 }
 
 #envCircuit .env-charge.active,
@@ -2290,7 +2294,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
                       refX="8.5" refY="4" markerWidth="7"
                       markerHeight="6" orient="auto">
                 <path d="M0 0.8L9 4L0 7.2L2.2 4Z"
-                      fill="#e58a16"/>
+                      fill="#111"/>
               </marker>
             </defs>
     
@@ -2319,32 +2323,17 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
               Diode
             </text>
     
-            <!-- Charging current path -->
-            <path d="M100 115H150" class="env-charge"
-                  marker-end="url(#envCurrentArrow)"/>
-            <path d="M220 115H300" class="env-charge"
-                  marker-end="url(#envCurrentArrow)"/>
-    
             <!-- Output node -->
             <circle cx="310" cy="115" r="4" class="env-node"/>
             <path d="M310 115H455" class="env-wire"/>
             <path d="M310 115H455" class="env-wire"/>
-
-            <!-- Current from output node toward resistor -->
-            <path d="M320 115H440"
-              class="env-node-current"
-              marker-end="url(#envCurrentArrow)"/>
 
             <!-- Capacitor branch -->
             <path d="M350 115V158" class="env-wire"/>
             <path d="M330 158H370M330 170H370" class="env-wire"/>
             <path d="M350 170V220" class="env-wire"/>
             <text x="380" y="160" class="env-svg-label">C</text>
-    
-            <!-- Capacitor charging current -->
-            <path d="M350 120V151" class="env-charge"
-                  marker-end="url(#envCurrentArrow)"/>
-    
+        
             <!-- Resistor branch -->
             <path d="M455 115V137" class="env-wire"/>
             <path d="M455 137L445 145L465 153L445 161L465 169L445 177L465 185L455 193"
@@ -2357,6 +2346,24 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
             <path d="M382 220V232M365 232H399M371 238H393M377 244H387"
                   class="env-wire"/>
     
+            <!-- Charging arrows: input -> diode -> output node -->
+            <path d="M100 115H150" class="env-charge"
+            marker-end="url(#envCurrentArrow)"/>
+
+            <path d="M220 115H300" class="env-charge"
+            marker-end="url(#envCurrentArrow)"/>
+
+            <!-- Capacitor charging arrow: downward -->
+            <path d="M350 120V151" class="env-charge"
+            marker-end="url(#envCurrentArrow)"/>
+
+            <!-- Capacitor discharging arrow: upward -->
+            <path d="M350 151V120" class="env-discharge"/>
+
+            <!-- Current from output node toward resistor: always rightward -->
+            <path d="M320 115H440" class="env-node-current"
+            marker-end="url(#envCurrentArrow)"/>
+
             <!-- Output label -->
             <text x="310" y="94" text-anchor="middle" class="env-svg-label">
               vC(t)
@@ -3046,22 +3053,31 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
   function updateCircuit() {
     const p = sampleAt(time);
     const conducting = p.conducting;
+    const arrow = 'url(#envCurrentArrow)';
 
-    // Charging path:
-    // Input -> diode -> output node -> capacitor
+    // Charging arrows: visible only when the diode conducts.
     root.querySelectorAll('.env-charge').forEach(el => {
-      el.classList.toggle('active', conducting);
+      if (conducting) {
+        el.setAttribute('marker-end', arrow);
+      } else {
+        el.removeAttribute('marker-end');
+      }
     });
 
-    // Discharging path:
-    // Capacitor -> output node
+    // Discharging arrow: upward through the capacitor only
+    // when the diode is OFF.
     root.querySelectorAll('.env-discharge').forEach(el => {
-      el.classList.toggle('active', !conducting);
+      if (!conducting) {
+        el.setAttribute('marker-end', arrow);
+      } else {
+        el.removeAttribute('marker-end');
+      }
     });
 
-    // Current from output node toward the resistor
+    // Current from the output node toward the resistor
+    // is always directed to the right.
     root.querySelectorAll('.env-node-current').forEach(el => {
-      el.classList.add('active');
+      el.setAttribute('marker-end', arrow);
     });
 
     $('envChargeLabel').textContent =
@@ -3072,7 +3088,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
 
     $('envPlayStatus').textContent = conducting
       ? 'Diode ON: current flows from the input through the diode to the output node, charging the capacitor. Current also flows toward the resistor.'
-      : 'Diode OFF: no current flows through the diode. The capacitor discharges upward to the output node, and current flows toward the resistor.';
+      : 'Diode OFF: no current flows before the diode. The capacitor discharges upward to the output node, and current flows toward the resistor.';
   }
 
   function updateReadout() {
