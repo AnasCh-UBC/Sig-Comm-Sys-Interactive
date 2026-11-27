@@ -893,11 +893,13 @@ header{align-items:center}
   height: auto;
   display: block;
   overflow: visible;
+  background: #dceeff;
+  border-radius: 7px;
 }
 
 #envCircuit .env-wire {
   fill: none;
-  stroke: #55c8f2;
+  stroke: #111827;
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -905,33 +907,33 @@ header{align-items:center}
 
 #envCircuit .env-source-wave {
   fill: none;
-  stroke: #55c8f2;
+  stroke: #111827;
   stroke-width: 1.8;
 }
 
 #envCircuit .env-node {
-  fill: #55c8f2;
+  fill: #111827;
 }
 
 #envCircuit .env-diode {
-  fill: rgba(85,200,242,.12);
-  stroke: #55c8f2;
+  fill: rgba(17,24,39,.08);
+  stroke: #111827;
   stroke-width: 2;
 }
 
 #envCircuit .env-svg-label {
-  fill: var(--fg,#e8eaf0);
+  fill: #111827;
   font-size: 14px;
   font-family: system-ui,sans-serif;
 }
 
 #envCircuit .env-svg-small {
-  fill: var(--muted,#a9bdce);
+  fill: #111827;
   font-size: 12px;
 }
 
 #envCircuit .env-svg-state {
-  fill: var(--muted,#a9bdce);
+  fill: #111827;
   font-size: 11px;
   font-family: system-ui,sans-serif;
 }
@@ -946,11 +948,11 @@ header{align-items:center}
 }
 
 #envCircuit .env-charge.active {
-  stroke: #ffb454;
+  stroke: #e58a16;
 }
 
 #envCircuit .env-discharge.active {
-  stroke: #62d99a;
+  stroke: #159447;
 }
 
 @media(max-width:850px) {
@@ -1921,7 +1923,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
   <section id="implementation">
     <h2><small>5</small> Implementation of modulation and demodulation</h2>
     <div class="card">
-      <h3>Why a nonlinear device?</h3>
+      <h3>Modulation needs a nonlinear device. Why?</h3>
       <p>Modulation generates new frequency components and therefore cannot be modeled as an LTI system. 
         A nonlinear device, such as a diode, can generate the required modulated components.</p>
     </div>
@@ -2166,68 +2168,68 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
             <li>If the RC constant is large enough, the capacitor remains charged until the next peak, and its voltage traces the message signal.</li>
           </ul>
         </div>
-      </div>
-      <div class="diagram">
-        <svg viewBox="0 0 490 235" role="img" aria-label="Diode RC envelope detector circuit" style="width:100%;max-width:490px;height:auto;display:block;margin:0 auto;">
-          <style>
-            .math-text { font-family: "STIX Two Text", "Times New Roman", Georgia, serif; font-size: 20px; fill: #0f172a; }
-            .math-italic { font-style: italic; }
-            .math-sub { font-size: 13.5px; font-style: italic; }
-            .schematic-label { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 500; fill: #475569; }
-            .polarity-mark { font-family: system-ui, -apple-system, sans-serif; font-size: 15px; font-weight: 600; fill: #475569; }
-          </style>
-        
-          <!-- Input Port: r(t) -->
-          <text x="42" y="145" text-anchor="middle" class="math-text"><tspan class="math-italic">r</tspan>(<tspan class="math-italic">t</tspan>)</text>
-          <text x="68" y="92" text-anchor="middle" class="polarity-mark">+</text>
-          <text x="68" y="190" text-anchor="middle" class="polarity-mark">&minus;</text>
-        
-          <!-- Main Rails -->
-          <line x1="90.5" y1="96" x2="122" y2="96" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round" />
-          <line x1="158" y1="96" x2="363.5" y2="96" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round" />
-          <line x1="90.5" y1="186" x2="363.5" y2="186" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round" />
-        
-          <!-- Open Input Terminals -->
-          <circle cx="86" cy="96" r="4.5" fill="#ffffff" stroke="#1e293b" stroke-width="1.8" />
-          <circle cx="86" cy="186" r="4.5" fill="#ffffff" stroke="#1e293b" stroke-width="1.8" />
-        
-          <!-- Series Diode (D) -->
-          <text x="140" y="66" text-anchor="middle" class="math-text" style="font-size:17px;"><tspan class="math-italic">D</tspan></text>
-          <polygon points="122,80 122,112 158,96" fill="#1e293b" stroke="#1e293b" stroke-width="1.8" stroke-linejoin="round" />
-          <line x1="158" y1="78" x2="158" y2="114" stroke="#1e293b" stroke-width="2.4" stroke-linecap="round" />
-        
-          <!-- Parallel Capacitor (C) -->
-          <line x1="224" y1="96" x2="224" y2="135" stroke="#1e293b" stroke-width="1.8" />
-          <line x1="206" y1="135" x2="242" y2="135" stroke="#1e293b" stroke-width="2.3" stroke-linecap="round" />
-          <line x1="206" y1="147" x2="242" y2="147" stroke="#1e293b" stroke-width="2.3" stroke-linecap="round" />
-          <line x1="224" y1="147" x2="224" y2="186" stroke="#1e293b" stroke-width="1.8" />
-          <text x="197" y="146" text-anchor="end" class="math-text"><tspan class="math-italic">C</tspan></text>
-          <circle cx="224" cy="96" r="3.4" fill="#1e293b" />
-          <circle cx="224" cy="186" r="3.4" fill="#1e293b" />
-        
-          <!-- Parallel Resistor (R) -->
-          <line x1="310" y1="96" x2="310" y2="116" stroke="#1e293b" stroke-width="1.8" />
-          <polyline points="310,116 320,120.2 300,128.5 320,136.8 300,145.2 320,153.5 300,161.8 310,166" fill="none" stroke="#1e293b" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" />
-          <line x1="310" y1="166" x2="310" y2="186" stroke="#1e293b" stroke-width="1.8" />
-          <text x="328" y="146" text-anchor="start" class="math-text"><tspan class="math-italic">R</tspan></text>
-          <circle cx="310" cy="96" r="3.4" fill="#1e293b" />
-          <circle cx="310" cy="186" r="3.4" fill="#1e293b" />
-        
-          <!-- Ground Reference Symbol -->
-          <circle cx="267" cy="186" r="3" fill="#1e293b" />
-          <line x1="267" y1="186" x2="267" y2="204" stroke="#1e293b" stroke-width="1.8" />
-          <line x1="254" y1="204" x2="280" y2="204" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round" />
-          <line x1="259" y1="210" x2="275" y2="210" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round" />
-          <line x1="263" y1="216" x2="271" y2="216" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round" />
-        
-          <!-- Output Port: Envelope -->
-          <text x="384" y="92" text-anchor="middle" class="polarity-mark">+</text>
-          <text x="384" y="190" text-anchor="middle" class="polarity-mark">&minus;</text>
-          <circle cx="368" cy="96" r="4.5" fill="#ffffff" stroke="#1e293b" stroke-width="1.8" />
-          <circle cx="368" cy="186" r="4.5" fill="#ffffff" stroke="#1e293b" stroke-width="1.8" />
-          <text x="400" y="134" text-anchor="start" class="math-text"><tspan class="math-italic">v</tspan><tspan dy="4" class="math-sub">out</tspan><tspan dy="-4">(</tspan><tspan class="math-italic">t</tspan><tspan>)</tspan></text>
-          <text x="400" y="154" text-anchor="start" class="schematic-label">Envelope</text>
-        </svg>
+        <div class="diagram">
+          <svg viewBox="0 0 490 235" role="img" aria-label="Diode RC envelope detector circuit" style="width:100%;max-width:490px;height:auto;display:block;margin:0 auto;">
+            <style>
+              .math-text { font-family: "STIX Two Text", "Times New Roman", Georgia, serif; font-size: 20px; fill: #0f172a; }
+              .math-italic { font-style: italic; }
+              .math-sub { font-size: 13.5px; font-style: italic; }
+              .schematic-label { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 500; fill: #475569; }
+              .polarity-mark { font-family: system-ui, -apple-system, sans-serif; font-size: 15px; font-weight: 600; fill: #475569; }
+            </style>
+          
+            <!-- Input Port: r(t) -->
+            <text x="42" y="145" text-anchor="middle" class="math-text"><tspan class="math-italic">r</tspan>(<tspan class="math-italic">t</tspan>)</text>
+            <text x="68" y="92" text-anchor="middle" class="polarity-mark">+</text>
+            <text x="68" y="190" text-anchor="middle" class="polarity-mark">&minus;</text>
+          
+            <!-- Main Rails -->
+            <line x1="90.5" y1="96" x2="122" y2="96" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round" />
+            <line x1="158" y1="96" x2="363.5" y2="96" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round" />
+            <line x1="90.5" y1="186" x2="363.5" y2="186" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round" />
+          
+            <!-- Open Input Terminals -->
+            <circle cx="86" cy="96" r="4.5" fill="#ffffff" stroke="#1e293b" stroke-width="1.8" />
+            <circle cx="86" cy="186" r="4.5" fill="#ffffff" stroke="#1e293b" stroke-width="1.8" />
+          
+            <!-- Series Diode (D) -->
+            <text x="140" y="66" text-anchor="middle" class="math-text" style="font-size:17px;"><tspan class="math-italic">D</tspan></text>
+            <polygon points="122,80 122,112 158,96" fill="#1e293b" stroke="#1e293b" stroke-width="1.8" stroke-linejoin="round" />
+            <line x1="158" y1="78" x2="158" y2="114" stroke="#1e293b" stroke-width="2.4" stroke-linecap="round" />
+          
+            <!-- Parallel Capacitor (C) -->
+            <line x1="224" y1="96" x2="224" y2="135" stroke="#1e293b" stroke-width="1.8" />
+            <line x1="206" y1="135" x2="242" y2="135" stroke="#1e293b" stroke-width="2.3" stroke-linecap="round" />
+            <line x1="206" y1="147" x2="242" y2="147" stroke="#1e293b" stroke-width="2.3" stroke-linecap="round" />
+            <line x1="224" y1="147" x2="224" y2="186" stroke="#1e293b" stroke-width="1.8" />
+            <text x="197" y="146" text-anchor="end" class="math-text"><tspan class="math-italic">C</tspan></text>
+            <circle cx="224" cy="96" r="3.4" fill="#1e293b" />
+            <circle cx="224" cy="186" r="3.4" fill="#1e293b" />
+          
+            <!-- Parallel Resistor (R) -->
+            <line x1="310" y1="96" x2="310" y2="116" stroke="#1e293b" stroke-width="1.8" />
+            <polyline points="310,116 320,120.2 300,128.5 320,136.8 300,145.2 320,153.5 300,161.8 310,166" fill="none" stroke="#1e293b" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" />
+            <line x1="310" y1="166" x2="310" y2="186" stroke="#1e293b" stroke-width="1.8" />
+            <text x="328" y="146" text-anchor="start" class="math-text"><tspan class="math-italic">R</tspan></text>
+            <circle cx="310" cy="96" r="3.4" fill="#1e293b" />
+            <circle cx="310" cy="186" r="3.4" fill="#1e293b" />
+          
+            <!-- Ground Reference Symbol -->
+            <circle cx="267" cy="186" r="3" fill="#1e293b" />
+            <line x1="267" y1="186" x2="267" y2="204" stroke="#1e293b" stroke-width="1.8" />
+            <line x1="254" y1="204" x2="280" y2="204" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round" />
+            <line x1="259" y1="210" x2="275" y2="210" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round" />
+            <line x1="263" y1="216" x2="271" y2="216" stroke="#1e293b" stroke-width="1.8" stroke-linecap="round" />
+          
+            <!-- Output Port: Envelope -->
+            <text x="384" y="92" text-anchor="middle" class="polarity-mark">+</text>
+            <text x="384" y="190" text-anchor="middle" class="polarity-mark">&minus;</text>
+            <circle cx="368" cy="96" r="4.5" fill="#ffffff" stroke="#1e293b" stroke-width="1.8" />
+            <circle cx="368" cy="186" r="4.5" fill="#ffffff" stroke="#1e293b" stroke-width="1.8" />
+            <text x="400" y="134" text-anchor="start" class="math-text"><tspan class="math-italic">v</tspan><tspan dy="4" class="math-sub">out</tspan><tspan dy="-4">(</tspan><tspan class="math-italic">t</tspan><tspan>)</tspan></text>
+            <text x="400" y="154" text-anchor="start" class="schematic-label">Envelope</text>
+          </svg>
+        </div>
       </div>
     </div>
 
@@ -2783,7 +2785,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
   const modulation = 0.75;
 
   // Slow simulation playback: simulation seconds per real second.
-  const playbackSpeed = 0.22;
+  const playbackSpeed = 0.055;
 
   const dt = 1 / (fc * 180);
   const N = Math.ceil(duration / dt);
