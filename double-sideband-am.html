@@ -1934,9 +1934,6 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
             </foreignObject>
         
             <!-- Output -->
-            <path class="ln" d="M363 125H390" marker-end="url(#balancedArrow)"/>
-
-            <!-- Output -->
             <path class="ln" d="M343 125H375" marker-end="url(#balancedArrow)"/>
 
             <foreignObject x="387" y="105" width="153" height="40">
@@ -1954,7 +1951,16 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     
     <div class="card">
       <h3>A simple envelope detector circuit</h3>
-      <p>An envelope detector uses a diode (rectifier) followed by a parallel \(RC\) network. During positive peaks, the diode conducts and the capacitor charges. When the input falls below the capacitor voltage, the diode becomes reverse-biased and the capacitor discharges through \(R\).</p>
+      <div class="grid">
+        <div class="tile">
+          <p>A simple envelope detector uses a diode (rectifier) followed by a parallel RC LPF.</p>
+          <ul>
+            <li>When the input exceeds the capacitor voltage, the diode conducts and the capacitor charges.</li>
+            <li>When the input falls below the capacitor voltage, the diode becomes reverse-biased and the capacitor discharges through R.</li>
+            <li>If the RC constant is large enough, the capacitor remains charged until the next peak, and its voltage traces the message signal.</li>
+          </ul>
+        </div>
+      </div>
       <div class="diagram">
         <svg viewBox="0 0 490 235" role="img" aria-label="Diode RC envelope detector circuit" style="width:100%;max-width:490px;height:auto;display:block;margin:0 auto;">
           <style>
@@ -2017,11 +2023,6 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
           <text x="400" y="154" text-anchor="start" class="schematic-label">Envelope</text>
         </svg>
       </div>
-      <ul>
-        <li>During the positive half-cycle, the diode conducts and the capacitor charges.</li>
-        <li>When \(r(t)\) falls below the capacitor voltage, the diode disconnects the input and the capacitor discharges through \(R\).</li>
-        <li>The \(RC\) network smooths the rectified signal and follows its envelope.</li>
-      </ul>
     </div>
 
     <div class="callout">
