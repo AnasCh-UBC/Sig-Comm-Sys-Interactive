@@ -2175,9 +2175,9 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     
     <div class="card">
       <h3>A simple envelope detector circuit</h3>
+      <p>A simple envelope detector uses a diode (rectifier) followed by a parallel RC as a LPF.</p>
       <div class="grid" style="align-items: center;">
         <div class="tile" style="min-width: 0;">
-          <p>A simple envelope detector uses a diode (rectifier) followed by a parallel RC LPF.</p>
           <ul>
             <li>When the input exceeds the capacitor voltage, the diode conducts and the capacitor charges.</li>
             <li>When the input falls below the capacitor voltage, the diode becomes reverse-biased and the capacitor discharges through R.</li>
@@ -2794,27 +2794,33 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
   let lastFrame = null;
   let animationId = null;
 
-  // Asymmetric message: gradual rise followed by a rapid drop.
-  // The short falling edge makes the slow capacitor discharge for large RC
-  // values easier to see. The shape repeats at the message frequency.
+  // Smooth asymmetric message signal with no flat sections:
+  // an early, distinct peak; a relatively fast fall; then a slow variation
+  // back toward the trough before the next cycle.
   function message(t) {
     const phase = ((fm * t) % 1 + 1) % 1;
 
-    const riseEnd = 0.22;
-    const fallEnd = 0.29;
+    // Raised-cosine interpolation gives smooth joins between segments.
+    const ease = u => 0.5 - 0.5 * Math.cos(PI * u);
 
-    if (phase < riseEnd) {
+    const peakEnd = 0.18;
+    const fastFallEnd = 0.36;
+
+    if (phase < peakEnd) {
       // Gradual rise from -1 to +1.
-      return -1 + 2 * phase / riseEnd;
+      const u = phase / peakEnd;
+      return -1 + 2 * ease(u);
     }
 
-    if (phase < fallEnd) {
-      // Rapid fall from +1 back to -1.
-      return 1 - 2 * (phase - riseEnd) / (fallEnd - riseEnd);
+    if (phase < fastFallEnd) {
+      // Relatively fast decrease from +1 to -0.5.
+      const u = (phase - peakEnd) / (fastFallEnd - peakEnd);
+      return 1 - 1.5 * ease(u);
     }
 
-    // Remain low until the next pulse.
-    return -1;
+    // Continue changing slowly from -0.5 to -1 for the rest of the cycle.
+    const u = (phase - fastFallEnd) / (1 - fastFallEnd);
+    return -0.5 - 0.5 * ease(u);
   }
 
   function envelope(t) {
