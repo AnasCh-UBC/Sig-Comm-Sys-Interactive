@@ -966,10 +966,8 @@ header{align-items:center}
 #envCircuit .env-discharge,
 #envCircuit .env-node-current {
   fill: none;
-  stroke: transparent;
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  stroke: none;
+  marker-end: none;
 }
 
 @media(max-width:700px) {
@@ -2175,16 +2173,16 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
     
     <div class="card">
       <h3>A simple envelope detector circuit</h3>
-      <div class="grid">
-        <div class="tile">
+      <div class="grid" style="align-items: center;">
+        <div class="tile" style="min-width: 0;">
           <p>A simple envelope detector uses a diode (rectifier) followed by a parallel RC LPF.</p>
           <ul>
             <li>When the input exceeds the capacitor voltage, the diode conducts and the capacitor charges.</li>
             <li>When the input falls below the capacitor voltage, the diode becomes reverse-biased and the capacitor discharges through R.</li>
           </ul>
         </div>
-        <div class="diagram">
-          <svg viewBox="0 0 490 235" role="img" aria-label="Diode RC envelope detector circuit" style="width:100%;max-width:490px;height:auto;display:block;margin:0 auto;">
+        <div class="diagram" style="min-width: 0; display: flex; justify-content: center; align-items: center;">
+          <svg viewBox="10 42 445 182" role="img" aria-label="Diode RC envelope detector circuit" style="width: 100%; max-width: 340px; height: auto; display: block;">
             <style>
               .math-text { font-family: "STIX Two Text", "Times New Roman", Georgia, serif; font-size: 20px; fill: #0f172a; }
               .math-italic { font-style: italic; }
@@ -2318,8 +2316,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
             <path d="M310 115H455" class="env-wire"/>
 
             <!-- Capacitor branch with a small gap for the direction arrowhead -->
-            <path d="M350 115V122" class="env-wire"/>
-            <path d="M350 148V158" class="env-wire"/>
+            <path class="env-wire" d="M350 115V158"/>
             <path d="M330 158H370M330 170H370" class="env-wire"/>
             <path d="M350 170V220" class="env-wire"/>
             <text x="380" y="160" class="env-svg-label">C</text>
@@ -2344,9 +2341,9 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
             <path d="M220 115H300" class="env-charge"
             marker-end="url(#envCurrentArrow)"/>
 
-            <!-- Capacitor current: arrowhead only, with no colored shaft -->
+            <!-- Capacitor current arrows -->
             <path d="M350 123V147" class="env-charge"
-                  marker-end="url(#envCurrentArrow)"/>
+            marker-end="url(#envCurrentArrow)"/>
             <path d="M350 147V123" class="env-discharge"/>
 
             <!-- Output node toward resistor -->
