@@ -966,8 +966,10 @@ header{align-items:center}
 #envCircuit .env-discharge,
 #envCircuit .env-node-current {
   fill: none;
-  stroke: none;
-  marker-end: none;
+  stroke: transparent;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 @media(max-width:700px) {
@@ -2181,8 +2183,8 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
             <li>When the input falls below the capacitor voltage, the diode becomes reverse-biased and the capacitor discharges through R.</li>
           </ul>
         </div>
-        <div class="diagram" style="min-width: 0; display: flex; justify-content: center; align-items: center;">
-          <svg viewBox="10 42 445 182" role="img" aria-label="Diode RC envelope detector circuit" style="width: 100%; max-width: 340px; height: auto; display: block;">
+        <div class="diagram" style="min-width: 0; overflow: hidden; display: flex; justify-content: center; align-items: center; padding: 8px;">
+          <svg viewBox="14 48 446 174" role="img" aria-label="Diode RC envelope detector circuit" style="width: 100%; max-width: 245px; height: auto; display: block;">
             <style>
               .math-text { font-family: "STIX Two Text", "Times New Roman", Georgia, serif; font-size: 20px; fill: #0f172a; }
               .math-italic { font-style: italic; }
@@ -2279,11 +2281,12 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
                role="img" aria-label="Diode RC envelope detector circuit">
     
             <defs>
-              <marker id="envCurrentArrow" viewBox="0 0 10 8"
-                      refX="8.5" refY="4" markerWidth="9"
-                      markerHeight="8" orient="auto">
-                <path d="M0 0.8L9 4L0 7.2L2.2 4Z"
-                      fill="#ff3333"/>
+              <marker id="envCurrentArrow"
+                      markerWidth="9" markerHeight="8"
+                      refX="7" refY="4"
+                      orient="auto"
+                      markerUnits="userSpaceOnUse">
+                <path d="M0 0 L8 4 L0 8 Z" fill="#ff3333"/>
               </marker>
             </defs>
     
@@ -2392,12 +2395,6 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
         The circuit is ready.
       </div>
     
-      <p class="demo-note">
-        The diode conducts only when the instantaneous input voltage exceeds
-        the capacitor voltage. The capacitor then charges toward the input
-        voltage. Otherwise, the diode is off and the capacitor discharges
-        through the load resistor.
-      </p>
     </div>
 
 
@@ -3083,7 +3080,7 @@ window.MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]
       <span class="readout-sep">|</span>
       <span><b>Input voltage:</b> ${p.x.toFixed(3)} V</span>
       <span class="readout-sep">|</span>
-      <span><b>Diode:</b> ${p.conducting ? 'Conducting' : 'OFF'}</span>
+      <span><b>Diode:</b> ${p.conducting ? 'ON' : 'OFF'}</span>
     `;
   }
 
